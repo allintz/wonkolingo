@@ -66,6 +66,7 @@ function validateCourse(raw) {
               return [str(pr[0], `${w}.pairs[${k}][0]`, 60), str(pr[1], `${w}.pairs[${k}][1]`, 160)];
             });
             if (new Set(pairs.map(pr => pr[0])).size !== pairs.length) err(w + '.pairs', 'has duplicate terms');
+            if (new Set(pairs.map(pr => pr[1])).size !== pairs.length) err(w + '.pairs', 'has duplicate meanings; each meaning must be different or the game can’t tell which one was meant');
             return { t: 'match', p: str(it.p, w + '.p', 300), pairs, x };
           }
           if (it.t === 'order') {

@@ -94,7 +94,7 @@ Keep the whole file under 200 KB. Fields not listed here are ignored.
 }
 ```
 
-`pairs` is 3 to 6 `[term, meaning]` pairs. Terms are up to 60 characters and must be unique; meanings are up to 160. `p` (up to 300) and `x` are required.
+`pairs` is 3 to 6 `[term, meaning]` pairs. Terms are up to 60 characters and meanings up to 160. Every term **and** every meaning must be different from the others in the same question, or players can't tell which one is meant. `p` (up to 300) and `x` are required.
 
 ### Ordering (`"t": "order"`)
 
