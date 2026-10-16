@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head><body>
-<title>Hill Speak</title>
+<title>WonkoLingo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&family=Source+Serif+4:ital,opsz,wght@1,8..60,500&display=swap">
@@ -278,7 +278,7 @@ svg { display: block; }
   <div class="top-in">
     <div class="brand">
       <svg viewBox="0 0 32 32" aria-hidden="true" fill="currentColor"><rect x="15" y="2" width="2" height="5" rx="1"/><path d="M8 17a8 8 0 0 1 16 0z"/><rect x="5" y="17" width="22" height="3" rx="1"/><rect x="7" y="21" width="2.5" height="6"/><rect x="12" y="21" width="2.5" height="6"/><rect x="17.5" y="21" width="2.5" height="6"/><rect x="22.5" y="21" width="2.5" height="6"/><rect x="4" y="27" width="24" height="3" rx="1"/></svg>
-      Hill Speak
+      WonkoLingo
     </div>
     <div class="stats">
       <div class="stat streak" title="Day streak"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.5 2c.6 3.4 4.9 5.6 4.9 10.6A5.4 5.4 0 0 1 12 18a5.4 5.4 0 0 1-5.4-5.4c0-2.4 1.2-4 2.4-5 0 2 .9 3.2 2 3.4-.3-3.3.5-6.4 1.5-9z"/><path d="M8 19.5h8v2.5H8z" opacity=".5"/></svg><span id="streak">0</span><span class="sr" hidden>day streak</span></div>
@@ -714,7 +714,8 @@ const PROC_UNITS = [
 ];
 
 /* COURSE-FORMAT START: build.sh copies this block into the server as src/course-format.js, so keep it free of DOM code. */
-const COURSE_FORMAT = 'hill-speak-course/1';
+const COURSE_FORMAT = 'wonkolingo-course/1';
+const COURSE_FORMATS_ACCEPTED = [COURSE_FORMAT, 'hill-speak-course/1'];
 const COURSE_LIMITS = { units: 12, lessons: 8, items: 15, totalItems: 400, bytes: 200000 };
 function validateCourse(raw) {
   const errors = [];
@@ -732,7 +733,7 @@ function validateCourse(raw) {
     return v.slice(0, max);
   };
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return { ok: false, errors: ['The file must be a single JSON object.'] };
-  if (raw.format !== COURSE_FORMAT) err('format', `must be "${COURSE_FORMAT}"`);
+  if (!COURSE_FORMATS_ACCEPTED.includes(raw.format)) err('format', `must be "${COURSE_FORMAT}"`);
   const c = { format: COURSE_FORMAT };
   c.id = str(raw.id, 'id', 40);
   if (c.id && !/^[a-z0-9][a-z0-9-]{1,39}$/.test(c.id)) err('id', 'must be 2 to 40 lowercase letters, numbers or hyphens');
@@ -1076,7 +1077,7 @@ $('#tabs').addEventListener('click', e => {
 
 /* ---------- group play ---------- */
 const GKEY = 'hillspeak-group';
-const SITE = 'https://hill-speak.alex-l-lintz.workers.dev';
+const SITE = 'https://wonkolingo.alex-l-lintz.workers.dev';
 const API = /workers\.dev$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) ? '' : SITE;
 const FLAME = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.5 2c.6 3.4 4.9 5.6 4.9 10.6A5.4 5.4 0 0 1 12 18a5.4 5.4 0 0 1-5.4-5.4c0-2.4 1.2-4 2.4-5 0 2 .9 3.2 2 3.4-.3-3.3.5-6.4 1.5-9z"/></svg>';
 let G = (() => { try { return JSON.parse(localStorage.getItem(GKEY)); } catch (e) { return null; } })();
@@ -1255,12 +1256,12 @@ function renderAdd() {
   }
   $('#addBody').innerHTML = `<p class="kicker">Step 1</p><h3 class="prompt sm">Have your Claude write it</h3>
     <p>Paste this into Claude and fill in the topic. It reads the <a href="${GUIDE}" target="_blank" rel="noopener">course format guide</a> and gives you back a file.</p>
-    <textarea id="addPrompt" rows="4" readonly>Read ${GUIDE} and follow it exactly. Build me a Hill Speak course about [TOPIC]. Research the facts before writing questions, then give me the finished course as a single .json file.</textarea>
+    <textarea id="addPrompt" rows="4" readonly>Read ${GUIDE} and follow it exactly. Build me a WonkoLingo course about [TOPIC]. Research the facts before writing questions, then give me the finished course as a single .json file.</textarea>
     <div class="row"><button class="btn ghost sm" id="copyPrompt">Copy prompt</button></div>
     <p class="kicker">Step 2</p><h3 class="prompt sm">Upload the file</h3>
     <div class="row"><input type="file" id="addFile" accept=".json,application/json"></div>
     <p>Or paste the JSON here:</p>
-    <textarea id="addText" rows="8" spellcheck="false" placeholder='{ "format": "hill-speak-course/1", ... }'>${esc(a.text)}</textarea>
+    <textarea id="addText" rows="8" spellcheck="false" placeholder='{ "format": "wonkolingo-course/1", ... }'>${esc(a.text)}</textarea>
     <div class="row"><button class="btn sm" id="addCheck">Check file</button></div>${res}`;
 }
 function openAdd(prefill) { addState = { text: prefill || '', check: null, busy: false, err: '' }; renderAdd(); openSheet('#addc'); }

@@ -1,6 +1,6 @@
-# Hill Speak course format guide
+# WonkoLingo course format guide
 
-This guide is written for an AI assistant (such as Claude) that has been asked to build a course for **Hill Speak**, a Duolingo-style quiz app at https://hill-speak.alex-l-lintz.workers.dev. Friends in a group each upload courses, and everyone competes on the XP they earn finishing lessons.
+This guide is written for an AI assistant (such as Claude) that has been asked to build a course for **WonkoLingo**, a Duolingo-style quiz app at https://wonkolingo.alex-l-lintz.workers.dev. Friends in a group each upload courses, and everyone competes on the XP they earn finishing lessons.
 
 Your job: build one course on the topic the user names, as a single JSON file that follows this guide exactly. The app checks every upload against the rules below and rejects files that break them.
 
@@ -20,7 +20,7 @@ The app shuffles answer options, match pairs and ordering steps itself, so write
 
 ```json
 {
-  "format": "hill-speak-course/1",
+  "format": "wonkolingo-course/1",
   "id": "state-ai-bills",
   "title": "State AI Bills",
   "description": "What the biggest state AI laws require and who they cover.",
@@ -42,7 +42,7 @@ The app shuffles answer options, match pairs and ordering steps itself, so write
 
 | Field | Rules |
 |---|---|
-| `format` | Exactly `"hill-speak-course/1"`. |
+| `format` | Exactly `"wonkolingo-course/1"`. |
 | `id` | 2 to 40 characters: lowercase letters, numbers, hyphens. Must start with a letter or number. Uploading again with the same `id` replaces your earlier version. |
 | `title` | Required, up to 40 characters. Shown as a tab, so keep it short. |
 | `description` | Optional, up to 200 characters. |
@@ -120,6 +120,6 @@ Check that:
 - every `who` matches a key in `speakers`;
 - every fact, number and date is one you verified, and every `news` card describes a real event with its real date.
 
-Give the user the finished course as **one `.json` file** named after the `id` (for example `state-ai-bills.json`), with nothing else in the file. Tell them to open Hill Speak, choose **+ Add course**, and upload it. If the app lists problems, it will show them as `units[0].lessons[1].items[2].a: ...` paths; fix exactly those and send a new file.
+Give the user the finished course as **one `.json` file** named after the `id` (for example `state-ai-bills.json`), with nothing else in the file. Tell them to open WonkoLingo, choose **+ Add course**, and upload it. If the app lists problems, it will show them as `units[0].lessons[1].items[2].a: ...` paths; fix exactly those and send a new file.
 
-A complete small example: https://hill-speak.alex-l-lintz.workers.dev/example-course.json
+A complete small example: https://wonkolingo.alex-l-lintz.workers.dev/example-course.json

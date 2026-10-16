@@ -1,11 +1,11 @@
-# Hill Speak
+# WonkoLingo
 
-A Duolingo-style trainer with two tracks:
+A Duolingo-style quiz app for groups of friends. Everyone can write courses (with help from their AI assistant), and the group competes on streaks and XP. It ships with two built-in courses:
 
 - **Staff Talk:** decoding what Capitol Hill staffers mean ("we're monitoring the issue closely").
 - **Procedure:** how bills move through the House and Senate: committees, the Rules Committee, cloture, reconciliation, conference, vetoes and the Congressional Review Act.
 
-Play it at https://allintz.github.io/hill-speak/ (also at https://hill-speak.alex-l-lintz.workers.dev).
+Play it at https://allintz.github.io/wonkolingo/ (also at https://wonkolingo.alex-l-lintz.workers.dev).
 
 It's a single self-contained page (`docs/index.html`). Your own progress is saved in your browser.
 
@@ -15,7 +15,7 @@ Start a group or join one with a 6-letter invite code to see everyone's streaks,
 
 ## Making your own courses
 
-Anyone in a group can add a course with **+ Add course**. Give your AI assistant the [course format guide](course-guide.md) (also at https://hill-speak.alex-l-lintz.workers.dev/course-guide.md), upload the `.json` file it produces, and the app checks it before publishing it to your group. Everyone's lessons count toward the same leaderboard. Players can report wrong answers; only the author sees the reports. See [example-course.json](example-course.json) for a small complete course.
+Anyone in a group can add a course with **+ Add course**. Give your AI assistant the [course format guide](course-guide.md) (also at https://wonkolingo.alex-l-lintz.workers.dev/course-guide.md), upload the `.json` file it produces, and the app checks it before publishing it to your group. Everyone's lessons count toward the same leaderboard. Players can report wrong answers; only the author sees the reports. See [example-course.json](example-course.json) for a small complete course.
 
 The backend is a Cloudflare Worker (`src/worker.js`) with a D1 database (`schema.sql`). The GitHub Pages copy talks to the same API.
 

@@ -1,4 +1,4 @@
-// Hill Speak group play API. Static files come from ./docs; only /api/* reaches this code.
+// WonkoLingo group play API. Static files come from ./docs; only /api/* reaches this code.
 // Identity is a random token per player (no passwords). The token doubles as a recovery code.
 
 import { validateCourse, COURSE_LIMITS } from './course-format.js';
