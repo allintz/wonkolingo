@@ -1,0 +1,70 @@
+{
+  "format": "hill-speak-course/1",
+  "id": "example-veto-basics",
+  "title": "Veto Basics",
+  "description": "A small sample course showing every question type.",
+  "caveat": "Sample course. Simplified from the Constitution's Presentment Clause and Senate historical records.",
+  "speakers": {
+    "d": { "n": "Dana", "r": "Legislative Director, House office" }
+  },
+  "units": [
+    {
+      "title": "The President's move",
+      "desc": "What happens after Congress passes a bill.",
+      "lessons": [
+        {
+          "title": "Sign or veto",
+          "items": [
+            {
+              "t": "mc",
+              "p": "How long does the President have to act on a bill while Congress is in session?",
+              "o": ["10 days, not counting Sundays", "30 days", "Until the session ends", "48 hours"],
+              "a": 0,
+              "x": "If the President does nothing for 10 days (Sundays excepted) while Congress is in session, the bill becomes law without a signature."
+            },
+            {
+              "t": "mc",
+              "who": "d",
+              "q": "“They don’t have the votes to override.”",
+              "p": "What is the staffer saying?",
+              "o": ["Fewer than two-thirds of one chamber will vote to overturn the veto", "The bill lacks a simple majority", "The Senate parliamentarian ruled against it", "The President hasn’t decided yet"],
+              "a": 0,
+              "x": "Overriding a veto takes two-thirds of those voting in each chamber, which is why most vetoes stand.",
+              "ask": "“Who are the members still on the fence?”"
+            },
+            {
+              "t": "order",
+              "p": "Put a veto fight in order.",
+              "ends": ["First", "Last"],
+              "items": ["Both chambers pass the bill", "The President vetoes it", "The chamber where it started votes on override", "The other chamber votes on override"],
+              "x": "The vetoed bill goes back to the chamber where it originated. If that chamber fails to override, the other never votes."
+            }
+          ]
+        },
+        {
+          "title": "Veto vocabulary",
+          "items": [
+            {
+              "t": "match",
+              "p": "Match each term to its meaning.",
+              "pairs": [
+                ["Veto", "The President returns a bill unsigned, with objections"],
+                ["Override", "Two-thirds of each chamber pass the bill anyway"],
+                ["Pocket veto", "A bill dies because Congress adjourned and the President didn’t sign"],
+                ["Enrolled bill", "The final text passed by both chambers"]
+              ],
+              "x": "A pocket veto can’t be overridden, because Congress never gets the bill back to vote on."
+            },
+            {
+              "t": "mc",
+              "p": "Can a President veto only part of a bill?",
+              "o": ["No. The Supreme Court struck down the line-item veto in 1998", "Yes, for spending bills", "Yes, with Senate consent", "Only in wartime"],
+              "a": 0,
+              "x": "In Clinton v. City of New York (1998), the Court held the Line Item Veto Act unconstitutional. A President has to sign or veto the whole bill."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

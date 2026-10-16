@@ -24,3 +24,27 @@ CREATE TABLE IF NOT EXISTS completions (
 );
 CREATE INDEX IF NOT EXISTS idx_comp_group ON completions(group_code, created_at);
 CREATE INDEX IF NOT EXISTS idx_players_group ON players(group_code);
+CREATE TABLE IF NOT EXISTS courses (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  group_code TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  author_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  json TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  UNIQUE (group_code, slug)
+);
+CREATE TABLE IF NOT EXISTS reports (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  course_id INTEGER NOT NULL REFERENCES courses(id),
+  player_id TEXT NOT NULL,
+  lesson_id TEXT NOT NULL,
+  item_text TEXT NOT NULL,
+  note TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  resolved INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_reports_course ON reports(course_id, resolved);

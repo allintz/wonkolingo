@@ -13,6 +13,10 @@ It's a single self-contained page (`docs/index.html`). Your own progress is save
 
 Start a group or join one with a 6-letter invite code to see everyone's streaks, weekly and all-time XP, and recent lessons, and to challenge each other with "Beat it." There are no passwords: each player gets a random token, shown as a recovery code for moving to another device. Scores are self-reported, so this is for friendly competition only.
 
+## Making your own courses
+
+Anyone in a group can add a course with **+ Add course**. Give your AI assistant the [course format guide](course-guide.md) (also at https://hill-speak.alex-l-lintz.workers.dev/course-guide.md), upload the `.json` file it produces, and the app checks it before publishing it to your group. Everyone's lessons count toward the same leaderboard. Players can report wrong answers; only the author sees the reports. See [example-course.json](example-course.json) for a small complete course.
+
 The backend is a Cloudflare Worker (`src/worker.js`) with a D1 database (`schema.sql`). The GitHub Pages copy talks to the same API.
 
 ## Caveats

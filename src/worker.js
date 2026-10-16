@@ -1,6 +1,8 @@
 // Hill Speak group play API. Static files come from ./docs; only /api/* reaches this code.
 // Identity is a random token per player (no passwords). The token doubles as a recovery code.
 
+import { validateCourse, COURSE_LIMITS } from './course-format.js';
+
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -110,7 +112,7 @@ async function api(req, env, path) {
     const b = await body(req);
     const xp = Math.max(0, Math.min(100, Math.round(+b.xp || 0)));
     const acc = Math.max(0, Math.min(100, Math.round(+b.acc || 0)));
-    const lessonId = String(b.lessonId || '').slice(0, 20), title = cleanName(b.title, 60);
+    const lessonId = String(b.lessonId || '').slice(0, 90), title = cleanName(b.title, 60);
     if (!lessonId || !title || !DAY_RE.test(b.day || '')) return fail('Bad completion.');
     // At most one completion of the same lesson per minute, to blunt double-submits.
     const dup = await env.DB.prepare('SELECT 1 FROM completions WHERE player_id = ? AND lesson_id = ? AND created_at > ?').bind(me.id, lessonId, Date.now() - 60000).first();
@@ -137,6 +139,64 @@ async function api(req, env, path) {
       return { id: p.id, name: p.name, week: t.week || 0, total: t.total || 0, lessons: t.lessons || 0, ...streakOf(dayMap.get(p.id) || [], today) };
     });
     return json({ code: g, groupName: me.group_name, me: me.id, weekStart: ws, players: rows, feed: feed.results.map(f => ({ id: f.player_id, name: f.name, lessonId: f.lesson_id, title: f.title, acc: f.acc, xp: f.xp, at: f.created_at })) });
+  }
+
+  // ---- group-made courses ----
+  if (m === 'GET' && path === '/api/courses') {
+    const rows = await env.DB.prepare(`SELECT c.id, c.slug, c.title, c.json, c.version, c.author_id, p.name AS author, c.updated_at,
+      (SELECT COUNT(*) FROM reports r WHERE r.course_id = c.id AND r.resolved = 0) AS open_reports
+      FROM courses c JOIN players p ON p.id = c.author_id WHERE c.group_code = ? ORDER BY c.created_at`).bind(me.group_code).all();
+    return json({ courses: rows.results.map(r => ({ slug: r.slug, title: r.title, version: r.version, authorId: r.author_id, author: r.author, updatedAt: r.updated_at, openReports: r.open_reports, course: JSON.parse(r.json) })) });
+  }
+
+  if (m === 'POST' && path === '/api/courses') {
+    const text = await req.text();
+    if (text.length > COURSE_LIMITS.bytes + 1000) return fail('That course file is too large.', 413);
+    let raw; try { raw = JSON.parse(text).course; } catch { return fail('That isn’t valid JSON.'); }
+    const v = validateCourse(raw);
+    if (!v.ok) return json({ error: 'The course has problems.', errors: v.errors }, 422);
+    const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM courses WHERE group_code = ?').bind(me.group_code).first();
+    const existing = await env.DB.prepare('SELECT id, author_id, version FROM courses WHERE group_code = ? AND slug = ?').bind(me.group_code, v.course.id).first();
+    const body = JSON.stringify(v.course), now = Date.now();
+    if (existing) {
+      if (existing.author_id !== me.id) return fail('Someone else in this group already has a course with that id. Change "id" in your file.', 409);
+      await env.DB.prepare('UPDATE courses SET title = ?, json = ?, version = version + 1, updated_at = ? WHERE id = ?').bind(v.course.title, body, now, existing.id).run();
+      return json({ slug: v.course.id, version: existing.version + 1, updated: true });
+    }
+    if (n.n >= 50) return fail('This group already has 50 courses.', 403);
+    await env.DB.prepare('INSERT INTO courses (group_code, slug, author_id, title, json, version, created_at, updated_at) VALUES (?, ?, ?, ?, ?, 1, ?, ?)').bind(me.group_code, v.course.id, me.id, v.course.title, body, now, now).run();
+    return json({ slug: v.course.id, version: 1, updated: false });
+  }
+
+  const cm = path.match(/^\/api\/courses\/([a-z0-9-]{2,40})(\/reports|\/delete)?$/);
+  if (cm) {
+    const c = await env.DB.prepare('SELECT id, author_id, version FROM courses WHERE group_code = ? AND slug = ?').bind(me.group_code, cm[1]).first();
+    if (!c) return fail('No course with that id in this group.', 404);
+    if (m === 'POST' && cm[2] === '/reports') {
+      const b = await body(req);
+      const note = cleanName(b.note, 500), itemText = cleanName(b.itemText, 300), lessonId = String(b.lessonId || '').slice(0, 90);
+      if (!note) return fail('Say what’s wrong.');
+      const recent = await env.DB.prepare('SELECT COUNT(*) AS n FROM reports WHERE player_id = ? AND created_at > ?').bind(me.id, Date.now() - 3600000).first();
+      if (recent.n >= 30) return fail('That’s a lot of reports this hour. Try again later.', 429);
+      await env.DB.prepare('INSERT INTO reports (course_id, player_id, lesson_id, item_text, note, version, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)').bind(c.id, me.id, lessonId, itemText || '(no text)', note, c.version, Date.now()).run();
+      return json({ ok: true });
+    }
+    if (c.author_id !== me.id) return fail('Only the course’s author can do that.', 403);
+    if (m === 'GET' && cm[2] === '/reports') {
+      const r = await env.DB.prepare('SELECT r.id, r.lesson_id, r.item_text, r.note, r.version, r.created_at, p.name FROM reports r JOIN players p ON p.id = r.player_id WHERE r.course_id = ? AND r.resolved = 0 ORDER BY r.created_at DESC').bind(c.id).all();
+      return json({ reports: r.results.map(x => ({ id: x.id, lessonId: x.lesson_id, itemText: x.item_text, note: x.note, version: x.version, at: x.created_at, by: x.name })) });
+    }
+    if (m === 'POST' && cm[2] === '/delete') {
+      await env.DB.batch([env.DB.prepare('DELETE FROM reports WHERE course_id = ?').bind(c.id), env.DB.prepare('DELETE FROM courses WHERE id = ?').bind(c.id)]);
+      return json({ ok: true });
+    }
+  }
+  const rm = path.match(/^\/api\/reports\/(\d+)\/resolve$/);
+  if (m === 'POST' && rm) {
+    const r = await env.DB.prepare('SELECT r.id FROM reports r JOIN courses c ON c.id = r.course_id WHERE r.id = ? AND c.author_id = ?').bind(+rm[1], me.id).first();
+    if (!r) return fail('Report not found.', 404);
+    await env.DB.prepare('UPDATE reports SET resolved = 1 WHERE id = ?').bind(r.id).run();
+    return json({ ok: true });
   }
 
   return fail('Not found.', 404);

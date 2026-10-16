@@ -137,6 +137,32 @@ svg { display: block; }
 .glinks { display: flex; flex-wrap: wrap; gap: 14px; }
 .result .vs { color: var(--fg); font-weight: 800; }
 
+/* group courses */
+.tabs { overflow-x: auto; scrollbar-width: thin; }
+.tab { flex: 1 0 auto; white-space: nowrap; }
+.tab.add { flex: 0 0 auto; color: var(--primary); border: 2px dashed var(--line-deep); }
+.cinfo { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin-top: -12px; font-size: 14px; font-weight: 700; color: var(--muted); }
+.cinfo .cdesc { flex-basis: 100%; font-weight: 600; }
+.sheet .lbar h2 { margin: 0; font-size: 20px; font-weight: 900; }
+.prompt.sm { font-size: 20px; }
+.sheet textarea, .repbox textarea { font: 500 14px/1.45 ui-monospace, "SF Mono", Menlo, monospace; color: var(--fg); background: var(--surface); border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; width: 100%; resize: vertical; }
+.repbox textarea { font-family: var(--f-ui); font-size: 15px; font-weight: 600; }
+.sheet textarea:focus, .repbox textarea:focus { outline: none; border-color: var(--primary); }
+.sheet p { margin: 0; color: var(--muted); max-width: 62ch; }
+.sheet p a { color: var(--primary); font-weight: 800; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.okbox, .errbox { border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; }
+.okbox { background: var(--good-bg); }
+.okbox p { color: var(--fg); }
+.errbox { background: var(--bad-bg); }
+.errbox ul { margin: 0; padding-left: 18px; font-size: 14px; font-weight: 600; }
+.errbox h4, .okbox h4 { margin: 0; font-size: 16px; font-weight: 900; }
+.replist { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.replist li { background: var(--surface); border: 2px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 6px; }
+.replist .rq { font-family: var(--f-quote); font-style: italic; font-size: 17px; }
+.replist .rn { font-weight: 700; }
+.repbox { display: grid; gap: 8px; margin-top: 4px; }
+
 /* shared buttons */
 .btn { border: 0; border-radius: 14px; padding: 14px 28px; font-weight: 900; font-size: 16px; letter-spacing: .05em; text-transform: uppercase; background: var(--primary); color: var(--on-primary); box-shadow: 0 4px 0 var(--primary-deep); min-width: 150px; }
 .btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 var(--primary-deep); }
@@ -264,6 +290,7 @@ svg { display: block; }
 <main class="home" id="home">
   <div class="path-col">
     <div class="tabs" id="tabs" role="tablist" aria-label="Course"></div>
+    <div class="cinfo" id="cinfo" hidden></div>
     <div class="path" id="path"></div>
   </div>
   <aside class="side">
@@ -297,6 +324,16 @@ svg { display: block; }
 
 <section class="overlay result" id="result" hidden>
   <div class="result-in" id="resultIn"></div>
+</section>
+
+<section class="overlay sheet" id="addc" hidden>
+  <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Add a course</h2></div>
+  <div class="stage"><div class="stage-in" id="addBody"></div></div>
+</section>
+
+<section class="overlay sheet" id="repv" hidden>
+  <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Problem reports</h2></div>
+  <div class="stage"><div class="stage-in" id="repBody"></div></div>
 </section>
 
 <div class="toast" id="toast" hidden></div>
@@ -676,6 +713,90 @@ const PROC_UNITS = [
   ]}
 ];
 
+/* COURSE-FORMAT START: build.sh copies this block into the server as src/course-format.js, so keep it free of DOM code. */
+const COURSE_FORMAT = 'hill-speak-course/1';
+const COURSE_LIMITS = { units: 12, lessons: 8, items: 15, totalItems: 400, bytes: 200000 };
+function validateCourse(raw) {
+  const errors = [];
+  const err = (where, msg) => { if (errors.length < 40) errors.push(where + ': ' + msg); };
+  const str = (v, where, max, required = true) => {
+    if (v === undefined || v === null || v === '') { if (required) err(where, 'is required'); return undefined; }
+    if (typeof v !== 'string') { err(where, 'must be text'); return undefined; }
+    const s = v.trim();
+    if (s.length > max) err(where, `is ${s.length} characters; the limit is ${max}`);
+    return s.slice(0, max);
+  };
+  const arr = (v, where, min, max) => {
+    if (!Array.isArray(v)) { err(where, 'must be a list'); return []; }
+    if (v.length < min || v.length > max) err(where, `has ${v.length} entries; it needs ${min} to ${max}`);
+    return v.slice(0, max);
+  };
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return { ok: false, errors: ['The file must be a single JSON object.'] };
+  if (raw.format !== COURSE_FORMAT) err('format', `must be "${COURSE_FORMAT}"`);
+  const c = { format: COURSE_FORMAT };
+  c.id = str(raw.id, 'id', 40);
+  if (c.id && !/^[a-z0-9][a-z0-9-]{1,39}$/.test(c.id)) err('id', 'must be 2 to 40 lowercase letters, numbers or hyphens');
+  c.title = str(raw.title, 'title', 40);
+  c.description = str(raw.description, 'description', 200, false) || '';
+  c.caveat = str(raw.caveat, 'caveat', 400, false) || '';
+  c.speakers = {};
+  if (raw.speakers !== undefined) {
+    if (!raw.speakers || typeof raw.speakers !== 'object' || Array.isArray(raw.speakers)) err('speakers', 'must be an object');
+    else Object.entries(raw.speakers).slice(0, 8).forEach(([k, v]) => {
+      if (!/^[a-z]{1,8}$/.test(k)) { err('speakers.' + k, 'key must be 1 to 8 lowercase letters'); return; }
+      c.speakers[k] = { n: str(v && v.n, `speakers.${k}.n`, 30), r: str(v && v.r, `speakers.${k}.r`, 60, false) || '' };
+    });
+  }
+  let total = 0;
+  c.units = arr(raw.units, 'units', 1, COURSE_LIMITS.units).map((u, ui) => {
+    const uw = `units[${ui}]`;
+    u = u || {};
+    return { title: str(u.title, uw + '.title', 60), desc: str(u.desc, uw + '.desc', 200, false) || '',
+      lessons: arr(u.lessons, uw + '.lessons', 1, COURSE_LIMITS.lessons).map((l, li) => {
+        const lw = `${uw}.lessons[${li}]`;
+        l = l || {};
+        return { title: str(l.title, lw + '.title', 60), items: arr(l.items, lw + '.items', 2, COURSE_LIMITS.items).map((it, ii) => {
+          total++;
+          const w = `${lw}.items[${ii}]`;
+          it = it || {};
+          const x = str(it.x, w + '.x (explanation)', 700);
+          if (it.t === 'mc') {
+            const o = arr(it.o, w + '.o (options)', 2, 5).map((s, k) => str(s, `${w}.o[${k}]`, 200));
+            const out = { t: 'mc', o, a: it.a, x };
+            if (!Number.isInteger(it.a) || it.a < 0 || it.a >= o.length) err(w + '.a', 'must be the 0-based position of the right option');
+            if (new Set(o).size !== o.length) err(w + '.o', 'has duplicate options');
+            const q = str(it.q, w + '.q', 300, false), p = str(it.p, w + '.p', 300, false);
+            if (!q && !p) err(w, 'needs a question (p) or a quote (q)');
+            if (q) out.q = q; if (p) out.p = p;
+            if (it.who !== undefined) { if (typeof it.who !== 'string' || !c.speakers[it.who]) err(w + '.who', 'must be a key from speakers'); else out.who = it.who; }
+            const ask = str(it.ask, w + '.ask', 300, false); if (ask) out.ask = ask;
+            if (it.news !== undefined) out.news = { h: str(it.news && it.news.h, w + '.news.h', 160), d: str(it.news && it.news.d, w + '.news.d', 60) };
+            return out;
+          }
+          if (it.t === 'match') {
+            const pairs = arr(it.pairs, w + '.pairs', 3, 6).map((pr, k) => {
+              if (!Array.isArray(pr) || pr.length !== 2) { err(`${w}.pairs[${k}]`, 'must be [term, meaning]'); return ['', '']; }
+              return [str(pr[0], `${w}.pairs[${k}][0]`, 60), str(pr[1], `${w}.pairs[${k}][1]`, 160)];
+            });
+            if (new Set(pairs.map(pr => pr[0])).size !== pairs.length) err(w + '.pairs', 'has duplicate terms');
+            return { t: 'match', p: str(it.p, w + '.p', 300), pairs, x };
+          }
+          if (it.t === 'order') {
+            const ends = arr(it.ends, w + '.ends', 2, 2).map((s, k) => str(s, `${w}.ends[${k}]`, 30));
+            const items = arr(it.items, w + '.items', 3, 7).map((s, k) => str(s, `${w}.items[${k}]`, 160));
+            if (new Set(items).size !== items.length) err(w + '.items', 'has duplicate entries');
+            return { t: 'order', p: str(it.p, w + '.p', 300), ends, items, x };
+          }
+          err(w + '.t', 'must be "mc", "match" or "order"');
+          return null;
+        }) };
+      }) };
+  });
+  if (total > COURSE_LIMITS.totalItems) err('units', `has ${total} questions in all; the limit is ${COURSE_LIMITS.totalItems}`);
+  return errors.length ? { ok: false, errors } : { ok: true, errors: [], course: c, stats: { units: c.units.length, lessons: c.units.reduce((n, u) => n + u.lessons.length, 0), items: total } };
+}
+/* COURSE-FORMAT END */
+
 const COURSES = {
   lingo: { name: 'Staff Talk', units: UNITS, pre: '',
     caveat: ['These are generic rules of thumb drawn from published staffer guides and Hill reporting. Nobody has checked them against what offices actually did afterward, and meanings vary by chamber, party, office and individual staffer.', 'Treat each answer as a starting guess. Check anything you plan to rely on with a former staffer.'],
@@ -713,7 +834,7 @@ const ICON = {
 
 let state = load();
 function load() {
-  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done) { if (!COURSES[s.course]) s.course = 'lingo'; return s; } } catch (e) {}
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done) { if (!COURSES[s.course]) { if (String(s.course).startsWith('c:')) s.wantCourse = s.course; s.course = 'lingo'; } return s; } } catch (e) {}
   return { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: 'lingo' };
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
@@ -733,7 +854,10 @@ function renderHome() {
   $('#streak').textContent = state.streak;
   const cur = LESSONS.findIndex((l, i) => !state.done[l.id] && unlocked(i));
   let h = '', k = 0;
-  $('#tabs').innerHTML = Object.entries(COURSES).map(([k, c]) => `<button class="tab${k === state.course ? ' on' : ''}" role="tab" aria-selected="${k === state.course}" data-course="${k}">${esc(c.name)}</button>`).join('');
+  $('#tabs').innerHTML = Object.entries(COURSES).map(([k, c]) => `<button class="tab${k === state.course ? ' on' : ''}" role="tab" aria-selected="${k === state.course}" data-course="${k}">${esc(c.name)}</button>`).join('') + (typeof G !== 'undefined' && G ? '<button class="tab add" id="addCourseBtn">+ Add course</button>' : '');
+  const CI = COURSES[state.course], mine = CI.group && G && CI.authorId === G.player.id;
+  $('#cinfo').hidden = !CI.group;
+  $('#cinfo').innerHTML = CI.group ? `<span>${esc(CI.meta)}</span>${mine ? `<button class="linkbtn" id="ciReports">${CI.openReports} open report${CI.openReports === 1 ? '' : 's'}</button><button class="linkbtn" id="ciUpdate">Upload new version</button><button class="linkbtn" id="ciDelete">Remove course</button>` : ''}${CI.description ? `<span class="cdesc">${esc(CI.description)}</span>` : ''}` : '';
   const C = COURSES[state.course];
   $('#caveat').innerHTML = `<h3>How sure are these answers?</h3>${C.caveat.map(t => `<p>${esc(t)}</p>`).join('')}<div class="meta">${esc(C.meta)}</div>`;
   curUnits().forEach((u, ui) => {
@@ -769,7 +893,7 @@ function renderPotd() {
   const pool = LESSONS.flatMap(l => l.items).filter(it => it.t === 'mc' && (state.course === 'lingo' ? it.q : true));
   const day = Math.floor(new Date(dstr(new Date()) + 'T12:00:00').getTime() / 864e5);
   const it = pool[day % pool.length];
-  const sp = SPEAKERS[it.who || 'm'];
+  const sp = spk(it);
   const head = it.q ? `<h3>Phrase of the day</h3><div class="quote-sm">${esc(it.q)}</div><div class="who-sm">${esc(sp.n)}, ${esc(sp.r)}</div>` : `<h3>Question of the day</h3><p class="potd-q">${esc(it.p)}</p>`;
   $('#potd').innerHTML = `${head}<div class="reveal-body" id="potdBody" hidden><p><b>${esc(it.o[it.a])}</b></p><p>${esc(it.x)}</p></div><button class="linkbtn" id="potdBtn">What it means</button>`;
   $('#potdBtn').onclick = () => { const b = $('#potdBody'); b.hidden = !b.hidden; $('#potdBtn').textContent = b.hidden ? 'What it means' : 'Hide'; };
@@ -793,7 +917,7 @@ function startLesson(i, challenge) {
   show('#lesson');
   nextItem();
 }
-function goHome() { run = null; show(null); renderHome(); window.scrollTo(0, 0); }
+function goHome() { run = null; show(null); if (pendingCourses) { const p = pendingCourses; pendingCourses = null; installCourses(p); } renderHome(); window.scrollTo(0, 0); }
 $('#quitBtn').onclick = goHome;
 
 function updateBar() {
@@ -814,7 +938,7 @@ function nextItem() {
 }
 
 function quoteHTML(it) {
-  const sp = SPEAKERS[it.who || 'm'];
+  const sp = spk(it);
   return `<div class="speaker"><div class="avatar" aria-hidden="true">${sp.n[0]}</div><div class="bubble"><q>${esc(it.q)}</q><div class="who">${esc(sp.n)}, ${esc(sp.r)}</div></div></div>`;
 }
 
@@ -899,7 +1023,7 @@ function grade(ok, ansHTML, heading) {
   const foot = $('#foot'); foot.className = 'lfoot ' + (ok ? 'good' : 'bad');
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
   const head = heading || (ok ? PRAISE[Math.floor(Math.random() * PRAISE.length)] : 'Not quite.');
-  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${esc(head)}</h4>${ansHTML || ''}<p>${esc(it.x)}</p>${it.ask ? `<p class="ask"><span>Try asking</span>${esc(it.ask)}</p>` : ''}`;
+  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${esc(head)}</h4>${ansHTML || ''}<p>${esc(it.x)}</p>${it.ask ? `<p class="ask"><span>Try asking</span>${esc(it.ask)}</p>` : ''}${COURSES[state.course].group && G ? '<div class="repbox"><button class="linkbtn" id="repBtn">Report a problem</button></div>' : ''}`;
   const b = $('#checkBtn'); b.hidden = false; b.disabled = false; b.textContent = 'Continue'; b.focus({ preventScroll: true });
 }
 
@@ -937,12 +1061,14 @@ function fail() {
 
 document.addEventListener('keydown', e => {
   if (!run || $('#lesson').hidden) return;
+  if (e.target.matches && e.target.matches('textarea, input')) return;
   if (e.key === 'Escape') { goHome(); return; }
   if (e.key === 'Enter') { const b = $('#checkBtn'); if (!b.hidden && !b.disabled) { e.preventDefault(); b.click(); } return; }
   if (run.phase === 'answer' && run.cur.t === 'mc' && /^[1-9]$/.test(e.key)) { const i = +e.key - 1; if (i < run.cur._opts.length) pickMC(i); }
 });
 
 $('#tabs').addEventListener('click', e => {
+  if (e.target.closest('#addCourseBtn')) { openAdd(); return; }
   const b = e.target.closest('[data-course]');
   if (!b || b.dataset.course === state.course) return;
   state.course = b.dataset.course; save(); buildLessons(); renderHome(); renderPotd();
@@ -1029,7 +1155,7 @@ async function groupSubmit() {
     G = { token: d.token, code: d.code, groupName: d.groupName, player: d.player }; saveG();
     if (joinParam) history.replaceState(null, '', location.pathname);
     toast('You’re in ' + d.groupName + '.');
-    gBusy = false; await refreshBoard();
+    gBusy = false; await refreshBoard(); loadCourses();
   } catch (e) {
     if (gMode === 'restore') { G = null; }
     gBusy = false; gErr = netMsg(e); renderGroupKeep();
@@ -1055,7 +1181,7 @@ $('#group').addEventListener('click', e => {
   if (t.id === 'gRec') { recShown = !recShown; renderGroup(); return; }
   if (t.id === 'gLeave') {
     if (!leaveArmed) { leaveArmed = true; renderGroup(); setTimeout(() => { leaveArmed = false; if (G) renderGroup(); }, 4000); return; }
-    G = null; board = null; leaveArmed = false; recShown = false; saveG(); renderGroup(); toast('Left the group on this device. Your recovery code still works.'); return;
+    G = null; board = null; leaveArmed = false; recShown = false; saveG(); renderGroup(); try { localStorage.removeItem(CKEY); } catch (e) {} installCourses([]); toast('Left the group on this device. Your recovery code still works.'); return;
   }
   if (t.dataset.beat) {
     const id = t.dataset.beat, course = Object.keys(COURSES).find(k => COURSES[k].pre && id.startsWith(COURSES[k].pre)) || 'lingo';
@@ -1083,6 +1209,126 @@ document.addEventListener('visibilitychange', () => { if (G && !document.hidden 
 buildLessons();
 renderHome();
 renderPotd();
+/* ---------- group-made courses ---------- */
+const CKEY = 'hillspeak-gcourses';
+let pendingCourses = null, addState = { text: '', check: null, busy: false, err: '' };
+function spk(it) { return ((COURSES[state.course] && COURSES[state.course].speakers) || SPEAKERS)[it.who || 'm'] || { n: 'Staffer', r: '' }; }
+
+function installCourses(list) {
+  if (run) { pendingCourses = list; return; }
+  Object.keys(COURSES).filter(k => k.startsWith('c:')).forEach(k => delete COURSES[k]);
+  (list || []).forEach(x => {
+    const c = x.course;
+    COURSES['c:' + x.slug] = { name: c.title, units: c.units, pre: 'c:' + x.slug + ':', group: true, slug: x.slug, author: x.author, authorId: x.authorId, version: x.version, openReports: x.openReports, description: c.description,
+      speakers: Object.keys(c.speakers || {}).length ? c.speakers : null,
+      caveat: [c.caveat, `Written by ${x.author}, probably with AI help, and not checked by anyone else. If an answer looks wrong, use “Report a problem” after answering it.`].filter(Boolean),
+      meta: `By ${x.author} · Version ${x.version}` };
+  });
+  if (state.wantCourse && COURSES[state.wantCourse]) { state.course = state.wantCourse; delete state.wantCourse; }
+  if (!COURSES[state.course]) state.course = 'lingo';
+  buildLessons(); renderHome(); renderPotd();
+}
+async function loadCourses() {
+  if (!G) { installCourses([]); return; }
+  try {
+    const d = await apiCall('/api/courses');
+    try { localStorage.setItem(CKEY, JSON.stringify({ code: G.code, courses: d.courses })); } catch (e) {}
+    installCourses(d.courses);
+  } catch (e) { /* keep whatever is cached */ }
+}
+(() => { try { const c = JSON.parse(localStorage.getItem(CKEY)); if (G && c && c.code === G.code) installCourses(c.courses); } catch (e) {} })();
+
+function openSheet(id) { $(id).hidden = false; document.body.classList.add('in-lesson'); }
+function closeSheet(id) { $(id).hidden = true; if ($('#lesson').hidden && $('#result').hidden) document.body.classList.remove('in-lesson'); }
+document.querySelectorAll('.sheet [data-close]').forEach(b => b.onclick = () => closeSheet('#' + b.closest('.sheet').id));
+
+const GUIDE = SITE + '/course-guide.md';
+function renderAdd() {
+  const a = addState, chk = a.check;
+  let res = '';
+  if (a.err) res = `<div class="errbox"><h4>Couldn’t publish</h4><p>${a.err}</p></div>`;
+  else if (chk && !chk.ok) res = `<div class="errbox"><h4>${chk.errors.length >= 40 ? '40+' : chk.errors.length} problem${chk.errors.length === 1 ? '' : 's'} to fix</h4><ul>${chk.errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul><p>Paste these back to your Claude and ask it to fix them.</p></div>`;
+  else if (chk && chk.ok) {
+    const ex = COURSES['c:' + chk.course.id];
+    const note = !ex ? 'This adds a new course for everyone in your group.' : ex.authorId === G.player.id ? `This replaces your version ${ex.version}.` : `Someone else already has a course with the id “${esc(chk.course.id)}”. Change "id" in the file before publishing.`;
+    res = `<div class="okbox"><h4>Ready: ${esc(chk.course.title)}</h4><p>${chk.stats.units} unit${chk.stats.units === 1 ? '' : 's'}, ${chk.stats.lessons} lesson${chk.stats.lessons === 1 ? '' : 's'}, ${chk.stats.items} questions. ${note}</p><div class="row"><button class="btn sm" id="addPub" ${a.busy || (ex && ex.authorId !== G.player.id) ? 'disabled' : ''}>Publish to ${esc(G.groupName)}</button></div></div>`;
+  }
+  $('#addBody').innerHTML = `<p class="kicker">Step 1</p><h3 class="prompt sm">Have your Claude write it</h3>
+    <p>Paste this into Claude and fill in the topic. It reads the <a href="${GUIDE}" target="_blank" rel="noopener">course format guide</a> and gives you back a file.</p>
+    <textarea id="addPrompt" rows="4" readonly>Read ${GUIDE} and follow it exactly. Build me a Hill Speak course about [TOPIC]. Research the facts before writing questions, then give me the finished course as a single .json file.</textarea>
+    <div class="row"><button class="btn ghost sm" id="copyPrompt">Copy prompt</button></div>
+    <p class="kicker">Step 2</p><h3 class="prompt sm">Upload the file</h3>
+    <div class="row"><input type="file" id="addFile" accept=".json,application/json"></div>
+    <p>Or paste the JSON here:</p>
+    <textarea id="addText" rows="8" spellcheck="false" placeholder='{ "format": "hill-speak-course/1", ... }'>${esc(a.text)}</textarea>
+    <div class="row"><button class="btn sm" id="addCheck">Check file</button></div>${res}`;
+}
+function openAdd(prefill) { addState = { text: prefill || '', check: null, busy: false, err: '' }; renderAdd(); openSheet('#addc'); }
+function runCheck() {
+  addState.text = $('#addText').value; addState.err = '';
+  let raw;
+  try { raw = JSON.parse(addState.text); } catch (e) { addState.check = { ok: false, errors: ['That isn’t valid JSON (' + e.message + '). Ask your Claude for the raw .json file.'] }; renderAdd(); return; }
+  addState.check = validateCourse(raw); renderAdd();
+}
+$('#addBody').addEventListener('click', async e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.id === 'copyPrompt') { const v = $('#addPrompt').value; (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(() => toast('Prompt copied.'), () => { $('#addPrompt').select(); toast('Select the text and copy it.'); }); }
+  if (t.id === 'addCheck') runCheck();
+  if (t.id === 'addPub') {
+    addState.busy = true; renderAdd();
+    try {
+      const d = await apiCall('/api/courses', { course: addState.check.course });
+      closeSheet('#addc'); toast(d.updated ? `Updated to version ${d.version}.` : 'Course published to your group.');
+      state.course = 'c:' + d.slug; save(); await loadCourses();
+    } catch (err) { addState.busy = false; addState.err = netMsg(err); renderAdd(); }
+  }
+});
+$('#addBody').addEventListener('change', e => {
+  if (e.target.id !== 'addFile' || !e.target.files[0]) return;
+  const f = e.target.files[0];
+  if (f.size > COURSE_LIMITS.bytes) { addState.check = { ok: false, errors: [`The file is ${Math.round(f.size / 1000)} KB; the limit is ${COURSE_LIMITS.bytes / 1000} KB.`] }; renderAdd(); return; }
+  f.text().then(txt => { $('#addText').value = txt; runCheck(); });
+});
+
+$('#cinfo').addEventListener('click', async e => {
+  const t = e.target.closest('button'); if (!t) return;
+  const C = COURSES[state.course];
+  if (t.id === 'ciUpdate') openAdd();
+  if (t.id === 'ciReports') openReports(C);
+  if (t.id === 'ciDelete') {
+    if (t.dataset.armed !== '1') { t.dataset.armed = '1'; t.textContent = 'Click again to remove it for everyone'; setTimeout(() => { if (t.isConnected) { t.dataset.armed = ''; t.textContent = 'Remove course'; } }, 4000); return; }
+    try { await apiCall('/api/courses/' + C.slug + '/delete', {}); toast('Course removed.'); state.course = 'lingo'; save(); await loadCourses(); }
+    catch (err) { toast(err.message); }
+  }
+});
+
+async function openReports(C) {
+  openSheet('#repv'); $('#repBody').innerHTML = '<p>Loading…</p>';
+  try {
+    const d = await apiCall('/api/courses/' + C.slug + '/reports');
+    const lessonName = id => { const l = LESSONS.find(x => x.id === id); return l ? l.title : 'A lesson'; };
+    $('#repBody').innerHTML = d.reports.length ? `<p class="kicker">${esc(C.name)}</p><ul class="replist">${d.reports.map(r => `<li><div class="meta">${esc(lessonName(r.lessonId))} · from ${esc(r.by)} · ${ago(r.at)}${r.version !== C.version ? ` · on version ${r.version}` : ''}</div><div class="rq">${esc(r.itemText)}</div><div class="rn">${esc(r.note)}</div><div class="row"><button class="btn ghost sm" data-resolve="${r.id}">Mark fixed</button></div></li>`).join('')}</ul><p>To fix something, give these notes to your Claude along with your course file, then upload the new version.</p>` : '<p>No open reports.</p>';
+  } catch (err) { $('#repBody').innerHTML = `<p class="gerr">${netMsg(err)}</p>`; }
+}
+$('#repBody').addEventListener('click', async e => {
+  const t = e.target.closest('[data-resolve]'); if (!t) return;
+  try { await apiCall('/api/reports/' + t.dataset.resolve + '/resolve', {}); t.closest('li').remove(); const C = COURSES[state.course]; if (C) C.openReports = Math.max(0, C.openReports - 1); renderHome(); }
+  catch (err) { toast(err.message); }
+});
+
+$('#fb').addEventListener('click', async e => {
+  const t = e.target.closest('button'); if (!t || !run) return;
+  const C = COURSES[state.course];
+  if (t.id === 'repBtn') { t.parentElement.innerHTML = '<textarea id="repNote" rows="2" maxlength="500" placeholder="What’s wrong? Include a source if you have one."></textarea><div class="row"><button class="btn ghost sm" id="repSend">Send report</button></div>'; $('#repNote').focus(); }
+  if (t.id === 'repSend') {
+    const note = $('#repNote').value.trim(); if (!note) return;
+    const it = run.cur;
+    try { await apiCall('/api/courses/' + C.slug + '/reports', { lessonId: LESSONS[run.idx].id, itemText: it.q || it.p || '', note }); t.closest('.repbox').innerHTML = '<p>Thanks. The author will see it.</p>'; }
+    catch (err) { toast(err.message); }
+  }
+});
+
 refreshBoard();
+loadCourses();
 </script>
 </body></html>
