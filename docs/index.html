@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<title>Hill Speak</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&family=Source+Serif+4:ital,opsz,wght@1,8..60,500&display=swap">
+<style>
+/* Layout: sticky stat bar; zigzag lesson path under unit banners, beside a narrow side column; lessons open as a full-screen drill whose footer turns green or red on Check. */
+:root {
+  --bg: #f6f7fb; --surface: #ffffff; --fg: #162033; --muted: #5a6479; --line: #dbe0ea; --line-deep: #c3cad8;
+  --primary: #2f5fd0; --primary-deep: #1e3f96; --primary-soft: #e4ecfd; --on-primary: #ffffff;
+  --brass: #a8720c; --brass-soft: #fbf0d6;
+  --good: #2f8a2a; --good-deep: #1f6a1b; --good-bg: #e3f4dc;
+  --bad: #c93a32; --bad-deep: #9a2620; --bad-bg: #fbe4e2;
+  --locked: #d3d9e3; --locked-deep: #b5bdcc; --locked-fg: #7d879a;
+  --f-ui: "Nunito", ui-rounded, "Segoe UI", system-ui, sans-serif;
+  --f-quote: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e1320; --surface: #171f31; --fg: #e6ebf5; --muted: #99a4ba; --line: #28324a; --line-deep: #344060;
+  --primary: #7398f2; --primary-deep: #3d5fb8; --primary-soft: #1d2a4a; --on-primary: #0e1320;
+  --brass: #e3ae49; --brass-soft: #3a2f17;
+  --good: #6cc65e; --good-deep: #3f8f34; --good-bg: #18301c;
+  --bad: #f2766d; --bad-deep: #b04640; --bad-bg: #3b1c1b;
+  --locked: #2a3349; --locked-deep: #1f2638; --locked-fg: #6f7a91;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0e1320; --surface: #171f31; --fg: #e6ebf5; --muted: #99a4ba; --line: #28324a; --line-deep: #344060;
+  --primary: #7398f2; --primary-deep: #3d5fb8; --primary-soft: #1d2a4a; --on-primary: #0e1320;
+  --brass: #e3ae49; --brass-soft: #3a2f17;
+  --good: #6cc65e; --good-deep: #3f8f34; --good-bg: #18301c;
+  --bad: #f2766d; --bad-deep: #b04640; --bad-bg: #3b1c1b;
+  --locked: #2a3349; --locked-deep: #1f2638; --locked-fg: #6f7a91;
+  color-scheme: dark }
+
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-ui); font-size: 16px; line-height: 1.45; font-weight: 600; }
+body.in-lesson { overflow: hidden; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+svg { display: block; }
+
+/* top bar */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 2px solid var(--line); }
+.top-in { max-width: 1000px; margin: 0 auto; padding-inline: 16px; padding-block: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 22px; letter-spacing: -0.01em; color: var(--primary); }
+.brand svg { width: 30px; height: 30px; }
+.stats { display: flex; gap: 18px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.stat { display: flex; align-items: center; gap: 6px; }
+.stat svg { width: 22px; height: 22px; }
+.stat.streak { color: var(--brass); }
+.stat.xp { color: var(--primary); }
+.stat.hearts { color: var(--bad); }
+
+/* home */
+.home { max-width: 1000px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 64px; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; align-items: start; }
+.path { display: grid; gap: 28px; min-width: 0; }
+.unit { display: grid; gap: 20px; }
+.banner { background: var(--primary); color: var(--on-primary); border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 4px 0 var(--primary-deep); }
+.unit.is-locked .banner { background: var(--locked); color: var(--locked-fg); box-shadow: 0 4px 0 var(--locked-deep); }
+.eyebrow { font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; opacity: .85; }
+.banner h2 { margin: 2px 0 2px; font-size: 22px; font-weight: 900; text-wrap: balance; }
+.banner p { margin: 0; font-weight: 600; opacity: .92; max-width: 46ch; }
+.jump { flex: none; background: var(--surface); color: var(--fg); border: 2px solid var(--line-deep); border-bottom-width: 4px; border-radius: 12px; padding: 8px 14px; font-weight: 800; font-size: 14px; }
+.jump:active { transform: translateY(2px); border-bottom-width: 2px; }
+.nodes { display: grid; justify-items: center; gap: 22px; padding-block: 6px 10px; --zig: 1; }
+.node-wrap { position: relative; display: grid; justify-items: center; gap: 6px; transform: translateX(calc(var(--x) * var(--zig))); }
+.node { width: 72px; height: 72px; border-radius: 50%; border: 0; display: grid; place-items: center; background: var(--primary); color: var(--on-primary); box-shadow: 0 6px 0 var(--primary-deep); transition: transform .08s; }
+.node svg { width: 32px; height: 32px; }
+.node:active { transform: translateY(5px); box-shadow: 0 1px 0 var(--primary-deep); }
+.node.done { background: var(--brass); box-shadow: 0 6px 0 color-mix(in srgb, var(--brass) 60%, #000); }
+.node.locked { background: var(--locked); color: var(--locked-fg); box-shadow: 0 6px 0 var(--locked-deep); cursor: not-allowed; }
+.node.current { box-shadow: 0 6px 0 var(--primary-deep), 0 0 0 8px var(--primary-soft); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow: 0 6px 0 var(--primary-deep), 0 0 0 13px var(--primary-soft); } }
+.node-label { font-size: 14px; font-weight: 800; color: var(--muted); text-align: center; max-width: 16ch; }
+.start { position: absolute; top: -40px; background: var(--surface); color: var(--primary); border: 2px solid var(--line); border-radius: 10px; padding: 3px 12px; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: .05em; white-space: nowrap; }
+.start::after { content: ""; position: absolute; left: 50%; bottom: -8px; width: 12px; height: 12px; background: var(--surface); border-right: 2px solid var(--line); border-bottom: 2px solid var(--line); transform: translateX(-50%) rotate(45deg); }
+
+.side { display: grid; gap: 18px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 80px); min-width: 0; }
+.card { background: var(--surface); border: 2px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 10px; min-width: 0; }
+.card h3 { margin: 0; font-size: 17px; font-weight: 900; }
+.card p { margin: 0; font-weight: 600; color: var(--muted); font-size: 15px; }
+.card .quote-sm { font-family: var(--f-quote); font-style: italic; font-size: 19px; line-height: 1.35; color: var(--fg); }
+.card .who-sm { font-size: 13px; color: var(--muted); }
+.reveal-body { display: grid; gap: 8px; }
+.reveal-body[hidden] { display: none; }
+.reveal-body b { color: var(--good); }
+.meta { font-size: 13px; color: var(--muted); font-weight: 700; }
+.bar-mini { height: 10px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.bar-mini > i { display: block; height: 100%; background: var(--brass); }
+.kv { display: flex; justify-content: space-between; font-weight: 800; font-variant-numeric: tabular-nums; }
+.linkbtn { justify-self: start; background: none; border: 0; padding: 0; color: var(--primary); font-weight: 800; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+
+/* course tabs */
+.path-col { display: grid; gap: 24px; min-width: 0; }
+.tabs { display: flex; gap: 8px; background: var(--surface); border: 2px solid var(--line); border-radius: 16px; padding: 6px; }
+.tab { flex: 1; border: 0; background: none; border-radius: 11px; padding: 10px 12px; font-weight: 900; font-size: 15px; color: var(--muted); letter-spacing: .02em; }
+.tab.on { background: var(--primary); color: var(--on-primary); box-shadow: 0 3px 0 var(--primary-deep); }
+.tab:not(.on):hover { background: var(--primary-soft); color: var(--primary); }
+.potd-q { color: var(--fg) !important; font-weight: 800 !important; font-size: 16px !important; }
+
+/* news card */
+.news { background: var(--surface); border: 2px solid var(--line); border-left: 6px solid var(--brass); border-radius: 12px; padding: 12px 16px; display: grid; gap: 4px; }
+.news-k { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--brass); }
+.news-h { margin: 0; font-family: var(--f-quote); font-style: italic; font-size: 20px; line-height: 1.3; }
+.news-d { font-size: 13px; color: var(--muted); font-weight: 700; }
+
+/* shared buttons */
+.btn { border: 0; border-radius: 14px; padding: 14px 28px; font-weight: 900; font-size: 16px; letter-spacing: .05em; text-transform: uppercase; background: var(--primary); color: var(--on-primary); box-shadow: 0 4px 0 var(--primary-deep); min-width: 150px; }
+.btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 var(--primary-deep); }
+.btn:disabled { background: var(--locked); color: var(--locked-fg); box-shadow: 0 4px 0 var(--locked-deep); cursor: not-allowed; }
+.btn.ghost { background: var(--surface); color: var(--fg); border: 2px solid var(--line-deep); box-shadow: 0 4px 0 var(--line-deep); }
+.lfoot.good .btn { background: var(--good); box-shadow: 0 4px 0 var(--good-deep); }
+.lfoot.bad .btn { background: var(--bad); box-shadow: 0 4px 0 var(--bad-deep); }
+
+/* lesson overlay */
+.overlay { position: fixed; inset: 0; z-index: 20; background: var(--bg); display: flex; flex-direction: column; padding-top: env(safe-area-inset-top, 0px); }
+.lbar { width: 100%; max-width: 760px; margin: 0 auto; padding: 18px 16px 8px; display: flex; align-items: center; gap: 16px; }
+.icon-btn { background: none; border: 0; padding: 4px; color: var(--muted); border-radius: 8px; }
+.icon-btn svg { width: 26px; height: 26px; }
+.progress { flex: 1; height: 16px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.progress > i { display: block; height: 100%; width: 0; background: var(--good); border-radius: 99px; transition: width .35s ease; }
+.stage { flex: 1; overflow-y: auto; width: 100%; }
+.stage-in { max-width: 760px; margin: 0 auto; padding-inline: 16px; padding-block: 16px 32px; display: grid; gap: 18px; }
+.kicker { margin: 0; font-size: 13px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--primary); }
+.prompt { margin: 0; font-size: 26px; font-weight: 900; line-height: 1.2; text-wrap: balance; }
+.speaker { display: flex; align-items: flex-end; gap: 14px; }
+.avatar { flex: none; width: 56px; height: 56px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 900; font-size: 22px; border: 2px solid var(--line); position: relative; }
+.avatar::after { content: ""; position: absolute; bottom: -6px; width: 14px; height: 10px; border-radius: 2px; background: var(--brass); }
+.bubble { position: relative; background: var(--surface); border: 2px solid var(--line); border-radius: 16px; padding: 14px 18px; min-width: 0; }
+.bubble::before { content: ""; position: absolute; left: -9px; bottom: 16px; width: 14px; height: 14px; background: var(--surface); border-left: 2px solid var(--line); border-bottom: 2px solid var(--line); transform: rotate(45deg); }
+.bubble q { quotes: none; font-family: var(--f-quote); font-style: italic; font-size: 21px; line-height: 1.35; display: block; }
+.bubble .who { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.opts { display: grid; gap: 10px; }
+.opt { display: flex; align-items: center; gap: 14px; text-align: left; background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 14px; padding: 14px 16px; font-weight: 700; font-size: 16px; }
+.opt:hover { background: color-mix(in srgb, var(--primary-soft) 50%, var(--surface)); }
+.kbd { flex: none; width: 28px; height: 28px; border-radius: 8px; border: 2px solid var(--line); display: grid; place-items: center; font-size: 13px; font-weight: 900; color: var(--muted); }
+.opt.sel { border-color: var(--primary); background: var(--primary-soft); }
+.opt.sel .kbd { border-color: var(--primary); color: var(--primary); }
+.opt.right { border-color: var(--good); background: var(--good-bg); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+.opt:disabled { cursor: default; }
+
+.match { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 10px 12px; }
+.col { display: grid; gap: 10px; align-content: start; }
+.tile { text-align: left; background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 14px; padding: 12px 14px; font-weight: 700; font-size: 15px; min-height: 64px; line-height: 1.3; }
+.tile.term { font-weight: 900; font-size: 16px; }
+.tile.sel { border-color: var(--primary); background: var(--primary-soft); }
+.tile.matched { border-color: var(--line); background: var(--bg); color: var(--locked-fg); border-bottom-width: 2px; cursor: default; }
+.tile.miss { border-color: var(--bad); background: var(--bad-bg); animation: shake .3s; }
+@keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+.order { display: grid; gap: 8px; }
+.end { font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; counter-reset: slot; }
+.slots li { counter-increment: slot; display: flex; align-items: center; gap: 10px; min-height: 52px; }
+.slots li::before { content: counter(slot); flex: none; width: 28px; text-align: center; font-weight: 900; color: var(--muted); font-variant-numeric: tabular-nums; }
+.slots .empty { flex: 1; height: 48px; border: 2px dashed var(--line-deep); border-radius: 12px; }
+.pool { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 8px; border-top: 2px solid var(--line); }
+.chip { text-align: left; background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 12px; padding: 10px 14px; font-weight: 700; font-size: 15px; }
+.slots .chip { flex: 1; border-color: var(--primary); background: var(--primary-soft); }
+.order-ans { margin: 0; padding-left: 22px; }
+
+.lfoot { border-top: 2px solid var(--line); background: var(--bg); padding-inline: 16px; padding-block: 16px calc(16px + env(safe-area-inset-bottom, 0px)); transition: background .15s; }
+.lfoot.good { background: var(--good-bg); border-top-color: transparent; }
+.lfoot.bad { background: var(--bad-bg); border-top-color: transparent; }
+.foot-in { max-width: 760px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+.fb { flex: 1; min-width: 0; display: grid; gap: 6px; max-height: 38vh; overflow-y: auto; }
+.fb h4 { margin: 0; font-size: 22px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+.fb h4 svg { width: 26px; height: 26px; }
+.lfoot.good .fb h4 { color: var(--good); }
+.lfoot.bad .fb h4 { color: var(--bad); }
+.fb p { margin: 0; font-weight: 600; font-size: 15px; max-width: 62ch; }
+.fb .ans { font-weight: 800; }
+.fb .ask { border-left: 4px solid var(--brass); padding-left: 10px; }
+.fb .ask span { display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; color: var(--brass); }
+.fb.hint p { color: var(--muted); }
+.foot-in .btn { flex: none; }
+
+/* result screen */
+.result { justify-content: center; align-items: center; padding-inline: 16px; overflow-y: auto; }
+.result-in { max-width: 520px; width: 100%; display: grid; gap: 22px; justify-items: center; text-align: center; padding-block: 32px; }
+.result h2 { margin: 0; font-size: 32px; font-weight: 900; color: var(--brass); text-wrap: balance; }
+.result.failed h2 { color: var(--bad); }
+.result p { margin: 0; color: var(--muted); max-width: 42ch; }
+.seal { width: 120px; height: 120px; }
+.rtiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
+.rtile { border: 2px solid var(--brass); border-radius: 14px; overflow: hidden; display: grid; }
+.rtile .k { background: var(--brass); color: var(--surface); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; padding: 4px; }
+.rtile .v { font-size: 24px; font-weight: 900; padding: 10px 4px; font-variant-numeric: tabular-nums; }
+.rtile.acc { border-color: var(--good); } .rtile.acc .k { background: var(--good); }
+.rtile.st { border-color: var(--primary); } .rtile.st .k { background: var(--primary); }
+.rbtns { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 18px; border-radius: 12px; font-weight: 800; font-size: 14px; z-index: 40; max-width: calc(100% - 32px); text-align: center; }
+
+@media (max-width: 820px) {
+  .home { grid-template-columns: 1fr; }
+  .side { position: static; }
+}
+@media (max-width: 520px) {
+  .nodes { --zig: .55; }
+  .prompt { font-size: 22px; }
+  .bubble q { font-size: 19px; }
+  .stats { gap: 12px; }
+  .brand { font-size: 19px; }
+  .foot-in { flex-direction: column; align-items: stretch; }
+  .foot-in .btn { width: 100%; }
+  .match { grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); gap: 8px; }
+  .tile { padding: 10px; font-size: 14px; }
+  .tile.term { font-size: 15px; }
+  .rtile .v { font-size: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true" fill="currentColor"><rect x="15" y="2" width="2" height="5" rx="1"/><path d="M8 17a8 8 0 0 1 16 0z"/><rect x="5" y="17" width="22" height="3" rx="1"/><rect x="7" y="21" width="2.5" height="6"/><rect x="12" y="21" width="2.5" height="6"/><rect x="17.5" y="21" width="2.5" height="6"/><rect x="22.5" y="21" width="2.5" height="6"/><rect x="4" y="27" width="24" height="3" rx="1"/></svg>
+      Hill Speak
+    </div>
+    <div class="stats">
+      <div class="stat streak" title="Day streak"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.5 2c.6 3.4 4.9 5.6 4.9 10.6A5.4 5.4 0 0 1 12 18a5.4 5.4 0 0 1-5.4-5.4c0-2.4 1.2-4 2.4-5 0 2 .9 3.2 2 3.4-.3-3.3.5-6.4 1.5-9z"/><path d="M8 19.5h8v2.5H8z" opacity=".5"/></svg><span id="streak">0</span><span class="sr" hidden>day streak</span></div>
+      <div class="stat xp" title="Total XP"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 2 4 14h6.5L9.5 22 20 9.5h-6.5z"/></svg><span id="xp">0</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="home" id="home">
+  <div class="path-col">
+    <div class="tabs" id="tabs" role="tablist" aria-label="Course"></div>
+    <div class="path" id="path"></div>
+  </div>
+  <aside class="side">
+    <section class="card" id="potd"></section>
+    <section class="card">
+      <h3>Your progress</h3>
+      <div class="kv"><span>Lessons</span><span id="pDone">0 / 0</span></div>
+      <div class="bar-mini"><i id="pBar" style="width:0"></i></div>
+      <p>Keys: 1 to 4 picks an answer, Enter checks, Esc quits.</p>
+      <button class="linkbtn" id="resetBtn">Reset progress</button>
+    </section>
+    <section class="card" id="caveat"></section>
+  </aside>
+</main>
+
+<section class="overlay" id="lesson" hidden>
+  <div class="lbar">
+    <button class="icon-btn" id="quitBtn" aria-label="Quit lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
+    <div class="progress" role="progressbar" aria-label="Lesson progress"><i id="prog"></i></div>
+    <div class="stat hearts" title="Hearts left"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.6-4.6-9.6-9.3C1 8.4 3.2 4.8 6.8 4.8c2 0 3.5 1.1 5.2 3 1.7-1.9 3.2-3 5.2-3 3.6 0 5.8 3.6 4.4 6.9C19.6 16.4 12 21 12 21z"/></svg><span id="hearts">5</span></div>
+  </div>
+  <div class="stage" id="stageWrap"><div class="stage-in" id="stage"></div></div>
+  <footer class="lfoot" id="foot">
+    <div class="foot-in">
+      <div class="fb" id="fb" hidden></div>
+      <button class="btn" id="checkBtn" disabled>Check</button>
+    </div>
+  </footer>
+</section>
+
+<section class="overlay result" id="result" hidden>
+  <div class="result-in" id="resultIn"></div>
+</section>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const KEY = 'hillspeak-v1';
+const SPEAKERS = {
+  m: { n: 'Marcus', r: 'Legislative Director, Senate office' },
+  p: { n: 'Priya', r: 'Legislative Assistant, House office' },
+  t: { n: 'Tom', r: 'Professional Staff Member, Senate committee' }
+};
+
+const UNITS = [
+  { title: 'The Polite No', desc: 'Most meetings end warmly. Learn to tell warmth from commitment.', lessons: [
+    { title: 'Holding phrases', items: [
+      { t: 'mc', who: 'm', q: '“We’re monitoring the issue closely.”',
+        o: ['They’re drafting their own bill on it', 'No position, and no plans to take one soon', 'They support it but can’t say so publicly', 'They’re opposed and will work against it'], a: 1,
+        x: '“Monitoring” is the standard holding phrase. It commits the office to nothing. If they were drafting something, they would usually say so, because offices want advocates to know they’re leading.',
+        ask: '“Is the boss likely to take a position this Congress, or is this one you’re watching for now?”' },
+      { t: 'mc', who: 'p', q: '“I’ll definitely take this back to the boss.”',
+        o: ['The member will read your materials personally', 'A routine way to close; it tells you little either way', 'A soft yes', 'A soft no'], a: 1,
+        x: 'Staff say this at the end of nearly every meeting. The real signal comes later: a follow-up email with specific questions means it went somewhere. Silence means it probably didn’t.',
+        ask: '“What would be most useful for me to send before you brief her?”' },
+      { t: 'mc', who: 'm', q: '“The senator is supportive of the goals of the bill.”',
+        o: ['She’ll cosponsor if asked', 'She likes the idea in public but isn’t ready to sign on to this text', 'She’s already a cosponsor', 'She opposes it'], a: 1,
+        x: 'Praising the “goals” separates the idea from the bill. It lets the office say nice things without signing on. For now, it usually means no cosponsorship.',
+        ask: '“What would need to change in the text for her to sign on?”' },
+      { t: 'mc', who: 'm', q: '“That’s a heavy lift this Congress.”',
+        o: ['It’s hard, but they’ll push for it', 'It probably won’t move this Congress, and the office won’t spend capital trying', 'They need help counting votes', 'It’s going to markup soon'], a: 1,
+        x: '“Heavy lift” is usually a polite forecast that nothing will happen. Sometimes it’s an accurate read of the floor; sometimes it covers the office not wanting to try. Either way, don’t plan around passage.',
+        ask: '“What would make it lighter: a different vehicle, a narrower version, or more Republicans on board?”' }
+    ]},
+    { title: 'Reading the temperature', items: [
+      { t: 'mc', who: 'p', q: '“Happy to keep the lines of communication open.”',
+        o: ['They want monthly check-ins', 'The meeting is over and nothing was committed', 'They want to be the lead office', 'They want you to testify'], a: 1,
+        x: 'This is a goodbye. It keeps the relationship friendly without promising anything. A follow-up is fine, but don’t read this line as interest.' },
+      { t: 'mc', who: 'm', q: '“We’d want to see who else is on before we commit.”',
+        o: ['A brush-off', 'A real condition: they’ll consider it once other offices take the risk first', 'They want your donor list', 'A firm yes'], a: 1,
+        x: 'One of the more useful lines you’ll hear. Offices want political cover, especially from the other party or their own state delegation. It’s a request for information you can actually meet.',
+        ask: '“Which offices’ support would matter most to the senator?”' },
+      { t: 'mc', who: 'p', q: '“The boss has some concerns.”',
+        o: ['A firm no', 'Real but unnamed objections; could be policy, could be politics', 'They want a bigger version', 'They didn’t read it'], a: 1,
+        x: 'Concerns can mean a fixable drafting problem or an in-district company lobbying against the bill. The office often won’t say which unless you ask, so your job is to find out.',
+        ask: '“Are the concerns about the policy itself, or about who’s opposing it?”' },
+      { t: 'order', p: 'Put these in order from coldest to warmest.', ends: ['Coldest', 'Warmest'],
+        items: ['“We’re monitoring it.”', '“The boss supports the goals.”', '“We’d want to see who else is on.”', '“Can you send the text and the cosponsor list?”', '“Who should I talk to in the lead sponsor’s office?”'],
+        x: 'Roughly: watching, then praising the idea, then naming a condition, then asking for materials, then asking how to join. Treat this as a rule of thumb. A particular staffer’s habits can reshuffle the middle.' }
+    ]}
+  ]},
+  { title: 'Process Words', desc: 'The vocabulary of how a bill actually moves.', lessons: [
+    { title: 'Committee and cost', items: [
+      { t: 'match', p: 'Match each term to its meaning.', pairs: [
+        ['Markup', 'Committee session where members amend and vote on a bill'],
+        ['Vehicle', 'A bill likely to pass that other provisions can ride on'],
+        ['Pay-for', 'A spending cut or revenue that offsets a bill’s cost'],
+        ['Score', 'CBO’s estimate of what a bill would cost'],
+        ['Dear Colleague', 'A letter one office sends to all offices, often seeking cosponsors']],
+        x: 'These five come up in almost every legislative meeting.' },
+      { t: 'mc', who: 'm', q: '“Has it been scored?”', p: 'Why would a staffer ask this?',
+        o: ['They want your organization’s rating of the member', 'They’re checking whether CBO has estimated the cost, which suggests they’re thinking about passage', 'They want polling numbers', 'They’re asking about the markup vote count'], a: 1,
+        x: 'Cost matters once a bill might actually move, so this question is usually a sign of real interest. If there’s no score yet, expect to hear the question again.' },
+      { t: 'mc', who: 't', q: '“We’d need to find a vehicle for this.”',
+        o: ['The bill needs a new sponsor', 'It probably won’t pass on its own and would need to ride on must-pass legislation', 'They need a press event', 'It needs a companion bill in the House'], a: 1,
+        x: 'Most standalone bills never get floor time. Provisions often ride on bills that have to pass, like the NDAA (the annual defense authorization) or appropriations. A lot of AI policy has moved this way.',
+        ask: '“Which vehicle looks realistic, and when does that text get locked?”' },
+      { t: 'mc', who: 't', q: '“The Chair wants regular order on this.”',
+        o: ['Leadership will write it behind closed doors', 'It should go through committee hearings and markup before the floor', 'It should pass by unanimous consent', 'It should be attached to the budget'], a: 1,
+        x: '“Regular order” means the textbook process: hearings, markup, then the floor. Hearing it from committee staff means you’ll work through them, and the timeline will be slower.' }
+    ]},
+    { title: 'Floor mechanics', items: [
+      { t: 'match', p: 'Match each term to its meaning.', pairs: [
+        ['Hold', 'A senator’s notice they’ll object to fast-tracking a bill or nominee'],
+        ['Unanimous consent', 'Senate action taken with no objection; one senator can block it'],
+        ['Cloture', 'Senate vote to end debate; usually needs 60'],
+        ['Suspension', 'House fast track: limited debate, needs two-thirds'],
+        ['Hotline', 'Leadership asks every Senate office whether it objects to passing something by UC']],
+        x: 'All five are about speed: how a bill skips steps, and how one member can stop it.' },
+      { t: 'mc', who: 't', q: '“We could try to hotline it.”',
+        o: ['Call the White House', 'Try to pass it quickly in the Senate by checking that no office objects', 'Leak it to the press', 'Move it under suspension'], a: 1,
+        x: 'Hotlining works for noncontroversial bills. A single hold stops it, which is why staff will ask whether anyone is likely to object.' },
+      { t: 'mc', who: 'p', q: '“Honestly, it’s a messaging bill.”',
+        o: ['A bill about communications policy', 'A bill introduced to make a point, not expected to pass', 'A bill written by the press office', 'A bill that passed by voice vote'], a: 1,
+        x: 'Messaging bills stake out a position for the party or a campaign. Cosponsoring one is cheap, so it tells you less about how the member would vote on a real deal.' },
+      { t: 'mc', who: 'm', q: '“That’s a Byrd rule problem.”',
+        o: ['It would violate Senate ethics rules', 'In a reconciliation bill, provisions that are mainly policy rather than budget can be struck', 'It needs 67 votes', 'It conflicts with a House rule'], a: 1,
+        x: 'Reconciliation bills pass the Senate with a simple majority, but the Byrd rule lets senators strike provisions that aren’t mainly about the budget. In 2025, the proposed moratorium on state AI laws was rewritten around broadband funding to survive it; the Senate then voted 99-1 to remove it anyway.' }
+    ]}
+  ]},
+  { title: 'Who’s Who', desc: 'Who you meet tells you how the office is treating your issue.', lessons: [
+    { title: 'The staff ladder', items: [
+      { t: 'match', p: 'Match each title to the job.', pairs: [
+        ['LD', 'Legislative Director: runs the policy staff and agenda'],
+        ['LA', 'Legislative Assistant: covers a portfolio of issues'],
+        ['LC', 'Legislative Correspondent: answers constituent mail, often junior'],
+        ['Chief of Staff', 'Runs the office and makes the political calls'],
+        ['PSM', 'Professional Staff Member: committee staffer who works on text']],
+        x: 'Personal offices have the LD, LAs and LCs. Committees have their own staff, who usually write the text.' },
+      { t: 'mc', p: 'You asked for a meeting on AI safety. The office books you with the LC instead of the tech LA. What’s the best read?',
+        o: ['You’ve been snubbed and should escalate', 'Lower priority for now, but the LC may write the memo the LA reads', 'The office has no tech LA', 'The LC is the decision-maker'], a: 1,
+        x: 'Junior staff often take first meetings. Take them seriously: LCs write memos, get promoted, and remember who was useful.',
+        ask: '“How does this usually get in front of the LA?”' },
+      { t: 'mc', who: 'p', q: '“That’s really a question for committee staff.”',
+        o: ['Go away', 'The personal office doesn’t lead on this; the committee writes the text', 'Call the Rules Committee', 'They want you to testify'], a: 1,
+        x: 'Offices whose member isn’t on the committee that handles the bill rarely shape its text. If they offer an introduction to committee staff, that’s a real step forward.',
+        ask: '“Would you be willing to connect me with the right person on the committee?”' },
+      { t: 'mc', who: 'm', q: '“The boss is a yes, but she won’t lead on it.”',
+        o: ['She’ll introduce it next month', 'She’ll vote for it or cosponsor, but won’t spend time or capital pushing it', 'She opposes it', 'She’ll whip votes for it'], a: 1,
+        x: 'Members have limited bandwidth to lead. A “yes but won’t lead” office gives you a cosponsor, not a champion. You still need a champion somewhere else.' }
+    ]},
+    { title: 'Jurisdiction and money', items: [
+      { t: 'mc', p: 'A bill funds grants to state election offices. Which Senate committee handles election administration law?',
+        o: ['Judiciary', 'Rules and Administration', 'Homeland Security', 'Commerce'], a: 1,
+        x: 'Senate Rules and Administration handles federal election law. In the House it’s the Committee on House Administration. The grant money itself runs through appropriations.' },
+      { t: 'mc', p: 'A bill requires frontier AI developers to report safety incidents. Where would it most likely go in the Senate?',
+        o: ['Commerce, Science, and Transportation', 'Rules and Administration', 'Finance', 'Agriculture'], a: 0,
+        x: 'Commerce handles most tech regulation, though AI bills can also land in Judiciary, Homeland Security or Armed Services depending on how they’re written. Drafting choices can steer a bill toward a friendlier committee.' },
+      { t: 'mc', who: 't', q: '“Could we do this in report language instead?”',
+        o: ['Put it in a press release', 'Put direction in the committee report that accompanies a spending bill, rather than in law', 'Ask CRS to write a report', 'Enter it into the Congressional Record'], a: 1,
+        x: 'Report language isn’t binding law, but agencies usually follow it because the same committee funds them next year. It’s a much easier ask than a statute and a common win for advocates.' },
+      { t: 'mc', who: 'p', q: '“Leadership hasn’t weighed in yet.”',
+        o: ['Leadership opposes it', 'Offices are waiting to see whether party leaders will back it or give it floor time', 'It’s already scheduled', 'It’s dead'], a: 1,
+        x: 'Leadership controls the floor. Many offices won’t commit before they know where leadership stands, especially on anything that splits the caucus.',
+        ask: '“Do you know who in leadership’s office is working on this?”' }
+    ]}
+  ]},
+  { title: 'Real Interest', desc: 'The signals that mean an office is actually moving.', lessons: [
+    { title: 'Buying signals', items: [
+      { t: 'mc', p: 'Which of these is the strongest sign of real interest?',
+        o: ['“Thanks so much for coming in.”', '“This is really helpful context.”', '“Can you send the bill text and who else has signed on?”', '“We’ll keep it in mind.”'], a: 2,
+        x: 'Requests for specific materials mean someone is preparing to brief the member or make a decision. Thanks and praise are just good manners.' },
+      { t: 'mc', who: 'm', q: '“What’s the strongest argument against this?”', p: 'A staffer asks you this. What’s the best read?',
+        o: ['They’re hostile', 'A good sign: they’re preparing to defend a position or brief the boss', 'They want you to leave', 'They’re testing your loyalty'], a: 1,
+        x: 'Staff who might recommend a yes need to know what the boss will be asked. Answer honestly. Spin here costs credibility fast.' },
+      { t: 'mc', who: 'p', q: '“Could you help us with some language on this?”',
+        o: ['A polite brush-off', 'A strong signal: they want drafting help, possibly for their own bill', 'They want a press statement', 'They want you to proofread'], a: 1,
+        x: 'Small offices rely on outside groups for help with text (staff call this technical assistance, or “TA”). If they want your language, your idea may be going into a bill, though maybe not the bill you came to pitch.',
+        ask: '“Is this for something the boss is planning to introduce?”' },
+      { t: 'mc', who: 'p', q: '“Send me a one-pager.”',
+        o: ['Always a brush-off', 'Ambiguous: it depends on whether they asked anything specific', 'Always a strong signal', 'They want a longer memo'], a: 1,
+        x: 'Sometimes it’s how staff end a meeting. Sometimes they really need something to forward. If they asked pointed questions during the meeting, it’s probably real.' }
+    ]},
+    { title: 'After the meeting', items: [
+      { t: 'mc', p: 'After the meeting, which follow-up from the office means the most?',
+        o: ['An auto-reply', 'A thank-you note', 'The staffer introduces you to the committee staffer working on the issue', 'You get added to the office newsletter'], a: 2,
+        x: 'An introduction spends some of the staffer’s own credibility. When they make one, they’re betting your issue is worth the committee’s time.' },
+      { t: 'mc', who: 'm', q: '“We’re hearing from a lot of stakeholders on this.”',
+        o: ['There’s broad support', 'Other groups, often opponents, are lobbying the office too', 'They want you to bring more groups', 'They’re running a poll'], a: 1,
+        x: 'This usually means industry or other groups are making the opposite case. It’s an opening to find out what they’re hearing.',
+        ask: '“Who are you hearing from, and what are they saying?”' },
+      { t: 'order', p: 'Order these follow-ups from weakest to strongest signal.', ends: ['Weakest', 'Strongest'],
+        items: ['You’re added to the office newsletter', '“Thanks again, we’ll be in touch.”', 'An email asking two specific questions about the bill', 'An introduction to the committee staffer on the issue', 'A request for help drafting language'],
+        x: 'Effort is the signal. The more work the staffer does after the meeting, the more the issue is moving. Treat the exact order as a rule of thumb.' }
+    ]}
+  ]},
+  { title: 'Ask the Next Question', desc: 'Decoding the phrase is half the job. The follow-up gets you the truth.', lessons: [
+    { title: 'Turn vague into specific', items: [
+      { t: 'mc', who: 'm', q: '“The senator is very engaged on AI, and we’re looking at a range of approaches.”', p: 'What’s the best follow-up?',
+        o: ['“Great. So will she cosponsor?”', '“Is she working on her own legislation in this space?”', '“I’ll send over a one-pager.”', '“Thanks for your time.”'], a: 1,
+        x: 'Members who want to lead on an issue rarely cosponsor a rival bill. If she’s drafting her own, the realistic win is getting your language into hers.' },
+      { t: 'mc', who: 'm', q: '“That’s a heavy lift.”', p: 'What’s the best follow-up?',
+        o: ['“I understand. Thanks anyway.”', '“What would make it lighter: a different vehicle, a narrower version, or more Republicans on board?”', '“Other offices think it’s easy.”', '“Can I meet the senator directly?”'], a: 1,
+        x: 'This turns a vague no into a list of specific obstacles, some of which you might be able to remove.' },
+      { t: 'mc', who: 'p', q: '“The boss has some concerns.”', p: 'What’s the best follow-up?',
+        o: ['“What are they?”', '“Are the concerns about the policy itself, or about who’s opposing it?”', '“Other members don’t have concerns.”', '“Can we deal with those later?”'], a: 1,
+        x: '“What are they?” is fine, but separating policy from politics gets you more. Drafting problems can be fixed with text. Political problems need validators or cover.' }
+    ]},
+    { title: 'Pin it down', items: [
+      { t: 'mc', who: 'p', q: '“We’ll get back to you.”', p: 'What’s the best follow-up?',
+        o: ['“Great, thanks.”', '“When should I check back, and are you the right person to follow up with?”', '“Can you commit now?”', '“I’ll email your boss.”'], a: 1,
+        x: 'Get a time and a name. It’s polite, and it makes silence informative: if they haven’t answered by then, you’ve learned something.' },
+      { t: 'mc', who: 'm', q: '“We’d want to see who else is on.”', p: 'What’s the best follow-up?',
+        o: ['“Everyone’s on board.”', '“Which offices would matter most to the senator?”', '“That’s not a good reason.”', '“OK, thanks.”'], a: 1,
+        x: 'Get specific names. Same-state colleagues, committee members and offices from the other party tend to matter most, but each office has its own list.' },
+      { t: 'mc', who: 't', q: '“We don’t usually take positions before markup.”', p: 'What’s the best follow-up?',
+        o: ['“Can you make an exception?”', '“Understood. Are there amendments the senator is considering?”', '“Then I’ll come back after markup.”', '“That seems evasive.”'], a: 1,
+        x: 'Committee members often avoid public positions before markup to keep room to negotiate. Amendments are where they actually shape the bill, so ask about those.' }
+    ]}
+  ]}
+];
+
+const PROC_UNITS = [
+  { title: 'The Basic Path', desc: 'How a bill gets from an idea to the floor.', lessons: [
+    { title: 'Introduction and referral', items: [
+      { t: 'order', p: 'Put the usual steps in order.', ends: ['First', 'Last'],
+        items: ['A member introduces the bill', 'It’s referred to a committee', 'The committee holds a hearing', 'The committee marks it up', 'The committee reports it', 'The full chamber considers it'],
+        x: 'This is the textbook path, often called regular order. Many bills skip the hearing, and leadership sometimes skips committee entirely by bringing a bill straight to the floor.' },
+      { t: 'mc', p: 'Who can formally introduce a bill in the House?',
+        o: ['Any member of the House', 'Any member, or the White House', 'Any registered lobbyist', 'Only committee chairs'], a: 0,
+        x: 'Only members can introduce bills. Agencies, the White House and outside groups often write the text, but a member has to put it in. In the House that means dropping it in the “hopper,” a box on the floor.' },
+      { t: 'mc', p: 'Under the Constitution, which bills must start in the House?',
+        o: ['Bills raising revenue', 'All bills over \$1 billion', 'Treaties', 'Bills about elections'], a: 0,
+        x: 'The Origination Clause (Article I, Section 7) requires revenue bills to start in the House, and by custom appropriations bills do too. The Senate works around this by taking a House-passed bill and replacing its text. The Affordable Care Act moved on H.R. 3590, which began as a tax bill about homeownership for service members.' },
+      { t: 'match', p: 'Match each term to its meaning.', pairs: [
+        ['Sponsor', 'The member who introduces the bill and leads on it'],
+        ['Cosponsor', 'A member who formally signs on in support'],
+        ['Companion bill', 'A matching bill introduced in the other chamber'],
+        ['Referral', 'Sending a bill to the committee with jurisdiction'],
+        ['Hopper', 'The box on the House floor where new bills are dropped']],
+        x: 'A long cosponsor list shows support, but it doesn’t move a bill. The committee does.' }
+    ]},
+    { title: 'Inside committee', items: [
+      { t: 'mc', p: 'Who usually decides whether a bill gets a hearing or a markup?',
+        o: ['The committee chair', 'The bill’s sponsor', 'The minority leader', 'The parliamentarian'], a: 0,
+        x: 'The chair controls the committee’s agenda. A bill the chair won’t schedule usually goes nowhere, whatever its cosponsor count.' },
+      { t: 'mc', p: 'In the House, who refers a new bill to committee?',
+        o: ['The Speaker, advised by the parliamentarian', 'The bill’s sponsor', 'The Rules Committee', 'The Clerk, by lottery'], a: 0,
+        x: 'Referral is formally the Speaker’s call, made in practice on the parliamentarian’s advice about jurisdiction. A bill can go to several committees, and each one becomes a place where it can stall.' },
+      { t: 'mc', who: 't', q: '“The chair is going to mark up her own substitute.”', p: 'What does that tell you?',
+        o: ['The committee will start from the chair’s rewrite, not the bill as introduced', 'The bill is dead', 'The chair is leaving the committee', 'The bill goes straight to the floor'], a: 0,
+        x: 'Committees often mark up an “amendment in the nature of a substitute,” which replaces the whole bill. The substitute is the text that matters from then on, so get a copy as soon as it circulates.' },
+      { t: 'mc', p: 'Roughly what share of introduced bills become law in a typical recent Congress?',
+        o: ['A few percent', 'About a tenth', 'About a third', 'Most of them'], a: 0,
+        x: 'Only a few percent of bills become law, and most never get a committee vote. Many are introduced to stake out a position, with no real plan to pass them.' }
+    ]}
+  ]},
+  { title: 'The House Floor', desc: 'The majority controls the House floor, mostly through the Rules Committee.', lessons: [
+    { title: 'The Rules Committee', items: [
+      { t: 'mc', p: 'What does a “rule” from the Rules Committee do?',
+        o: ['Sets the terms for debating one bill: time limits and which amendments are allowed', 'Permanently changes the House’s standing rules', 'Decides whether a bill is constitutional', 'Schedules committee hearings'], a: 0,
+        x: 'Most major bills reach the House floor under a special rule written for that bill. The House has to adopt the rule by majority vote before it can debate the bill.' },
+      { t: 'match', p: 'Match each type of rule to what it allows.', pairs: [
+        ['Open rule', 'Any germane amendment can be offered'],
+        ['Structured rule', 'Only amendments the Rules Committee lists'],
+        ['Closed rule', 'No amendments at all'],
+        ['Self-executing rule', 'Adopting the rule automatically changes the bill’s text']],
+        x: 'Open rules have become rare. Most major bills now come up under structured or closed rules, which lets the majority avoid amendment votes it doesn’t want.' },
+      { t: 'mc', p: 'Why is Rules called “the Speaker’s committee”?',
+        o: ['The majority holds 9 of its 13 seats, and the Speaker picks them', 'The Speaker chairs it', 'It only meets when the Speaker attends', 'It writes the Speaker’s floor schedule'], a: 0,
+        x: 'The 9 to 4 split and the Speaker’s control over majority appointments make Rules an arm of leadership. That control can slip: as part of his 2023 deal to become Speaker, Kevin McCarthy put hardliners on the committee who could block rules.' },
+      { t: 'mc', news: { h: 'Majority members vote down their own party’s rule', d: 'Happened repeatedly in 2023 and 2024' }, p: 'What happens when a rule fails on the floor?',
+        o: ['The bill can’t come up under that rule; leadership needs a new rule or another route', 'The bill passes automatically', 'The Senate takes up the bill instead', 'The Speaker is removed'], a: 0,
+        x: 'Rule votes used to be party-line formalities. Since 2023, hardliners in the majority have sunk rules to protest leadership, which can stall a bill even when it has the votes to pass.' }
+    ]},
+    { title: 'Shortcuts and end-runs', items: [
+      { t: 'mc', p: 'Under “suspension of the rules,” what does a bill need to pass?',
+        o: ['Two-thirds of those voting, with 40 minutes of debate and no amendments', 'A simple majority', '60 votes', 'Unanimous consent'], a: 0,
+        x: 'Most bills the House passes go through suspension, usually noncontroversial ones like naming post offices. It skips the Rules Committee entirely, at the cost of a two-thirds threshold.' },
+      { t: 'mc', news: { h: 'Petition to force a vote on releasing the Epstein files gets its 218th signature', d: 'November 12, 2025' }, p: 'What does reaching 218 signatures do?',
+        o: ['After a waiting period, it can force a floor vote over leadership’s objection', 'It passes the bill', 'It sends the bill to the Senate', 'It removes the committee chair'], a: 0,
+        x: 'A discharge petition lets a majority of the House pull a bill out of committee. It rarely succeeds, because majority members don’t like to cross their own leaders. This one reached 218 when newly sworn-in Rep. Adelita Grijalva signed, after a delay in seating her that critics said was meant to stall the vote.' },
+      { t: 'mc', p: 'What is the motion to recommit?',
+        o: ['The minority’s last chance to send the bill back to committee before final passage', 'A motion to restart the bill from scratch', 'A Senate motion to reconsider a vote', 'A vote to override a veto'], a: 0,
+        x: 'It comes right before the final vote and almost always fails. Since 2021, House rules have barred attaching amendment instructions to it, which used to make it the minority’s favorite tool for forcing awkward votes.' },
+      { t: 'order', p: 'Put a major House bill’s floor steps in order.', ends: ['First', 'Last'],
+        items: ['Rules Committee reports a rule', 'House adopts the rule', 'General debate', 'Amendments the rule allows', 'Motion to recommit', 'Final passage vote'],
+        x: 'If the rule fails at the second step, nothing after it happens.' }
+    ]}
+  ]},
+  { title: 'The Senate Floor', desc: 'Unlimited debate means the Senate runs on agreement, and one senator can slow almost anything.', lessons: [
+    { title: 'Consent and holds', items: [
+      { t: 'mc', p: 'Why does the Senate do most of its business by unanimous consent?',
+        o: ['Its rules allow nearly unlimited debate, so formal procedure is slow, and agreement skips it', 'The Constitution requires it', 'The Vice President prefers it', 'It makes votes easier to count'], a: 0,
+        x: 'Consent agreements set when votes happen, which amendments get votes and how long debate lasts. Any one senator can object, which is where individual senators get their power.' },
+      { t: 'mc', p: 'A senator puts a hold on a nominee. What can the majority leader do?',
+        o: ['Bring it up anyway and spend floor time on cloture; a hold is a threatened objection, not a veto', 'Nothing until the senator lifts it', 'Ask the parliamentarian to cancel it', 'Send the nomination to the House'], a: 0,
+        x: 'A hold signals that the senator will object to fast-tracking. Leadership can get around it through cloture, but floor time is scarce, so holds on lower-priority items often work.' },
+      { t: 'mc', who: 't', q: '“We’ll have to file cloture on the motion to proceed first.”', p: 'What is the staffer telling you?',
+        o: ['Even starting debate on the bill can be filibustered, so that step needs 60 votes too', 'The bill has passed', 'The bill is going to conference', 'The motion to proceed is a formality'], a: 0,
+        x: 'The motion to start debating a bill is itself debatable. Opponents can force two cloture fights, one to begin debate and one to end it, and each one eats days of floor time.' },
+      { t: 'match', p: 'Match each term to its meaning.', pairs: [
+        ['Unanimous consent', 'Skipping normal procedure by agreement; one objection blocks it'],
+        ['Hold', 'A senator’s warning they’ll object to moving something quickly'],
+        ['Quorum call', 'A roll call often used as a pause while senators negotiate'],
+        ['Motion to proceed', 'The motion to begin debate on a bill'],
+        ['Parliamentarian', 'Nonpartisan staff who advise on what the rules allow']],
+        x: 'When C-SPAN shows a quorum call, the real work is usually happening off the floor.' }
+    ]},
+    { title: 'Cloture and the filibuster', items: [
+      { t: 'mc', p: 'How many votes does cloture on a bill usually need?',
+        o: ['60, three-fifths of the full Senate', '51', '67', '50 plus the Vice President'], a: 0,
+        x: 'The rule is three-fifths of senators “duly chosen and sworn,” which is 60 when no seats are vacant. Ending debate on a change to the Senate’s rules takes two-thirds of those voting.' },
+      { t: 'mc', p: 'Does a senator have to keep talking on the floor to filibuster today?',
+        o: ['No. If the majority can’t get 60 votes for cloture, the bill is stuck', 'Yes, without stopping', 'Yes, for at least 24 hours', 'Only on bills, not nominations'], a: 0,
+        x: 'The modern filibuster is the 60-vote threshold itself. Long speeches still happen, but they’re for attention and don’t decide the outcome.' },
+      { t: 'order', p: 'Put the cloture process in order.', ends: ['First', 'Last'],
+        items: ['A senator files a cloture motion', 'One full day of session passes', 'The Senate votes on cloture', 'Up to 30 more hours of debate', 'Vote on the bill itself'],
+        x: 'Each cloture fight takes days. That time cost, as much as the 60 votes, is why leaders can only push a handful of contested bills through each year.' },
+      { t: 'mc', news: { h: 'Senate Republicans change precedent to confirm nominees in batches', d: 'September 11, 2025' }, p: 'How could they change Senate practice with a simple majority?',
+        o: ['The “nuclear option”: a majority overrules the chair, setting a new precedent', 'They amended the Constitution', 'They found 67 votes', 'The parliamentarian approved it'], a: 0,
+        x: 'Changing the Senate’s written rules needs two-thirds to end debate, but a simple majority can set a new precedent by overruling the presiding officer. Democrats did this for most nominations in 2013, Republicans for Supreme Court nominees in 2017, and Republicans again in 2025 for batches of sub-Cabinet nominees. Cabinet and judicial nominees still go one at a time.' }
+    ]}
+  ]},
+  { title: 'Money', desc: 'Spending runs on its own calendar and its own rules.', lessons: [
+    { title: 'Authorize, then appropriate', items: [
+      { t: 'match', p: 'Match each term to its meaning.', pairs: [
+        ['Authorization', 'A law that creates or continues a program'],
+        ['Appropriation', 'A law that actually provides the money'],
+        ['Continuing resolution', 'Stopgap funding, usually at last year’s levels'],
+        ['Omnibus', 'Many appropriations bills combined into one'],
+        ['Earmark', 'Funding a member directs to a specific project']],
+        x: 'Authorizers write the rules for a program. Appropriators decide how much it gets each year. An authorized program with no appropriation has no money.' },
+      { t: 'mc', p: 'How many regular appropriations bills does Congress write each year?',
+        o: ['12', '1', '4', '24'], a: 0,
+        x: 'There’s one for each pair of House and Senate appropriations subcommittees. Congress rarely passes all twelve on time, so it leans on continuing resolutions and omnibus packages.' },
+      { t: 'mc', news: { h: 'Longest shutdown in U.S. history ends after 43 days', d: 'November 12, 2025' }, p: 'What causes a shutdown?',
+        o: ['Appropriations lapse with no stopgap, so unfunded agencies must stop most work', 'The country hits the debt limit', 'The President vetoes the budget resolution', 'The Senate rejects the budget director'], a: 0,
+        x: 'The fiscal year starts October 1. If neither the regular bills nor a continuing resolution is law by then, agencies without funding stop most work. Programs on mandatory spending, like Social Security payments, keep going.' },
+      { t: 'mc', p: 'Which of these is NOT funded through the annual appropriations bills?',
+        o: ['Social Security benefits', 'The military', 'NASA', 'The FBI'], a: 0,
+        x: 'Social Security, Medicare and most of Medicaid are “mandatory” spending, set by permanent law. Annual appropriations cover “discretionary” spending, roughly a quarter of the federal budget.' }
+    ]},
+    { title: 'Reconciliation', items: [
+      { t: 'mc', p: 'What makes reconciliation special in the Senate?',
+        o: ['Debate is capped at 20 hours, so it can’t be filibustered and passes by simple majority', 'It needs no House vote', 'It doesn’t go to the President', 'It allows amendments without votes'], a: 0,
+        x: 'Reconciliation is the main way a majority passes big tax and spending changes without 60 votes. The tradeoff is the Byrd rule, which limits it to provisions that are mainly budgetary.' },
+      { t: 'order', p: 'Put the reconciliation process in order.', ends: ['First', 'Last'],
+        items: ['Congress adopts a budget resolution with reconciliation instructions', 'Committees write their pieces', 'The Budget Committee packages them', 'Senate debate, capped at 20 hours', 'Vote-a-rama on amendments', 'Final passage'],
+        x: 'The budget resolution comes first because it unlocks the process. Without one, there’s no reconciliation bill.' },
+      { t: 'mc', p: 'Who advises on whether a provision violates the Byrd rule?',
+        o: ['The Senate parliamentarian', 'The CBO director', 'The Chief Justice', 'The House Rules Committee'], a: 0,
+        x: 'Staff run provisions past the parliamentarian in a process nicknamed the “Byrd bath.” A provision that fails can be struck unless 60 senators vote to waive the rule.' },
+      { t: 'mc', news: { h: 'Senate passes the One Big Beautiful Bill Act 51-50, Vice President breaks the tie', d: 'July 1, 2025' }, p: 'Why could it pass with 51 votes instead of 60?',
+        o: ['It moved through reconciliation, which can’t be filibustered', 'It was a constitutional amendment', 'The minority agreed to skip cloture', 'It was a conference report'], a: 0,
+        x: 'Final passage came after a vote-a-rama, the long series of amendment votes that follows once debate time runs out. Debate is capped, but senators can keep offering amendments, so these often run through the night.' }
+    ]}
+  ]},
+  { title: 'Between the Chambers', desc: 'Nothing becomes law until both chambers pass the exact same text.', lessons: [
+    { title: 'Getting to one text', items: [
+      { t: 'mc', p: 'The House and Senate pass different versions of a bill. What has to happen?',
+        o: ['One chamber passes the other’s exact text, or they resolve the differences', 'The President picks one', 'The longer version wins', 'The Senate version is final'], a: 0,
+        x: 'The text has to match word for word. Differences get resolved by passing the bill back and forth with amendments, or through a conference committee.' },
+      { t: 'match', p: 'Match each term to its meaning.', pairs: [
+        ['Ping-pong', 'Chambers trade amendments until the text matches'],
+        ['Conference committee', 'Negotiators from both chambers write a compromise'],
+        ['Conference report', 'The compromise text, voted up or down with no amendments'],
+        ['Engrossed bill', 'The official copy as passed by one chamber'],
+        ['Enrolled bill', 'The final version, passed by both and sent to the President']],
+        x: 'If you hear a bill is “enrolled,” Congress is done with it.' },
+      { t: 'mc', p: 'Why are formal conference committees rarer than they used to be?',
+        o: ['Setting one up in the Senate takes several steps that can each be filibustered, so leaders negotiate informally', 'They were banned in 2011', 'The Constitution limits them', 'The President must approve each one'], a: 0,
+        x: 'Leaders now usually work out the deal privately and move it through ping-pong. That puts the final text in a few hands, which matters if you’re trying to get a provision in.' }
+    ]},
+    { title: 'Vehicles and shells', items: [
+      { t: 'mc', who: 't', q: '“We’ll use a House-passed shell.”', p: 'What does that mean?',
+        o: ['The Senate will replace a House-passed bill’s text with its own', 'The bill will be left empty', 'The House will rewrite the Senate bill', 'They’ll wait for the next Congress'], a: 0,
+        x: 'Starting from a bill the House already passed saves a step and satisfies the rule that revenue bills start in the House. The original bill may have nothing to do with the final law.' },
+      { t: 'mc', p: 'What happens to bills that haven’t passed when a two-year Congress ends?',
+        o: ['They die and must be reintroduced', 'They carry over automatically', 'They go to the President', 'They become resolutions'], a: 0,
+        x: 'Each Congress starts fresh. The 119th Congress ends January 3, 2027, so anything still pending then starts over in the 120th.' },
+      { t: 'mc', p: 'Why do so many unrelated provisions end up in the NDAA?',
+        o: ['It’s must-pass and has become law every year for over 60 years, so riders get a reliable ride', 'It can’t be amended', 'It skips the Senate', 'It’s exempt from committee review'], a: 0,
+        x: 'The annual defense authorization almost always becomes law, so members attach whatever they can get germane to it, including many AI and tech measures.' }
+    ]}
+  ]},
+  { title: 'Endgame', desc: 'What the President can do, and what Congress can undo.', lessons: [
+    { title: 'Sign or veto', items: [
+      { t: 'mc', p: 'How long does the President have to act on a bill?',
+        o: ['10 days, not counting Sundays', '30 days', 'Until the session ends', '48 hours'], a: 0,
+        x: 'If the President does nothing and Congress is in session, the bill becomes law without a signature after 10 days (Sundays excepted).' },
+      { t: 'mc', p: 'What is a pocket veto?',
+        o: ['Congress adjourns so the bill can’t be returned, the President doesn’t sign, and it dies', 'A veto announced privately', 'A veto of one section of a bill', 'A veto issued before the bill passes'], a: 0,
+        x: 'A regular veto can be overridden. A pocket veto can’t, because Congress never gets the bill back to vote on. Which adjournments allow one has long been disputed between Congress and Presidents.' },
+      { t: 'mc', p: 'What does overriding a veto take?',
+        o: ['Two-thirds of those voting in each chamber', '60 in the Senate and a majority in the House', 'Three-fifths of each chamber', 'A majority plus the Vice President'], a: 0,
+        x: 'Overrides are rare. Congress has overridden only about 7 percent of regular vetoes in its history.' },
+      { t: 'mc', p: 'Can the President veto just part of a bill?',
+        o: ['No. The Supreme Court struck down the line-item veto in 1998', 'Yes, for spending bills', 'Yes, with Senate consent', 'Only in wartime'], a: 0,
+        x: 'In Clinton v. City of New York, the Court held that letting the President cancel parts of a signed law violated the Constitution’s process for making laws. A President who dislikes part of a bill has to veto all of it.' },
+      { t: 'order', p: 'Put a veto fight in order.', ends: ['First', 'Last'],
+        items: ['Both chambers pass the bill', 'It’s presented to the President', 'The President vetoes it and returns it with objections', 'The chamber where it started votes on override', 'The other chamber votes on override'],
+        x: 'The bill goes back to the chamber where it started. If that chamber fails to override, the other one never votes.' }
+    ]},
+    { title: 'Undoing agency rules', items: [
+      { t: 'mc', p: 'What does the Congressional Review Act let Congress do?',
+        o: ['Overturn a recent agency rule with a joint resolution that can’t be filibustered in the Senate', 'Rewrite any rule by committee vote', 'Overturn court decisions', 'Fire agency heads'], a: 0,
+        x: 'The resolution still needs the President’s signature, so it mostly gets used right after a new President of the other party takes office, to undo the previous administration’s late rules.' },
+      { t: 'mc', p: 'A rule comes out in an outgoing administration’s final months. Why can the next Congress still overturn it?',
+        o: ['The CRA’s lookback lets the new Congress reach rules submitted in roughly the last 60 days of session before', 'Rules aren’t final for a year', 'Courts send them back automatically', 'It can’t'], a: 0,
+        x: 'That’s why rules finished in an administration’s last months are the most exposed, and why agencies race to finalize rules earlier in an election year.' },
+      { t: 'mc', p: 'After Congress overturns a rule under the CRA, what can the agency do?',
+        o: ['It can’t issue a “substantially the same” rule unless Congress authorizes it', 'Reissue it the next day', 'Appeal to the Supreme Court', 'Nothing changes'], a: 0,
+        x: 'This is sometimes called “salting the earth,” and it’s why CRA votes matter more than they look. Nobody is sure how different a new rule has to be.' },
+      { t: 'mc', p: 'Before 2017, how many times had the CRA been used successfully?',
+        o: ['Once', 'Never', 'About 50', 'Every year'], a: 0,
+        x: 'It overturned a workplace ergonomics rule in 2001, and that was it until 2017, when Congress used it to repeal 16 Obama-era rules. It has been used again after later transitions.' }
+    ]}
+  ]}
+];
+
+const COURSES = {
+  lingo: { name: 'Staff Talk', units: UNITS, pre: '',
+    caveat: ['These are generic rules of thumb drawn from published staffer guides and Hill reporting. Nobody has checked them against what offices actually did afterward, and meanings vary by chamber, party, office and individual staffer.', 'Treat each answer as a starting guess. Check anything you plan to rely on with a former staffer.'],
+    meta: 'Draft · 2026-10-02 12:38 · Not reviewed by a Hill staffer' },
+  proc: { name: 'Procedure', units: PROC_UNITS, pre: 'p',
+    caveat: ['These simplify standard House and Senate procedure as described in CRS reports and the chambers’ rules. Precedents and each Congress’s rules package change details over time, and there are exceptions to almost everything here.', 'News examples are paraphrased from 2023 to 2025 coverage, not real headlines.'],
+    meta: 'Draft · 2026-10-16 · Not reviewed by a procedure expert' }
+};
+
+let LESSONS = [];
+function buildLessons() {
+  const C = COURSES[state.course];
+  LESSONS = [];
+  C.units.forEach((u, ui) => u.lessons.forEach((l, li) => LESSONS.push({ ...l, unit: ui, id: C.pre + 'u' + ui + 'l' + li })));
+}
+const jumpKey = ui => COURSES[state.course].pre ? COURSES[state.course].pre + ui : ui;
+const curUnits = () => COURSES[state.course].units;
+const OFFS = [0, 52, 78, 52, 0, -52, -78, -52];
+const PRAISE = ['Nicely decoded.', 'Correct.', 'You read that right.', 'Exactly.'];
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function dstr(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+
+const ICON = {
+  star: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 10V7.5a5 5 0 0 1 10 0V10h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1zm2 0h6V7.5a3 3 0 0 0-6 0z"/></svg>',
+  ok: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="11"/><path d="m7 12.5 3.2 3.2L17 9" fill="none" stroke="var(--good-bg)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  no: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="11"/><path d="m8 8 8 8M16 8l-8 8" fill="none" stroke="var(--bad-bg)" stroke-width="2.8" stroke-linecap="round"/></svg>',
+  seal: '<svg class="seal" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" fill="var(--brass-soft)" stroke="var(--brass)" stroke-width="6"/><circle cx="60" cy="60" r="42" fill="none" stroke="var(--brass)" stroke-width="2" stroke-dasharray="3 5"/><g fill="var(--brass)"><rect x="58" y="26" width="4" height="9" rx="2"/><path d="M42 58a18 18 0 0 1 36 0z"/><rect x="36" y="58" width="48" height="5" rx="1"/><rect x="40" y="65" width="5" height="16"/><rect x="50" y="65" width="5" height="16"/><rect x="65" y="65" width="5" height="16"/><rect x="75" y="65" width="5" height="16"/><rect x="34" y="82" width="52" height="6" rx="1"/></g></svg>',
+  heart: '<svg class="seal" viewBox="0 0 24 24" fill="var(--bad)" aria-hidden="true"><path d="M12 21s-7.6-4.6-9.6-9.3C1 8.4 3.2 4.8 6.8 4.8c2 0 3.5 1.1 5.2 3 1.7-1.9 3.2-3 5.2-3 3.6 0 5.8 3.6 4.4 6.9C19.6 16.4 12 21 12 21z" opacity=".35"/><path d="m8 9 8 8M16 9l-8 8" stroke="var(--bad)" stroke-width="2" stroke-linecap="round"/></svg>'
+};
+
+let state = load();
+function load() {
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done) { if (!COURSES[s.course]) s.course = 'lingo'; return s; } } catch (e) {}
+  return { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: 'lingo' };
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+function unlocked(i) {
+  if (i === 0) return true;
+  if (state.done[LESSONS[i - 1].id]) return true;
+  return state.jumped.includes(jumpKey(LESSONS[i].unit));
+}
+
+let toastTimer;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => t.hidden = true, 2600); }
+
+/* ---------- home ---------- */
+function renderHome() {
+  $('#xp').textContent = state.xp;
+  $('#streak').textContent = state.streak;
+  const cur = LESSONS.findIndex((l, i) => !state.done[l.id] && unlocked(i));
+  let h = '', k = 0;
+  $('#tabs').innerHTML = Object.entries(COURSES).map(([k, c]) => `<button class="tab${k === state.course ? ' on' : ''}" role="tab" aria-selected="${k === state.course}" data-course="${k}">${esc(c.name)}</button>`).join('');
+  const C = COURSES[state.course];
+  $('#caveat').innerHTML = `<h3>How sure are these answers?</h3>${C.caveat.map(t => `<p>${esc(t)}</p>`).join('')}<div class="meta">${esc(C.meta)}</div>`;
+  curUnits().forEach((u, ui) => {
+    const first = LESSONS.findIndex(l => l.unit === ui);
+    const uLocked = !unlocked(first);
+    const nDone = LESSONS.filter(l => l.unit === ui && state.done[l.id]).length;
+    h += `<section class="unit${uLocked ? ' is-locked' : ''}"><div class="banner"><div><div class="eyebrow">Unit ${ui + 1} · ${nDone} of ${u.lessons.length} done</div><h2>${esc(u.title)}</h2><p>${esc(u.desc)}</p></div>${uLocked ? `<button class="jump" data-jump="${ui}">Jump here</button>` : ''}</div><div class="nodes">`;
+    LESSONS.forEach((l, i) => {
+      if (l.unit !== ui) return;
+      const cls = state.done[l.id] ? 'done' : i === cur ? 'current' : unlocked(i) ? 'open' : 'locked';
+      const icon = cls === 'done' ? ICON.check : cls === 'locked' ? ICON.lock : ICON.star;
+      h += `<div class="node-wrap" style="--x:${OFFS[k++ % OFFS.length]}px">${cls === 'current' ? '<span class="start">Start</span>' : ''}<button class="node ${cls}" data-idx="${i}" aria-label="${esc(l.title)}${cls === 'locked' ? ' (locked)' : cls === 'done' ? ' (done)' : ''}">${icon}</button><span class="node-label">${esc(l.title)}</span></div>`;
+    });
+    h += '</div></section>';
+  });
+  $('#path').innerHTML = h;
+  const nd = LESSONS.filter(l => state.done[l.id]).length;
+  $('#pDone').textContent = nd + ' / ' + LESSONS.length;
+  $('#pBar').style.width = (nd / LESSONS.length * 100) + '%';
+}
+
+$('#path').addEventListener('click', e => {
+  const j = e.target.closest('[data-jump]');
+  if (j) { const ui = +j.dataset.jump; const key = jumpKey(ui); if (!state.jumped.includes(key)) state.jumped.push(key); save(); renderHome(); return; }
+  const n = e.target.closest('.node');
+  if (!n) return;
+  const i = +n.dataset.idx;
+  if (!unlocked(i)) { toast('Finish the lesson before this one, or use Jump here on the unit.'); return; }
+  startLesson(i);
+});
+
+function renderPotd() {
+  const pool = LESSONS.flatMap(l => l.items).filter(it => it.t === 'mc' && (state.course === 'lingo' ? it.q : true));
+  const day = Math.floor(new Date(dstr(new Date()) + 'T12:00:00').getTime() / 864e5);
+  const it = pool[day % pool.length];
+  const sp = SPEAKERS[it.who || 'm'];
+  const head = it.q ? `<h3>Phrase of the day</h3><div class="quote-sm">${esc(it.q)}</div><div class="who-sm">${esc(sp.n)}, ${esc(sp.r)}</div>` : `<h3>Question of the day</h3><p class="potd-q">${esc(it.p)}</p>`;
+  $('#potd').innerHTML = `${head}<div class="reveal-body" id="potdBody" hidden><p><b>${esc(it.o[it.a])}</b></p><p>${esc(it.x)}</p></div><button class="linkbtn" id="potdBtn">What it means</button>`;
+  $('#potdBtn').onclick = () => { const b = $('#potdBody'); b.hidden = !b.hidden; $('#potdBtn').textContent = b.hidden ? 'What it means' : 'Hide'; };
+}
+
+let resetArmed = false;
+$('#resetBtn').onclick = () => {
+  if (!resetArmed) { resetArmed = true; $('#resetBtn').textContent = 'Click again to erase all progress'; setTimeout(() => { resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; }, 4000); return; }
+  state = { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: state.course }; save(); resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; renderHome(); toast('Progress reset.');
+};
+
+/* ---------- lesson ---------- */
+let run = null;
+function show(id) {
+  ['#lesson', '#result'].forEach(s => $(s).hidden = s !== id);
+  document.body.classList.toggle('in-lesson', id !== null);
+}
+function startLesson(i) {
+  const L = LESSONS[i];
+  run = { idx: i, queue: L.items.map((it, k) => ({ ...it, key: k })), total: L.items.length, correct: 0, hearts: 5, wrong: new Set(), cur: null, sel: null, phase: 'answer' };
+  show('#lesson');
+  nextItem();
+}
+function goHome() { run = null; show(null); renderHome(); window.scrollTo(0, 0); }
+$('#quitBtn').onclick = goHome;
+
+function updateBar() {
+  $('#prog').style.width = (run.correct / run.total * 100) + '%';
+  $('#hearts').textContent = run.hearts;
+}
+function setCheck(visible, enabled) { const b = $('#checkBtn'); b.hidden = !visible; b.disabled = !enabled; b.textContent = 'Check'; }
+function resetFoot() { $('#foot').className = 'lfoot'; const fb = $('#fb'); fb.hidden = true; fb.className = 'fb'; fb.innerHTML = ''; }
+
+function nextItem() {
+  resetFoot();
+  if (!run.queue.length) return finish();
+  run.cur = run.queue.shift(); run.sel = null; run.phase = 'answer';
+  updateBar();
+  const it = run.cur;
+  if (it.t === 'mc') renderMC(it); else if (it.t === 'match') renderMatch(it); else renderOrder(it);
+  $('#stageWrap').scrollTop = 0;
+}
+
+function quoteHTML(it) {
+  const sp = SPEAKERS[it.who || 'm'];
+  return `<div class="speaker"><div class="avatar" aria-hidden="true">${sp.n[0]}</div><div class="bubble"><q>${esc(it.q)}</q><div class="who">${esc(sp.n)}, ${esc(sp.r)}</div></div></div>`;
+}
+
+function renderMC(it) {
+  it._opts = shuffle(it.o.map((text, i) => ({ text, right: i === it.a })));
+  const kicker = it.news ? 'Spot the procedure' : it.q ? 'Decode the staffer' : 'Choose the best answer';
+  const news = it.news ? `<div class="news"><span class="news-k">In the news</span><p class="news-h">${esc(it.news.h)}</p><span class="news-d">${esc(it.news.d)} · paraphrased</span></div>` : '';
+  $('#stage').innerHTML = `<p class="kicker">${kicker}</p>${news}<h3 class="prompt">${esc(it.p || 'What does this most likely mean?')}</h3>${it.q ? quoteHTML(it) : ''}<div class="opts" role="radiogroup">${it._opts.map((o, i) => `<button class="opt" role="radio" aria-checked="false" data-i="${i}"><span class="kbd">${i + 1}</span><span>${esc(o.text)}</span></button>`).join('')}</div>`;
+  $('#stage').querySelectorAll('.opt').forEach(b => b.onclick = () => pickMC(+b.dataset.i));
+  setCheck(true, false);
+}
+function pickMC(i) {
+  if (run.phase !== 'answer') return;
+  run.sel = i;
+  $('#stage').querySelectorAll('.opt').forEach((b, k) => { b.classList.toggle('sel', k === i); b.setAttribute('aria-checked', k === i); });
+  setCheck(true, true);
+}
+
+function renderMatch(it) {
+  const L = shuffle(it.pairs.map((p, i) => ({ t: p[0], i })));
+  const R = shuffle(it.pairs.map((p, i) => ({ t: p[1], i })));
+  $('#stage').innerHTML = `<p class="kicker">Match the pairs</p><h3 class="prompt">${esc(it.p)}</h3><div class="match"><div class="col">${L.map(x => `<button class="tile term" data-s="l" data-i="${x.i}">${esc(x.t)}</button>`).join('')}</div><div class="col">${R.map(x => `<button class="tile" data-s="r" data-i="${x.i}">${esc(x.t)}</button>`).join('')}</div></div>`;
+  run.m = { l: null, r: null, left: it.pairs.length, misses: 0 };
+  $('#stage').querySelectorAll('.tile').forEach(b => b.onclick = () => pickTile(b));
+  setCheck(false, false);
+  const fb = $('#fb'); fb.hidden = false; fb.className = 'fb hint'; fb.innerHTML = '<p>Tap a term, then the meaning that goes with it.</p>';
+}
+function pickTile(b) {
+  if (run.phase !== 'answer' || b.classList.contains('matched')) return;
+  const side = b.dataset.s;
+  $('#stage').querySelectorAll(`.tile[data-s="${side}"]`).forEach(x => x.classList.remove('sel'));
+  if (run.m[side] === b) { run.m[side] = null; return; }
+  b.classList.add('sel'); run.m[side] = b;
+  const { l, r } = run.m;
+  if (!l || !r) return;
+  if (l.dataset.i === r.dataset.i) {
+    [l, r].forEach(x => { x.classList.remove('sel'); x.classList.add('matched'); x.disabled = true; });
+    run.m.left--;
+    if (run.m.left === 0) setTimeout(() => {
+      grade(true, '', run.m.misses ? `Matched, with ${run.m.misses} miss${run.m.misses > 1 ? 'es' : ''}.` : null);
+    }, 300);
+  } else {
+    run.m.misses++; run.wrong.add(run.cur.key);
+    [l, r].forEach(x => { x.classList.remove('sel'); x.classList.add('miss'); setTimeout(() => x.classList.remove('miss'), 450); });
+  }
+  run.m.l = null; run.m.r = null;
+}
+
+function renderOrder(it) {
+  if (!run.pool || run.poolFor !== it) { run.pool = shuffle(it.items.map((_, i) => i)); run.ans = []; run.poolFor = it; }
+  const slots = it.items.map((_, k) => `<li>${run.ans[k] !== undefined ? `<button class="chip" data-a="${k}">${esc(it.items[run.ans[k]])}</button>` : '<span class="empty"></span>'}</li>`).join('');
+  const pool = run.pool.filter(i => !run.ans.includes(i)).map(i => `<button class="chip" data-p="${i}">${esc(it.items[i])}</button>`).join('');
+  $('#stage').innerHTML = `<p class="kicker">Put them in order</p><h3 class="prompt">${esc(it.p)}</h3><div class="order"><div class="end">${esc(it.ends[0])}</div><ol class="slots">${slots}</ol><div class="end">${esc(it.ends[1])}</div></div><div class="pool">${pool || '<span class="end">All placed. Tap one above to take it back.</span>'}</div>`;
+  $('#stage').querySelectorAll('[data-p]').forEach(b => b.onclick = () => { if (run.phase !== 'answer') return; run.ans.push(+b.dataset.p); renderOrder(it); });
+  $('#stage').querySelectorAll('[data-a]').forEach(b => b.onclick = () => { if (run.phase !== 'answer') return; run.ans.splice(+b.dataset.a, 1); renderOrder(it); });
+  setCheck(true, run.ans.length === it.items.length);
+}
+
+function check() {
+  const it = run.cur;
+  if (it.t === 'mc') {
+    if (run.sel === null) return;
+    const ok = it._opts[run.sel].right;
+    $('#stage').querySelectorAll('.opt').forEach((b, k) => {
+      b.disabled = true; b.classList.remove('sel');
+      if (it._opts[k].right) b.classList.add('right'); else if (k === run.sel) b.classList.add('wrong');
+    });
+    grade(ok, ok ? '' : `<p class="ans">Better answer: ${esc(it.o[it.a])}</p>`);
+  } else if (it.t === 'order') {
+    const ok = run.ans.every((v, i) => v === i);
+    grade(ok, ok ? '' : `<p class="ans">A better order:</p><ol class="order-ans">${it.items.map(s => `<li>${esc(s)}</li>`).join('')}</ol>`);
+    run.poolFor = null;
+  }
+}
+
+function grade(ok, ansHTML, heading) {
+  const it = run.cur;
+  run.phase = 'feedback';
+  if (ok) run.correct++;
+  else { run.hearts--; run.wrong.add(it.key); run.queue.push(it); }
+  updateBar();
+  const foot = $('#foot'); foot.className = 'lfoot ' + (ok ? 'good' : 'bad');
+  const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
+  const head = heading || (ok ? PRAISE[Math.floor(Math.random() * PRAISE.length)] : 'Not quite.');
+  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${esc(head)}</h4>${ansHTML || ''}<p>${esc(it.x)}</p>${it.ask ? `<p class="ask"><span>Try asking</span>${esc(it.ask)}</p>` : ''}`;
+  const b = $('#checkBtn'); b.hidden = false; b.disabled = false; b.textContent = 'Continue'; b.focus({ preventScroll: true });
+}
+
+$('#checkBtn').onclick = () => {
+  if (!run) return;
+  if (run.phase === 'feedback') { if (run.hearts <= 0) return fail(); nextItem(); }
+  else check();
+};
+
+function finish() {
+  const L = LESSONS[run.idx];
+  state.done[L.id] = true;
+  const firstTry = run.total - run.wrong.size;
+  const gained = 10 + firstTry * 5;
+  state.xp += gained;
+  const today = dstr(new Date());
+  const y = new Date(); y.setDate(y.getDate() - 1);
+  if (state.last !== today) { state.streak = state.last === dstr(y) ? state.streak + 1 : 1; state.last = today; }
+  save();
+  const acc = Math.round(firstTry / run.total * 100);
+  const nextL = LESSONS[run.idx + 1];
+  $('#result').classList.remove('failed');
+  $('#resultIn').innerHTML = `${ICON.seal}<h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${gained}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div><div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
+  show('#result');
+  $('#rHome').onclick = goHome; $('#rHome').focus();
+}
+function fail() {
+  const i = run.idx;
+  $('#result').classList.add('failed');
+  $('#resultIn').innerHTML = `${ICON.heart}<h2>Out of hearts.</h2><p>Five misses ends the lesson. You’ve now seen the explanations, so the second pass usually goes faster.</p><div class="rbtns"><button class="btn" id="rRetry">Try again</button><button class="btn ghost" id="rHome">Back to path</button></div>`;
+  show('#result');
+  $('#rRetry').onclick = () => startLesson(i); $('#rHome').onclick = goHome; $('#rRetry').focus();
+}
+
+document.addEventListener('keydown', e => {
+  if (!run || $('#lesson').hidden) return;
+  if (e.key === 'Escape') { goHome(); return; }
+  if (e.key === 'Enter') { const b = $('#checkBtn'); if (!b.hidden && !b.disabled) { e.preventDefault(); b.click(); } return; }
+  if (run.phase === 'answer' && run.cur.t === 'mc' && /^[1-9]$/.test(e.key)) { const i = +e.key - 1; if (i < run.cur._opts.length) pickMC(i); }
+});
+
+$('#tabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-course]');
+  if (!b || b.dataset.course === state.course) return;
+  state.course = b.dataset.course; save(); buildLessons(); renderHome(); renderPotd();
+});
+
+buildLessons();
+renderHome();
+renderPotd();
+</script>
+</body></html>
