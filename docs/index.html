@@ -163,6 +163,33 @@ svg { display: block; }
 .replist .rn { font-weight: 700; }
 .repbox { display: grid; gap: 8px; margin-top: 4px; }
 
+/* course picker + welcome */
+.picker { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 16px; padding: 12px 16px; }
+.picker:hover { border-color: var(--line-deep); }
+.picker .pk-main { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.picker .pk-k { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.picker .pk-n { font-size: 19px; font-weight: 900; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.picker .pk-p { flex: none; font-size: 14px; font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; }
+.picker svg { flex: none; width: 22px; height: 22px; color: var(--primary); }
+.welcome { background: var(--surface); border: 2px solid var(--line); border-radius: 20px; padding: 28px 24px; display: grid; gap: 14px; }
+.welcome h2 { margin: 0; font-size: 30px; font-weight: 900; line-height: 1.15; text-wrap: balance; }
+.welcome p { margin: 0; color: var(--muted); font-size: 17px; max-width: 54ch; }
+.steps { margin: 4px 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: st; }
+.steps li { counter-increment: st; display: flex; gap: 12px; align-items: baseline; font-size: 16px; }
+.steps li::before { content: counter(st); flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 900; font-size: 14px; }
+.pk-sec { display: grid; gap: 8px; }
+.pk-sec h4 { margin: 8px 0 0; font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pk-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; text-align: left; background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 14px; padding: 12px 14px; }
+.pk-item:hover { border-color: var(--line-deep); }
+.pk-item.on { border-color: var(--primary); background: var(--primary-soft); }
+.pk-item .t { font-weight: 900; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pk-item .s { grid-column: 1; font-size: 13px; font-weight: 700; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pk-item .n { grid-row: 1 / span 2; grid-column: 2; font-size: 13px; font-weight: 800; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; display: grid; gap: 4px; justify-items: end; }
+.pk-item .n .bar-mini { width: 72px; }
+.pk-empty { background: var(--bg); border: 2px dashed var(--line-deep); border-radius: 14px; padding: 12px 14px; display: grid; gap: 8px; }
+.pk-search { font: inherit; font-size: 16px; font-weight: 700; color: var(--fg); background: var(--surface); border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; width: 100%; }
+.pk-search:focus { outline: none; border-color: var(--primary); }
+
 /* shared buttons */
 .btn { border: 0; border-radius: 14px; padding: 14px 28px; font-weight: 900; font-size: 16px; letter-spacing: .05em; text-transform: uppercase; background: var(--primary); color: var(--on-primary); box-shadow: 0 4px 0 var(--primary-deep); min-width: 150px; }
 .btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 var(--primary-deep); }
@@ -289,14 +316,14 @@ svg { display: block; }
 
 <main class="home" id="home">
   <div class="path-col">
-    <div class="tabs" id="tabs" role="tablist" aria-label="Course"></div>
+    <div id="pickWrap"></div>
     <div class="cinfo" id="cinfo" hidden></div>
     <div class="path" id="path"></div>
   </div>
   <aside class="side">
     <section class="card" id="group"></section>
     <section class="card" id="potd"></section>
-    <section class="card">
+    <section class="card" id="progressCard">
       <h3>Your progress</h3>
       <div class="kv"><span>Lessons</span><span id="pDone">0 / 0</span></div>
       <div class="bar-mini"><i id="pBar" style="width:0"></i></div>
@@ -329,6 +356,11 @@ svg { display: block; }
 <section class="overlay sheet" id="addc" hidden>
   <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Add a course</h2></div>
   <div class="stage"><div class="stage-in" id="addBody"></div></div>
+</section>
+
+<section class="overlay sheet" id="pick" hidden>
+  <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Courses</h2></div>
+  <div class="stage"><div class="stage-in" id="pickBody"></div></div>
 </section>
 
 <section class="overlay sheet" id="repv" hidden>
@@ -1633,6 +1665,7 @@ let LESSONS = [];
 function buildLessons() {
   const C = COURSES[state.course];
   LESSONS = [];
+  if (!C) return;
   C.units.forEach((u, ui) => u.lessons.forEach((l, li) => LESSONS.push({ ...l, unit: ui, id: C.pre + 'u' + ui + 'l' + li })));
 }
 const jumpKey = ui => COURSES[state.course].pre ? COURSES[state.course].pre + ui : ui;
@@ -1657,8 +1690,8 @@ const ICON = {
 
 let state = load();
 function load() {
-  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done) { if (!COURSES[s.course]) { if (String(s.course).startsWith('c:')) s.wantCourse = s.course; s.course = 'lingo'; } return s; } } catch (e) {}
-  return { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: 'lingo' };
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done) { if (s.course && !COURSES[s.course]) { if (String(s.course).startsWith('c:')) s.wantCourse = s.course; s.course = null; } return s; } } catch (e) {}
+  return { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: null };
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
@@ -1677,8 +1710,12 @@ function renderHome() {
   $('#streak').textContent = state.streak;
   const cur = LESSONS.findIndex((l, i) => !state.done[l.id] && unlocked(i));
   let h = '', k = 0;
-  $('#tabs').innerHTML = Object.entries(COURSES).map(([k, c]) => `<button class="tab${k === state.course ? ' on' : ''}" role="tab" aria-selected="${k === state.course}" data-course="${k}">${esc(c.name)}</button>`).join('') + (typeof G !== 'undefined' && G ? '<button class="tab add" id="addCourseBtn">+ Add course</button>' : '');
-  const CI = COURSES[state.course], mine = CI.group && G && CI.authorId === G.player.id;
+  const CI = COURSES[state.course];
+  const nCourses = Object.keys(COURSES).length;
+  $('#pickWrap').innerHTML = `<button class="picker" id="pickBtn" aria-haspopup="dialog"><span class="pk-main"><span class="pk-k">${CI ? 'Course' : 'Choose a course'}</span><span class="pk-n">${CI ? esc(CI.name) : nCourses + ' courses to try, or make your own'}</span></span>${CI ? `<span class="pk-p">${courseProgress(state.course).done} of ${courseProgress(state.course).total}</span>` : ''}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>`;
+  ['#caveat', '#potd', '#progressCard'].forEach(id => $(id).hidden = !CI);
+  if (!CI) { $('#cinfo').hidden = true; $('#path').innerHTML = welcomeHTML(); return; }
+  const mine = CI.group && G && CI.authorId === G.player.id;
   $('#cinfo').hidden = !CI.group;
   $('#cinfo').innerHTML = CI.group ? `<span>${esc(CI.meta)}</span>${mine ? `<button class="linkbtn" id="ciReports">${CI.openReports} open report${CI.openReports === 1 ? '' : 's'}</button><button class="linkbtn" id="ciUpdate">Upload new version</button><button class="linkbtn" id="ciDelete">Remove course</button>` : ''}${CI.description ? `<span class="cdesc">${esc(CI.description)}</span>` : ''}` : '';
   const C = COURSES[state.course];
@@ -1713,6 +1750,7 @@ $('#path').addEventListener('click', e => {
 });
 
 function renderPotd() {
+  if (!COURSES[state.course]) { $('#potd').hidden = true; return; }
   const pool = LESSONS.flatMap(l => l.items).filter(it => it.t === 'mc' && (state.course === 'lingo' ? it.q : true));
   const day = Math.floor(new Date(dstr(new Date()) + 'T12:00:00').getTime() / 864e5);
   const it = pool[day % pool.length];
@@ -1890,12 +1928,6 @@ document.addEventListener('keydown', e => {
   if (run.phase === 'answer' && run.cur.t === 'mc' && /^[1-9]$/.test(e.key)) { const i = +e.key - 1; if (i < run.cur._opts.length) pickMC(i); }
 });
 
-$('#tabs').addEventListener('click', e => {
-  if (e.target.closest('#addCourseBtn')) { openAdd(); return; }
-  const b = e.target.closest('[data-course]');
-  if (!b || b.dataset.course === state.course) return;
-  state.course = b.dataset.course; save(); buildLessons(); renderHome(); renderPotd();
-});
 
 /* ---------- group play ---------- */
 const GKEY = 'hillspeak-group';
@@ -2048,7 +2080,7 @@ function installCourses(list) {
       meta: `By ${x.author} · Version ${x.version}` };
   });
   if (state.wantCourse && COURSES[state.wantCourse]) { state.course = state.wantCourse; delete state.wantCourse; }
-  if (!COURSES[state.course]) state.course = 'lingo';
+  if (state.course && !COURSES[state.course]) state.course = null;
   buildLessons(); renderHome(); renderPotd();
 }
 async function loadCourses() {
@@ -2068,25 +2100,51 @@ document.querySelectorAll('.sheet [data-close]').forEach(b => b.onclick = () => 
 const GUIDE = SITE + '/course-guide.md';
 function renderAdd() {
   const a = addState, chk = a.check;
+  const cur = document.getElementById('addText'); if (cur) a.text = cur.value;
+  const keep = {}; ['agGroup', 'agName', 'agCode'].forEach(id => { const x = document.getElementById(id); if (x) keep[id] = x.value; });
   let res = '';
   if (a.err) res = `<div class="errbox"><h4>Couldn’t publish</h4><p>${a.err}</p></div>`;
   else if (chk && !chk.ok) res = `<div class="errbox"><h4>${chk.errors.length >= 40 ? '40+' : chk.errors.length} problem${chk.errors.length === 1 ? '' : 's'} to fix</h4><ul>${chk.errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul><p>Paste these back to your Claude and ask it to fix them.</p></div>`;
   else if (chk && chk.ok) {
     const ex = COURSES['c:' + chk.course.id];
-    const note = !ex ? 'This adds a new course for everyone in your group.' : ex.authorId === G.player.id ? `This replaces your version ${ex.version}.` : `Someone else already has a course with the id “${esc(chk.course.id)}”. Change "id" in the file before publishing.`;
-    res = `<div class="okbox"><h4>Ready: ${esc(chk.course.title)}</h4><p>${chk.stats.units} unit${chk.stats.units === 1 ? '' : 's'}, ${chk.stats.lessons} lesson${chk.stats.lessons === 1 ? '' : 's'}, ${chk.stats.items} questions. ${note}</p><div class="row"><button class="btn sm" id="addPub" ${a.busy || (ex && ex.authorId !== G.player.id) ? 'disabled' : ''}>Publish to ${esc(G.groupName)}</button></div></div>`;
+    const taken = ex && G && ex.authorId !== G.player.id;
+    const note = !G ? 'Start or join a group above to publish it.' : !ex ? 'This adds a new course for everyone in your group.' : !taken ? `This replaces your version ${ex.version}.` : `Someone else already has a course with the id “${esc(chk.course.id)}”. Change "id" in the file before publishing.`;
+    res = `<div class="okbox"><h4>Ready: ${esc(chk.course.title)}</h4><p>${chk.stats.units} unit${chk.stats.units === 1 ? '' : 's'}, ${chk.stats.lessons} lesson${chk.stats.lessons === 1 ? '' : 's'}, ${chk.stats.items} questions. ${note}</p><div class="row"><button class="btn sm" id="addPub" ${a.busy || !G || taken ? 'disabled' : ''}>${G ? 'Publish to ' + esc(G.groupName) : 'Publish'}</button></div></div>`;
   }
-  $('#addBody').innerHTML = `<p class="kicker">Step 1</p><h3 class="prompt sm">Have your Claude write it</h3>
-    <p>Paste this into Claude and fill in the topic. It reads the <a href="${GUIDE}" target="_blank" rel="noopener">course format guide</a> and gives you back a file.</p>
+  let n = 0;
+  const step = t => `<p class="kicker">Step ${++n}</p><h3 class="prompt sm">${t}</h3>`;
+  let grp = '';
+  if (!G) {
+    const gm = a.groupMode || 'start';
+    grp = step('Start or join a group') + `<p>Courses are shared inside a group, so friends can play them and you can compete. A group of one is fine too.</p>
+      <div class="seg"><button data-agmode="start" class="${gm === 'start' ? 'on' : ''}">Start a group</button><button data-agmode="join" class="${gm === 'join' ? 'on' : ''}">Join with a code</button></div>
+      ${gm === 'start' ? '<label class="fld"><span>Group name</span><input id="agGroup" maxlength="40"></label>' : '<label class="fld"><span>Invite code</span><input id="agCode" maxlength="6" autocomplete="off" autocapitalize="characters"></label>'}
+      <label class="fld"><span>Your display name</span><input id="agName" maxlength="24" autocomplete="nickname"></label>
+      <div class="row"><button class="btn sm" id="agGo" ${a.gBusy ? 'disabled' : ''}>${gm === 'start' ? 'Start group' : 'Join group'}</button></div>${a.gErr ? `<p class="gerr">${a.gErr}</p>` : ''}`;
+  } else grp = `<p class="meta">Publishing to ${esc(G.groupName)} as ${esc(G.player.name)}.</p>`;
+  $('#addBody').innerHTML = grp + step('Have your AI assistant write it') + `
+    <p>Paste this into Claude (or another assistant) and fill in the topic. It reads the <a href="${GUIDE}" target="_blank" rel="noopener">course format guide</a> and gives you back a file.</p>
     <textarea id="addPrompt" rows="4" readonly>Read ${GUIDE} and follow it exactly. Build me a WonkoLingo course about [TOPIC]. Research the facts before writing questions, then give me the finished course as a single .json file.</textarea>
     <div class="row"><button class="btn ghost sm" id="copyPrompt">Copy prompt</button></div>
-    <p class="kicker">Step 2</p><h3 class="prompt sm">Upload the file</h3>
+    ${step('Upload the file')}
     <div class="row"><input type="file" id="addFile" accept=".json,application/json"></div>
     <p>Or paste the JSON here:</p>
     <textarea id="addText" rows="8" spellcheck="false" placeholder='{ "format": "wonkolingo-course/1", ... }'>${esc(a.text)}</textarea>
     <div class="row"><button class="btn sm" id="addCheck">Check file</button></div>${res}`;
+  Object.entries(keep).forEach(([id, v]) => { const x = document.getElementById(id); if (x) x.value = v; });
 }
-function openAdd(prefill) { addState = { text: prefill || '', check: null, busy: false, err: '' }; renderAdd(); openSheet('#addc'); }
+async function addGroupSubmit() {
+  const a = addState, gm = a.groupMode || 'start';
+  a.gErr = ''; a.gBusy = true; renderAdd();
+  try {
+    const name = $('#agName').value;
+    const d = gm === 'start' ? await apiCall('/api/groups', { groupName: $('#agGroup').value, name }) : await apiCall('/api/join', { code: $('#agCode').value, name });
+    G = { token: d.token, code: d.code, groupName: d.groupName, player: d.player }; saveG();
+    a.gBusy = false; toast('You’re in ' + d.groupName + '.');
+    renderAdd(); refreshBoard(); loadCourses();
+  } catch (e) { a.gBusy = false; a.gErr = netMsg(e); renderAdd(); }
+}
+function openAdd(prefill) { $('#addBody').innerHTML = ''; addState = { text: prefill || '', check: null, busy: false, err: '' }; renderAdd(); openSheet('#addc'); }
 function runCheck() {
   addState.text = $('#addText').value; addState.err = '';
   let raw;
@@ -2097,6 +2155,8 @@ $('#addBody').addEventListener('click', async e => {
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'copyPrompt') { const v = $('#addPrompt').value; (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(() => toast('Prompt copied.'), () => { $('#addPrompt').select(); toast('Select the text and copy it.'); }); }
   if (t.id === 'addCheck') runCheck();
+  if (t.dataset.agmode) { addState.groupMode = t.dataset.agmode; addState.gErr = ''; renderAdd(); return; }
+  if (t.id === 'agGo') { addGroupSubmit(); return; }
   if (t.id === 'addPub') {
     addState.busy = true; renderAdd();
     try {
@@ -2120,7 +2180,7 @@ $('#cinfo').addEventListener('click', async e => {
   if (t.id === 'ciReports') openReports(C);
   if (t.id === 'ciDelete') {
     if (t.dataset.armed !== '1') { t.dataset.armed = '1'; t.textContent = 'Click again to remove it for everyone'; setTimeout(() => { if (t.isConnected) { t.dataset.armed = ''; t.textContent = 'Remove course'; } }, 4000); return; }
-    try { await apiCall('/api/courses/' + C.slug + '/delete', {}); toast('Course removed.'); state.course = 'lingo'; save(); await loadCourses(); }
+    try { await apiCall('/api/courses/' + C.slug + '/delete', {}); toast('Course removed.'); state.course = null; save(); await loadCourses(); }
     catch (err) { toast(err.message); }
   }
 });
@@ -2149,6 +2209,62 @@ $('#fb').addEventListener('click', async e => {
     try { await apiCall('/api/courses/' + C.slug + '/reports', { lessonId: LESSONS[run.idx].id, itemText: it.q || it.p || '', note }); t.closest('.repbox').innerHTML = '<p>Thanks. The author will see it.</p>'; }
     catch (err) { toast(err.message); }
   }
+});
+
+/* ---------- course picker and welcome ---------- */
+function courseProgress(key) {
+  const C = COURSES[key]; if (!C) return { done: 0, total: 0 };
+  let total = 0, done = 0;
+  C.units.forEach((u, ui) => u.lessons.forEach((l, li) => { total++; if (state.done[C.pre + 'u' + ui + 'l' + li]) done++; }));
+  return { done, total };
+}
+function welcomeHTML() {
+  return `<section class="welcome"><p class="kicker">Welcome to WonkoLingo</p><h2>Learn anything with your friends</h2>
+    <p>Pick any topic. Your AI assistant turns it into a bite-size course in a few minutes. Then you and your friends play each other’s courses and compete on streaks and points.</p>
+    <ol class="steps"><li><span><b>Start a group</b> and invite friends, or just use it yourself.</span></li><li><span><b>Make a course</b> by pasting our prompt into Claude or another AI assistant.</span></li><li><span><b>Play and compete</b> on your group’s weekly leaderboard.</span></li></ol>
+    <div class="row"><button class="btn" id="wCreate">Create your first course</button><button class="btn ghost" id="wBrowse">Try an example course</button></div></section>`;
+}
+function selectCourse(key) {
+  state.course = key; save(); buildLessons(); renderHome(); renderPotd(); window.scrollTo(0, 0);
+}
+let pickQ = '';
+function renderPick() {
+  const keys = Object.keys(COURSES);
+  const q = pickQ.trim().toLowerCase();
+  const match = k => !q || (COURSES[k].name + ' ' + (COURSES[k].author || '') + ' ' + (COURSES[k].description || '')).toLowerCase().includes(q);
+  const item = k => {
+    const C = COURSES[k], pr = courseProgress(k);
+    const sub = C.group ? (G && C.authorId === G.player.id ? 'By you' : 'By ' + C.author) : 'Example course';
+    const pct = pr.total ? Math.round(pr.done / pr.total * 100) : 0;
+    return `<button class="pk-item${k === state.course ? ' on' : ''}" data-course="${esc(k)}"><span class="t">${esc(C.name)}</span><span class="n">${pr.done === pr.total && pr.total ? 'Done' : pr.done ? pr.done + ' of ' + pr.total : pr.total + ' lessons'}<span class="bar-mini"><i style="width:${pct}%"></i></span></span><span class="s">${esc(sub)}${C.description ? ' · ' + esc(C.description) : ''}</span></button>`;
+  };
+  const started = k => courseProgress(k).done > 0 ? 0 : 1;
+  const sortK = (a, b) => started(a) - started(b) || COURSES[a].name.localeCompare(COURSES[b].name);
+  const mine = keys.filter(k => COURSES[k].group && G && COURSES[k].authorId === G.player.id && match(k)).sort(sortK);
+  const group = keys.filter(k => COURSES[k].group && !(G && COURSES[k].authorId === G.player.id) && match(k)).sort(sortK);
+  const builtin = keys.filter(k => !COURSES[k].group && match(k));
+  let h = `<div class="row"><button class="btn sm" id="pkCreate">+ Create a course</button></div>`;
+  if (keys.length > 6) h += `<input class="pk-search" id="pickQ" type="search" placeholder="Search courses" value="${esc(pickQ)}" autocomplete="off">`;
+  h += `<div class="pk-sec"><h4>Your courses</h4>${mine.length ? mine.map(item).join('') : q ? '<p>No matches.</p>' : `<div class="pk-empty"><p>You haven’t made a course yet. Pick a topic you want to learn or teach, and your AI assistant can draft one in a few minutes.</p><div class="row"><button class="btn ghost sm" id="pkCreate2">Make one</button></div></div>`}</div>`;
+  if (G) h += `<div class="pk-sec"><h4>From ${esc(G.groupName)}</h4>${group.length ? group.map(item).join('') : `<p>${q ? 'No matches.' : 'Nobody else in your group has shared a course yet.'}</p>`}</div>`;
+  if (builtin.length) h += `<div class="pk-sec"><h4>Example courses</h4>${builtin.map(item).join('')}</div>`;
+  $('#pickBody').innerHTML = h;
+}
+function openPicker() { pickQ = ''; renderPick(); openSheet('#pick'); }
+$('#pickWrap').addEventListener('click', e => { if (e.target.closest('#pickBtn')) openPicker(); });
+$('#path').addEventListener('click', e => {
+  if (e.target.closest('#wCreate')) openAdd();
+  if (e.target.closest('#wBrowse')) openPicker();
+});
+$('#pickBody').addEventListener('click', e => {
+  if (e.target.closest('#pkCreate, #pkCreate2')) { closeSheet('#pick'); openAdd(); return; }
+  const b = e.target.closest('[data-course]'); if (!b) return;
+  closeSheet('#pick'); selectCourse(b.dataset.course);
+});
+$('#pickBody').addEventListener('input', e => {
+  if (e.target.id !== 'pickQ') return;
+  pickQ = e.target.value; const pos = e.target.selectionStart; renderPick();
+  const inp = $('#pickQ'); inp.focus(); inp.setSelectionRange(pos, pos);
 });
 
 refreshBoard();
