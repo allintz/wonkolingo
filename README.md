@@ -1,9 +1,10 @@
 # WonkoLingo
 
-A Duolingo-style quiz app for groups of friends. Everyone can write courses (with help from their AI assistant), and the group competes on streaks and XP. It ships with two built-in courses:
+A Duolingo-style quiz app for groups of friends. Everyone can write courses (with help from their AI assistant), and the group competes on streaks and XP. It ships with three built-in courses:
 
 - **Staff Talk:** decoding what Capitol Hill staffers mean ("we're monitoring the issue closely").
 - **Procedure:** how bills move through the House and Senate: committees, the Rules Committee, cloture, reconciliation, conference, vetoes and the Congressional Review Act.
+- **FRONTIER Act:** how the leading bipartisan House frontier AI bill (H.R. 9925) would work: developer tiers, reporting, licensed outside auditors, emergency orders and state preemption. Also available as a course file in [courses/frontier-act.json](courses/frontier-act.json).
 
 Play it at https://allintz.github.io/wonkolingo/ (also at https://wonkolingo.alex-l-lintz.workers.dev).
 
