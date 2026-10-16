@@ -107,6 +107,36 @@ svg { display: block; }
 .news-h { margin: 0; font-family: var(--f-quote); font-style: italic; font-size: 20px; line-height: 1.3; }
 .news-d { font-size: 13px; color: var(--muted); font-weight: 700; }
 
+/* group play */
+.seg { display: flex; gap: 4px; background: var(--bg); border: 2px solid var(--line); border-radius: 12px; padding: 4px; }
+.seg button { flex: 1; border: 0; background: none; border-radius: 8px; padding: 6px 8px; font-weight: 800; font-size: 13px; color: var(--muted); }
+.seg button.on { background: var(--surface); color: var(--primary); box-shadow: 0 1px 0 var(--line-deep); }
+.fld { display: grid; gap: 4px; font-size: 13px; font-weight: 800; color: var(--muted); }
+.fld input { font: inherit; font-size: 16px; font-weight: 700; color: var(--fg); background: var(--bg); border: 2px solid var(--line); border-radius: 10px; padding: 8px 10px; width: 100%; min-width: 0; }
+.fld input:focus { outline: none; border-color: var(--primary); }
+.btn.sm { padding: 10px 16px; font-size: 14px; min-width: 0; justify-self: start; }
+.card .gerr { color: var(--bad); font-weight: 700; }
+.card .gerr a { color: inherit; }
+.ghead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.lb { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.lb li { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 6px 8px; border-radius: 10px; font-weight: 800; font-size: 15px; }
+.lb li.me { background: var(--primary-soft); }
+.lb .rk { color: var(--muted); font-variant-numeric: tabular-nums; text-align: center; }
+.lb .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb .fl { display: flex; align-items: center; gap: 2px; color: var(--brass); font-variant-numeric: tabular-nums; }
+.lb .fl.zero { color: var(--locked-fg); }
+.lb .fl.risk { color: var(--bad); }
+.lb .fl svg { width: 16px; height: 16px; }
+.lb .pts { color: var(--primary); font-variant-numeric: tabular-nums; min-width: 58px; text-align: right; }
+.gsub { margin: 6px 0 0; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.feed { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.feed li { font-size: 14px; color: var(--muted); font-weight: 600; line-height: 1.35; }
+.feed b { color: var(--fg); }
+.beat { margin-left: 4px; background: none; border: 2px solid var(--line-deep); border-radius: 8px; padding: 0 8px; font-size: 12px; font-weight: 900; color: var(--primary); }
+.rec { display: block; font-size: 13px; word-break: break-all; background: var(--bg); border: 2px solid var(--line); border-radius: 8px; padding: 6px 8px; color: var(--fg); }
+.glinks { display: flex; flex-wrap: wrap; gap: 14px; }
+.result .vs { color: var(--fg); font-weight: 800; }
+
 /* shared buttons */
 .btn { border: 0; border-radius: 14px; padding: 14px 28px; font-weight: 900; font-size: 16px; letter-spacing: .05em; text-transform: uppercase; background: var(--primary); color: var(--on-primary); box-shadow: 0 4px 0 var(--primary-deep); min-width: 150px; }
 .btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 var(--primary-deep); }
@@ -237,6 +267,7 @@ svg { display: block; }
     <div class="path" id="path"></div>
   </div>
   <aside class="side">
+    <section class="card" id="group"></section>
     <section class="card" id="potd"></section>
     <section class="card">
       <h3>Your progress</h3>
@@ -756,9 +787,9 @@ function show(id) {
   ['#lesson', '#result'].forEach(s => $(s).hidden = s !== id);
   document.body.classList.toggle('in-lesson', id !== null);
 }
-function startLesson(i) {
+function startLesson(i, challenge) {
   const L = LESSONS[i];
-  run = { idx: i, queue: L.items.map((it, k) => ({ ...it, key: k })), total: L.items.length, correct: 0, hearts: 5, wrong: new Set(), cur: null, sel: null, phase: 'answer' };
+  run = { challenge: challenge || null, idx: i, queue: L.items.map((it, k) => ({ ...it, key: k })), total: L.items.length, correct: 0, hearts: 5, wrong: new Set(), cur: null, sel: null, phase: 'answer' };
   show('#lesson');
   nextItem();
 }
@@ -889,9 +920,10 @@ function finish() {
   if (state.last !== today) { state.streak = state.last === dstr(y) ? state.streak + 1 : 1; state.last = today; }
   save();
   const acc = Math.round(firstTry / run.total * 100);
+  groupPost(L, gained, acc);
   const nextL = LESSONS[run.idx + 1];
   $('#result').classList.remove('failed');
-  $('#resultIn').innerHTML = `${ICON.seal}<h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${gained}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div><div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
+  $('#resultIn').innerHTML = `${ICON.seal}<h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${gained}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc)}<div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
   show('#result');
   $('#rHome').onclick = goHome; $('#rHome').focus();
 }
@@ -916,8 +948,141 @@ $('#tabs').addEventListener('click', e => {
   state.course = b.dataset.course; save(); buildLessons(); renderHome(); renderPotd();
 });
 
+/* ---------- group play ---------- */
+const GKEY = 'hillspeak-group';
+const SITE = 'https://hill-speak.alex-l-lintz.workers.dev';
+const API = /workers\.dev$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) ? '' : SITE;
+const FLAME = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.5 2c.6 3.4 4.9 5.6 4.9 10.6A5.4 5.4 0 0 1 12 18a5.4 5.4 0 0 1-5.4-5.4c0-2.4 1.2-4 2.4-5 0 2 .9 3.2 2 3.4-.3-3.3.5-6.4 1.5-9z"/></svg>';
+let G = (() => { try { return JSON.parse(localStorage.getItem(GKEY)); } catch (e) { return null; } })();
+let board = null, gTab = 'week', gMode = 'join', gErr = '', gBusy = false, gOffline = false, recShown = false, leaveArmed = false;
+const joinParam = (new URLSearchParams(location.search).get('join') || '').toUpperCase().slice(0, 6);
+if (joinParam && !G) gMode = 'join';
+function saveG() { try { G ? localStorage.setItem(GKEY, JSON.stringify(G)) : localStorage.removeItem(GKEY); } catch (e) {} }
+
+async function apiCall(path, bodyObj) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (G && G.token) headers.Authorization = 'Bearer ' + G.token;
+  const r = await fetch(API + path, { method: bodyObj ? 'POST' : 'GET', headers, body: bodyObj ? JSON.stringify(bodyObj) : undefined });
+  let d = {}; try { d = await r.json(); } catch (e) {}
+  if (!r.ok) { const e = new Error(d.error || 'Something went wrong.'); e.status = r.status; throw e; }
+  return d;
+}
+function netMsg(e) {
+  return e instanceof TypeError ? `Can’t reach the group server from this page. Group play works at <a href="${SITE}">${SITE.replace('https://', '')}</a>.` : esc(e.message);
+}
+function ago(ms) {
+  const m = Math.round((Date.now() - ms) / 60000);
+  if (m < 1) return 'just now'; if (m < 60) return m + 'm ago';
+  const h = Math.round(m / 60); if (h < 24) return h + 'h ago';
+  return Math.round(h / 24) + 'd ago';
+}
+
+async function refreshBoard() {
+  if (!G) return renderGroup();
+  try { board = await apiCall('/api/board?today=' + dstr(new Date())); gOffline = false; G.groupName = board.groupName; saveG(); }
+  catch (e) { if (e.status === 401) { G = null; saveG(); board = null; gErr = 'That group sign-in no longer works. Join again or use a recovery code.'; } else gOffline = true; }
+  renderGroup();
+}
+
+function renderGroup() {
+  const el = $('#group');
+  if (!G) {
+    const modes = [['join', 'Join'], ['start', 'Start a group'], ['restore', 'Recovery code']];
+    let form = '';
+    if (gMode === 'join') form = `<label class="fld"><span>Invite code</span><input id="gCode" maxlength="6" autocomplete="off" autocapitalize="characters" value="${esc(joinParam)}"></label><label class="fld"><span>Your display name</span><input id="gName" maxlength="24" autocomplete="nickname"></label><button class="btn sm" id="gGo">Join group</button>`;
+    else if (gMode === 'start') form = `<label class="fld"><span>Group name</span><input id="gGroup" maxlength="40"></label><label class="fld"><span>Your display name</span><input id="gName" maxlength="24" autocomplete="nickname"></label><button class="btn sm" id="gGo">Start group</button>`;
+    else form = `<label class="fld"><span>Recovery code</span><input id="gRecIn" autocomplete="off" spellcheck="false"></label><button class="btn sm" id="gGo">Restore</button>`;
+    el.innerHTML = `<h3>Play with friends</h3><p>Join a group to see each other’s streaks and compete on weekly XP. Your display name and finished lessons are visible to the group.</p><div class="seg">${modes.map(([k, t]) => `<button data-gmode="${k}" class="${k === gMode ? 'on' : ''}">${t}</button>`).join('')}</div>${form}${gErr ? `<p class="gerr">${gErr}</p>` : ''}`;
+    $('#gGo').disabled = gBusy;
+    return;
+  }
+  let h = `<div class="ghead"><h3>${esc(G.groupName)}</h3><button class="linkbtn" id="gInvite">Copy invite link</button></div><div class="meta">Code ${esc(G.code)} · You’re ${esc(G.player.name)}</div>`;
+  if (gOffline) h += `<p class="gerr">Can’t reach the group server right now. Lessons you finish still count on this device.</p>`;
+  if (board) {
+    const key = gTab === 'week' ? 'week' : 'total';
+    const rows = board.players.slice().sort((a, b) => b[key] - a[key] || b.streak - a.streak || a.name.localeCompare(b.name));
+    h += `<div class="seg"><button data-gtab="week" class="${gTab === 'week' ? 'on' : ''}">This week</button><button data-gtab="all" class="${gTab === 'all' ? 'on' : ''}">All time</button></div>`;
+    h += `<ol class="lb">${rows.map((r, i) => {
+      const fl = r.streak === 0 ? 'zero' : r.atRisk ? 'risk' : '';
+      const tip = r.streak === 0 ? 'No current streak' : r.atRisk ? `${r.streak}-day streak, ends tonight without a lesson` : `${r.streak}-day streak`;
+      return `<li class="${r.id === board.me ? 'me' : ''}"><span class="rk">${i + 1}</span><span class="nm">${esc(r.name)}</span><span class="fl ${fl}" title="${esc(tip)}">${FLAME}${r.streak}</span><span class="pts">${r[key]} XP</span></li>`;
+    }).join('')}</ol>`;
+    if (gTab === 'week') h += `<p class="meta">Weekly XP resets Monday 00:00 UTC.</p>`;
+    if (board.feed.length) h += `<h4 class="gsub">Recent</h4><ul class="feed">${board.feed.slice(0, 8).map(f => `<li><b>${esc(f.name)}</b> finished ${esc(f.title)} · ${f.acc}% · ${ago(f.at)}${f.id !== board.me ? `<button class="beat" data-beat="${esc(f.lessonId)}" data-who="${esc(f.name)}" data-acc="${f.acc}">Beat it</button>` : ''}</li>`).join('')}</ul>`;
+    else h += `<p>No lessons finished yet. Be the first.</p>`;
+  } else if (!gOffline) h += `<p>Loading…</p>`;
+  h += recShown ? `<p>Save this code to use the same account on another device. Anyone with it can post as you.</p><code class="rec">${esc(G.token)}</code>` : '';
+  h += `<div class="glinks"><button class="linkbtn" id="gRec">${recShown ? 'Hide recovery code' : 'Recovery code'}</button><button class="linkbtn" id="gLeave">${leaveArmed ? 'Click again to leave' : 'Leave group'}</button></div>`;
+  el.innerHTML = h;
+}
+
+async function groupSubmit() {
+  gErr = ''; gBusy = true; renderGroupKeep();
+  try {
+    let d;
+    if (gMode === 'restore') {
+      const tok = ($('#gRecIn').value || '').trim();
+      if (!tok.includes('.')) throw new Error('That doesn’t look like a recovery code.');
+      G = { token: tok }; const me = await apiCall('/api/me'); d = { ...me, token: tok };
+    } else if (gMode === 'start') d = await apiCall('/api/groups', { groupName: $('#gGroup').value, name: $('#gName').value });
+    else d = await apiCall('/api/join', { code: $('#gCode').value, name: $('#gName').value });
+    G = { token: d.token, code: d.code, groupName: d.groupName, player: d.player }; saveG();
+    if (joinParam) history.replaceState(null, '', location.pathname);
+    toast('You’re in ' + d.groupName + '.');
+    gBusy = false; await refreshBoard();
+  } catch (e) {
+    if (gMode === 'restore') { G = null; }
+    gBusy = false; gErr = netMsg(e); renderGroupKeep();
+  }
+}
+// Re-render the form without wiping what the person typed.
+function renderGroupKeep() {
+  const vals = {}; ['gCode', 'gName', 'gGroup', 'gRecIn'].forEach(id => { const x = document.getElementById(id); if (x) vals[id] = x.value; });
+  renderGroup();
+  Object.entries(vals).forEach(([id, v]) => { const x = document.getElementById(id); if (x) x.value = v; });
+}
+
+$('#group').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.gmode) { gMode = t.dataset.gmode; gErr = ''; renderGroupKeep(); return; }
+  if (t.dataset.gtab) { gTab = t.dataset.gtab; renderGroup(); return; }
+  if (t.id === 'gGo') { groupSubmit(); return; }
+  if (t.id === 'gInvite') {
+    const link = SITE + '/?join=' + G.code;
+    (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(() => toast('Invite link copied.'), () => toast(link));
+    return;
+  }
+  if (t.id === 'gRec') { recShown = !recShown; renderGroup(); return; }
+  if (t.id === 'gLeave') {
+    if (!leaveArmed) { leaveArmed = true; renderGroup(); setTimeout(() => { leaveArmed = false; if (G) renderGroup(); }, 4000); return; }
+    G = null; board = null; leaveArmed = false; recShown = false; saveG(); renderGroup(); toast('Left the group on this device. Your recovery code still works.'); return;
+  }
+  if (t.dataset.beat) {
+    const id = t.dataset.beat, course = Object.keys(COURSES).find(k => COURSES[k].pre && id.startsWith(COURSES[k].pre)) || 'lingo';
+    if (course !== state.course) { state.course = course; save(); buildLessons(); renderHome(); renderPotd(); }
+    const i = LESSONS.findIndex(l => l.id === id);
+    if (i < 0) { toast('That lesson isn’t available anymore.'); return; }
+    startLesson(i, { name: t.dataset.who, acc: +t.dataset.acc });
+  }
+});
+$('#group').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); groupSubmit(); } });
+
+function groupPost(L, xp, acc) {
+  if (!G) return;
+  apiCall('/api/complete', { lessonId: L.id, title: L.title, xp, acc, day: dstr(new Date()) }).then(refreshBoard, () => { gOffline = true; renderGroup(); });
+}
+function groupLine(acc) {
+  let s = '';
+  if (run.challenge) { const c = run.challenge; s += `<p class="vs">${acc > c.acc ? 'You beat' : acc === c.acc ? 'You tied' : 'You didn’t beat'} ${esc(c.name)}: ${acc}% vs ${c.acc}% first try.</p>`; }
+  if (G) s += `<p>Posted to ${esc(G.groupName)}.</p>`;
+  return s;
+}
+setInterval(() => { if (G && !document.hidden && !run) refreshBoard(); }, 60000);
+document.addEventListener('visibilitychange', () => { if (G && !document.hidden && !run) refreshBoard(); });
+
 buildLessons();
 renderHome();
 renderPotd();
+refreshBoard();
 </script>
 </body></html>

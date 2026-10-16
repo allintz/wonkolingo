@@ -7,7 +7,13 @@ A Duolingo-style trainer with two tracks:
 
 Play it at https://allintz.github.io/hill-speak/ (also at https://hill-speak.alex-l-lintz.workers.dev).
 
-It's a single self-contained page (`docs/index.html`). Progress is saved in your browser only.
+It's a single self-contained page (`docs/index.html`). Your own progress is saved in your browser.
+
+## Group play
+
+Start a group or join one with a 6-letter invite code to see everyone's streaks, weekly and all-time XP, and recent lessons, and to challenge each other with "Beat it." There are no passwords: each player gets a random token, shown as a recovery code for moving to another device. Scores are self-reported, so this is for friendly competition only.
+
+The backend is a Cloudflare Worker (`src/worker.js`) with a D1 database (`schema.sql`). The GitHub Pages copy talks to the same API.
 
 ## Caveats
 
@@ -15,4 +21,4 @@ The Staff Talk answers are generic rules of thumb from published staffer guides 
 
 ## Editing
 
-The source lives outside this repo. `build.sh` wraps it into `docs/index.html`; `deploy.sh` rebuilds and deploys to Cloudflare. To publish to GitHub Pages, commit and push `docs/`.
+The source lives outside this repo. `build.sh` wraps it into `docs/index.html`; `deploy.sh` rebuilds and deploys the page and API to Cloudflare. For a new database, run `wrangler d1 execute hill-speak --remote --file schema.sql` once. To publish to GitHub Pages, commit and push `docs/`.
