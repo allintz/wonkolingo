@@ -11,8 +11,10 @@ Your job: build one course on the topic the user names, as a single JSON file th
 3. **Make wrong options plausible.** Each wrong option should be something a reasonable beginner might believe. Avoid joke options and "all of the above."
 4. **One clearly best answer.** If experts could argue for two options, rewrite the question.
 5. **Build up.** Order units from basics to harder material. Each lesson should take two to four minutes: about 4 to 6 questions.
-6. **Mix question types.** Use mostly multiple choice, plus some matching and ordering.
+6. **Mix question types.** Use mostly multiple choice, plus about one short-answer (`recall`) question per lesson and some matching and ordering.
 7. **Be honest about uncertainty.** Use the course `caveat` to say what the course simplifies, where facts change quickly, and what date the facts are current as of.
+8. **Write right answers that stand on their own.** WonkoLingo is a spaced-repetition app. A player first sees a multiple-choice question as written, but when it comes back for review days or weeks later, they have to type the answer from memory, and an AI grader compares it with your right option. So the right option must be a complete, correct answer to the question by itself ("60 votes, three-fifths of the Senate"), never "Both A and C" or "None of the above".
+9. **Explain wrong options when you can.** The optional `ow` field explains why each wrong option is wrong. Players who pick one see that note, which helps undo the pull of a plausible wrong answer.
 
 The app shuffles answer options, match pairs and ordering steps itself, so write them in any order. For ordering questions, list the steps in the **correct** order.
 
@@ -79,6 +81,24 @@ Keep the whole file under 200 KB. Fields not listed here are ignored.
 | `ask` | Optional follow-up question the player could ask in real life, up to 300 characters. |
 | `news` | Optional `{ "h": "...", "d": "..." }` card shown above the question: `h` is a **paraphrased** description of a real event (up to 160 characters), and `d` is its date (up to 60). Only for real, verified events. The app labels it "paraphrased." |
 
+| `ow` | Optional. A list the same length as `o`, explaining why each option is wrong, with `""` for the right one. Each entry up to 300 characters. |
+| `keys` | Optional. 1 to 5 key points (up to 160 characters each) the AI grader should look for when the question comes back as a typed answer. |
+| `predict` | Optional `true`. Shows the question as "Make a prediction" (for example, how a vote or ruling turned out). Use only for real, resolved events, and say in `x` what actually happened. |
+
+### Short answer (`"t": "recall"`)
+
+```json
+{
+  "t": "recall",
+  "p": "Why can a single senator slow down almost any bill?",
+  "answer": "Because the Senate runs on unanimous consent, and any one senator can object, forcing slow formal procedure like cloture.",
+  "keys": ["unanimous consent", "one objection forces formal procedure"],
+  "x": "Most Senate business is scheduled by unanimous consent agreements. An objection means leadership has to use floor time on cloture votes instead."
+}
+```
+
+The player types an answer, says how sure they are, and an AI grader scores it from 0 to 3 against `answer` and `keys`. `p` (up to 300 characters), `answer` (up to 400) and `x` are required. Ask about something with a clear answer that can be stated in a sentence. "Why" and "what happens when" questions work well; open-ended opinion questions don't.
+
 ### Matching (`"t": "match"`)
 
 ```json
@@ -115,7 +135,8 @@ Keep the whole file under 200 KB. Fields not listed here are ignored.
 Check that:
 
 - the file is valid JSON (straight double quotes, no trailing commas, no comments);
-- every `a` points at the right option, and the position starts at 0;
+- every `a` points at the right option, the position starts at 0, and the right option makes sense as a typed answer on its own;
+- every `ow` list has exactly one entry per option;
 - no field is over its length limit, and every lesson has at least 2 questions;
 - every `who` matches a key in `speakers`;
 - every fact, number and date is one you verified, and every `news` card describes a real event with its real date.

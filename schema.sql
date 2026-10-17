@@ -48,3 +48,9 @@ CREATE TABLE IF NOT EXISTS reports (
   created_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_reports_course ON reports(course_id, resolved);
+CREATE TABLE IF NOT EXISTS grade_usage (
+  day TEXT NOT NULL,
+  player_id TEXT NOT NULL,
+  n INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (day, player_id)
+);

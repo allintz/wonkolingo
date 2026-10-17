@@ -190,6 +190,37 @@ svg { display: block; }
 .pk-search { font: inherit; font-size: 16px; font-weight: 700; color: var(--fg); background: var(--surface); border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; width: 100%; }
 .pk-search:focus { outline: none; border-color: var(--primary); }
 
+/* daily session, typed answers */
+.today { background: var(--primary); color: var(--on-primary); border-radius: 18px; padding: 20px 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 5px 0 var(--primary-deep); }
+.today .kicker { color: inherit; opacity: .85; }
+.today h2 { margin: 2px 0 4px; font-size: 26px; font-weight: 900; }
+.today p { margin: 0; opacity: .92; max-width: 48ch; }
+.today .btn { background: var(--surface); color: var(--primary); box-shadow: 0 4px 0 var(--primary-deep); flex: none; }
+.today.done { background: var(--surface); color: var(--fg); border: 2px solid var(--line); box-shadow: none; }
+.today.done .kicker { color: var(--primary); opacity: 1; }
+.today.done p { color: var(--muted); }
+.today.done .btn { background: var(--surface); color: var(--fg); border: 2px solid var(--line-deep); box-shadow: 0 4px 0 var(--line-deep); }
+.cardtag { margin: 0; font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.recall-in { font: 600 17px/1.45 var(--f-ui); color: var(--fg); background: var(--surface); border: 2px solid var(--line); border-radius: 14px; padding: 12px 14px; width: 100%; resize: vertical; }
+.recall-in:focus { outline: none; border-color: var(--primary); }
+.conf { display: grid; gap: 8px; justify-items: start; }
+.conf-k { font-size: 13px; font-weight: 800; color: var(--muted); }
+.conf-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.cbtn { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 12px; padding: 10px 14px; font-weight: 800; font-size: 15px; }
+.cbtn:hover { border-color: var(--primary); }
+.cbtn:disabled, .conf .linkbtn:disabled { opacity: .5; cursor: default; }
+.recall-ans { background: var(--surface); border: 2px solid var(--line); border-left: 6px solid var(--good); border-radius: 12px; padding: 10px 14px; display: grid; gap: 2px; }
+.recall-ans span { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--good); }
+.recall-ans p { margin: 0; font-weight: 700; color: var(--fg); }
+.fb .aifb { font-weight: 700; color: var(--fg); }
+.fb .gq { font-weight: 800; color: var(--fg); }
+.grades { display: flex; flex-wrap: wrap; gap: 8px; }
+.gbtn { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 12px; padding: 8px 12px; font-size: 15px; }
+.gbtn:hover { border-color: var(--primary); }
+.fb .whynot { border-left: 4px solid var(--bad); padding-left: 10px; }
+.fb .whynot span { display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; color: var(--bad); }
+@media (max-width: 520px) { .today { flex-direction: column; align-items: stretch; } .today h2 { font-size: 22px; } }
+
 /* shared buttons */
 .btn { border: 0; border-radius: 14px; padding: 14px 28px; font-weight: 900; font-size: 16px; letter-spacing: .05em; text-transform: uppercase; background: var(--primary); color: var(--on-primary); box-shadow: 0 4px 0 var(--primary-deep); min-width: 150px; }
 .btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 var(--primary-deep); }
@@ -316,6 +347,7 @@ svg { display: block; }
 
 <main class="home" id="home">
   <div class="path-col">
+    <div id="todayWrap"></div>
     <div id="pickWrap"></div>
     <div class="cinfo" id="cinfo" hidden></div>
     <div class="path" id="path"></div>
@@ -327,7 +359,9 @@ svg { display: block; }
       <h3>Your progress</h3>
       <div class="kv"><span>Lessons</span><span id="pDone">0 / 0</span></div>
       <div class="bar-mini"><i id="pBar" style="width:0"></i></div>
-      <p>Keys: 1 to 4 picks an answer, Enter checks, Esc quits.</p>
+      <div class="kv"><span>Cards in your reviews</span><span id="pCards">0</span></div>
+      <div class="kv"><span>Due tomorrow</span><span id="pTomorrow">0</span></div>
+      <p>Keys: 1 to 4 picks an answer, Enter checks, Esc quits. On typed answers, 1 to 3 submits with your confidence.</p>
       <button class="linkbtn" id="resetBtn">Reset progress</button>
     </section>
     <section class="card" id="caveat"></section>
@@ -1622,6 +1656,17 @@ function validateCourse(raw) {
             if (it.who !== undefined) { if (typeof it.who !== 'string' || !c.speakers[it.who]) err(w + '.who', 'must be a key from speakers'); else out.who = it.who; }
             const ask = str(it.ask, w + '.ask', 300, false); if (ask) out.ask = ask;
             if (it.news !== undefined) out.news = { h: str(it.news && it.news.h, w + '.news.h', 160), d: str(it.news && it.news.d, w + '.news.d', 60) };
+            if (it.predict !== undefined) { if (typeof it.predict !== 'boolean') err(w + '.predict', 'must be true or false'); else if (it.predict) out.predict = true; }
+            if (it.ow !== undefined) {
+              if (!Array.isArray(it.ow) || it.ow.length !== o.length) err(w + '.ow', 'must be a list with one entry per option (use "" for the right one)');
+              else out.ow = it.ow.map((t, k) => str(t, `${w}.ow[${k}]`, 300, false) || '');
+            }
+            if (it.keys !== undefined) out.keys = arr(it.keys, w + '.keys', 1, 5).map((t, k) => str(t, `${w}.keys[${k}]`, 160));
+            return out;
+          }
+          if (it.t === 'recall') {
+            const out = { t: 'recall', p: str(it.p, w + '.p', 300), answer: str(it.answer, w + '.answer', 400), x };
+            if (it.keys !== undefined) out.keys = arr(it.keys, w + '.keys', 1, 5).map((t, k) => str(t, `${w}.keys[${k}]`, 160));
             return out;
           }
           if (it.t === 'match') {
@@ -1639,7 +1684,7 @@ function validateCourse(raw) {
             if (new Set(items).size !== items.length) err(w + '.items', 'has duplicate entries');
             return { t: 'order', p: str(it.p, w + '.p', 300), ends, items, x };
           }
-          err(w + '.t', 'must be "mc", "match" or "order"');
+          err(w + '.t', 'must be "mc", "recall", "match" or "order"');
           return null;
         }) };
       }) };
@@ -1690,8 +1735,8 @@ const ICON = {
 
 let state = load();
 function load() {
-  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done) { if (s.course && !COURSES[s.course]) { if (String(s.course).startsWith('c:')) s.wantCourse = s.course; s.course = null; } return s; } } catch (e) {}
-  return { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: null };
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done) { s.srs = s.srs || {}; if (s.course && !COURSES[s.course]) { if (String(s.course).startsWith('c:')) s.wantCourse = s.course; s.course = null; } return s; } } catch (e) {}
+  return { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: null, srs: {} };
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
@@ -1706,6 +1751,7 @@ function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = fal
 
 /* ---------- home ---------- */
 function renderHome() {
+  renderToday();
   $('#xp').textContent = state.xp;
   $('#streak').textContent = state.streak;
   const cur = LESSONS.findIndex((l, i) => !state.done[l.id] && unlocked(i));
@@ -1737,6 +1783,9 @@ function renderHome() {
   const nd = LESSONS.filter(l => state.done[l.id]).length;
   $('#pDone').textContent = nd + ' / ' + LESSONS.length;
   $('#pBar').style.width = (nd / LESSONS.length * 100) + '%';
+  const td = dstr(new Date());
+  $('#pCards').textContent = Object.keys(state.srs).length;
+  $('#pTomorrow').textContent = Object.values(state.srs).filter(c => c.due <= addDays(td, 1) && c.due > td).length;
 }
 
 $('#path').addEventListener('click', e => {
@@ -1763,18 +1812,96 @@ function renderPotd() {
 let resetArmed = false;
 $('#resetBtn').onclick = () => {
   if (!resetArmed) { resetArmed = true; $('#resetBtn').textContent = 'Click again to erase all progress'; setTimeout(() => { resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; }, 4000); return; }
-  state = { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: state.course }; save(); resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; renderHome(); toast('Progress reset.');
+  state = { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: state.course, srs: {} }; save(); resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; renderHome(); toast('Progress reset.');
 };
 
-/* ---------- lesson ---------- */
+/* ---------- spaced repetition: FSRS-4.5 with its published default weights ---------- */
+const FSRS_W = [0.4872, 1.4003, 3.7145, 13.8206, 5.1618, 1.2298, 0.8975, 0.031, 1.6474, 0.1367, 1.0461, 2.1072, 0.0793, 0.3246, 1.587, 0.2272, 2.8755];
+const FSRS_DECAY = -0.5, FSRS_FACTOR = 19 / 81, TARGET_RETENTION = 0.9, MAX_INTERVAL = 365;
+const SESSION_REVIEWS = 20, SESSION_NEW = 5;
+const clampD = d => Math.min(10, Math.max(1, d));
+const dayDiff = (a, b) => Math.round((Date.parse(b + 'T12:00:00') - Date.parse(a + 'T12:00:00')) / 864e5);
+const addDays = (day, n) => { const d = new Date(day + 'T12:00:00'); d.setDate(d.getDate() + n); return dstr(d); };
+const retrievability = (days, stab) => Math.pow(1 + FSRS_FACTOR * days / stab, FSRS_DECAY);
+// g: 1 = missed, 2 = hard, 3 = good, 4 = easy. Returns the card's new memory state and next due day.
+function fsrsNext(card, g, today) {
+  const W = FSRS_W;
+  let st, d;
+  if (!card) { st = W[g - 1]; d = clampD(W[4] - (g - 3) * W[5]); }
+  else {
+    const r = retrievability(Math.max(0, dayDiff(card.last, today)), card.s);
+    if (g === 1) st = Math.min(card.s, W[11] * Math.pow(card.d, -W[12]) * (Math.pow(card.s + 1, W[13]) - 1) * Math.exp(W[14] * (1 - r)));
+    else st = card.s * (1 + Math.exp(W[8]) * (11 - card.d) * Math.pow(card.s, -W[9]) * (Math.exp(W[10] * (1 - r)) - 1) * (g === 2 ? W[15] : 1) * (g === 4 ? W[16] : 1));
+    d = clampD(W[7] * W[4] + (1 - W[7]) * (card.d - W[6] * (g - 3)));
+  }
+  st = Math.max(0.1, st);
+  const ivl = Math.min(MAX_INTERVAL, Math.max(1, Math.round(st / FSRS_FACTOR * (Math.pow(TARGET_RETENTION, 1 / FSRS_DECAY) - 1))));
+  return { s: st, d, last: today, due: addDays(today, ivl), ivl, reps: (card ? card.reps : 0) + 1, lapses: (card ? card.lapses : 0) + (g === 1 && card ? 1 : 0) };
+}
+const ivlText = n => n <= 1 ? '1 day' : n < 30 ? n + ' days' : n < 365 ? Math.round(n / 30) + ' mo' : '1 yr';
+function whenText(day) { const n = dayDiff(dstr(new Date()), day); return n <= 0 ? 'today' : n === 1 ? 'tomorrow' : 'in ' + n + ' days'; }
+
+/* ---------- cards: every question in every course is a card ---------- */
+const cardId = (lessonId, k) => lessonId + '#' + k;
+function courseCards(key) {
+  const C = COURSES[key]; if (!C) return [];
+  const out = [];
+  C.units.forEach((u, ui) => u.lessons.forEach((l, li) => { const lid = C.pre + 'u' + ui + 'l' + li; l.items.forEach((it, k) => out.push({ id: cardId(lid, k), course: key, lessonId: lid, item: it })); }));
+  return out;
+}
+function cardIndex() { const m = new Map(); Object.keys(COURSES).forEach(k => courseCards(k).forEach(c => m.set(c.id, c))); return m; }
+function dueCards(today) {
+  const idx = cardIndex();
+  return Object.entries(state.srs).filter(([id, c]) => c.due <= today && idx.has(id))
+    .map(([id, c]) => ({ ...idx.get(id), r: retrievability(Math.max(0, dayDiff(c.last, today)), c.s) }))
+    .sort((a, b) => a.r - b.r);
+}
+const newCardsAvailable = () => courseCards(state.course).filter(c => !state.srs[c.id]);
+const newAllowanceToday = today => Math.max(0, SESSION_NEW - (state.newDay === today ? state.newCount : 0));
+function markLessonDone(lessonId, course) {
+  const cards = courseCards(course).filter(c => c.lessonId === lessonId);
+  if (cards.length && cards.every(c => state.srs[c.id])) state.done[lessonId] = true;
+}
+function srsRecord(it, g) {
+  if (!it._card || run.graded.has(it._card)) return;
+  run.graded.add(it._card);
+  const today = dstr(new Date()), prev = state.srs[it._card];
+  state.srs[it._card] = fsrsNext(prev, g, today);
+  if (!prev) {
+    if (state.newDay !== today) { state.newDay = today; state.newCount = 0; }
+    state.newCount++; run.newSeen++; run.xp += g > 1 ? 5 : 1;
+  } else {
+    // Only reviews that were actually due earn full credit, so replaying fresh material can't farm XP.
+    const wasDue = prev.due <= today;
+    run.reviewed++; if (g > 1) run.remembered++;
+    run.xp += wasDue ? (g > 1 ? 10 : 2) : 1;
+  }
+  markLessonDone(it._lesson, it._course);
+  save();
+}
+
+/* ---------- lessons and sessions ---------- */
 let run = null;
 function show(id) {
   ['#lesson', '#result'].forEach(s => $(s).hidden = s !== id);
   document.body.classList.toggle('in-lesson', id !== null);
 }
+function newRun(extra) { return { graded: new Set(), xp: 0, reviewed: 0, remembered: 0, newSeen: 0, correct: 0, wrong: new Set(), cur: null, sel: null, phase: 'answer', ...extra }; }
 function startLesson(i, challenge) {
   const L = LESSONS[i];
-  run = { challenge: challenge || null, idx: i, queue: L.items.map((it, k) => ({ ...it, key: k })), total: L.items.length, correct: 0, hearts: 5, wrong: new Set(), cur: null, sel: null, phase: 'answer' };
+  run = newRun({ mode: 'lesson', challenge: challenge || null, idx: i, hearts: 5, total: L.items.length,
+    queue: L.items.map((it, k) => ({ ...it, key: k, _card: cardId(L.id, k), _course: state.course, _lesson: L.id })) });
+  show('#lesson');
+  nextItem();
+}
+function startSession(extra) {
+  const today = dstr(new Date());
+  const due = dueCards(today).slice(0, SESSION_REVIEWS);
+  const fresh = newCardsAvailable().slice(0, extra ? SESSION_NEW : newAllowanceToday(today));
+  const cards = due.concat(fresh);
+  if (!cards.length) { toast('Nothing to review right now.'); return; }
+  run = newRun({ mode: 'session', hearts: Infinity, total: cards.length,
+    queue: cards.map((c, k) => ({ ...c.item, key: k, _card: c.id, _course: c.course, _lesson: c.lessonId, _new: !state.srs[c.id] })) });
   show('#lesson');
   nextItem();
 }
@@ -1783,9 +1910,10 @@ $('#quitBtn').onclick = goHome;
 
 function updateBar() {
   $('#prog').style.width = (run.correct / run.total * 100) + '%';
+  $('.lbar .stat.hearts').hidden = !isFinite(run.hearts);
   $('#hearts').textContent = run.hearts;
 }
-function setCheck(visible, enabled) { const b = $('#checkBtn'); b.hidden = !visible; b.disabled = !enabled; b.textContent = 'Check'; }
+function setCheck(visible, enabled, label) { const b = $('#checkBtn'); b.hidden = !visible; b.disabled = !enabled; b.textContent = label || 'Check'; }
 function resetFoot() { $('#foot').className = 'lfoot'; const fb = $('#fb'); fb.hidden = true; fb.className = 'fb'; fb.innerHTML = ''; }
 
 function nextItem() {
@@ -1794,7 +1922,10 @@ function nextItem() {
   run.cur = run.queue.shift(); run.sel = null; run.phase = 'answer';
   updateBar();
   const it = run.cur;
-  if (it.t === 'mc') renderMC(it); else if (it.t === 'match') renderMatch(it); else renderOrder(it);
+  if (it.t === 'recall' && it._retry) it._noAI = true;
+  const typed = it.t === 'recall' || (it.t === 'mc' && run.mode === 'session' && !it._new && !it._retry);
+  if (typed) renderTyped(it); else if (it.t === 'mc') renderMC(it); else if (it.t === 'match') renderMatch(it); else renderOrder(it);
+  if (run.mode === 'session') $('#stage').insertAdjacentHTML('afterbegin', `<p class="cardtag">${it._new ? 'New' : 'Review'} · ${esc((COURSES[it._course] || {}).name || '')}</p>`);
   $('#stageWrap').scrollTop = 0;
 }
 
@@ -1804,10 +1935,9 @@ function quoteHTML(it) {
 }
 
 function renderMC(it) {
-  it._opts = shuffle(it.o.map((text, i) => ({ text, right: i === it.a })));
-  const kicker = it.news ? 'Spot the procedure' : it.q ? 'Decode the staffer' : 'Choose the best answer';
-  const news = it.news ? `<div class="news"><span class="news-k">In the news</span><p class="news-h">${esc(it.news.h)}</p><span class="news-d">${esc(it.news.d)} · paraphrased</span></div>` : '';
-  $('#stage').innerHTML = `<p class="kicker">${kicker}</p>${news}<h3 class="prompt">${esc(it.p || 'What does this most likely mean?')}</h3>${it.q ? quoteHTML(it) : ''}<div class="opts" role="radiogroup">${it._opts.map((o, i) => `<button class="opt" role="radio" aria-checked="false" data-i="${i}"><span class="kbd">${i + 1}</span><span>${esc(o.text)}</span></button>`).join('')}</div>`;
+  it._opts = shuffle(it.o.map((text, i) => ({ text, right: i === it.a, i })));
+  const kicker = it.predict ? 'Make a prediction' : it.news ? 'Spot the procedure' : it.q ? 'Decode the staffer' : 'Choose the best answer';
+  $('#stage').innerHTML = `<p class="kicker">${kicker}</p>${newsHTML(it)}<h3 class="prompt">${esc(it.p || 'What does this most likely mean?')}</h3>${it.q ? quoteHTML(it) : ''}<div class="opts" role="radiogroup">${it._opts.map((o, i) => `<button class="opt" role="radio" aria-checked="false" data-i="${i}"><span class="kbd">${i + 1}</span><span>${esc(o.text)}</span></button>`).join('')}</div>`;
   $('#stage').querySelectorAll('.opt').forEach(b => b.onclick = () => pickMC(+b.dataset.i));
   setCheck(true, false);
 }
@@ -1839,7 +1969,7 @@ function pickTile(b) {
     [l, r].forEach(x => { x.classList.remove('sel'); x.classList.add('matched'); x.disabled = true; });
     run.m.left--;
     if (run.m.left === 0) setTimeout(() => {
-      grade(true, '', run.m.misses ? `Matched, with ${run.m.misses} miss${run.m.misses > 1 ? 'es' : ''}.` : null);
+      grade(true, '', run.m.misses ? `Matched, with ${run.m.misses} miss${run.m.misses > 1 ? 'es' : ''}.` : null, run.m.misses ? 2 : 3);
     }, 300);
   } else {
     run.m.misses++; run.wrong.add(run.cur.key);
@@ -1856,18 +1986,20 @@ function renderOrder(it) {
   $('#stage').querySelectorAll('[data-p]').forEach(b => b.onclick = () => { if (run.phase !== 'answer') return; run.ans.push(+b.dataset.p); renderOrder(it); });
   $('#stage').querySelectorAll('[data-a]').forEach(b => b.onclick = () => { if (run.phase !== 'answer') return; run.ans.splice(+b.dataset.a, 1); renderOrder(it); });
   setCheck(true, run.ans.length === it.items.length);
+  if (run.mode === 'session' && !$('#stage .cardtag')) $('#stage').insertAdjacentHTML('afterbegin', `<p class="cardtag">${it._new ? 'New' : 'Review'} · ${esc((COURSES[it._course] || {}).name || '')}</p>`);
 }
 
 function check() {
   const it = run.cur;
   if (it.t === 'mc') {
     if (run.sel === null) return;
-    const ok = it._opts[run.sel].right;
+    const pick = it._opts[run.sel], ok = pick.right;
     $('#stage').querySelectorAll('.opt').forEach((b, k) => {
       b.disabled = true; b.classList.remove('sel');
       if (it._opts[k].right) b.classList.add('right'); else if (k === run.sel) b.classList.add('wrong');
     });
-    grade(ok, ok ? '' : `<p class="ans">Better answer: ${esc(it.o[it.a])}</p>`);
+    const whyNot = !ok && it.ow && it.ow[pick.i] ? `<p class="whynot"><span>Why not that one</span>${esc(it.ow[pick.i])}</p>` : '';
+    grade(ok, ok ? '' : `<p class="ans">${it.predict ? 'What happened' : 'Better answer'}: ${esc(it.o[it.a])}</p>${whyNot}`);
   } else if (it.t === 'order') {
     const ok = run.ans.every((v, i) => v === i);
     grade(ok, ok ? '' : `<p class="ans">A better order:</p><ol class="order-ans">${it.items.map(s => `<li>${esc(s)}</li>`).join('')}</ol>`);
@@ -1875,42 +2007,133 @@ function check() {
   }
 }
 
-function grade(ok, ansHTML, heading) {
+function reportHTML(it) { return (COURSES[it._course] || {}).group && G ? '<div class="repbox"><button class="linkbtn" id="repBtn">Report a problem</button></div>' : ''; }
+function newsHTML(it) { return it.news ? `<div class="news"><span class="news-k">In the news</span><p class="news-h">${esc(it.news.h)}</p><span class="news-d">${esc(it.news.d)} · paraphrased</span></div>` : ''; }
+
+/* ---------- typed answers: confidence first, then an AI grade (or a self-grade fallback) ---------- */
+const CONF = [['guess', 'Guessing'], ['sure', 'Fairly sure'], ['cold', 'Knew it']];
+const typedAnswerOf = it => it.t === 'recall' ? it.answer : it.o[it.a];
+// Answer score (0 to 3) plus confidence becomes an FSRS grade. Right answers that were guesses come back sooner.
+const fsrsFrom = (score, conf) => score === 0 ? 1 : score === 1 ? 2 : score === 2 ? (conf === 'guess' ? 2 : 3) : (conf === 'cold' ? 4 : 3);
+function renderTyped(it) {
+  $('#stage').innerHTML = `<p class="kicker">From memory</p>${newsHTML(it)}<h3 class="prompt">${esc(it.p || 'What does this most likely mean?')}</h3>${it.q ? quoteHTML(it) : ''}
+    <textarea class="recall-in" id="recallIn" rows="3" placeholder="Answer in a few words or a sentence."></textarea>
+    <div class="conf"><span class="conf-k">Submit with how sure you are</span><div class="conf-btns">${CONF.map(([k, t], i) => `<button class="cbtn" data-conf="${k}"><span class="kbd">${i + 1}</span>${t}</button>`).join('')}</div><button class="linkbtn" data-conf="none">I don’t know</button></div>`;
+  setCheck(false, false);
+  setTimeout(() => { const x = $('#recallIn'); if (x) x.focus(); }, 30);
+}
+async function submitTyped(conf) {
+  if (!run || run.phase !== 'answer') return;
+  const it = run.cur, text = ($('#recallIn').value || '').trim();
+  if (conf !== 'none' && !text) { toast('Type an answer first, or tap “I don’t know”.'); return; }
+  run.phase = 'grading'; it._conf = conf;
+  $('#recallIn').disabled = true; $('#stage').querySelectorAll('[data-conf]').forEach(b => b.disabled = true);
+  if (conf === 'none') return showTyped(it, 0, '', 'guess', 'none');
+  const fb = $('#fb'); fb.hidden = false; fb.className = 'fb hint'; fb.innerHTML = '<p>Checking your answer…</p>';
+  if (G && !it._noAI) {
+    try {
+      const r = await apiCall('/api/grade', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [], response: text });
+      if (run && run.cur === it) showTyped(it, r.score, r.feedback, conf, 'ai');
+      return;
+    } catch (e) { if (run && run.cur === it) selfGrade(it, conf, e instanceof TypeError ? 'Couldn’t reach the grader.' : e.message); return; }
+  }
+  selfGrade(it, conf, it._noAI ? '' : 'Join a group to have answers graded for you.');
+}
+function selfGrade(it, conf, note) {
+  run.phase = 'selfgrade'; run.selfConf = conf;
+  const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
+  fb.innerHTML = `${note ? `<p class="meta">${esc(note)}</p>` : ''}<div class="recall-ans"><span>Model answer</span><p>${esc(typedAnswerOf(it))}</p></div><p class="gq">How close was yours?</p><div class="grades">${[[0, 'Missed it'], [1, 'Partly'], [2, 'Mostly'], [3, 'Fully']].map(([n, t], i) => `<button class="gbtn" data-self="${n}"><span class="kbd">${i + 1}</span><b>${t}</b></button>`).join('')}</div>`;
+}
+function showTyped(it, score, feedback, conf, source) {
+  run.phase = 'feedback';
+  it._snap = { prev: state.srs[it._card], graded: run.graded.has(it._card), xp: run.xp, reviewed: run.reviewed, remembered: run.remembered, newSeen: run.newSeen, newCount: state.newCount, correct: run.correct, qlen: run.queue.length, wrongHad: run.wrong.has(it.key) };
+  srsRecord(it, fsrsFrom(score, conf));
+  if (state.srs[it._card]) { state.srs[it._card].miss = conf === 'cold' && score === 0; save(); }
+  run.correct++;
+  if (score <= 1) run.wrong.add(it.key);
+  if (score === 0) { run.correct--; run.queue.push({ ...it, _retry: true }); }
+  updateBar();
+  const ok = score >= 2;
+  $('#foot').className = 'lfoot ' + (ok ? 'good' : 'bad');
+  const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
+  const heads = ['Not quite.', 'Partly there.', 'Mostly right.', 'Exactly right.'];
+  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${heads[score]}</h4>${source === 'ai' && feedback ? `<p class="aifb">${esc(feedback)}</p>` : ''}<div class="recall-ans"><span>Model answer</span><p>${esc(typedAnswerOf(it))}</p></div><p>${esc(it.x)}</p>${conf === 'cold' && score === 0 ? '<p class="whynot"><span>Confident miss</span>You were sure about this one, so it comes back tomorrow. These are the mistakes most worth fixing.</p>' : ''}${source === 'ai' ? '<p class="meta">Graded by AI. <button class="linkbtn" id="regrade">Grade it myself</button></p>' : ''}${reportHTML(it)}`;
+  const b = $('#checkBtn'); b.hidden = false; b.disabled = false; b.textContent = 'Continue'; b.focus({ preventScroll: true });
+}
+// Undo an AI grade so the learner can grade the same answer themselves.
+function undoTyped(it) {
+  const sn = it._snap; if (!sn) return;
+  if (sn.prev) state.srs[it._card] = sn.prev; else delete state.srs[it._card];
+  if (!sn.graded) run.graded.delete(it._card);
+  Object.assign(run, { xp: sn.xp, reviewed: sn.reviewed, remembered: sn.remembered, newSeen: sn.newSeen, correct: sn.correct });
+  state.newCount = sn.newCount; run.queue.length = sn.qlen;
+  if (!sn.wrongHad) run.wrong.delete(it.key);
+  save(); updateBar();
+}
+$('#stage').addEventListener('click', e => { const b = e.target.closest('[data-conf]'); if (b && run) submitTyped(b.dataset.conf); });
+$('#fb').addEventListener('click', e => {
+  if (!run) return;
+  const sb = e.target.closest('[data-self]');
+  if (sb && run.phase === 'selfgrade') { showTyped(run.cur, +sb.dataset.self, '', run.selfConf || 'sure', 'self'); return; }
+  if (e.target.closest('#regrade') && run.phase === 'feedback') { const it = run.cur; const conf = run.selfConf; undoTyped(it); $('#foot').className = 'lfoot'; selfGrade(it, it._conf || 'sure', ''); }
+});
+
+// srsGrade defaults to good (3) when correct and missed (1) when wrong; matching with misses passes 2.
+function grade(ok, ansHTML, heading, srsGrade) {
   const it = run.cur;
   run.phase = 'feedback';
+  srsRecord(it, srsGrade || (ok ? 3 : 1));
   if (ok) run.correct++;
   else { run.hearts--; run.wrong.add(it.key); run.queue.push(it); }
   updateBar();
   const foot = $('#foot'); foot.className = 'lfoot ' + (ok ? 'good' : 'bad');
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
-  const head = heading || (ok ? PRAISE[Math.floor(Math.random() * PRAISE.length)] : 'Not quite.');
-  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${esc(head)}</h4>${ansHTML || ''}<p>${esc(it.x)}</p>${it.ask ? `<p class="ask"><span>Try asking</span>${esc(it.ask)}</p>` : ''}${COURSES[state.course].group && G ? '<div class="repbox"><button class="linkbtn" id="repBtn">Report a problem</button></div>' : ''}`;
+  const head = heading || (it.predict ? (ok ? 'Good call.' : 'Here’s what happened.') : ok ? PRAISE[Math.floor(Math.random() * PRAISE.length)] : 'Not quite.');
+  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${esc(head)}</h4>${ansHTML || ''}<p>${esc(it.x)}</p>${it.ask ? `<p class="ask"><span>Try asking</span>${esc(it.ask)}</p>` : ''}${reportHTML(it)}`;
   const b = $('#checkBtn'); b.hidden = false; b.disabled = false; b.textContent = 'Continue'; b.focus({ preventScroll: true });
 }
 
 $('#checkBtn').onclick = () => {
   if (!run) return;
   if (run.phase === 'feedback') { if (run.hearts <= 0) return fail(); nextItem(); }
-  else check();
+  else if (run.phase === 'answer') check();
 };
 
+function bumpStreak() {
+  const today = dstr(new Date());
+  if (state.last !== today) { state.streak = state.last === addDays(today, -1) ? state.streak + 1 : 1; state.last = today; }
+}
 function finish() {
+  bumpStreak();
+  if (run.mode === 'session') return finishSession();
   const L = LESSONS[run.idx];
   state.done[L.id] = true;
+  run.xp += 10;
+  state.xp += run.xp; save();
   const firstTry = run.total - run.wrong.size;
-  const gained = 10 + firstTry * 5;
-  state.xp += gained;
-  const today = dstr(new Date());
-  const y = new Date(); y.setDate(y.getDate() - 1);
-  if (state.last !== today) { state.streak = state.last === dstr(y) ? state.streak + 1 : 1; state.last = today; }
-  save();
   const acc = Math.round(firstTry / run.total * 100);
-  groupPost(L, gained, acc);
+  groupPost(L, run.xp, acc);
   const nextL = LESSONS[run.idx + 1];
   $('#result').classList.remove('failed');
-  $('#resultIn').innerHTML = `${ICON.seal}<h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${gained}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc)}<div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
+  $('#resultIn').innerHTML = `${ICON.seal}<h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc)}<div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
   show('#result');
   $('#rHome').onclick = goHome; $('#rHome').focus();
+}
+function finishSession() {
+  state.xp += run.xp; save();
+  const today = dstr(new Date());
+  const acc = run.reviewed ? Math.round(run.remembered / run.reviewed * 100) : 100;
+  groupPostSession(run.xp, acc, run.reviewed, run.newSeen);
+  const more = dueCards(today).length, canLearn = newCardsAvailable().length;
+  const tomorrow = Object.values(state.srs).filter(c => c.due === addDays(today, 1)).length;
+  const parts = [];
+  if (run.reviewed) parts.push(`You remembered ${run.remembered} of ${run.reviewed} review${run.reviewed === 1 ? '' : 's'}`);
+  if (run.newSeen) parts.push(`learned ${run.newSeen} new card${run.newSeen === 1 ? '' : 's'}`);
+  $('#result').classList.remove('failed');
+  $('#resultIn').innerHTML = `${ICON.seal}<h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${more ? more + ' more reviews are due.' : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${G ? `<p>Posted to ${esc(G.groupName)}.</p>` : ''}<div class="rbtns"><button class="btn" id="rHome">Done</button>${more || canLearn ? `<button class="btn ghost" id="rMore">${more ? 'Keep reviewing' : 'Learn 5 more'}</button>` : ''}</div>`;
+  show('#result');
+  $('#rHome').onclick = goHome; $('#rHome').focus();
+  if ($('#rMore')) $('#rMore').onclick = () => startSession(true);
 }
 function fail() {
   const i = run.idx;
@@ -1922,8 +2145,10 @@ function fail() {
 
 document.addEventListener('keydown', e => {
   if (!run || $('#lesson').hidden) return;
-  if (e.target.matches && e.target.matches('textarea, input')) return;
   if (e.key === 'Escape') { goHome(); return; }
+  if (e.target.matches && e.target.matches('textarea, input')) { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && run.phase === 'answer' && $('#recallIn')) { e.preventDefault(); submitTyped('sure'); } return; }
+  if (run.phase === 'answer' && $('#recallIn') && /^[1-3]$/.test(e.key)) { submitTyped(CONF[+e.key - 1][0]); return; }
+  if (run.phase === 'selfgrade' && /^[1-4]$/.test(e.key)) { showTyped(run.cur, +e.key - 1, '', run.selfConf || 'sure', 'self'); return; }
   if (e.key === 'Enter') { const b = $('#checkBtn'); if (!b.hidden && !b.disabled) { e.preventDefault(); b.click(); } return; }
   if (run.phase === 'answer' && run.cur.t === 'mc' && /^[1-9]$/.test(e.key)) { const i = +e.key - 1; if (i < run.cur._opts.length) pickMC(i); }
 });
@@ -1989,7 +2214,7 @@ function renderGroup() {
       return `<li class="${r.id === board.me ? 'me' : ''}"><span class="rk">${i + 1}</span><span class="nm">${esc(r.name)}</span><span class="fl ${fl}" title="${esc(tip)}">${FLAME}${r.streak}</span><span class="pts">${r[key]} XP</span></li>`;
     }).join('')}</ol>`;
     if (gTab === 'week') h += `<p class="meta">Weekly XP resets Monday 00:00 UTC.</p>`;
-    if (board.feed.length) h += `<h4 class="gsub">Recent</h4><ul class="feed">${board.feed.slice(0, 8).map(f => `<li><b>${esc(f.name)}</b> finished ${esc(f.title)} · ${f.acc}% · ${ago(f.at)}${f.id !== board.me ? `<button class="beat" data-beat="${esc(f.lessonId)}" data-who="${esc(f.name)}" data-acc="${f.acc}">Beat it</button>` : ''}</li>`).join('')}</ul>`;
+    if (board.feed.length) h += `<h4 class="gsub">Recent</h4><ul class="feed">${board.feed.slice(0, 8).map(f => `<li><b>${esc(f.name)}</b> finished ${esc(f.title)} · ${f.acc}% · ${ago(f.at)}${f.id !== board.me && !String(f.lessonId).startsWith('review-') ? `<button class="beat" data-beat="${esc(f.lessonId)}" data-who="${esc(f.name)}" data-acc="${f.acc}">Beat it</button>` : ''}</li>`).join('')}</ul>`;
     else h += `<p>No lessons finished yet. Be the first.</p>`;
   } else if (!gOffline) h += `<p>Loading…</p>`;
   h += recShown ? `<p>Save this code to use the same account on another device. Anyone with it can post as you.</p><code class="rec">${esc(G.token)}</code>` : '';
@@ -2266,6 +2491,33 @@ $('#pickBody').addEventListener('input', e => {
   pickQ = e.target.value; const pos = e.target.selectionStart; renderPick();
   const inp = $('#pickQ'); inp.focus(); inp.setSelectionRange(pos, pos);
 });
+
+/* ---------- today: the daily session is the main thing ---------- */
+function renderToday() {
+  const el = $('#todayWrap'); if (!el) return;
+  const today = dstr(new Date());
+  const learned = Object.keys(state.srs).length;
+  if (!learned && !COURSES[state.course]) { el.innerHTML = ''; return; }
+  const due = dueCards(today).length, sessDue = Math.min(due, SESSION_REVIEWS);
+  const avail = newCardsAvailable().length, nNew = Math.min(avail, newAllowanceToday(today));
+  if (sessDue + nNew > 0) {
+    const mins = Math.max(1, Math.round(sessDue * 0.6 + nNew * 0.4));
+    const what = [sessDue ? `${sessDue} review${sessDue === 1 ? '' : 's'}` : '', nNew ? `${nNew} new` : ''].filter(Boolean).join(' · ');
+    el.innerHTML = `<section class="today"><div class="today-main"><p class="kicker">Today</p><h2>${what}</h2><p>About ${mins} minute${mins === 1 ? '' : 's'}. Reviews ask you to type answers from memory${G ? ', graded by AI' : ''}.${due > SESSION_REVIEWS ? ` ${due - SESSION_REVIEWS} more are waiting for later sessions.` : ''}</p></div><button class="btn" id="todayGo">Start</button></section>`;
+  } else {
+    const next = Object.values(state.srs).map(c => c.due).filter(d => d > today).sort()[0];
+    el.innerHTML = `<section class="today done"><div class="today-main"><p class="kicker">Today</p><h2>All caught up</h2><p>${next ? 'Your next reviews are due ' + whenText(next) + '.' : ''}${avail ? ' You can learn more now if you want.' : ''}</p></div>${avail ? '<button class="btn ghost" id="todayMore">Learn 5 more</button>' : ''}</section>`;
+  }
+}
+$('#todayWrap').addEventListener('click', e => {
+  if (e.target.closest('#todayGo')) startSession(false);
+  if (e.target.closest('#todayMore')) startSession(true);
+});
+function groupPostSession(xp, acc, reviewed, fresh) {
+  if (!G || !xp) return;
+  const title = reviewed ? `today’s review (${reviewed} card${reviewed === 1 ? '' : 's'})` : `${fresh} new card${fresh === 1 ? '' : 's'}`;
+  apiCall('/api/complete', { lessonId: 'review-' + Date.now(), title, xp, acc, day: dstr(new Date()) }).then(refreshBoard, () => { gOffline = true; renderGroup(); });
+}
 
 refreshBoard();
 loadCourses();

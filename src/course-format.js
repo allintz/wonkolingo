@@ -58,6 +58,17 @@ function validateCourse(raw) {
             if (it.who !== undefined) { if (typeof it.who !== 'string' || !c.speakers[it.who]) err(w + '.who', 'must be a key from speakers'); else out.who = it.who; }
             const ask = str(it.ask, w + '.ask', 300, false); if (ask) out.ask = ask;
             if (it.news !== undefined) out.news = { h: str(it.news && it.news.h, w + '.news.h', 160), d: str(it.news && it.news.d, w + '.news.d', 60) };
+            if (it.predict !== undefined) { if (typeof it.predict !== 'boolean') err(w + '.predict', 'must be true or false'); else if (it.predict) out.predict = true; }
+            if (it.ow !== undefined) {
+              if (!Array.isArray(it.ow) || it.ow.length !== o.length) err(w + '.ow', 'must be a list with one entry per option (use "" for the right one)');
+              else out.ow = it.ow.map((t, k) => str(t, `${w}.ow[${k}]`, 300, false) || '');
+            }
+            if (it.keys !== undefined) out.keys = arr(it.keys, w + '.keys', 1, 5).map((t, k) => str(t, `${w}.keys[${k}]`, 160));
+            return out;
+          }
+          if (it.t === 'recall') {
+            const out = { t: 'recall', p: str(it.p, w + '.p', 300), answer: str(it.answer, w + '.answer', 400), x };
+            if (it.keys !== undefined) out.keys = arr(it.keys, w + '.keys', 1, 5).map((t, k) => str(t, `${w}.keys[${k}]`, 160));
             return out;
           }
           if (it.t === 'match') {
@@ -75,7 +86,7 @@ function validateCourse(raw) {
             if (new Set(items).size !== items.length) err(w + '.items', 'has duplicate entries');
             return { t: 'order', p: str(it.p, w + '.p', 300), ends, items, x };
           }
-          err(w + '.t', 'must be "mc", "match" or "order"');
+          err(w + '.t', 'must be "mc", "recall", "match" or "order"');
           return null;
         }) };
       }) };

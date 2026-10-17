@@ -1,6 +1,6 @@
 # WonkoLingo
 
-A Duolingo-style quiz app for groups of friends. Everyone can write courses (with help from their AI assistant), and the group competes on streaks and XP. It ships with three built-in courses:
+A spaced-repetition quiz app for groups of friends, with a Duolingo-style social layer. Every question becomes a card that comes back for review on a schedule (the [FSRS](https://github.com/open-spaced-repetition/fsrs4anki) algorithm with default weights). Reviews ask you to type the answer from memory and say how sure you are; Claude Haiku 5.5 grades the answer and explains what you missed, and the score plus your confidence set when the card comes back. Everyone can write courses (with help from their AI assistant), and the group competes on streaks and XP. It ships with three built-in courses:
 
 - **Staff Talk:** decoding what Capitol Hill staffers mean ("we're monitoring the issue closely").
 - **Procedure:** how bills move through the House and Senate: committees, the Rules Committee, cloture, reconciliation, conference, vetoes and the Congressional Review Act.
@@ -17,6 +17,10 @@ Start a group or join one with a 6-letter invite code to see everyone's streaks,
 ## Making your own courses
 
 Anyone in a group can add a course with **+ Add course**. Give your AI assistant the [course format guide](course-guide.md) (also at https://wonkolingo.alex-l-lintz.workers.dev/course-guide.md), upload the `.json` file it produces, and the app checks it before publishing it to your group. Everyone's lessons count toward the same leaderboard. Players can report wrong answers; only the author sees the reports. See [example-course.json](example-course.json) for a small complete course.
+
+The previous lesson-path version is tagged `v1-lesson-path`.
+
+Answer grading needs an `ANTHROPIC_API_KEY` Worker secret (`wrangler secret put ANTHROPIC_API_KEY`); it's capped per player and per day in `src/grade.js`. Without it, players grade themselves.
 
 The backend is a Cloudflare Worker (`src/worker.js`) with a D1 database (`schema.sql`). The GitHub Pages copy talks to the same API.
 

@@ -1,0 +1,25 @@
+{
+  "name": "wonkolingo",
+  "version": "1.0.0",
+  "description": "WonkoLingo quiz app: Cloudflare Worker + D1",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allintz/wonkolingo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/allintz/wonkolingo/issues"
+  },
+  "homepage": "https://github.com/allintz/wonkolingo#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
+    "zod": "^4.6.7"
+  },
+  "private": true
+}

@@ -2,6 +2,8 @@
 // Identity is a random token per player (no passwords). The token doubles as a recovery code.
 
 import { validateCourse, COURSE_LIMITS } from './course-format.js';
+import Anthropic from '@anthropic-ai/sdk';
+import { gradeAnswer, takeGradeQuota } from './grade.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -110,7 +112,7 @@ async function api(req, env, path) {
 
   if (m === 'POST' && path === '/api/complete') {
     const b = await body(req);
-    const xp = Math.max(0, Math.min(100, Math.round(+b.xp || 0)));
+    const xp = Math.max(0, Math.min(500, Math.round(+b.xp || 0)));
     const acc = Math.max(0, Math.min(100, Math.round(+b.acc || 0)));
     const lessonId = String(b.lessonId || '').slice(0, 90), title = cleanName(b.title, 60);
     if (!lessonId || !title || !DAY_RE.test(b.day || '')) return fail('Bad completion.');
@@ -139,6 +141,25 @@ async function api(req, env, path) {
       return { id: p.id, name: p.name, week: t.week || 0, total: t.total || 0, lessons: t.lessons || 0, ...streakOf(dayMap.get(p.id) || [], today) };
     });
     return json({ code: g, groupName: me.group_name, me: me.id, weekStart: ws, players: rows, feed: feed.results.map(f => ({ id: f.player_id, name: f.name, lessonId: f.lesson_id, title: f.title, acc: f.acc, xp: f.xp, at: f.created_at })) });
+  }
+
+  if (m === 'POST' && path === '/api/grade') {
+    if (!env.ANTHROPIC_API_KEY) return fail('Answer grading isn’t set up.', 503);
+    const b = await body(req);
+    if (!String(b.response || '').trim()) return json({ score: 0, feedback: 'No answer given.' });
+    if (!String(b.question || '').trim() || !String(b.answer || '').trim()) return fail('Missing question or model answer.');
+    const capped = await takeGradeQuota(env, me.id);
+    if (capped) return fail(capped, 429);
+    try {
+      const g = await gradeAnswer(env, b);
+      if (!g) return fail('The grader couldn’t grade that one. Grade yourself.', 502);
+      return json({ score: g.score, feedback: g.feedback });
+    } catch (e) {
+      if (e instanceof Anthropic.RateLimitError) return fail('The grader is busy. Grade yourself for this one.', 503);
+      if (e instanceof Anthropic.AuthenticationError) return fail('Answer grading isn’t set up correctly.', 503);
+      if (e instanceof Anthropic.APIError) return fail('The grader had an error. Grade yourself for this one.', 502);
+      throw e;
+    }
   }
 
   // ---- group-made courses ----
