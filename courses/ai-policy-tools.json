@@ -1,0 +1,381 @@
+{
+ "format": "wonkolingo-course/1",
+ "id": "ai-policy-tools",
+ "title": "AI Policy Tools (pilot)",
+ "description": "Short-answer drills on the main tools for reducing catastrophic AI risk: which tools address which risks, what each tool is for, and the main objections.",
+ "caveat": "Current as of October 2026. Answers list common examples, not every right answer; the grader accepts other correct ones. Supporters' and critics' arguments are views, not settled fact. Built from a researched catalog of AI policy ideas and fact-checked by a second AI; no person has reviewed it.",
+ "units": [
+  {
+   "title": "From risk to policy tools",
+   "desc": "Start from a danger and name the tools people have proposed to reduce it.",
+   "lessons": [
+    {
+     "title": "Misuse and theft",
+     "items": [
+      {
+       "t": "recall",
+       "p": "AI models could give real step-by-step help to someone trying to build a biological weapon. Name two policy tools aimed at reducing that risk.",
+       "answer": "Examples: mandatory screening of DNA synthesis orders and customers; government testing of models for bio capabilities before release; limits on openly releasing model weights above a dangerous-capability threshold; managed access to biological design tools.",
+       "keys": [
+        "DNA synthesis screening",
+        "pre-release dangerous-capability testing",
+        "limits on open-weight release above a threshold",
+        "restricted or managed access to bio design tools"
+       ],
+       "x": "The tools work at different points. Testing and access limits act on the model; DNA screening acts on the physical step of turning a design into a pathogen, so supporters argue it works whichever model produced the design, as long as screening keeps pace.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "A frontier model could help attackers find and exploit software vulnerabilities at scale. Name two policy tools aimed at that risk.",
+       "answer": "Examples: testing models for offensive cyber capability before release; limiting or staging access to the most capable cyber features; requiring developers to report serious incidents; identifying and logging AI agents so attacks can be traced and stopped; a required ability to shut down or cut off misused systems.",
+       "keys": [
+        "pre-release cyber capability testing",
+        "staged or limited access",
+        "incident reporting",
+        "agent identification and logging",
+        "shutdown capability"
+       ],
+       "x": "Critics note that comparable capabilities spread quickly, so delaying access to one model is not a lasting defense; that pushes some proposals toward defense (hardening systems, logging and attribution) rather than only gating models.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "A rival government or criminal group steals the weights of a frontier model, which lets them strip its safeguards and run it freely. Name two policy tools meant to prevent or limit this.",
+       "answer": "Examples: required security standards for model weights and labs, up to defending against nation-state attackers; security conditions on frontier data centers (tied to permits, grid access or contracts); controls on insiders' access to weights; mandatory reporting of weight theft or tampering.",
+       "keys": [
+        "model weight security standards",
+        "data center security requirements",
+        "insider access controls",
+        "reporting weight theft"
+       ],
+       "x": "Weight theft undoes every other safeguard, since whoever holds the weights controls the model. That's why security is often described as the foundation that deployment limits, export controls and pauses depend on.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Companies in countries under chip export controls can still get frontier computing power. Name two policy tools aimed at closing those gaps.",
+       "answer": "Examples: know-your-customer rules for cloud providers renting AI chips; extending export controls to remote cloud access; chip location verification to catch smuggling; stronger enforcement against smuggling and resale.",
+       "keys": [
+        "cloud know-your-customer rules",
+        "controls on remote or cloud access",
+        "chip location verification",
+        "anti-smuggling enforcement"
+       ],
+       "x": "Export controls alone leave two holes: smuggling physical chips and renting the same chips through the cloud. These tools target those two routes.",
+       "open": true
+      }
+     ]
+    },
+    {
+     "title": "Control, racing and power",
+     "items": [
+      {
+       "t": "recall",
+       "p": "Developers worry that a model could deceive its developers or evade their control. Name two policy tools aimed at catching or containing this.",
+       "answer": "Examples: required reporting of incidents such as loss of control or deceptive behavior; oversight of models labs use internally before release; testing for control-related capabilities; a required, tested ability to shut systems down; government emergency authority to halt a dangerous model; pauses triggered when capability thresholds are crossed.",
+       "keys": [
+        "incident reporting of deception or loss of control",
+        "oversight of internal deployment",
+        "shutdown capability",
+        "emergency halt authority",
+        "capability-triggered pauses"
+       ],
+       "x": "Internal use matters here: labs often run their most capable models inside the company, increasingly to do AI research, before anyone outside sees them. Rules that trigger only on public release miss that window.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Competitive pressure can push AI labs to cut safety corners to ship first. Name two policy tools aimed at that dynamic.",
+       "answer": "Examples: a legal duty of care backed by lawsuits; published safety frameworks that labs must follow; independent audits; whistleblower protections for employees; an antitrust safe harbor letting labs coordinate on safety; binding rules that apply to every lab at once.",
+       "keys": [
+        "duty of care or liability",
+        "required safety frameworks",
+        "independent audits",
+        "whistleblower protections",
+        "antitrust safe harbor for coordination"
+       ],
+       "x": "Most of these change the incentives rather than the technology: they make skipped precautions costly or visible, or they let labs slow down together without one of them losing the race.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Advanced AI could let a small group run large parts of a government or military with few people involved, removing the check that people can refuse illegal orders. Name two policy tools aimed at that risk.",
+       "answer": "Examples: requiring AI used by government to refuse clearly unlawful orders; statutory limits on military and coercive government uses of AI; logging and preserving how officials use AI so it can be reviewed; designing government AI so no single person or small group controls it; audits for hidden loyalties in models.",
+       "keys": [
+        "AI that refuses unlawful orders",
+        "statutory limits on military or government AI",
+        "records of officials' AI use",
+        "distributed control of government AI",
+        "audits for hidden loyalties"
+       ],
+       "x": "This family of tools tries to keep a 'many hands' check alive once AI can replace the soldiers, analysts and civil servants who might otherwise refuse.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Governments often learn about dangerous AI capabilities from the press or after something goes wrong. Name two policy tools that would give officials earlier warning.",
+       "answer": "Examples: government testing of frontier models before release; reporting of very large training runs and computing clusters; mandatory incident reporting; independent or embedded auditors with ongoing access; whistleblower protections for lab staff.",
+       "keys": [
+        "pre-release government testing",
+        "compute and training-run reporting",
+        "incident reporting",
+        "independent or embedded auditors",
+        "whistleblower protections"
+       ],
+       "x": "These are visibility tools. On their own they don't stop anything, which is why critics point out that someone has to act on what they reveal.",
+       "open": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "From policy tool to purpose",
+   "desc": "Start from a tool and explain what problem it's meant to solve.",
+   "lessons": [
+    {
+     "title": "Information and incentives",
+     "items": [
+      {
+       "t": "recall",
+       "p": "Some laws require frontier AI developers to publish a safety framework, a written plan for testing for and managing catastrophic risks, and to follow it. What problem is this meant to fix?",
+       "answer": "Labs set their own safety rules privately and can quietly loosen them under competitive pressure. Publishing creates a public baseline that journalists, employees and regulators can check, and a duty to follow it turns broken promises into legal violations.",
+       "keys": [
+        "labs' private rules can be loosened quietly",
+        "creates a public baseline others can check",
+        "following it becomes a legal obligation"
+       ],
+       "x": "The law usually doesn't set the safety standard itself. Critics point out that because labs write their own frameworks, a vague one is hard to violate.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "A statutory duty of care would require frontier developers to take reasonable care to avoid causing or enabling catastrophic harm, enforced through lawsuits. What failure is it meant to address?",
+       "answer": "Labs under competitive pressure skip safety work when the benefits are spread across society but the costs fall on the lab. Legal exposure makes those precautions effectively mandatory, so lawyers and boards treat them as required.",
+       "keys": [
+        "competitive pressure leads labs to skip safety work",
+        "costs fall on the lab, benefits are diffuse",
+        "legal exposure makes precautions effectively mandatory"
+       ],
+       "x": "A negligence standard is flexible: courts can judge new harm pathways without lawmakers anticipating each one in advance.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "What gap are AI whistleblower protections meant to close?",
+       "answer": "Lab employees are often the first to see dangerous capabilities, skipped safety tests or misleading public statements, but contracts and fear of retaliation can keep them quiet. Protection makes it safer to tell regulators or Congress, giving government a window into labs without building a large new agency.",
+       "keys": [
+        "insiders see problems first",
+        "contracts or retaliation keep them silent",
+        "gives government visibility into labs"
+       ],
+       "x": "A widely cited example: in 2024, OpenAI's departure agreements threatened departing employees' vested equity if they criticized the company. A key design question is covering reports of serious danger even when no law has been broken, since few AI-specific laws exist.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Antitrust law generally bars competitors from agreeing to limit their products. Why do some people propose an antitrust safe harbor for AI safety coordination?",
+       "answer": "So labs can share security threat information and agree to slow or delay training or releases for safety without risking an illegal-collusion lawsuit. Without it, no lab wants to slow down alone, and a joint slowdown could be treated as a cartel.",
+       "keys": [
+        "lets labs share safety or security threat information",
+        "lets labs agree to slow or delay for safety",
+        "without it, joint slowdowns could count as illegal collusion",
+        "no lab wants to slow down alone"
+       ],
+       "x": "Critics worry a safe harbor could shelter ordinary anticompetitive behavior under a safety label.",
+       "open": true
+      }
+     ]
+    },
+    {
+     "title": "Chips, cloud and control",
+     "items": [
+      {
+       "t": "recall",
+       "p": "Why do proposals require cloud providers that rent out AI chips to know their customers?",
+       "answer": "Export controls restrict sales of advanced chips, but companies in restricted countries can rent the same chips through cloud data centers. Know-your-customer rules aim to let the government see who is training very large models and deny service to adversaries.",
+       "keys": [
+        "closes the cloud-rental gap in export controls",
+        "lets government see who trains very large models",
+        "can deny service to adversaries"
+       ],
+       "x": "Supporters argue that because much frontier-scale compute is sold through a few large cloud providers, they make a useful control point. Critics such as the U.S. Chamber of Commerce say identity checks are easy to evade with shell companies and could push customers to non-U.S. clouds.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Some proposals add location verification to AI chips. What is it meant to accomplish?",
+       "answer": "In the near term, catching smuggling and diversion of export-controlled chips, since paper end-use checks miss them. In the longer run, a technical base for verifying compliance with international compute limits without trusting the other side.",
+       "keys": [
+        "catch smuggling or diversion of controlled chips",
+        "paper end-use checks miss it",
+        "could verify international compute agreements"
+       ],
+       "x": "Narrow versions only estimate roughly which country a chip is in, using signal delays; broader proposals would also verify what chips are used for.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Why do biosecurity proposals focus on screening DNA synthesis orders, rather than only on AI models?",
+       "answer": "Turning a pathogen design into a weapon still requires physical DNA, and DNA synthesis is a narrow industry. Screening orders and customers there is a chokepoint that works no matter which AI model produced the design, including openly released ones.",
+       "keys": [
+        "designs still need physical DNA",
+        "synthesis is a concentrated chokepoint",
+        "works regardless of which model was used, including open-weight models"
+       ],
+       "x": "Critics note that AI protein-design tools have generated sequence variants that screening software missed until it was patched, so screening has to keep improving to stay a reliable chokepoint.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "What problem is 'law-following AI', meaning government AI built to refuse clearly unlawful orders, meant to address?",
+       "answer": "Coups and abuses of power have historically needed many people's cooperation, and some refuse. If AI replaces those soldiers, analysts and civil servants, that check disappears unless the AI itself will refuse illegal orders.",
+       "keys": [
+        "power grabs need many people's cooperation",
+        "AI could replace those people",
+        "keeps a refusal check inside the system"
+       ],
+       "x": "Critics such as Cullen O'Keefe point out that laws have gaps a capable AI could help an official exploit while staying technically legal, so refusing clearly unlawful orders catches only the crudest abuses. Others question whether a model should follow the letter or the spirit of the law.",
+       "open": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The main objections",
+   "desc": "Each question describes a policy in a line, then asks what critics say.",
+   "lessons": [
+    {
+     "title": "Rules on developers",
+     "items": [
+      {
+       "t": "recall",
+       "p": "Licensing: frontier developers would need government permission before training or releasing top models. Name two objections critics raise.",
+       "answer": "Examples: it raises costs for smaller and open-source developers and invites capture by big incumbents who help write the rules; the regulated product is hard to define and its harms are uncertain, so approval fits poorly; it hands broad discretionary power to the executive branch; it slows useful releases.",
+       "keys": [
+        "raises entry costs or entrenches incumbents (regulatory capture)",
+        "hard to define what's licensed or judge safety",
+        "too much executive discretion or power",
+        "slows beneficial releases"
+       ],
+       "x": "Supporters reply that disclosure and liability act only after the fact, while a license can stop a dangerous model before it exists or ships.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Mandatory incident reporting: developers must tell a government agency about serious AI safety incidents within a set number of hours or days. Name one or two objections or weaknesses critics raise.",
+       "answer": "Examples: definitions that require actual harm can miss serious near misses or events during testing; vague definitions make compliance hard; requirements can't keep pace with rapid model updates; reports only help if an agency has the capacity to act on them.",
+       "keys": [
+        "definitions can miss near misses or test-time events",
+        "vague definitions make compliance hard",
+        "can't keep pace with model updates",
+        "no agency with capacity to act on reports"
+       ],
+       "x": "Notice the objections come from both directions: some critics say current rules are too narrow, others that they're too vague or burdensome.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Government pre-release testing: government evaluators test frontier models for dangerous capabilities before public release. Name two objections or limits critics raise.",
+       "answer": "Examples: tests can show a capability exists but can't prove it's absent, so a clean result gives weak assurance; voluntary programs can't bind labs that refuse; delaying one model isn't a lasting defense because similar capabilities spread; it can slow releases and concentrate discretion in officials.",
+       "keys": [
+        "can't prove a capability is absent",
+        "voluntary versions can't bind labs",
+        "capabilities spread anyway, so delay doesn't last",
+        "slows releases or gives officials discretion"
+       ],
+       "x": "Its value depends on test quality, on access to versions without safeguards, and on what happens after a bad result.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "A legal duty of care for frontier developers, judged by a negligence standard in court. Name one or two objections critics raise.",
+       "answer": "Examples: developers can escape liability by showing they followed industry practice, so it won't cover risks nobody yet knows how to mitigate (some prefer strict liability); fear of lawsuits can discourage labs from investigating and disclosing new risks; for a true catastrophe, liability comes too late and exceeds any company's assets.",
+       "keys": [
+        "industry-practice defense misses novel risks",
+        "discourages investigating or disclosing risks",
+        "too late for a real catastrophe",
+        "may chill innovation"
+       ],
+       "x": "Because of the 'too late' problem, supporters usually expect the duty to bite mainly through smaller incidents and injunctions, and many pair it with up-front rules.",
+       "open": true
+      }
+     ]
+    },
+    {
+     "title": "Chips, openness and halting",
+     "items": [
+      {
+       "t": "recall",
+       "p": "Chip export controls: limits on selling advanced AI chips and chipmaking tools to China and other countries of concern. Name two objections critics raise.",
+       "answer": "Examples: they push China to build its own chips (like Huawei's), so the lead may shrink; they cost U.S. chipmakers market share and revenue; smuggling and cloud access undercut them; treating compute as a race can make a U.S.-China safety agreement harder.",
+       "keys": [
+        "speeds up Chinese domestic substitutes",
+        "costs U.S. companies market share",
+        "undercut by smuggling or cloud access",
+        "makes cooperation or agreements harder"
+       ],
+       "x": "The substitution argument has been pressed hardest by Nvidia's CEO Jensen Huang, whose company lost China sales, and how fast Chinese substitutes are catching up is disputed. Supporters argue that a handful of U.S. and allied firms control chip supply, so restricting it slows rivals and buys time and leverage.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Limits on open-weight release: developers couldn't publish downloadable weights for models above a dangerous-capability threshold. Name two objections critics raise.",
+       "answer": "Examples: evidence that open models add much risk beyond closed models and the internet is thin; limits would shield closed labs from competition; open models spread power away from a few companies and help security research; China's open models would fill the gap.",
+       "keys": [
+        "thin evidence of extra risk",
+        "protects closed labs from competition",
+        "open models decentralize power or help research",
+        "others' open models fill the gap"
+       ],
+       "x": "Supporters of limits argue that safeguards on a released model can be stripped by fine-tuning and that a release can't be recalled, so open release of a model with dangerous capabilities would hand them to anyone.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Government emergency authority to halt AI: an official could suspend a dangerous model's development or deployment. Name one or two objections critics raise.",
+       "answer": "Examples: it gives one agency or official too much discretion (some want judges to decide instead); vague triggers invite political or improvised use; ad hoc halts damage trust with allies and customers; it could be used beyond its original purpose.",
+       "keys": [
+        "too much discretion for one agency or official",
+        "vague triggers invite political misuse",
+        "ad hoc halts damage trust",
+        "mission creep beyond emergencies"
+       ],
+       "x": "Many critics accept some halt power but want it written by Congress with clear triggers, time limits and an appeals process.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "Conditional pauses: frontier training or deployment stops automatically when a capability or compute threshold is crossed. Name two objections or obstacles critics raise.",
+       "answer": "Examples: rivals and other countries would keep going; a private agreement among labs to pause may be illegal under antitrust law; capability tests may detect danger too late; verifying that others actually stopped is very hard; it delays benefits.",
+       "keys": [
+        "other countries keep building",
+        "private pause may violate antitrust law",
+        "evaluations may fire too late",
+        "hard to verify others stopped",
+        "delays benefits"
+       ],
+       "x": "Supporters argue that agreeing on triggers in advance lets actors commit to stopping before competitive pressure peaks.",
+       "open": true
+      },
+      {
+       "t": "recall",
+       "p": "AI agent identification: each AI agent carries an ID tied to whoever built and runs it, with logs of its significant actions. Name one or two objections critics raise.",
+       "answer": "Examples: it creates a surveillance and privacy problem, especially in authoritarian states; bad actors won't register their agents; it doesn't address why agents misbehave; current proposals are mostly voluntary.",
+       "keys": [
+        "surveillance or privacy concerns",
+        "bad actors won't register",
+        "doesn't address why agents misbehave",
+        "mostly voluntary"
+       ],
+       "x": "Some researchers argue that designs keeping agents anonymous by default, while revealing identity to authorized bodies under due process, deserve exploration.",
+       "open": true
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

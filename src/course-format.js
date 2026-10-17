@@ -71,6 +71,7 @@ function validateCourse(raw) {
             const out = { t: 'recall', p: str(it.p, w + '.p', 300), answer: str(it.answer, w + '.answer', 400), x };
             const hint = str(it.hint, w + '.hint', 200, false); if (hint) out.hint = hint;
             if (it.keys !== undefined) out.keys = arr(it.keys, w + '.keys', 1, 5).map((t, k) => str(t, `${w}.keys[${k}]`, 160));
+            if (it.open !== undefined) { if (typeof it.open !== 'boolean') err(w + '.open', 'must be true or false'); else if (it.open) out.open = true; }
             return out;
           }
           if (it.t === 'match') {

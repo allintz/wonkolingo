@@ -100,6 +100,8 @@ Keep the whole file under 200 KB. Fields not listed here are ignored.
 
 The player types an answer, says how sure they are, and an AI grader scores it from 0 to 3 against `answer` and `keys`. `p` (up to 300 characters), `answer` (up to 400) and `x` are required; `keys` and `hint` work the same as for multiple choice. Ask about something with a clear answer that can be stated in a sentence. "Why" and "what happens when" questions work well; open-ended opinion questions don't.
 
+**Open questions (`"open": true`).** Some questions have many right answers, like "Name two policies that would reduce this risk." Add `"open": true` and write `answer` as a list of examples ("Examples: A; B; C"). The grader then gives full credit for any specific, correct answer, even one that isn't on your list, and the player sees your list under "Some good answers". Ask for one or two items, never "all of them": nobody can reliably recall a whole list. Opinion questions still don't work, even as open questions.
+
 ### Matching (`"t": "match"`)
 
 ```json
