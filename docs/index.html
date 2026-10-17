@@ -214,6 +214,18 @@ svg { display: block; }
 .recall-ans span { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--good); }
 .recall-ans p { margin: 0; font-weight: 700; color: var(--fg); }
 .fb .aifb { font-weight: 700; color: var(--fg); }
+.gpct { font-variant-numeric: tabular-nums; margin-right: 8px; }
+.gpts { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.gpts li { display: grid; gap: 2px; border-left: 4px solid var(--line-deep); padding: 2px 0 2px 10px; font-size: 15px; font-weight: 600; }
+.gpts li b { color: var(--fg); font-weight: 800; }
+.gpts .gv { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.gpts .v-ok { border-left-color: var(--good); } .gpts .v-ok .gv { color: var(--good); }
+.gpts .v-part { border-left-color: var(--brass); } .gpts .v-part .gv { color: var(--brass); }
+.gpts .v-no { border-left-color: var(--bad); } .gpts .v-no .gv { color: var(--bad); }
+.gpts .v-unsure .gv { color: var(--muted); }
+.gmiss { display: grid; gap: 2px; font-size: 15px; font-weight: 600; }
+.gmiss span { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.gmiss ul { margin: 0; padding-left: 18px; }
 .fb .gq { font-weight: 800; color: var(--fg); }
 .grades { display: flex; flex-wrap: wrap; gap: 8px; }
 .gbtn { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 12px; padding: 8px 12px; font-size: 15px; }
@@ -300,7 +312,7 @@ svg { display: block; }
 .lfoot.good { background: var(--good-bg); border-top-color: transparent; }
 .lfoot.bad { background: var(--bad-bg); border-top-color: transparent; }
 .foot-in { max-width: 760px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
-.fb { flex: 1; min-width: 0; display: grid; gap: 6px; max-height: 38vh; overflow-y: auto; }
+.fb { flex: 1; min-width: 0; display: grid; gap: 8px; max-height: 50vh; overflow-y: auto; }
 .fb h4 { margin: 0; font-size: 22px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
 .fb h4 svg { width: 26px; height: 26px; }
 .lfoot.good .fb h4 { color: var(--good); }
@@ -381,7 +393,7 @@ svg { display: block; }
       <div class="bar-mini"><i id="pBar" style="width:0"></i></div>
       <div class="kv"><span>Cards in your reviews</span><span id="pCards">0</span></div>
       <div class="kv"><span>Due tomorrow</span><span id="pTomorrow">0</span></div>
-      <p>Keys: 1 to 4 picks an answer, Enter checks, Esc quits. On typed answers, 1 to 3 submits with your confidence.</p>
+      <p>Keys: 1 to 4 picks an answer, Enter checks, Esc quits. On typed answers, Cmd+Enter (Ctrl+Enter) checks.</p>
       <p class="meta" id="pSync"></p>
       <button class="linkbtn" id="resetBtn">Reset progress</button>
     </section>
@@ -6094,7 +6106,7 @@ function renderTyped(it) {
   $('#stage').innerHTML = `<p class="kicker">${it.predict ? 'Make a prediction' : fresh ? 'Take your best shot' : 'From memory'}</p>${newsHTML(it)}<h3 class="prompt">${esc(it.p || 'What does this most likely mean?')}</h3>${it.q ? quoteHTML(it) : ''}
     <div class="hintbox" id="hintBox" hidden></div>
     <textarea class="recall-in" id="recallIn" rows="3" placeholder="Answer in a few words or a sentence."></textarea>
-    <div class="conf"><span class="conf-k">Submit with how sure you are</span><div class="conf-btns">${CONF.map(([k, t], i) => `<button class="cbtn" data-conf="${k}"><span class="kbd">${i + 1}</span>${t}</button>`).join('')}</div><div class="conf-alt"><button class="linkbtn" id="hintBtn">Give me a hint</button>${it.t === 'mc' ? '<button class="linkbtn" id="showChoices">Show choices instead</button>' : ''}<button class="linkbtn" data-conf="none">I don’t know</button></div></div>`;
+    <div class="conf"><div class="conf-btns"><button class="btn sm" data-conf="sure">Check answer</button></div><div class="conf-alt"><button class="linkbtn" id="hintBtn">Give me a hint</button>${it.t === 'mc' ? '<button class="linkbtn" id="showChoices">Show choices instead</button>' : ''}<button class="linkbtn" data-conf="none">I don’t know</button></div></div>`;
   setCheck(false, false);
   setTimeout(() => { const x = $('#recallIn'); if (x) x.focus(); }, 30);
 }
@@ -6106,14 +6118,14 @@ async function submitTyped(conf) {
   $('#recallIn').disabled = true; $('#stage').querySelectorAll('[data-conf]').forEach(b => b.disabled = true);
   if (conf === 'none') return showTyped(it, 0, '', 'guess', 'none');
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb hint'; fb.innerHTML = '<p>Checking your answer…</p>';
-  if (G && !it._noAI) {
+  if (!it._noAI) {
     try {
-      const r = await apiCall('/api/grade', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [], response: text, open: it.open === true });
-      if (run && run.cur === it) showTyped(it, r.score, r.feedback, conf, 'ai');
+      const r = await apiCall('/api/grade', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [], explain: it.x || '', response: text, open: it.open === true });
+      if (run && run.cur === it) showTyped(it, r.score, r.feedback, conf, 'ai', r);
       return;
     } catch (e) { if (run && run.cur === it) selfGrade(it, conf, e instanceof TypeError ? 'Couldn’t reach the grader.' : e.message); return; }
   }
-  selfGrade(it, conf, it._noAI ? '' : 'Join a group to have answers graded for you.');
+  selfGrade(it, conf, '');
 }
 
 // Hints: the course's own hint if it has one, then a cached or AI-written nudge, then a fallback that narrows the choices.
@@ -6124,7 +6136,7 @@ async function showHint(it) {
   const put = t => { if (run && run.cur === it) box.innerHTML = `<span>Hint</span><p>${esc(t)}</p>`; };
   if (it.hint) return put(it.hint);
   if (state.hints[it._card]) return put(state.hints[it._card]);
-  if (G) {
+  {
     try {
       const r = await apiCall('/api/hint', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [] });
       state.hints[it._card] = r.hint; save(); return put(r.hint);
@@ -6143,10 +6155,21 @@ function selfGrade(it, conf, note) {
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
   fb.innerHTML = `${note ? `<p class="meta">${esc(note)}</p>` : ''}<div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${esc(typedAnswerOf(it))}</p></div><p class="gq">How close was yours?</p><div class="grades">${[[0, 'Missed it'], [1, 'Partly'], [2, 'Mostly'], [3, 'Fully']].map(([n, t], i) => `<button class="gbtn" data-self="${n}"><span class="kbd">${i + 1}</span><b>${t}</b></button>`).join('')}</div>`;
 }
-function showTyped(it, score, feedback, conf, source) {
+// Percent-scored AI grades map straight to a review grade; self-grades use the 0 to 3 score.
+const fsrsFromPct = p => p < 25 ? 1 : p < 55 ? 2 : p < 95 ? 3 : 4;
+const VERDICT = { right: ['ok', 'Right'], partly: ['part', 'Partly'], wrong: ['no', 'Not right'], unsure: ['unsure', 'Can’t confirm'] };
+function pointsHTML(d) {
+  if (!d || !Array.isArray(d.points)) return '';
+  const pts = d.points.length ? `<ul class="gpts">${d.points.map(pt => { const v = VERDICT[pt.verdict] || VERDICT.unsure; return `<li class="v-${v[0]}"><span class="gv">${v[1]}</span><b>${esc(pt.said)}</b><span>${esc(pt.note)}</span></li>`; }).join('')}</ul>` : '';
+  const miss = d.missed && d.missed.length ? `<div class="gmiss"><span>Also worth knowing</span><ul>${d.missed.map(m => `<li>${esc(m)}</li>`).join('')}</ul></div>` : '';
+  return pts + miss;
+}
+function showTyped(it, score, feedback, conf, source, detail) {
   run.phase = 'feedback';
   it._snap = { prev: state.srs[it._card], graded: run.graded.has(it._card), xp: run.xp, reviewed: run.reviewed, remembered: run.remembered, newSeen: run.newSeen, newCount: state.newCount, correct: run.correct, qlen: run.queue.length, wrongHad: run.wrong.has(it.key) };
-  srsRecord(it, it._hinted ? Math.min(2, fsrsFrom(score, conf)) : fsrsFrom(score, conf));
+  const pct = detail && Number.isFinite(detail.percent) ? detail.percent : null;
+  const g = pct !== null ? fsrsFromPct(pct) : fsrsFrom(score, conf);
+  srsRecord(it, it._hinted ? Math.min(2, g) : g);
   if (state.srs[it._card]) { state.srs[it._card].miss = conf === 'cold' && score === 0; save(); }
   run.correct++;
   if (score <= 1) run.wrong.add(it.key);
@@ -6156,7 +6179,7 @@ function showTyped(it, score, feedback, conf, source) {
   $('#foot').className = 'lfoot ' + (ok ? 'good' : 'bad');
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
   const heads = ['Not quite.', 'Partly there.', 'Mostly right.', 'Exactly right.'];
-  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${heads[score]}</h4>${source === 'ai' && feedback ? `<p class="aifb">${esc(feedback)}</p>` : ''}<div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${esc(typedAnswerOf(it))}</p></div><p>${esc(it.x)}</p>${it._hinted && score >= 2 ? '<p class="meta">You used a hint, so this one comes back a little sooner.</p>' : ''}${conf === 'cold' && score === 0 ? '<p class="whynot"><span>Confident miss</span>You were sure about this one, so it comes back tomorrow. These are the mistakes most worth fixing.</p>' : ''}${source === 'ai' ? '<p class="meta">Graded by AI. <button class="linkbtn" id="regrade">Grade it myself</button></p>' : ''}${reportHTML(it)}`;
+  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${pct !== null ? `<span class="gpct">${pct}%</span>` : ''}${heads[score]}</h4>${source === 'ai' && feedback ? `<p class="aifb">${esc(feedback)}</p>` : ''}${source === 'ai' ? pointsHTML(detail) : ''}<div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${esc(typedAnswerOf(it))}</p></div><p>${esc(it.x)}</p>${it._hinted && score >= 2 ? '<p class="meta">You used a hint, so this one comes back a little sooner.</p>' : ''}${conf === 'cold' && score === 0 ? '<p class="whynot"><span>Confident miss</span>You were sure about this one, so it comes back tomorrow. These are the mistakes most worth fixing.</p>' : ''}${source === 'ai' ? '<p class="meta">Graded by AI. <button class="linkbtn" id="regrade">Grade it myself</button></p>' : ''}${reportHTML(it)}`;
   const b = $('#checkBtn'); b.hidden = false; b.disabled = false; b.textContent = 'Continue'; b.focus({ preventScroll: true });
 }
 // Undo an AI grade so the learner can grade the same answer themselves.
@@ -6253,7 +6276,6 @@ document.addEventListener('keydown', e => {
   if (!run || $('#lesson').hidden) return;
   if (e.key === 'Escape') { goHome(); return; }
   if (e.target.matches && e.target.matches('textarea, input')) { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && run.phase === 'answer' && $('#recallIn')) { e.preventDefault(); submitTyped('sure'); } return; }
-  if (run.phase === 'answer' && $('#recallIn') && /^[1-3]$/.test(e.key)) { submitTyped(CONF[+e.key - 1][0]); return; }
   if (run.phase === 'selfgrade' && /^[1-4]$/.test(e.key)) { showTyped(run.cur, +e.key - 1, '', run.selfConf || 'sure', 'self'); return; }
   if (e.key === 'Enter') { const b = $('#checkBtn'); if (!b.hidden && !b.disabled) { e.preventDefault(); b.click(); } return; }
   if (run.phase === 'answer' && run.cur.t === 'mc' && /^[1-9]$/.test(e.key)) { const i = +e.key - 1; if (i < run.cur._opts.length) pickMC(i); }
@@ -6609,7 +6631,7 @@ function renderToday() {
   if (sessDue + nNew > 0) {
     const mins = Math.max(1, Math.round(sessDue * 0.6 + nNew * 0.4));
     const what = [sessDue ? `${sessDue} review${sessDue === 1 ? '' : 's'}` : '', nNew ? `${nNew} new` : ''].filter(Boolean).join(' · ');
-    el.innerHTML = `<section class="today"><div class="today-main"><p class="kicker">Today</p><h2>${what}</h2><p>About ${mins} minute${mins === 1 ? '' : 's'}. You type answers from memory${G ? ' and AI grades them' : ''}.${due > SESSION_REVIEWS ? ` ${due - SESSION_REVIEWS} more are waiting for later sessions.` : ''}</p></div><button class="btn" id="todayGo">Start</button></section>`;
+    el.innerHTML = `<section class="today"><div class="today-main"><p class="kicker">Today</p><h2>${what}</h2><p>About ${mins} minute${mins === 1 ? '' : 's'}. You type answers from memory and AI grades them.${due > SESSION_REVIEWS ? ` ${due - SESSION_REVIEWS} more are waiting for later sessions.` : ''}</p></div><button class="btn" id="todayGo">Start</button></section>`;
   } else {
     const next = Object.values(state.srs).map(c => c.due).filter(d => d > today).sort()[0];
     el.innerHTML = `<section class="today done"><div class="today-main"><p class="kicker">Today</p><h2>All caught up</h2><p>${next ? 'Your next reviews are due ' + whenText(next) + '.' : ''}${avail ? ' You can learn more now if you want.' : ''}</p></div>${avail ? '<button class="btn ghost" id="todayMore">Learn 5 more</button>' : ''}</section>`;

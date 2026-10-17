@@ -49,6 +49,13 @@ async function auth(req, env) {
   return p;
 }
 
+// Identity for grading quotas: the signed-in player, or a salted hash of the visitor's IP.
+async function graderId(req, env) {
+  const me = await auth(req, env);
+  if (me) return me.id;
+  return 'ip:' + (await sha256('wl-grade:' + (req.headers.get('CF-Connecting-IP') || 'unknown'))).slice(0, 16);
+}
+
 async function createPlayer(env, code, name) {
   const id = randomString(10, 'abcdefghijkmnpqrstuvwxyz23456789');
   const secret = randomString(24, 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789');
@@ -95,6 +102,45 @@ async function api(req, env, path) {
     return json({ code, groupName: g.name, player: { id: p.id, name: pname }, token: p.token });
   }
 
+  // Grading and hints work without a group: visitors are counted by a hash of their IP for the daily cap.
+  if (m === 'POST' && (path === '/api/grade' || path === '/api/hint')) {
+    const who = await graderId(req, env);
+    if (m === 'POST' && path === '/api/grade') {
+      if (!env.ANTHROPIC_API_KEY) return fail('Answer grading isn’t set up.', 503);
+      const b = await body(req);
+      if (!String(b.response || '').trim()) return json({ score: 0, feedback: 'No answer given.' });
+      if (!String(b.question || '').trim() || !String(b.answer || '').trim()) return fail('Missing question or model answer.');
+      const capped = await takeGradeQuota(env, who);
+      if (capped) return fail(capped, 429);
+      try {
+        const g = await gradeAnswer(env, b);
+        if (!g) return fail('The grader couldn’t grade that one. Grade yourself.', 502);
+      if (g.refused) return fail('The AI grader declined this one, which sometimes happens on biosecurity and weapons topics. Grade yourself.', 422);
+        return json({ score: g.score, percent: g.percent, points: g.points, missed: g.missed, feedback: g.feedback });
+      } catch (e) {
+        if (e instanceof Anthropic.RateLimitError) return fail('The grader is busy. Grade yourself for this one.', 503);
+        if (e instanceof Anthropic.AuthenticationError) return fail('Answer grading isn’t set up correctly.', 503);
+        if (e instanceof Anthropic.APIError) return fail('The grader had an error. Grade yourself for this one.', 502);
+        throw e;
+      }
+    }
+
+    if (m === 'POST' && path === '/api/hint') {
+      if (!env.ANTHROPIC_API_KEY) return fail('Hints aren’t set up.', 503);
+      const b = await body(req);
+      if (!String(b.question || '').trim() || !String(b.answer || '').trim()) return fail('Missing question or model answer.');
+      const capped = await takeGradeQuota(env, who);
+      if (capped) return fail(capped, 429);
+      try {
+        const h = await hintFor(env, b);
+        return h ? json({ hint: h }) : fail('No hint available for this one.', 502);
+      } catch (e) {
+        if (e instanceof Anthropic.APIError) return fail('Couldn’t get a hint right now.', 502);
+        throw e;
+      }
+    }
+  }
+
   const me = await auth(req, env);
   if (!me) return fail('Not signed in to a group.', 401);
 
@@ -137,40 +183,6 @@ async function api(req, env, path) {
       return { id: p.id, name: p.name, week: t.week || 0, total: t.total || 0, lessons: t.lessons || 0, streak: st.streak, atRisk: st.atRisk, freezes: st.freezes, offToday: st.offToday };
     });
     return json({ code: g, groupName: me.group_name, me: me.id, weekStart: ws, players: rows, feed: feed.results.map(f => ({ id: f.player_id, name: f.name, lessonId: f.lesson_id, title: f.title, acc: f.acc, xp: f.xp, at: f.created_at })) });
-  }
-
-  if (m === 'POST' && path === '/api/grade') {
-    if (!env.ANTHROPIC_API_KEY) return fail('Answer grading isn’t set up.', 503);
-    const b = await body(req);
-    if (!String(b.response || '').trim()) return json({ score: 0, feedback: 'No answer given.' });
-    if (!String(b.question || '').trim() || !String(b.answer || '').trim()) return fail('Missing question or model answer.');
-    const capped = await takeGradeQuota(env, me.id);
-    if (capped) return fail(capped, 429);
-    try {
-      const g = await gradeAnswer(env, b);
-      if (!g) return fail('The grader couldn’t grade that one. Grade yourself.', 502);
-      return json({ score: g.score, feedback: g.feedback });
-    } catch (e) {
-      if (e instanceof Anthropic.RateLimitError) return fail('The grader is busy. Grade yourself for this one.', 503);
-      if (e instanceof Anthropic.AuthenticationError) return fail('Answer grading isn’t set up correctly.', 503);
-      if (e instanceof Anthropic.APIError) return fail('The grader had an error. Grade yourself for this one.', 502);
-      throw e;
-    }
-  }
-
-  if (m === 'POST' && path === '/api/hint') {
-    if (!env.ANTHROPIC_API_KEY) return fail('Hints aren’t set up.', 503);
-    const b = await body(req);
-    if (!String(b.question || '').trim() || !String(b.answer || '').trim()) return fail('Missing question or model answer.');
-    const capped = await takeGradeQuota(env, me.id);
-    if (capped) return fail(capped, 429);
-    try {
-      const h = await hintFor(env, b);
-      return h ? json({ hint: h }) : fail('No hint available for this one.', 502);
-    } catch (e) {
-      if (e instanceof Anthropic.APIError) return fail('Couldn’t get a hint right now.', 502);
-      throw e;
-    }
   }
 
   // ---- synced progress (review schedule, practice days, streak settings) ----
