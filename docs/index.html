@@ -205,6 +205,7 @@ svg { display: block; }
 .recall-in:focus { outline: none; border-color: var(--primary); }
 .conf { display: grid; gap: 8px; justify-items: start; }
 .conf-k { font-size: 13px; font-weight: 800; color: var(--muted); }
+.conf-alt { display: flex; flex-wrap: wrap; gap: 18px; }
 .conf-btns { display: flex; flex-wrap: wrap; gap: 8px; }
 .cbtn { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 12px; padding: 10px 14px; font-weight: 800; font-size: 15px; }
 .cbtn:hover { border-color: var(--primary); }
@@ -220,6 +221,24 @@ svg { display: block; }
 .fb .whynot { border-left: 4px solid var(--bad); padding-left: 10px; }
 .fb .whynot span { display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; color: var(--bad); }
 @media (max-width: 520px) { .today { flex-direction: column; align-items: stretch; } .today h2 { font-size: 22px; } }
+
+/* streak card, hints */
+.sk-row { display: flex; align-items: center; gap: 8px; color: var(--brass); }
+.sk-row.risk { color: var(--bad); }
+.sk-f { width: 34px; height: 34px; }
+.sk-n { font-size: 34px; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1; }
+.sk-d { font-size: 15px; font-weight: 800; color: var(--muted); }
+.flakes { display: flex; gap: 4px; }
+.flake { width: 22px; height: 22px; color: var(--locked); }
+.flake svg { width: 22px; height: 22px; }
+.flake.on { color: #3a9fd8; }
+.days { display: flex; flex-wrap: wrap; gap: 6px; }
+.dayt { border: 2px solid var(--line); background: var(--surface); border-radius: 10px; padding: 8px 10px; font-weight: 800; font-size: 14px; min-width: 52px; }
+.dayt.on { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+.hintbox { background: var(--brass-soft); border: 2px solid color-mix(in srgb, var(--brass) 40%, transparent); border-radius: 12px; padding: 10px 14px; display: grid; gap: 2px; }
+.hintbox span { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--brass); }
+.hintbox p { margin: 0; font-weight: 700; color: var(--fg); }
+.conf-alt .linkbtn:disabled { opacity: .5; text-decoration: none; cursor: default; }
 
 /* shared buttons */
 .btn { border: 0; border-radius: 14px; padding: 14px 28px; font-weight: 900; font-size: 16px; letter-spacing: .05em; text-transform: uppercase; background: var(--primary); color: var(--on-primary); box-shadow: 0 4px 0 var(--primary-deep); min-width: 150px; }
@@ -355,6 +374,7 @@ svg { display: block; }
   <aside class="side">
     <section class="card" id="group"></section>
     <section class="card" id="potd"></section>
+    <section class="card" id="streakCard"></section>
     <section class="card" id="progressCard">
       <h3>Your progress</h3>
       <div class="kv"><span>Lessons</span><span id="pDone">0 / 0</span></div>
@@ -362,6 +382,7 @@ svg { display: block; }
       <div class="kv"><span>Cards in your reviews</span><span id="pCards">0</span></div>
       <div class="kv"><span>Due tomorrow</span><span id="pTomorrow">0</span></div>
       <p>Keys: 1 to 4 picks an answer, Enter checks, Esc quits. On typed answers, 1 to 3 submits with your confidence.</p>
+      <p class="meta" id="pSync"></p>
       <button class="linkbtn" id="resetBtn">Reset progress</button>
     </section>
     <section class="card" id="caveat"></section>
@@ -395,6 +416,11 @@ svg { display: block; }
 <section class="overlay sheet" id="pick" hidden>
   <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Courses</h2></div>
   <div class="stage"><div class="stage-in" id="pickBody"></div></div>
+</section>
+
+<section class="overlay sheet" id="streakSheet" hidden>
+  <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Streak settings</h2></div>
+  <div class="stage"><div class="stage-in" id="streakBody"></div></div>
 </section>
 
 <section class="overlay sheet" id="repv" hidden>
@@ -1662,10 +1688,12 @@ function validateCourse(raw) {
               else out.ow = it.ow.map((t, k) => str(t, `${w}.ow[${k}]`, 300, false) || '');
             }
             if (it.keys !== undefined) out.keys = arr(it.keys, w + '.keys', 1, 5).map((t, k) => str(t, `${w}.keys[${k}]`, 160));
+            const hint = str(it.hint, w + '.hint', 200, false); if (hint) out.hint = hint;
             return out;
           }
           if (it.t === 'recall') {
             const out = { t: 'recall', p: str(it.p, w + '.p', 300), answer: str(it.answer, w + '.answer', 400), x };
+            const hint = str(it.hint, w + '.hint', 200, false); if (hint) out.hint = hint;
             if (it.keys !== undefined) out.keys = arr(it.keys, w + '.keys', 1, 5).map((t, k) => str(t, `${w}.keys[${k}]`, 160));
             return out;
           }
@@ -1692,6 +1720,37 @@ function validateCourse(raw) {
   if (total > COURSE_LIMITS.totalItems) err('units', `has ${total} questions in all; the limit is ${COURSE_LIMITS.totalItems}`);
   return errors.length ? { ok: false, errors } : { ok: true, errors: [], course: c, stats: { units: c.units.length, lessons: c.units.reduce((n, u) => n + u.lessons.length, 0), items: total } };
 }
+// Streak rules, shared with the server so the leaderboard shows the same number.
+// days: list of YYYY-MM-DD days with practice. settings.days: 7 booleans, Sunday first, for days that count.
+// settings.pauses: [{ from, to }] (to null = still paused). Off days and paused days never break a streak.
+// Every STREAK_RULES.freezeEvery practice days earns a freeze (up to maxFreezes); a missed counting day uses one automatically.
+const STREAK_RULES = { freezeEvery: 5, maxFreezes: 3 };
+function computeStreak(days, settings, today) {
+  const ok = d => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d);
+  const set = new Set((days || []).filter(ok));
+  const sched = settings && Array.isArray(settings.days) && settings.days.length === 7 && settings.days.some(Boolean) ? settings.days.map(Boolean) : [true, true, true, true, true, true, true];
+  const pauses = settings && Array.isArray(settings.pauses) ? settings.pauses.filter(p => p && ok(p.from)) : [];
+  const paused = d => pauses.some(p => d >= p.from && (!p.to || d <= p.to));
+  const dow = d => new Date(d + 'T12:00:00Z').getUTCDay();
+  const next = d => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() + 1); return x.toISOString().slice(0, 10); };
+  const sorted = [...set].filter(d => d <= today).sort();
+  let streak = 0, bank = 0, progress = 0, best = 0;
+  const frozen = [];
+  const practice = () => { streak++; if (++progress >= STREAK_RULES.freezeEvery) { progress = 0; bank = Math.min(STREAK_RULES.maxFreezes, bank + 1); } };
+  if (sorted.length) {
+    for (let d = sorted[0]; d < today; d = next(d)) {
+      if (set.has(d)) practice();
+      else if (paused(d) || !sched[dow(d)]) { /* off day: no change */ }
+      else if (bank > 0) { bank--; frozen.push(d); }
+      else streak = 0;
+      best = Math.max(best, streak);
+    }
+  }
+  const doneToday = set.has(today);
+  if (doneToday) { practice(); best = Math.max(best, streak); }
+  const pausedNow = paused(today), offToday = pausedNow || !sched[dow(today)];
+  return { streak, best, freezes: bank, progress, toNextFreeze: bank >= STREAK_RULES.maxFreezes ? 0 : STREAK_RULES.freezeEvery - progress, frozen, doneToday, offToday, pausedNow, atRisk: streak > 0 && !doneToday && !offToday };
+}
 /* COURSE-FORMAT END */
 
 const COURSES = {
@@ -1706,6 +1765,9 @@ const COURSES = {
     meta: 'Draft · 2026-10-16 · Fact-checked by AI, not by a person' }
 };
 
+// Defined early because the home screen renders before the later script sections run.
+const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const WEEKDAYS = [false, true, true, true, true, true, false];
 let LESSONS = [];
 function buildLessons() {
   const C = COURSES[state.course];
@@ -1735,10 +1797,16 @@ const ICON = {
 
 let state = load();
 function load() {
-  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done) { s.srs = s.srs || {}; if (s.course && !COURSES[s.course]) { if (String(s.course).startsWith('c:')) s.wantCourse = s.course; s.course = null; } return s; } } catch (e) {}
-  return { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: null, srs: {} };
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done) {
+    s.srs = s.srs || {}; s.hints = s.hints || {}; s.settings = s.settings || defaultStreakSettings();
+    if (!s.activeDays) { // older saves only kept a streak count: rebuild the days it implies
+      s.activeDays = [];
+      for (let i = 0; s.last && i < Math.min(s.streak || 0, 400); i++) { const d = new Date(s.last + 'T12:00:00'); d.setDate(d.getDate() - i); s.activeDays.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')); }
+    } if (s.course && !COURSES[s.course]) { if (String(s.course).startsWith('c:')) s.wantCourse = s.course; s.course = null; } return s; } } catch (e) {}
+  return { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: null, srs: {}, hints: {}, activeDays: [], settings: defaultStreakSettings() };
 }
-function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+function defaultStreakSettings() { return { days: [true, true, true, true, true, true, true], pauses: [] }; }
+function save(noSync) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} if (!noSync && typeof scheduleSync === 'function') scheduleSync(); }
 
 function unlocked(i) {
   if (i === 0) return true;
@@ -1753,7 +1821,9 @@ function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = fal
 function renderHome() {
   renderToday();
   $('#xp').textContent = state.xp;
-  $('#streak').textContent = state.streak;
+  $('#streak').textContent = streakInfo().streak;
+  renderStreakCard();
+  $('#pSync').textContent = G ? 'Progress syncs across your devices through ' + G.groupName + '.' : 'Progress is saved on this device only. Join a group to sync it.';
   const cur = LESSONS.findIndex((l, i) => !state.done[l.id] && unlocked(i));
   let h = '', k = 0;
   const CI = COURSES[state.course];
@@ -1812,7 +1882,7 @@ function renderPotd() {
 let resetArmed = false;
 $('#resetBtn').onclick = () => {
   if (!resetArmed) { resetArmed = true; $('#resetBtn').textContent = 'Click again to erase all progress'; setTimeout(() => { resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; }, 4000); return; }
-  state = { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: state.course, srs: {} }; save(); resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; renderHome(); toast('Progress reset.');
+  state = { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: state.course, srs: {}, hints: {}, activeDays: [], settings: state.settings, settingsAt: Date.now() }; save(); resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; renderHome(); toast('Progress reset.');
 };
 
 /* ---------- spaced repetition: FSRS-4.5 with its published default weights ---------- */
@@ -1923,7 +1993,8 @@ function nextItem() {
   updateBar();
   const it = run.cur;
   if (it.t === 'recall' && it._retry) it._noAI = true;
-  const typed = it.t === 'recall' || (it.t === 'mc' && run.mode === 'session' && !it._new && !it._retry);
+  // Typed answers are the default for every multiple-choice question; "Show choices" switches one card back. Retries after a miss use choices.
+  const typed = it.t === 'recall' || (it.t === 'mc' && !it._retry && !it._choices);
   if (typed) renderTyped(it); else if (it.t === 'mc') renderMC(it); else if (it.t === 'match') renderMatch(it); else renderOrder(it);
   if (run.mode === 'session') $('#stage').insertAdjacentHTML('afterbegin', `<p class="cardtag">${it._new ? 'New' : 'Review'} · ${esc((COURSES[it._course] || {}).name || '')}</p>`);
   $('#stageWrap').scrollTop = 0;
@@ -2016,9 +2087,11 @@ const typedAnswerOf = it => it.t === 'recall' ? it.answer : it.o[it.a];
 // Answer score (0 to 3) plus confidence becomes an FSRS grade. Right answers that were guesses come back sooner.
 const fsrsFrom = (score, conf) => score === 0 ? 1 : score === 1 ? 2 : score === 2 ? (conf === 'guess' ? 2 : 3) : (conf === 'cold' ? 4 : 3);
 function renderTyped(it) {
-  $('#stage').innerHTML = `<p class="kicker">From memory</p>${newsHTML(it)}<h3 class="prompt">${esc(it.p || 'What does this most likely mean?')}</h3>${it.q ? quoteHTML(it) : ''}
+  const fresh = !state.srs[it._card];
+  $('#stage').innerHTML = `<p class="kicker">${it.predict ? 'Make a prediction' : fresh ? 'Take your best shot' : 'From memory'}</p>${newsHTML(it)}<h3 class="prompt">${esc(it.p || 'What does this most likely mean?')}</h3>${it.q ? quoteHTML(it) : ''}
+    <div class="hintbox" id="hintBox" hidden></div>
     <textarea class="recall-in" id="recallIn" rows="3" placeholder="Answer in a few words or a sentence."></textarea>
-    <div class="conf"><span class="conf-k">Submit with how sure you are</span><div class="conf-btns">${CONF.map(([k, t], i) => `<button class="cbtn" data-conf="${k}"><span class="kbd">${i + 1}</span>${t}</button>`).join('')}</div><button class="linkbtn" data-conf="none">I don’t know</button></div>`;
+    <div class="conf"><span class="conf-k">Submit with how sure you are</span><div class="conf-btns">${CONF.map(([k, t], i) => `<button class="cbtn" data-conf="${k}"><span class="kbd">${i + 1}</span>${t}</button>`).join('')}</div><div class="conf-alt"><button class="linkbtn" id="hintBtn">Give me a hint</button>${it.t === 'mc' ? '<button class="linkbtn" id="showChoices">Show choices instead</button>' : ''}<button class="linkbtn" data-conf="none">I don’t know</button></div></div>`;
   setCheck(false, false);
   setTimeout(() => { const x = $('#recallIn'); if (x) x.focus(); }, 30);
 }
@@ -2039,6 +2112,29 @@ async function submitTyped(conf) {
   }
   selfGrade(it, conf, it._noAI ? '' : 'Join a group to have answers graded for you.');
 }
+
+// Hints: the course's own hint if it has one, then a cached or AI-written nudge, then a fallback that narrows the choices.
+async function showHint(it) {
+  const box = $('#hintBox'), btn = $('#hintBtn');
+  if (!box || it._hinted) return;
+  it._hinted = true; btn.disabled = true; box.hidden = false; box.innerHTML = '<p>Thinking of a hint…</p>';
+  const put = t => { if (run && run.cur === it) box.innerHTML = `<span>Hint</span><p>${esc(t)}</p>`; };
+  if (it.hint) return put(it.hint);
+  if (state.hints[it._card]) return put(state.hints[it._card]);
+  if (G) {
+    try {
+      const r = await apiCall('/api/hint', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [] });
+      state.hints[it._card] = r.hint; save(); return put(r.hint);
+    } catch (e) { /* fall through to the offline hint */ }
+  }
+  if (it.t === 'mc') {
+    const wrong = it.o.filter((_, i) => i !== it.a);
+    const pair = shuffle([it.o[it.a], wrong[Math.floor(Math.random() * wrong.length)]]);
+    return put(`It’s one of these: “${pair[0]}” or “${pair[1]}”.`);
+  }
+  const words = String(it.answer).split(/\s+/);
+  put(`It starts: “${words.slice(0, Math.min(3, Math.ceil(words.length / 4))).join(' ')}…”`);
+}
 function selfGrade(it, conf, note) {
   run.phase = 'selfgrade'; run.selfConf = conf;
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
@@ -2047,7 +2143,7 @@ function selfGrade(it, conf, note) {
 function showTyped(it, score, feedback, conf, source) {
   run.phase = 'feedback';
   it._snap = { prev: state.srs[it._card], graded: run.graded.has(it._card), xp: run.xp, reviewed: run.reviewed, remembered: run.remembered, newSeen: run.newSeen, newCount: state.newCount, correct: run.correct, qlen: run.queue.length, wrongHad: run.wrong.has(it.key) };
-  srsRecord(it, fsrsFrom(score, conf));
+  srsRecord(it, it._hinted ? Math.min(2, fsrsFrom(score, conf)) : fsrsFrom(score, conf));
   if (state.srs[it._card]) { state.srs[it._card].miss = conf === 'cold' && score === 0; save(); }
   run.correct++;
   if (score <= 1) run.wrong.add(it.key);
@@ -2057,7 +2153,7 @@ function showTyped(it, score, feedback, conf, source) {
   $('#foot').className = 'lfoot ' + (ok ? 'good' : 'bad');
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
   const heads = ['Not quite.', 'Partly there.', 'Mostly right.', 'Exactly right.'];
-  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${heads[score]}</h4>${source === 'ai' && feedback ? `<p class="aifb">${esc(feedback)}</p>` : ''}<div class="recall-ans"><span>Model answer</span><p>${esc(typedAnswerOf(it))}</p></div><p>${esc(it.x)}</p>${conf === 'cold' && score === 0 ? '<p class="whynot"><span>Confident miss</span>You were sure about this one, so it comes back tomorrow. These are the mistakes most worth fixing.</p>' : ''}${source === 'ai' ? '<p class="meta">Graded by AI. <button class="linkbtn" id="regrade">Grade it myself</button></p>' : ''}${reportHTML(it)}`;
+  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${heads[score]}</h4>${source === 'ai' && feedback ? `<p class="aifb">${esc(feedback)}</p>` : ''}<div class="recall-ans"><span>Model answer</span><p>${esc(typedAnswerOf(it))}</p></div><p>${esc(it.x)}</p>${it._hinted && score >= 2 ? '<p class="meta">You used a hint, so this one comes back a little sooner.</p>' : ''}${conf === 'cold' && score === 0 ? '<p class="whynot"><span>Confident miss</span>You were sure about this one, so it comes back tomorrow. These are the mistakes most worth fixing.</p>' : ''}${source === 'ai' ? '<p class="meta">Graded by AI. <button class="linkbtn" id="regrade">Grade it myself</button></p>' : ''}${reportHTML(it)}`;
   const b = $('#checkBtn'); b.hidden = false; b.disabled = false; b.textContent = 'Continue'; b.focus({ preventScroll: true });
 }
 // Undo an AI grade so the learner can grade the same answer themselves.
@@ -2070,7 +2166,12 @@ function undoTyped(it) {
   if (!sn.wrongHad) run.wrong.delete(it.key);
   save(); updateBar();
 }
-$('#stage').addEventListener('click', e => { const b = e.target.closest('[data-conf]'); if (b && run) submitTyped(b.dataset.conf); });
+$('#stage').addEventListener('click', e => {
+  if (!run) return;
+  if (e.target.closest('#hintBtn') && run.phase === 'answer') { showHint(run.cur); return; }
+  if (e.target.closest('#showChoices') && run.phase === 'answer') { run.cur._choices = true; renderMC(run.cur); if (run.mode === 'session') $('#stage').insertAdjacentHTML('afterbegin', `<p class="cardtag">${run.cur._new ? 'New' : 'Review'} · ${esc((COURSES[run.cur._course] || {}).name || '')}</p>`); return; }
+  const b = e.target.closest('[data-conf]'); if (b) submitTyped(b.dataset.conf);
+});
 $('#fb').addEventListener('click', e => {
   if (!run) return;
   const sb = e.target.closest('[data-self]');
@@ -2101,8 +2202,10 @@ $('#checkBtn').onclick = () => {
 
 function bumpStreak() {
   const today = dstr(new Date());
-  if (state.last !== today) { state.streak = state.last === addDays(today, -1) ? state.streak + 1 : 1; state.last = today; }
+  if (!state.activeDays.includes(today)) state.activeDays.push(today);
+  state.last = today; state.streak = streakInfo().streak;
 }
+function streakInfo() { return computeStreak(state.activeDays, state.settings, dstr(new Date())); }
 function finish() {
   bumpStreak();
   if (run.mode === 'session') return finishSession();
@@ -2210,7 +2313,7 @@ function renderGroup() {
     h += `<div class="seg"><button data-gtab="week" class="${gTab === 'week' ? 'on' : ''}">This week</button><button data-gtab="all" class="${gTab === 'all' ? 'on' : ''}">All time</button></div>`;
     h += `<ol class="lb">${rows.map((r, i) => {
       const fl = r.streak === 0 ? 'zero' : r.atRisk ? 'risk' : '';
-      const tip = r.streak === 0 ? 'No current streak' : r.atRisk ? `${r.streak}-day streak, ends tonight without a lesson` : `${r.streak}-day streak`;
+      const tip = r.streak === 0 ? 'No current streak' : r.atRisk ? `${r.streak}-day streak, needs practice today` + (r.freezes ? ` (${r.freezes} freeze${r.freezes === 1 ? '' : 's'} saved)` : '') : `${r.streak}-day streak` + (r.offToday ? ', off today' : '');
       return `<li class="${r.id === board.me ? 'me' : ''}"><span class="rk">${i + 1}</span><span class="nm">${esc(r.name)}</span><span class="fl ${fl}" title="${esc(tip)}">${FLAME}${r.streak}</span><span class="pts">${r[key]} XP</span></li>`;
     }).join('')}</ol>`;
     if (gTab === 'week') h += `<p class="meta">Weekly XP resets Monday 00:00 UTC.</p>`;
@@ -2232,7 +2335,7 @@ async function groupSubmit() {
       G = { token: tok }; const me = await apiCall('/api/me'); d = { ...me, token: tok };
     } else if (gMode === 'start') d = await apiCall('/api/groups', { groupName: $('#gGroup').value, name: $('#gName').value });
     else d = await apiCall('/api/join', { code: $('#gCode').value, name: $('#gName').value });
-    G = { token: d.token, code: d.code, groupName: d.groupName, player: d.player }; saveG();
+    G = { token: d.token, code: d.code, groupName: d.groupName, player: d.player }; saveG(); syncNow();
     if (joinParam) history.replaceState(null, '', location.pathname);
     toast('You’re in ' + d.groupName + '.');
     gBusy = false; await refreshBoard(); loadCourses();
@@ -2364,7 +2467,7 @@ async function addGroupSubmit() {
   try {
     const name = $('#agName').value;
     const d = gm === 'start' ? await apiCall('/api/groups', { groupName: $('#agGroup').value, name }) : await apiCall('/api/join', { code: $('#agCode').value, name });
-    G = { token: d.token, code: d.code, groupName: d.groupName, player: d.player }; saveG();
+    G = { token: d.token, code: d.code, groupName: d.groupName, player: d.player }; saveG(); syncNow();
     a.gBusy = false; toast('You’re in ' + d.groupName + '.');
     renderAdd(); refreshBoard(); loadCourses();
   } catch (e) { a.gBusy = false; a.gErr = netMsg(e); renderAdd(); }
@@ -2503,7 +2606,7 @@ function renderToday() {
   if (sessDue + nNew > 0) {
     const mins = Math.max(1, Math.round(sessDue * 0.6 + nNew * 0.4));
     const what = [sessDue ? `${sessDue} review${sessDue === 1 ? '' : 's'}` : '', nNew ? `${nNew} new` : ''].filter(Boolean).join(' · ');
-    el.innerHTML = `<section class="today"><div class="today-main"><p class="kicker">Today</p><h2>${what}</h2><p>About ${mins} minute${mins === 1 ? '' : 's'}. Reviews ask you to type answers from memory${G ? ', graded by AI' : ''}.${due > SESSION_REVIEWS ? ` ${due - SESSION_REVIEWS} more are waiting for later sessions.` : ''}</p></div><button class="btn" id="todayGo">Start</button></section>`;
+    el.innerHTML = `<section class="today"><div class="today-main"><p class="kicker">Today</p><h2>${what}</h2><p>About ${mins} minute${mins === 1 ? '' : 's'}. You type answers from memory${G ? ' and AI grades them' : ''}.${due > SESSION_REVIEWS ? ` ${due - SESSION_REVIEWS} more are waiting for later sessions.` : ''}</p></div><button class="btn" id="todayGo">Start</button></section>`;
   } else {
     const next = Object.values(state.srs).map(c => c.due).filter(d => d > today).sort()[0];
     el.innerHTML = `<section class="today done"><div class="today-main"><p class="kicker">Today</p><h2>All caught up</h2><p>${next ? 'Your next reviews are due ' + whenText(next) + '.' : ''}${avail ? ' You can learn more now if you want.' : ''}</p></div>${avail ? '<button class="btn ghost" id="todayMore">Learn 5 more</button>' : ''}</section>`;
@@ -2519,7 +2622,100 @@ function groupPostSession(xp, acc, reviewed, fresh) {
   apiCall('/api/complete', { lessonId: 'review-' + Date.now(), title, xp, acc, day: dstr(new Date()) }).then(refreshBoard, () => { gOffline = true; renderGroup(); });
 }
 
+/* ---------- streak card and settings ---------- */
+function flameSVG(cls) { return `<svg class="${cls || ''}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.5 2c.6 3.4 4.9 5.6 4.9 10.6A5.4 5.4 0 0 1 12 18a5.4 5.4 0 0 1-5.4-5.4c0-2.4 1.2-4 2.4-5 0 2 .9 3.2 2 3.4-.3-3.3.5-6.4 1.5-9z"/></svg>`; }
+function snowSVG() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9 4l3 2 3-2M9 20l3-2 3 2M4 10.5l3.5-.3-1.4-3.2M20 13.5l-3.5.3 1.4 3.2M4 13.5l3.5.3-1.4 3.2M20 10.5l-3.5-.3 1.4-3.2"/></svg>'; }
+function schedText(days) { return days.every(Boolean) ? 'every day' : days.join() === WEEKDAYS.join() ? 'weekdays' : days.map((v, i) => v ? DOW[i] : null).filter(Boolean).join(', '); }
+function currentPause(today) { return (state.settings.pauses || []).find(p => today >= p.from && (!p.to || today <= p.to)); }
+function renderStreakCard() {
+  const el = $('#streakCard'); if (!el) return;
+  const si = streakInfo(), today = dstr(new Date());
+  let status = si.doneToday ? 'Done for today.' : si.pausedNow ? 'Paused. Missed days won’t count against you.' : si.offToday ? 'Today is an off day.' : si.streak ? 'Practice today to keep it going.' : 'Finish a session to start a streak.';
+  if (si.frozen.includes(addDays(today, -1))) status = 'A freeze covered yesterday. ' + status;
+  const flakes = Array.from({ length: STREAK_RULES.maxFreezes }, (_, i) => `<span class="flake${i < si.freezes ? ' on' : ''}">${snowSVG()}</span>`).join('');
+  el.innerHTML = `<div class="ghead"><h3>Streak</h3><button class="linkbtn" id="streakSet">Settings</button></div>
+    <div class="sk-row${si.atRisk ? ' risk' : ''}">${flameSVG('sk-f')}<span class="sk-n">${si.streak}</span><span class="sk-d">day${si.streak === 1 ? '' : 's'}</span></div>
+    <p>${esc(status)}</p>
+    <div class="kv"><span>Streak freezes</span><span class="flakes" title="${si.freezes} of ${STREAK_RULES.maxFreezes}">${flakes}</span></div>
+    <p class="meta">${si.freezes >= STREAK_RULES.maxFreezes ? 'Freezes full.' : `Next freeze after ${si.toNextFreeze} more practice day${si.toNextFreeze === 1 ? '' : 's'}.`} Counts ${schedText(state.settings.days)}${si.pausedNow ? ', paused now' : ''}. Best: ${si.best}.</p>`;
+}
+function renderStreakSheet() {
+  const st = state.settings, today = dstr(new Date()), pz = currentPause(today);
+  const preset = st.days.every(Boolean) ? 'all' : st.days.join() === WEEKDAYS.join() ? 'week' : 'custom';
+  $('#streakBody').innerHTML = `<p>Your streak only counts the days you pick, and it never breaks on off days or while paused. A missed counting day uses a streak freeze automatically if you have one. You earn a freeze for every ${STREAK_RULES.freezeEvery} days you practice, and can hold up to ${STREAK_RULES.maxFreezes}.</p>
+    <p class="kicker">Which days count</p>
+    <div class="seg"><button data-preset="all" class="${preset === 'all' ? 'on' : ''}">Every day</button><button data-preset="week" class="${preset === 'week' ? 'on' : ''}">Weekdays</button><button data-preset="custom" class="${preset === 'custom' ? 'on' : ''}">Custom</button></div>
+    <div class="days">${DOW.map((d, i) => `<button class="dayt${st.days[i] ? ' on' : ''}" data-dow="${i}" aria-pressed="${st.days[i]}">${d}</button>`).join('')}</div>
+    <p class="kicker">Pause</p>
+    ${pz ? `<p>Paused since ${esc(pz.from)}${pz.to ? ', until ' + esc(pz.to) : ' until you resume'}.</p><div class="row"><button class="btn sm" id="resumeBtn">Resume now</button></div>`
+      : `<p>Going away or having a rough stretch? Pause and your streak waits for you.</p><div class="row">${[[3, '3 days'], [7, '1 week'], [14, '2 weeks'], ['open', 'Until I resume']].map(([n, t]) => `<button class="btn ghost sm" data-pause="${n}">${t}</button>`).join('')}</div>`}`;
+}
+function setStreakSettings(mutate) {
+  mutate(state.settings); state.settingsAt = Date.now(); state.streak = streakInfo().streak;
+  save(); renderStreakSheet(); renderHome();
+}
+$('#streakCard').addEventListener('click', e => { if (e.target.closest('#streakSet')) { renderStreakSheet(); openSheet('#streakSheet'); } });
+$('#streakBody').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  const today = dstr(new Date());
+  if (t.dataset.preset === 'all') setStreakSettings(s => { s.days = [true, true, true, true, true, true, true]; });
+  else if (t.dataset.preset === 'week') setStreakSettings(s => { s.days = WEEKDAYS.slice(); });
+  else if (t.dataset.preset === 'custom') toast('Tap the days below to choose.');
+  else if (t.dataset.dow !== undefined) {
+    const i = +t.dataset.dow;
+    if (state.settings.days[i] && state.settings.days.filter(Boolean).length === 1) { toast('At least one day has to count.'); return; }
+    setStreakSettings(s => { s.days[i] = !s.days[i]; });
+  } else if (t.dataset.pause) {
+    const n = t.dataset.pause;
+    setStreakSettings(s => { s.pauses = s.pauses || []; s.pauses.push({ from: today, to: n === 'open' ? null : addDays(today, +n - 1) }); });
+    toast(n === 'open' ? 'Streak paused until you resume.' : 'Streak paused.');
+  } else if (t.id === 'resumeBtn') {
+    setStreakSettings(s => { s.pauses = (s.pauses || []).filter(p => !(today >= p.from && (!p.to || today <= p.to)) || p.from < today).map(p => (today >= p.from && (!p.to || today <= p.to)) ? { from: p.from, to: addDays(today, -1) } : p); });
+    toast('Streak resumed.');
+  }
+});
+
+/* ---------- sync progress to the server ---------- */
+let syncTimer = null, syncBusy = false, syncAgain = false;
+function syncPayload() { const { srs, done, jumped, activeDays, xp, settings, settingsAt, newDay, newCount, hints } = state; return { v: 1, srs, done, jumped, activeDays, xp, settings, settingsAt, newDay, newCount, hints }; }
+// Merges another device's progress into this one: the most-reviewed copy of each card wins, practice days are combined.
+function mergeStates(a, b) {
+  const out = { ...a };
+  const srs = { ...(b.srs || {}) };
+  for (const [id, c] of Object.entries(a.srs || {})) { const o = srs[id]; if (!o || (c.reps || 0) > (o.reps || 0) || ((c.reps || 0) === (o.reps || 0) && c.last > o.last)) srs[id] = c; }
+  out.srs = srs;
+  out.done = { ...(b.done || {}), ...(a.done || {}) };
+  out.jumped = [...new Set([...(b.jumped || []), ...(a.jumped || [])])];
+  out.activeDays = [...new Set([...(b.activeDays || []), ...(a.activeDays || [])])].sort();
+  out.xp = Math.max(a.xp || 0, b.xp || 0);
+  if ((b.settingsAt || 0) > (a.settingsAt || 0) && b.settings) { out.settings = b.settings; out.settingsAt = b.settingsAt; }
+  if ((b.newDay || '') > (a.newDay || '')) { out.newDay = b.newDay; out.newCount = b.newCount; }
+  else if (b.newDay === a.newDay) out.newCount = Math.max(a.newCount || 0, b.newCount || 0);
+  out.hints = { ...(b.hints || {}), ...(a.hints || {}) };
+  return out;
+}
+async function syncNow() {
+  if (!G) return;
+  if (syncBusy) { syncAgain = true; return; }
+  syncBusy = true; clearTimeout(syncTimer);
+  try {
+    const r = await apiCall('/api/state');
+    if (r.state) {
+      const m = mergeStates(state, r.state);
+      m.course = state.course; if (state.wantCourse) m.wantCourse = state.wantCourse;
+      state = m;
+    }
+    state.streak = streakInfo().streak; save(true);
+    await apiCall('/api/state', { state: syncPayload() });
+    if (!run) renderHome();
+  } catch (e) { /* offline: try again on the next change */ }
+  finally { syncBusy = false; if (syncAgain) { syncAgain = false; scheduleSync(); } }
+}
+function scheduleSync() { if (!G) return; clearTimeout(syncTimer); syncTimer = setTimeout(syncNow, 3000); }
+document.addEventListener('visibilitychange', () => { if (document.hidden && G) syncNow(); });
+
 refreshBoard();
 loadCourses();
+syncNow();
 </script>
 </body></html>

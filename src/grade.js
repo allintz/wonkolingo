@@ -59,3 +59,23 @@ export async function takeGradeQuota(env, playerId) {
   await env.DB.prepare('INSERT INTO grade_usage (day, player_id, n) VALUES (?, ?, 1) ON CONFLICT(day, player_id) DO UPDATE SET n = n + 1').bind(day, playerId).run();
   return null;
 }
+
+const HintSchema = z.object({ hint: z.string() });
+const HINT_SYSTEM = `You write hints for a quiz app for adults learning about policy and government.
+You get a question, its model answer and optional key points. Write one hint that nudges the learner toward the answer without stating it.
+Good hints point at the right concept, the relevant institution or rule, or what to think about ("Think about what the Senate needs to end debate").
+Never include the answer itself, a number from the answer, or any word that gives it away. Under 140 characters. Second person.`;
+
+export async function hintFor(env, { question, answer, keys }) {
+  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  const keyText = Array.isArray(keys) && keys.length ? keys.slice(0, 5).map(k => '- ' + clip(k, 200)).join('\n') : '(none)';
+  const msg = await client.messages.parse({
+    model: 'claude-haiku-5-5',
+    max_tokens: 1500,
+    output_config: { effort: 'low', format: zodOutputFormat(HintSchema) },
+    system: HINT_SYSTEM,
+    messages: [{ role: 'user', content: `<question>${clip(question, 700)}</question>\n<model_answer>${clip(answer, 700)}</model_answer>\n<key_points>\n${keyText}\n</key_points>` }],
+  });
+  if (msg.stop_reason === 'refusal' || !msg.parsed_output) return null;
+  return clip(msg.parsed_output.hint, 200);
+}

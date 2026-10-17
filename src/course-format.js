@@ -64,10 +64,12 @@ function validateCourse(raw) {
               else out.ow = it.ow.map((t, k) => str(t, `${w}.ow[${k}]`, 300, false) || '');
             }
             if (it.keys !== undefined) out.keys = arr(it.keys, w + '.keys', 1, 5).map((t, k) => str(t, `${w}.keys[${k}]`, 160));
+            const hint = str(it.hint, w + '.hint', 200, false); if (hint) out.hint = hint;
             return out;
           }
           if (it.t === 'recall') {
             const out = { t: 'recall', p: str(it.p, w + '.p', 300), answer: str(it.answer, w + '.answer', 400), x };
+            const hint = str(it.hint, w + '.hint', 200, false); if (hint) out.hint = hint;
             if (it.keys !== undefined) out.keys = arr(it.keys, w + '.keys', 1, 5).map((t, k) => str(t, `${w}.keys[${k}]`, 160));
             return out;
           }
@@ -94,5 +96,36 @@ function validateCourse(raw) {
   if (total > COURSE_LIMITS.totalItems) err('units', `has ${total} questions in all; the limit is ${COURSE_LIMITS.totalItems}`);
   return errors.length ? { ok: false, errors } : { ok: true, errors: [], course: c, stats: { units: c.units.length, lessons: c.units.reduce((n, u) => n + u.lessons.length, 0), items: total } };
 }
+// Streak rules, shared with the server so the leaderboard shows the same number.
+// days: list of YYYY-MM-DD days with practice. settings.days: 7 booleans, Sunday first, for days that count.
+// settings.pauses: [{ from, to }] (to null = still paused). Off days and paused days never break a streak.
+// Every STREAK_RULES.freezeEvery practice days earns a freeze (up to maxFreezes); a missed counting day uses one automatically.
+const STREAK_RULES = { freezeEvery: 5, maxFreezes: 3 };
+function computeStreak(days, settings, today) {
+  const ok = d => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d);
+  const set = new Set((days || []).filter(ok));
+  const sched = settings && Array.isArray(settings.days) && settings.days.length === 7 && settings.days.some(Boolean) ? settings.days.map(Boolean) : [true, true, true, true, true, true, true];
+  const pauses = settings && Array.isArray(settings.pauses) ? settings.pauses.filter(p => p && ok(p.from)) : [];
+  const paused = d => pauses.some(p => d >= p.from && (!p.to || d <= p.to));
+  const dow = d => new Date(d + 'T12:00:00Z').getUTCDay();
+  const next = d => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() + 1); return x.toISOString().slice(0, 10); };
+  const sorted = [...set].filter(d => d <= today).sort();
+  let streak = 0, bank = 0, progress = 0, best = 0;
+  const frozen = [];
+  const practice = () => { streak++; if (++progress >= STREAK_RULES.freezeEvery) { progress = 0; bank = Math.min(STREAK_RULES.maxFreezes, bank + 1); } };
+  if (sorted.length) {
+    for (let d = sorted[0]; d < today; d = next(d)) {
+      if (set.has(d)) practice();
+      else if (paused(d) || !sched[dow(d)]) { /* off day: no change */ }
+      else if (bank > 0) { bank--; frozen.push(d); }
+      else streak = 0;
+      best = Math.max(best, streak);
+    }
+  }
+  const doneToday = set.has(today);
+  if (doneToday) { practice(); best = Math.max(best, streak); }
+  const pausedNow = paused(today), offToday = pausedNow || !sched[dow(today)];
+  return { streak, best, freezes: bank, progress, toNextFreeze: bank >= STREAK_RULES.maxFreezes ? 0 : STREAK_RULES.freezeEvery - progress, frozen, doneToday, offToday, pausedNow, atRisk: streak > 0 && !doneToday && !offToday };
+}
 /* COURSE-FORMAT END */
-export { validateCourse, COURSE_FORMAT, COURSE_LIMITS };
+export { validateCourse, COURSE_FORMAT, COURSE_LIMITS, computeStreak, STREAK_RULES };

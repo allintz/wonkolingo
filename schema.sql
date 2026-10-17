@@ -54,3 +54,8 @@ CREATE TABLE IF NOT EXISTS grade_usage (
   n INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (day, player_id)
 );
+CREATE TABLE IF NOT EXISTS player_state (
+  player_id TEXT PRIMARY KEY,
+  json TEXT NOT NULL,
+  updated_at INTEGER NOT NULL
+);

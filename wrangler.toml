@@ -9,5 +9,5 @@ run_worker_first = ["/api/*"]
 
 [[d1_databases]]
 binding = "DB"
-database_name = "wonkolingo"
+database_name = "hill-speak"
 database_id = "0c6cfe6d-28ad-4e54-9b96-78d55d165124"

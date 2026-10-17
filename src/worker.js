@@ -1,9 +1,9 @@
 // WonkoLingo group play API. Static files come from ./docs; only /api/* reaches this code.
 // Identity is a random token per player (no passwords). The token doubles as a recovery code.
 
-import { validateCourse, COURSE_LIMITS } from './course-format.js';
+import { validateCourse, COURSE_LIMITS, computeStreak } from './course-format.js';
 import Anthropic from '@anthropic-ai/sdk';
-import { gradeAnswer, takeGradeQuota } from './grade.js';
+import { gradeAnswer, takeGradeQuota, hintFor } from './grade.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -39,16 +39,6 @@ function shiftDay(day, n) {
   const d = new Date(day + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().slice(0, 10);
 }
-// Consecutive days with a finished lesson, ending today or yesterday (in the viewer's calendar).
-function streakOf(days, today) {
-  const set = new Set(days);
-  let start = set.has(today) ? today : set.has(shiftDay(today, -1)) ? shiftDay(today, -1) : null;
-  if (!start) return { streak: 0, atRisk: false };
-  let n = 0, d = start;
-  while (set.has(d)) { n++; d = shiftDay(d, -1); }
-  return { streak: n, atRisk: start !== today };
-}
-
 async function auth(req, env) {
   const h = req.headers.get('Authorization') || '';
   const tok = h.startsWith('Bearer ') ? h.slice(7).trim() : '';
@@ -127,18 +117,24 @@ async function api(req, env, path) {
     const today = DAY_RE.test(url.searchParams.get('today') || '') ? url.searchParams.get('today') : new Date().toISOString().slice(0, 10);
     const ws = weekStart();
     const g = me.group_code;
-    const [players, totals, days, feed] = await env.DB.batch([
+    const [players, totals, days, feed, states] = await env.DB.batch([
       env.DB.prepare('SELECT id, name FROM players WHERE group_code = ?').bind(g),
       env.DB.prepare('SELECT player_id, SUM(xp) AS total, SUM(CASE WHEN created_at >= ? THEN xp ELSE 0 END) AS week, COUNT(*) AS lessons FROM completions WHERE group_code = ? GROUP BY player_id').bind(ws, g),
       env.DB.prepare('SELECT DISTINCT player_id, day FROM completions WHERE group_code = ? AND day >= ?').bind(g, shiftDay(today, -400)),
-      env.DB.prepare('SELECT c.player_id, p.name, c.lesson_id, c.title, c.acc, c.xp, c.created_at FROM completions c JOIN players p ON p.id = c.player_id WHERE c.group_code = ? ORDER BY c.created_at DESC LIMIT 12').bind(g)
+      env.DB.prepare('SELECT c.player_id, p.name, c.lesson_id, c.title, c.acc, c.xp, c.created_at FROM completions c JOIN players p ON p.id = c.player_id WHERE c.group_code = ? ORDER BY c.created_at DESC LIMIT 12').bind(g),
+      env.DB.prepare("SELECT s.player_id, json_extract(s.json, '$.activeDays') AS ad, json_extract(s.json, '$.settings') AS st FROM player_state s JOIN players p ON p.id = s.player_id WHERE p.group_code = ?").bind(g)
     ]);
+    const synced = new Map(states.results.map(r => { let ad = null, st = null; try { ad = JSON.parse(r.ad); } catch {} try { st = JSON.parse(r.st); } catch {} return [r.player_id, { ad, st }]; }));
     const tot = new Map(totals.results.map(r => [r.player_id, r]));
     const dayMap = new Map();
     for (const r of days.results) { if (!dayMap.has(r.player_id)) dayMap.set(r.player_id, []); dayMap.get(r.player_id).push(r.day); }
     const rows = players.results.map(p => {
       const t = tot.get(p.id) || {};
-      return { id: p.id, name: p.name, week: t.week || 0, total: t.total || 0, lessons: t.lessons || 0, ...streakOf(dayMap.get(p.id) || [], today) };
+      // Prefer the player's synced practice days and streak settings; fall back to days with posted results.
+      const sy = synced.get(p.id) || {};
+      const daysFor = Array.isArray(sy.ad) ? sy.ad.concat(dayMap.get(p.id) || []) : (dayMap.get(p.id) || []);
+      const st = computeStreak(daysFor, sy.st, today);
+      return { id: p.id, name: p.name, week: t.week || 0, total: t.total || 0, lessons: t.lessons || 0, streak: st.streak, atRisk: st.atRisk, freezes: st.freezes, offToday: st.offToday };
     });
     return json({ code: g, groupName: me.group_name, me: me.id, weekStart: ws, players: rows, feed: feed.results.map(f => ({ id: f.player_id, name: f.name, lessonId: f.lesson_id, title: f.title, acc: f.acc, xp: f.xp, at: f.created_at })) });
   }
@@ -160,6 +156,35 @@ async function api(req, env, path) {
       if (e instanceof Anthropic.APIError) return fail('The grader had an error. Grade yourself for this one.', 502);
       throw e;
     }
+  }
+
+  if (m === 'POST' && path === '/api/hint') {
+    if (!env.ANTHROPIC_API_KEY) return fail('Hints aren’t set up.', 503);
+    const b = await body(req);
+    if (!String(b.question || '').trim() || !String(b.answer || '').trim()) return fail('Missing question or model answer.');
+    const capped = await takeGradeQuota(env, me.id);
+    if (capped) return fail(capped, 429);
+    try {
+      const h = await hintFor(env, b);
+      return h ? json({ hint: h }) : fail('No hint available for this one.', 502);
+    } catch (e) {
+      if (e instanceof Anthropic.APIError) return fail('Couldn’t get a hint right now.', 502);
+      throw e;
+    }
+  }
+
+  // ---- synced progress (review schedule, practice days, streak settings) ----
+  if (m === 'GET' && path === '/api/state') {
+    const r = await env.DB.prepare('SELECT json, updated_at FROM player_state WHERE player_id = ?').bind(me.id).first();
+    return json({ state: r ? JSON.parse(r.json) : null, updatedAt: r ? r.updated_at : null });
+  }
+  if (m === 'POST' && path === '/api/state') {
+    const text = await req.text();
+    if (text.length > 800000) return fail('Progress is too large to sync.', 413);
+    let st; try { st = JSON.parse(text).state; } catch { return fail('That isn’t valid JSON.'); }
+    if (!st || typeof st !== 'object' || Array.isArray(st) || typeof st.srs !== 'object') return fail('Bad progress data.');
+    await env.DB.prepare('INSERT INTO player_state (player_id, json, updated_at) VALUES (?, ?, ?) ON CONFLICT(player_id) DO UPDATE SET json = excluded.json, updated_at = excluded.updated_at').bind(me.id, JSON.stringify(st), Date.now()).run();
+    return json({ ok: true });
   }
 
   // ---- group-made courses ----

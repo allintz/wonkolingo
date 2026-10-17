@@ -18,6 +18,8 @@ Start a group or join one with a 6-letter invite code to see everyone's streaks,
 
 Anyone in a group can add a course with **+ Add course**. Give your AI assistant the [course format guide](course-guide.md) (also at https://wonkolingo.alex-l-lintz.workers.dev/course-guide.md), upload the `.json` file it produces, and the app checks it before publishing it to your group. Everyone's lessons count toward the same leaderboard. Players can report wrong answers; only the author sees the reports. See [example-course.json](example-course.json) for a small complete course.
 
+Streaks are forgiving: you choose which days count (every day, weekdays or custom), can pause, and earn a streak freeze every 5 practice days (up to 3) that covers a missed day automatically. If you're in a group, progress syncs to the server so it follows you across devices.
+
 The previous lesson-path version is tagged `v1-lesson-path`.
 
 Answer grading needs an `ANTHROPIC_API_KEY` Worker secret (`wrangler secret put ANTHROPIC_API_KEY`); it's capped per player and per day in `src/grade.js`. Without it, players grade themselves.
@@ -30,4 +32,4 @@ The Staff Talk answers are generic rules of thumb from published staffer guides 
 
 ## Editing
 
-The source lives outside this repo. `build.sh` wraps it into `docs/index.html`; `deploy.sh` rebuilds and deploys the page and API to Cloudflare. For a new database, run `wrangler d1 execute hill-speak --remote --file schema.sql` once. To publish to GitHub Pages, commit and push `docs/`.
+The source lives outside this repo. `build.sh` wraps it into `docs/index.html`; `deploy.sh` rebuilds and deploys the page and API to Cloudflare. For a new database, run `wrangler d1 execute DB --remote --file schema.sql` once. To publish to GitHub Pages, commit and push `docs/`.

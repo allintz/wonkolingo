@@ -13,7 +13,7 @@ Your job: build one course on the topic the user names, as a single JSON file th
 5. **Build up.** Order units from basics to harder material. Each lesson should take two to four minutes: about 4 to 6 questions.
 6. **Mix question types.** Use mostly multiple choice, plus about one short-answer (`recall`) question per lesson and some matching and ordering.
 7. **Be honest about uncertainty.** Use the course `caveat` to say what the course simplifies, where facts change quickly, and what date the facts are current as of.
-8. **Write right answers that stand on their own.** WonkoLingo is a spaced-repetition app. A player first sees a multiple-choice question as written, but when it comes back for review days or weeks later, they have to type the answer from memory, and an AI grader compares it with your right option. So the right option must be a complete, correct answer to the question by itself ("60 votes, three-fifths of the Senate"), never "Both A and C" or "None of the above".
+8. **Write right answers that stand on their own.** WonkoLingo is a spaced-repetition app. Players type their answer to a multiple-choice question from memory, and an AI grader compares it with your right option (they can tap "Show choices" to see the options instead). So the right option must be a complete, correct answer to the question by itself ("60 votes, three-fifths of the Senate"), never "Both A and C" or "None of the above".
 9. **Explain wrong options when you can.** The optional `ow` field explains why each wrong option is wrong. Players who pick one see that note, which helps undo the pull of a plausible wrong answer.
 
 The app shuffles answer options, match pairs and ordering steps itself, so write them in any order. For ordering questions, list the steps in the **correct** order.
@@ -83,6 +83,7 @@ Keep the whole file under 200 KB. Fields not listed here are ignored.
 
 | `ow` | Optional. A list the same length as `o`, explaining why each option is wrong, with `""` for the right one. Each entry up to 300 characters. |
 | `keys` | Optional. 1 to 5 key points (up to 160 characters each) the AI grader should look for when the question comes back as a typed answer. |
+| `hint` | Optional. A nudge toward the answer (up to 200 characters) shown when the player taps "Give me a hint". It must not give the answer away. If you leave it out, the app writes one. |
 | `predict` | Optional `true`. Shows the question as "Make a prediction" (for example, how a vote or ruling turned out). Use only for real, resolved events, and say in `x` what actually happened. |
 
 ### Short answer (`"t": "recall"`)
@@ -97,7 +98,7 @@ Keep the whole file under 200 KB. Fields not listed here are ignored.
 }
 ```
 
-The player types an answer, says how sure they are, and an AI grader scores it from 0 to 3 against `answer` and `keys`. `p` (up to 300 characters), `answer` (up to 400) and `x` are required. Ask about something with a clear answer that can be stated in a sentence. "Why" and "what happens when" questions work well; open-ended opinion questions don't.
+The player types an answer, says how sure they are, and an AI grader scores it from 0 to 3 against `answer` and `keys`. `p` (up to 300 characters), `answer` (up to 400) and `x` are required; `keys` and `hint` work the same as for multiple choice. Ask about something with a clear answer that can be stated in a sentence. "Why" and "what happens when" questions work well; open-ended opinion questions don't.
 
 ### Matching (`"t": "match"`)
 
