@@ -1,15 +1,17 @@
-// Grades a typed short answer against a course's model answer with Claude Haiku 5.5.
+// Grades a typed short answer against a course's model answer with Claude Sonnet 5.5 (hints use Claude Haiku 5.5).
 // Cost guard: every call is counted per player and globally per UTC day in D1 before the model is called.
 
 import Anthropic from '@anthropic-ai/sdk';
 import { z } from 'zod';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 
-export const GRADE_LIMITS = { perPlayerPerDay: 150, perVisitorPerDay: 60, globalPerDay: 4000 };
+// Sonnet grades answers: in side-by-side tests it marked the same answer the same way across runs, and Haiku didn't.
+// It costs about 20 times as much per call (roughly 1.5 cents), so the site-wide daily cap is lower than it was for Haiku. Hints stay on Haiku.
+const GRADER_MODEL = 'claude-sonnet-5-5';
+export const GRADE_LIMITS = { perPlayerPerDay: 150, perVisitorPerDay: 40, globalPerDay: 1500 };
 
 const GradeSchema = z.object({
   asked: z.number().int(),
-  percent: z.number().int(),
   points: z.array(z.object({
     said: z.string(),
     verdict: z.enum(['right', 'partly', 'wrong', 'unsure']),
@@ -28,12 +30,13 @@ How to grade:
    - said: the learner's point, restated in a few words.
    - verdict: "right" (correct and answers the question), "partly" (on the right track but vague, imprecise, or only partly relevant), "wrong" (incorrect, or doesn't answer the question), or "unsure" (you can't confirm whether it's correct from the reference material and solid general knowledge).
    - note: one or two short sentences to the learner, in second person. Say what's right about it, what's off, and what the more precise answer is. If they misnamed something but the meaning is clear (an old or garbled name for an agency or bill), count it and give the correct current name, without adding history or dates you aren't sure of.
-2. For each point also set precision: "precise" (stated clearly and correctly enough for an expert), "minor_issue" (counts, but with a garbled or wrong name, a hedged half-idea, or a small inaccuracy), or "imprecise" (the idea is there but missing the specific that makes it a real policy or answer, e.g. a threshold without saying what it triggers). Don't mark an answer down for detail the question didn't ask for.
-   asked: how many separate items the question asks for: 2 for "name two" or "name one or two" or "what are the main objections", 1 only for a question with a single answer (one explanation, fact or name).
-   percent (0 to 100): only used when asked is 1. How much of what the question asked for the learner got right. Reserve 100 for complete, precise answers. Blank, "I don't know" or a vague gesture at a field ("regulation", "ban AI") is 0 or close to it.
+2. For each right point also set precision (use "precise" for partly, wrong and unsure points): "precise" (stated clearly and correctly enough for an expert), "minor_issue" (counts, but with a garbled or wrong name, a hedged half-idea, or a small inaccuracy), or "imprecise" (the idea is there but missing the specific that makes it a real policy or answer, e.g. a threshold without saying what it triggers). Don't mark an answer down for detail the question didn't ask for.
+   asked: how many separate items the question requires for full credit: 2 for "name two", 1 for "name one" or for a question with a single answer (one explanation, fact or name). If the question says "one or two", use 1.
+   The score is computed from these marks, so mark carefully: a blank, "I don't know" or a vague gesture at a field ("regulation", "ban AI") is "wrong"; a point that gets the core idea but misses or distorts something that matters is "partly".
 3. missed: up to 3 short items from the model answer or key points the learner didn't give that are most worth knowing. Empty if they covered it.
 4. feedback: one short sentence summarizing the result. No praise filler.
 
+Before calling a point off-list or unlisted, check it against the model answer and key points: equivalent wording counts as listed ("in-house independent auditors" = "embedded auditors"). Don't fault reasonable implications (auditors imply reporting to someone outside the lab).
 The model answer is one good answer, not the only one. Credit a different answer only when it is factually correct and actually answers the question; you must be confident of that. When you are not confident a claim is true, use "unsure" and say you can't confirm it, rather than marking it right or wrong.
 Judge meaning, not wording: paraphrases, abbreviations, hedges ("maybe", "?") and informal language are fine. Ignore spelling and grammar.
 Stay neutral. Many questions concern contested policy. Never say whether a policy is good or bad, and never present a contested view as fact: attribute views to their holders as the course does ("supporters say", "critics argue"). Only state facts that are in the reference material or that you are certain of. Don't add new numbers, dates or names unless they come from the reference material.
@@ -45,21 +48,15 @@ const clip = (s, n) => String(s || '').slice(0, n);
 const OPEN_NOTE = `This is an open question: the model answer lists examples of good answers, not every right one.
 Give full credit for any specific, real option, mechanism or objection that an informed policy expert would accept as correct and relevant, even if it isn't listed. Say in its note that it counts even though it isn't on the list.`;
 
-// List questions are scored in code from the per-point verdicts, so the same answer always gets the same score:
-// each of the N asked-for items earns right = 1, partly = 0.5, with small deductions for imprecision; extra wrong points cost a little.
+// Every answer is scored in code from the grader's per-point marks, so the same marks always give the same percent.
+// Each of the N asked-for items earns: right and precise 1, right with a minor issue 0.85, right but imprecise 0.7, partly 0.5.
+// Wrong points beyond the N slots are extra claims and cost 5 points each.
 const CREDIT = { right: 1, partly: 0.5, wrong: 0, unsure: 0 };
-const DEDUCT = { precise: 0, minor_issue: 0.25, imprecise: 0.4 };
+const RIGHT_BY_PRECISION = { precise: 1, minor_issue: 0.85, imprecise: 0.7 };
 export function scorePercent(o, points) {
   const n = Math.max(1, Math.min(5, Math.round(o.asked || 1)));
-  if (n === 1) {
-    let p = Math.max(0, Math.min(100, Math.round(o.percent || 0)));
-    if (!points.some(pt => pt.verdict === 'right' || pt.verdict === 'partly')) p = Math.min(p, 10);
-    else if (points.some(pt => pt.verdict === 'right')) p = Math.max(p, 50);
-    return p;
-  }
-  const credits = points.map(pt => Math.max(0, (CREDIT[pt.verdict] || 0) - (CREDIT[pt.verdict] ? DEDUCT[pt.precision] || 0 : 0))).sort((a, b) => b - a);
+  const credits = points.map(pt => pt.verdict === 'right' ? (RIGHT_BY_PRECISION[pt.precision] ?? 1) : (CREDIT[pt.verdict] || 0)).sort((a, b) => b - a);
   const got = credits.slice(0, n).reduce((a, b) => a + b, 0);
-  // Wrong points that didn't fill one of the N slots are extra claims; each costs 5 points.
   const wrong = points.filter(pt => pt.verdict === 'wrong').length, counted = points.length - wrong;
   const extraWrong = wrong - Math.min(wrong, Math.max(0, n - counted));
   return Math.max(0, Math.min(100, Math.round(100 * got / n - 5 * extraWrong)));
@@ -76,7 +73,7 @@ ${keyText}
 <explanation>${clip(explain, 900) || '(none)'}</explanation>
 <learner_answer>${clip(response, 1200)}</learner_answer>`;
   const msg = await client.messages.parse({
-    model: 'claude-haiku-5-5',
+    model: GRADER_MODEL,
     max_tokens: 4000,
     output_config: { effort: 'medium', format: zodOutputFormat(GradeSchema) },
     system: open === true ? SYSTEM + '\n' + OPEN_NOTE : SYSTEM,
