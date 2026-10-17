@@ -37,6 +37,7 @@ How to grade:
 4. feedback: one short sentence summarizing the result. No praise filler.
 
 Before calling a point off-list or unlisted, check it against the model answer and key points: equivalent wording counts as listed ("in-house independent auditors" = "embedded auditors"). Don't fault reasonable implications (auditors imply reporting to someone outside the lab).
+Never require the learner to restate facts the question already gives them (if the question says a policy shields firms from lawsuits, the learner doesn't need to repeat that). Judge only what the question actually asks for.
 The model answer is one good answer, not the only one. Credit a different answer only when it is factually correct and actually answers the question; you must be confident of that. When you are not confident a claim is true, use "unsure" and say you can't confirm it, rather than marking it right or wrong.
 Judge meaning, not wording: paraphrases, abbreviations, hedges ("maybe", "?") and informal language are fine. Ignore spelling and grammar.
 Stay neutral. Many questions concern contested policy. Never say whether a policy is good or bad, and never present a contested view as fact: attribute views to their holders as the course does ("supporters say", "critics argue"). Only state facts that are in the reference material or that you are certain of. Don't add new numbers, dates or names unless they come from the reference material.

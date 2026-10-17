@@ -16,6 +16,18 @@ Your job: build one course on the topic the user names, as a single JSON file th
 8. **Write right answers that stand on their own.** WonkoLingo is a spaced-repetition app. Players type their answer to a multiple-choice question from memory, and an AI grader compares it with your right option (they can tap "Show choices" to see the options instead). So the right option must be a complete, correct answer to the question by itself ("60 votes, three-fifths of the Senate"), never "Both A and C" or "None of the above".
 9. **Explain wrong options when you can.** The optional `ow` field explains why each wrong option is wrong. Players who pick one see that note, which helps undo the pull of a plausible wrong answer.
 
+### Writing questions players can answer well
+
+Players type answers from memory and an AI grader scores them, so how a question is worded decides what a good answer looks like.
+
+- **Don't give the answer away in the setup.** Context in the question should help the player understand it, never answer it. Bad: "A safe harbor shields developers from lawsuits if they meet conditions. How does it improve safety?" (the answer is "it rewards meeting the conditions," which the question already said). Better: "Why do supporters prefer a safe harbor to safety mandates or ordinary lawsuits?"
+- **Name exactly what the answer should address.** "Name two policies to address this" is ambiguous when a scenario has several problems in it. Say which one: "...so mistakes or sabotage by the AI could go unnoticed. Name two policies proposed to catch this."
+- **Ask for an exact number.** "Name two," never "name one or two" or "what are the objections." The grader gives credit per item, so the player needs to know how many earn full marks. Ask for no more items than the answer lists, and ideally fewer, so players have room to choose.
+- **Ask for what's distinctive.** Good questions test what separates this policy or idea from similar ones (why this and not a mandate, what this variant adds), not a restatement of its definition.
+- **Prefer understanding over source trivia.** "What example do the authors give in section 3?" tests memory of a document. "What tradeoff does this create?" tests whether the player understands it. Use source-specific questions sparingly, for genuinely important claims.
+- **Attribute views.** When the answer is an opinion, a framework or an objection, say whose it is in the question ("What do critics say...", "According to IFP..."). Don't present contested views as facts.
+- **Write the model answer at the precision you'd give full credit for.** The grader treats the model answer as the bar for "precise," so include the specifics that matter (what a threshold triggers, who checks, who gets the report).
+
 The app shuffles answer options, match pairs and ordering steps itself, so write them in any order. For ordering questions, list the steps in the **correct** order.
 
 ## File structure
