@@ -57,13 +57,14 @@ const DisputeSchema = GradeSchema.extend({
 
 const DISPUTE_NOTE = `The learner thinks the first grade (in <first_grade>) was wrong and explained why in <learner_dispute_note>. You are the second, more careful grader.
 Grade the answer again from scratch with the same rules. Defer to neither the first grader nor the learner: judge on the merits.
-Take the learner's note seriously as information. If they proposed a real policy, mechanism or objection that isn't in the course material, check carefully whether it is real and relevant and credit it if so; new ideas the course missed are exactly what disputes are for. If they point to a fact the first grader got wrong, check it.
+Take the learner's note seriously as information. If they proposed a policy, mechanism or objection that isn't in the course material, judge whether it is a specific and reasonable way to address what the question asks. It doesn't have to be an existing proposal: original ideas count if they are plausible, and new ideas the course missed are exactly what disputes are for. Say whether it is an existing proposal or a new idea, and note the main practical concern if there is one. If they point to a fact the first grader got wrong, check it.
 outcome: "upheld" if the first grade was clearly wrong in the learner's favor, "partly_upheld" if it was somewhat too harsh, "rejected" if it was fair or too generous.
 reply: two or three sentences to the learner, in second person, saying what you decided and why. If the course material itself looks incomplete or wrong, say so plainly.`;
 
 // Extra instruction for "open" questions, where the model answer lists examples of right answers rather than the full set.
 const OPEN_NOTE = `This is an open question: the model answer lists examples of good answers, not every right one.
-Give full credit for any specific, real option, mechanism or objection that an informed policy expert would accept as correct and relevant, even if it isn't listed. Say in its note that it counts even though it isn't on the list.`;
+Give full credit for any specific, real option, mechanism or objection that an informed policy expert would accept as correct and relevant, even if it isn't listed. Say in its note that it counts even though it isn't on the list.
+Also credit original ideas. A specific, plausible policy or argument that would reasonably address the problem the question states counts as right even if nobody has formally proposed it: say in its note that it's a new idea rather than an existing proposal, and mention the main practical concern if there's an obvious one. Novelty is welcome; vagueness isn't, so a gesture at a field ("more oversight") still doesn't count. If the learner claims something exists that doesn't (a law, a bill, a program), mark that claim wrong.`;
 
 // Every answer is scored in code from the grader's per-point marks, so the same marks always give the same percent.
 // Each of the N asked-for items earns: right and precise 1, right with a minor issue 0.85, right but imprecise 0.7, partly 0.5.
