@@ -1,0 +1,6 @@
+[
+ {"card": "Cloud know-your-customer (KYC) rules would make", "response": "Basically companies in China could train their AI on cloude compute located in other countries so you don't limit their ability to train frontier models as much", "target": [80, 100], "note": "Alex 10/17: ~90 reasonable. Core gap right; narrows it to foreign data centers (remote access from US clouds is also the gap)."},
+ {"card": "Suppose AI agents now write most", "response": "You could have a monitorabiity requirement which would mean that companies would be required to be able to check what's happening?", "target": [20, 40], "note": "Alex 10/17: 25% reasonable. One vague item where the question asks for two."},
+ {"card": "Suppose AI agents now write most", "response": "Mandatory human review of a minimum share of AI-written research code, and continuous monitoring and logging of what internal AI agents do", "target": [90, 100], "note": "Precise two-item answer; should score at or near full credit."},
+ {"card": "Suppose a lab runs an unreleased", "response": "In-house independent auditors could help and transparency laws which require incident reporting could help in the event of incidents", "target": [70, 85], "note": "Alex 10/17: auditors imply reporting to regulators, so the auditor item is fully right; incident reporting only partly fits internal use."}
+]

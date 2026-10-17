@@ -3,7 +3,7 @@
 
 import { validateCourse, COURSE_LIMITS, computeStreak } from './course-format.js';
 import Anthropic from '@anthropic-ai/sdk';
-import { gradeAnswer, takeGradeQuota, hintFor } from './grade.js';
+import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor } from './grade.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -103,7 +103,7 @@ async function api(req, env, path) {
   }
 
   // Grading and hints work without a group: visitors are counted by a hash of their IP for the daily cap.
-  if (m === 'POST' && (path === '/api/grade' || path === '/api/hint')) {
+  if (m === 'POST' && (path === '/api/grade' || path === '/api/hint' || path === '/api/dispute')) {
     const who = await graderId(req, env);
     if (m === 'POST' && path === '/api/grade') {
       if (!env.ANTHROPIC_API_KEY) return fail('Answer grading isn’t set up.', 503);
@@ -121,6 +121,29 @@ async function api(req, env, path) {
         if (e instanceof Anthropic.RateLimitError) return fail('The grader is busy. Grade yourself for this one.', 503);
         if (e instanceof Anthropic.AuthenticationError) return fail('Answer grading isn’t set up correctly.', 503);
         if (e instanceof Anthropic.APIError) return fail('The grader had an error. Grade yourself for this one.', 502);
+        throw e;
+      }
+    }
+
+    // "I think the grader is wrong": Opus re-grades with the learner's note, and the case is saved for review.
+    if (m === 'POST' && path === '/api/dispute') {
+      if (!env.ANTHROPIC_API_KEY) return fail('Answer grading isn’t set up.', 503);
+      const b = await body(req);
+      if (!String(b.response || '').trim() || !String(b.question || '').trim() || !String(b.answer || '').trim()) return fail('Missing the answer to re-grade.');
+      const capped = await takeDisputeQuota(env, who);
+      if (capped) return fail(capped, 429);
+      const first = b.first && typeof b.first === 'object' ? { percent: b.first.percent, points: b.first.points, feedback: b.first.feedback } : {};
+      const note = String(b.note || '').slice(0, 800);
+      const ins = await env.DB.prepare('INSERT INTO disputes (who, course, card, question, answer, response, note, first_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        .bind(who, String(b.course || '').slice(0, 80), String(b.card || '').slice(0, 120), String(b.question).slice(0, 700), String(b.answer).slice(0, 700), String(b.response).slice(0, 1200), note, JSON.stringify(first).slice(0, 4000), Date.now()).run();
+      const id = ins.meta.last_row_id;
+      try {
+        const g = await gradeAnswer(env, b, { first, note });
+        if (!g || g.refused) return fail('The second grader couldn’t grade this one. Your note was saved for review.', 422);
+        await env.DB.prepare('UPDATE disputes SET regrade_json = ?, outcome = ? WHERE id = ?').bind(JSON.stringify({ percent: g.percent, points: g.points, missed: g.missed, feedback: g.feedback, reply: g.reply }), g.outcome, id).run();
+        return json({ score: g.score, percent: g.percent, points: g.points, missed: g.missed, feedback: g.feedback, outcome: g.outcome, reply: g.reply });
+      } catch (e) {
+        if (e instanceof Anthropic.APIError) return fail('The second grader had an error. Your note was saved for review.', 502);
         throw e;
       }
     }

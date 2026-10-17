@@ -26,7 +26,7 @@ Players type answers from memory and an AI grader scores them, so how a question
 - **Ask for what's distinctive.** Good questions test what separates this policy or idea from similar ones (why this and not a mandate, what this variant adds), not a restatement of its definition.
 - **Prefer understanding over source trivia.** "What example do the authors give in section 3?" tests memory of a document. "What tradeoff does this create?" tests whether the player understands it. Use source-specific questions sparingly, for genuinely important claims.
 - **Attribute views.** When the answer is an opinion, a framework or an objection, say whose it is in the question ("What do critics say...", "According to IFP..."). Don't present contested views as facts.
-- **Write the model answer at the precision you'd give full credit for.** The grader treats the model answer as the bar for "precise," so include the specifics that matter (what a threshold triggers, who checks, who gets the report).
+- **Write the model answer at the precision you'd give full credit for.** The grader treats the model answer as the bar for "precise," so include the specifics that matter (what a threshold triggers, who checks, who gets the report). Put extra context (consequences, history, related facts) in the explanation `x`, which players see right below the model answer. The grader only grades what the question asks, so extra detail is welcome there and never required.
 
 The app shuffles answer options, match pairs and ordering steps itself, so write them in any order. For ordering questions, list the steps in the **correct** order.
 

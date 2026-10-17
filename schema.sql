@@ -59,3 +59,20 @@ CREATE TABLE IF NOT EXISTS player_state (
   json TEXT NOT NULL,
   updated_at INTEGER NOT NULL
 );
+-- Disputed AI grades: the player says the grader got it wrong, Opus re-grades, and the case is kept for course and grader fixes.
+CREATE TABLE IF NOT EXISTS disputes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  who TEXT NOT NULL,
+  course TEXT NOT NULL,
+  card TEXT NOT NULL,
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  response TEXT NOT NULL,
+  note TEXT NOT NULL,
+  first_json TEXT NOT NULL,
+  regrade_json TEXT,
+  outcome TEXT,
+  status TEXT NOT NULL DEFAULT 'open',
+  created_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_disputes_status ON disputes(status, created_at);

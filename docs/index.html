@@ -214,6 +214,9 @@ svg { display: block; }
 .recall-ans span { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--good); }
 .recall-ans p { margin: 0; font-weight: 700; color: var(--fg); }
 .fb .aifb { font-weight: 700; color: var(--fg); }
+.fb .second { border-left: 4px solid var(--primary); padding-left: 10px; display: grid; gap: 2px; }
+.fb .second span { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--primary); }
+.fb .second p { color: var(--fg); font-weight: 700; }
 .fb .checking { display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--muted); }
 .spin { width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--primary); animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -4467,13 +4470,13 @@ const POLICY_UNITS = [
      {
       "t": "recall",
       "p": "Cloud know-your-customer (KYC) rules would make cloud providers verify who rents large amounts of AI compute. What gap in export controls do supporters say this closes?",
-      "answer": "Firms in restricted countries can rent the same chips through cloud data centers that they are barred from buying. KYC lets the government see who is training very large models, deny service to adversaries, and in principle cut off access quickly.",
+      "answer": "Firms in restricted countries can rent the same advanced chips through cloud data centers (abroad or in the US) that export controls bar them from buying.",
       "keys": [
        "Chips barred from sale can still be rented via the cloud",
        "Few cloud providers sell most frontier compute: a precise control point",
        "Visibility into who trains large models; can deny or suspend access"
       ],
-      "x": "Janet Egan and Lennart Heim (2023) proposed KYC for compute providers. Commerce proposed a customer identification rule for cloud (infrastructure-as-a-service) providers in January 2024 that was never finalized. A narrower path, the Remote Access Security Act, makes foreign remote access to controlled chips an export needing a license; it passed the House 369-22 in January 2026."
+      "x": "KYC would let the government see who is training very large models, deny service to adversaries, and in principle cut off access quickly. Janet Egan and Lennart Heim (2023) proposed KYC for compute providers. Commerce proposed a customer identification rule for cloud (infrastructure-as-a-service) providers in January 2024 that was never finalized. A narrower path, the Remote Access Security Act, makes foreign remote access to controlled chips an export needing a license; it passed the House 369-22 in January 2026."
      },
      {
       "t": "recall",
@@ -6117,7 +6120,7 @@ async function submitTyped(conf) {
   if (!run || run.phase !== 'answer') return;
   const it = run.cur, text = ($('#recallIn').value || '').trim();
   if (conf !== 'none' && !text) { toast('Type an answer first, or tap “I don’t know”.'); return; }
-  run.phase = 'grading'; it._conf = conf;
+  run.phase = 'grading'; it._conf = conf; it._resp = text;
   $('#recallIn').disabled = true; $('#stage').querySelectorAll('[data-conf]').forEach(b => b.disabled = true);
   if (conf === 'none') return showTyped(it, 0, '', 'guess', 'none');
   // Show the model answer and explanation right away; the grade fills in above them when it arrives.
@@ -6125,7 +6128,7 @@ async function submitTyped(conf) {
   fb.innerHTML = `<p class="checking"><span class="spin" aria-hidden="true"></span>Grading your answer…</p><div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${esc(typedAnswerOf(it))}</p></div><p>${esc(it.x)}</p>`;
   if (!it._noAI) {
     try {
-      const r = await apiCall('/api/grade', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [], explain: it.x || '', response: text, open: it.open === true });
+      const r = await apiCall('/api/grade', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [], explain: it.x || '', response: text, open: it.open === true, accepted: (state.accepted || {})[it._card] || [] });
       if (run && run.cur === it) showTyped(it, r.score, r.feedback, conf, 'ai', r);
       return;
     } catch (e) { if (run && run.cur === it) selfGrade(it, conf, e instanceof TypeError ? 'Couldn’t reach the grader.' : e.message); return; }
@@ -6170,7 +6173,7 @@ function pointsHTML(d) {
   return pts + miss;
 }
 function showTyped(it, score, feedback, conf, source, detail) {
-  run.phase = 'feedback';
+  run.phase = 'feedback'; it._detail = detail || null;
   it._snap = { prev: state.srs[it._card], graded: run.graded.has(it._card), xp: run.xp, reviewed: run.reviewed, remembered: run.remembered, newSeen: run.newSeen, newCount: state.newCount, correct: run.correct, qlen: run.queue.length, wrongHad: run.wrong.has(it.key) };
   const pct = detail && Number.isFinite(detail.percent) ? detail.percent : null;
   const g = pct !== null ? fsrsFromPct(pct) : fsrsFrom(score, conf);
@@ -6184,7 +6187,7 @@ function showTyped(it, score, feedback, conf, source, detail) {
   $('#foot').className = 'lfoot ' + (ok ? 'good' : 'bad');
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
   const heads = ['Not quite.', 'Partly there.', 'Mostly right.', 'Exactly right.'];
-  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${pct !== null ? `<span class="gpct">${pct}%</span>` : ''}${heads[score]}</h4>${source === 'ai' && feedback ? `<p class="aifb">${esc(feedback)}</p>` : ''}${source === 'ai' ? pointsHTML(detail) : ''}<div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${esc(typedAnswerOf(it))}</p></div><p>${esc(it.x)}</p>${it._hinted && score >= 2 ? '<p class="meta">You used a hint, so this one comes back a little sooner.</p>' : ''}${conf === 'cold' && score === 0 ? '<p class="whynot"><span>Confident miss</span>You were sure about this one, so it comes back tomorrow. These are the mistakes most worth fixing.</p>' : ''}${source === 'ai' ? '<p class="meta">Graded by AI. <button class="linkbtn" id="regrade">Grade it myself</button></p>' : ''}${reportHTML(it)}`;
+  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${pct !== null ? `<span class="gpct">${pct}%</span>` : ''}${heads[score]}</h4>${detail && detail.reply ? `<div class="second"><span>Second opinion from a stronger grader</span><p>${esc(detail.reply)}</p></div>` : ''}${source === 'ai' && feedback ? `<p class="aifb">${esc(feedback)}</p>` : ''}${source === 'ai' ? pointsHTML(detail) : ''}<div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${esc(typedAnswerOf(it))}</p></div><p>${esc(it.x)}</p>${it._hinted && score >= 2 ? '<p class="meta">You used a hint, so this one comes back a little sooner.</p>' : ''}${conf === 'cold' && score === 0 ? '<p class="whynot"><span>Confident miss</span>You were sure about this one, so it comes back tomorrow. These are the mistakes most worth fixing.</p>' : ''}${source === 'ai' ? `<p class="meta" id="gradeMeta">${detail && detail.reply ? 'Re-graded by a stronger AI.' : 'Graded by AI.'} ${detail && detail.reply ? '' : '<button class="linkbtn" id="dispute">I think the grader is wrong</button> '}<button class="linkbtn" id="regrade">Grade it myself</button></p>` : ''}${reportHTML(it)}`;
   const b = $('#checkBtn'); b.hidden = false; b.disabled = false; b.textContent = 'Continue'; b.focus({ preventScroll: true });
 }
 // Undo an AI grade so the learner can grade the same answer themselves.
@@ -6208,6 +6211,32 @@ $('#fb').addEventListener('click', e => {
   const sb = e.target.closest('[data-self]');
   if (sb && run.phase === 'selfgrade') { showTyped(run.cur, +sb.dataset.self, '', run.selfConf || 'sure', 'self'); return; }
   if (e.target.closest('#regrade') && run.phase === 'feedback') { const it = run.cur; const conf = run.selfConf; undoTyped(it); $('#foot').className = 'lfoot'; selfGrade(it, it._conf || 'sure', ''); }
+});
+// "I think the grader is wrong": collect an optional note, get a second opinion from a stronger model, and replace the grade.
+$('#fb').addEventListener('click', async e => {
+  if (!run || run.phase !== 'feedback') return;
+  const it = run.cur;
+  if (e.target.closest('#dispute')) {
+    $('#gradeMeta').outerHTML = `<div class="repbox" id="dispBox"><label class="gq" for="dispNote">Why do you think the grader is wrong?</label><textarea id="dispNote" rows="3" maxlength="800" placeholder="For example: my second policy is real (say where it comes from), or the grader misread what I said."></textarea><div class="row"><button class="btn ghost sm" id="dispSend">Get a second opinion</button></div><p class="meta">Your answer and note are saved so the course and grader can be improved.</p></div>`;
+    $('#dispNote').focus(); return;
+  }
+  if (e.target.closest('#dispSend')) {
+    const note = ($('#dispNote').value || '').trim();
+    if (note.length < 10) { toast('Say briefly why you think the grade is wrong. The second grader uses it.'); $('#dispNote').focus(); return; }
+    $('#dispBox').innerHTML = '<p class="checking"><span class="spin" aria-hidden="true"></span>Getting a second opinion…</p>';
+    run.phase = 'disputing';
+    try {
+      const r = await apiCall('/api/dispute', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [], explain: it.x || '', response: it._resp || '', open: it.open === true, first: it._detail, note, course: it._course || '', card: it._card || '' });
+      if (!run || run.cur !== it) return;
+      // Remember answers accepted on appeal so the grader credits the same point next time this card comes up.
+      if (r.outcome === 'upheld' || r.outcome === 'partly_upheld') { state.accepted = state.accepted || {}; state.accepted[it._card] = [...(state.accepted[it._card] || []), { r: String(it._resp || '').slice(0, 400), why: String(r.reply || '').slice(0, 300) }].slice(-3); save(); }
+      undoTyped(it); showTyped(it, r.score, r.feedback, it._conf || 'sure', 'ai', r);
+    } catch (err) {
+      if (!run || run.cur !== it) return;
+      run.phase = 'feedback';
+      const box = $('#dispBox'); if (box) box.innerHTML = `<p class="meta">${esc(err instanceof TypeError ? 'Couldn’t reach the grader.' : err.message)}</p>`;
+    }
+  }
 });
 
 // srsGrade defaults to good (3) when correct and missed (1) when wrong; matching with misses passes 2.
@@ -6707,7 +6736,7 @@ $('#streakBody').addEventListener('click', e => {
 
 /* ---------- sync progress to the server ---------- */
 let syncTimer = null, syncBusy = false, syncAgain = false;
-function syncPayload() { const { srs, done, jumped, activeDays, xp, settings, settingsAt, newDay, newCount, hints } = state; return { v: 1, srs, done, jumped, activeDays, xp, settings, settingsAt, newDay, newCount, hints }; }
+function syncPayload() { const { srs, done, jumped, activeDays, xp, settings, settingsAt, newDay, newCount, hints, accepted } = state; return { v: 1, srs, done, jumped, activeDays, xp, settings, settingsAt, newDay, newCount, hints, accepted }; }
 // Merges another device's progress into this one: the most-reviewed copy of each card wins, practice days are combined.
 function mergeStates(a, b) {
   const out = { ...a };
@@ -6722,6 +6751,7 @@ function mergeStates(a, b) {
   if ((b.newDay || '') > (a.newDay || '')) { out.newDay = b.newDay; out.newCount = b.newCount; }
   else if (b.newDay === a.newDay) out.newCount = Math.max(a.newCount || 0, b.newCount || 0);
   out.hints = { ...(b.hints || {}), ...(a.hints || {}) };
+  out.accepted = { ...(b.accepted || {}), ...(a.accepted || {}) };
   return out;
 }
 async function syncNow() {
