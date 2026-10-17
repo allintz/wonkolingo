@@ -1,6 +1,6 @@
 # WonkoLingo
 
-A spaced-repetition quiz app for groups of friends, with a Duolingo-style social layer. Every question becomes a card that comes back for review on a schedule (the [FSRS](https://github.com/open-spaced-repetition/fsrs4anki) algorithm with default weights). Reviews ask you to type the answer from memory and say how sure you are; Claude Haiku 5.5 grades the answer and explains what you missed, and the score plus your confidence set when the card comes back. Everyone can write courses (with help from their AI assistant), and the group competes on streaks and XP. It ships with three built-in courses:
+A spaced-repetition quiz app for groups of friends, with a Duolingo-style social layer. Every question becomes a card that comes back for review on a schedule (the [FSRS](https://github.com/open-spaced-repetition/fsrs4anki) algorithm with default weights). Reviews ask you to type the answer from memory; Claude Sonnet 5.5 grades it, giving a percent score and a note on each point you made, and the score sets when the card comes back. If you think the grader got it wrong, you can say why and get a second opinion from Claude Opus 5.5; disputes are saved for review. Everyone can write courses (with help from their AI assistant), and the group competes on streaks and XP. It ships with built-in courses, including:
 
 - **Staff Talk:** decoding what Capitol Hill staffers mean ("we're monitoring the issue closely").
 - **Procedure:** how bills move through the House and Senate: committees, the Rules Committee, cloture, reconciliation, conference, vetoes and the Congressional Review Act.
@@ -22,7 +22,7 @@ Streaks are forgiving: you choose which days count (every day, weekdays or custo
 
 The previous lesson-path version is tagged `v1-lesson-path`.
 
-Answer grading needs an `ANTHROPIC_API_KEY` Worker secret (`wrangler secret put ANTHROPIC_API_KEY`); it's capped per player and per day in `src/grade.js`. Without it, players grade themselves.
+Answer grading needs an `ANTHROPIC_API_KEY` Worker secret (`wrangler secret put ANTHROPIC_API_KEY`); it's capped per player and per day in `src/grade.js`. Without it, players grade themselves. Grading works without joining a group; visitors are capped by a salted hash of their IP. `scripts/disputes.sh` lists disputed grades, and `scripts/grade_one.py --calibration` reruns a set of hand-graded answers (`scripts/calibration.json`) against the current grader prompt; run it before changing the prompt, scoring or model.
 
 The backend is a Cloudflare Worker (`src/worker.js`) with a D1 database (`schema.sql`). The GitHub Pages copy talks to the same API.
 
