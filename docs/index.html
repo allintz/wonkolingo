@@ -217,6 +217,18 @@ svg { display: block; }
 .fb .second { border-left: 4px solid var(--primary); padding-left: 10px; display: grid; gap: 2px; }
 .fb .second span { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--primary); }
 .fb .second p { color: var(--fg); font-weight: 700; }
+/* mascot (owl illustrations in mascot/) */
+.mascot { display: block; height: auto; pointer-events: none; user-select: none; }
+.welcome { grid-template-columns: minmax(0, 1fr) auto; column-gap: 16px; }
+.welcome > * { grid-column: 1; }
+.welcome > .steps, .welcome > .row { grid-column: 1 / -1; }
+.m-welcome { grid-column: 2; grid-row: 1 / span 3; align-self: center; width: 150px; }
+.m-result { width: 150px; }
+.m-think { width: 40px; }
+.m-today { width: 64px; flex: none; order: -1; }
+.today.done { justify-content: flex-start; }
+.today.done .btn { margin-left: auto; }
+@media (max-width: 520px) { .m-welcome { width: 104px; } .m-result { width: 120px; } }
 .fb .checking { display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--muted); }
 .spin { width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--primary); animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -6125,7 +6137,7 @@ async function submitTyped(conf) {
   if (conf === 'none') return showTyped(it, 0, '', 'guess', 'none');
   // Show the model answer and explanation right away; the grade fills in above them when it arrives.
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
-  fb.innerHTML = `<p class="checking"><span class="spin" aria-hidden="true"></span>Grading your answer…</p><div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${esc(typedAnswerOf(it))}</p></div><p>${esc(it.x)}</p>`;
+  fb.innerHTML = `<p class="checking"><img class="mascot m-think" src="mascot/think.webp" alt=""><span class="spin" aria-hidden="true"></span>Grading your answer…</p><div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${esc(typedAnswerOf(it))}</p></div><p>${esc(it.x)}</p>`;
   if (!it._noAI) {
     try {
       const r = await apiCall('/api/grade', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [], explain: it.x || '', response: text, open: it.open === true, accepted: (state.accepted || {})[it._card] || [] });
@@ -6278,7 +6290,7 @@ function finish() {
   groupPost(L, run.xp, acc);
   const nextL = LESSONS[run.idx + 1];
   $('#result').classList.remove('failed');
-  $('#resultIn').innerHTML = `${ICON.seal}<h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc)}<div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc)}<div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
   show('#result');
   $('#rHome').onclick = goHome; $('#rHome').focus();
 }
@@ -6293,7 +6305,7 @@ function finishSession() {
   if (run.reviewed) parts.push(`You remembered ${run.remembered} of ${run.reviewed} review${run.reviewed === 1 ? '' : 's'}`);
   if (run.newSeen) parts.push(`learned ${run.newSeen} new card${run.newSeen === 1 ? '' : 's'}`);
   $('#result').classList.remove('failed');
-  $('#resultIn').innerHTML = `${ICON.seal}<h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${more ? more + ' more reviews are due.' : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${G ? `<p>Posted to ${esc(G.groupName)}.</p>` : ''}<div class="rbtns"><button class="btn" id="rHome">Done</button>${more || canLearn ? `<button class="btn ghost" id="rMore">${more ? 'Keep reviewing' : 'Learn 5 more'}</button>` : ''}</div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${more ? more + ' more reviews are due.' : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${G ? `<p>Posted to ${esc(G.groupName)}.</p>` : ''}<div class="rbtns"><button class="btn" id="rHome">Done</button>${more || canLearn ? `<button class="btn ghost" id="rMore">${more ? 'Keep reviewing' : 'Learn 5 more'}</button>` : ''}</div>`;
   show('#result');
   $('#rHome').onclick = goHome; $('#rHome').focus();
   if ($('#rMore')) $('#rMore').onclick = () => startSession(true);
@@ -6301,7 +6313,7 @@ function finishSession() {
 function fail() {
   const i = run.idx;
   $('#result').classList.add('failed');
-  $('#resultIn').innerHTML = `${ICON.heart}<h2>Out of hearts.</h2><p>Five misses ends the lesson. You’ve now seen the explanations, so the second pass usually goes faster.</p><div class="rbtns"><button class="btn" id="rRetry">Try again</button><button class="btn ghost" id="rHome">Back to path</button></div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/skeptic.webp" alt=""><h2>Out of hearts.</h2><p>Five misses ends the lesson. You’ve now seen the explanations, so the second pass usually goes faster.</p><div class="rbtns"><button class="btn" id="rRetry">Try again</button><button class="btn ghost" id="rHome">Back to path</button></div>`;
   show('#result');
   $('#rRetry').onclick = () => startLesson(i); $('#rHome').onclick = goHome; $('#rRetry').focus();
 }
@@ -6606,7 +6618,7 @@ function courseProgress(key) {
   return { done, total };
 }
 function welcomeHTML() {
-  return `<section class="welcome"><p class="kicker">Welcome to WonkoLingo</p><h2>Learn anything with your friends</h2>
+  return `<section class="welcome"><img class="mascot m-welcome" src="mascot/wave.webp" alt="WonkoLingo owl waving"><p class="kicker">Welcome to WonkoLingo</p><h2>Learn anything with your friends</h2>
     <p>Pick any topic. Your AI assistant turns it into a bite-size course in a few minutes. Then you and your friends play each other’s courses and compete on streaks and points.</p>
     <ol class="steps"><li><span><b>Start a group</b> and invite friends, or just use it yourself.</span></li><li><span><b>Make a course</b> by pasting our prompt into Claude or another AI assistant.</span></li><li><span><b>Play and compete</b> on your group’s weekly leaderboard.</span></li></ol>
     <div class="row"><button class="btn" id="wCreate">Create your first course</button><button class="btn ghost" id="wBrowse">Try an example course</button></div></section>`;
@@ -6668,7 +6680,7 @@ function renderToday() {
     el.innerHTML = `<section class="today"><div class="today-main"><p class="kicker">Today</p><h2>${what}</h2><p>About ${mins} minute${mins === 1 ? '' : 's'}. You type answers from memory and AI grades them.${due > SESSION_REVIEWS ? ` ${due - SESSION_REVIEWS} more are waiting for later sessions.` : ''}</p></div><button class="btn" id="todayGo">Start</button></section>`;
   } else {
     const next = Object.values(state.srs).map(c => c.due).filter(d => d > today).sort()[0];
-    el.innerHTML = `<section class="today done"><div class="today-main"><p class="kicker">Today</p><h2>All caught up</h2><p>${next ? 'Your next reviews are due ' + whenText(next) + '.' : ''}${avail ? ' You can learn more now if you want.' : ''}</p></div>${avail ? '<button class="btn ghost" id="todayMore">Learn 5 more</button>' : ''}</section>`;
+    el.innerHTML = `<section class="today done"><img class="mascot m-today" src="mascot/read.webp" alt=""><div class="today-main"><p class="kicker">Today</p><h2>All caught up</h2><p>${next ? 'Your next reviews are due ' + whenText(next) + '.' : ''}${avail ? ' You can learn more now if you want.' : ''}</p></div>${avail ? '<button class="btn ghost" id="todayMore">Learn 5 more</button>' : ''}</section>`;
   }
 }
 $('#todayWrap').addEventListener('click', e => {
