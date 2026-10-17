@@ -214,6 +214,9 @@ svg { display: block; }
 .recall-ans span { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--good); }
 .recall-ans p { margin: 0; font-weight: 700; color: var(--fg); }
 .fb .aifb { font-weight: 700; color: var(--fg); }
+.fb .checking { display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--muted); }
+.spin { width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--primary); animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .gpct { font-variant-numeric: tabular-nums; margin-right: 8px; }
 .gpts { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .gpts li { display: grid; gap: 2px; border-left: 4px solid var(--line-deep); padding: 2px 0 2px 10px; font-size: 15px; font-weight: 600; }
@@ -6117,7 +6120,9 @@ async function submitTyped(conf) {
   run.phase = 'grading'; it._conf = conf;
   $('#recallIn').disabled = true; $('#stage').querySelectorAll('[data-conf]').forEach(b => b.disabled = true);
   if (conf === 'none') return showTyped(it, 0, '', 'guess', 'none');
-  const fb = $('#fb'); fb.hidden = false; fb.className = 'fb hint'; fb.innerHTML = '<p>Checking your answer…</p>';
+  // Show the model answer and explanation right away; the grade fills in above them when it arrives.
+  const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
+  fb.innerHTML = `<p class="checking"><span class="spin" aria-hidden="true"></span>Grading your answer…</p><div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${esc(typedAnswerOf(it))}</p></div><p>${esc(it.x)}</p>`;
   if (!it._noAI) {
     try {
       const r = await apiCall('/api/grade', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [], explain: it.x || '', response: text, open: it.open === true });
