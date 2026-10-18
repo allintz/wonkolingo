@@ -5905,6 +5905,9 @@ function renderPotd() {
   if (!COURSES[state.course]) { $('#potd').hidden = true; return; }
   const pool = LESSONS.flatMap(l => l.items).filter(it => it.t === 'mc' && (state.course === 'lingo' ? it.q : true));
   const day = Math.floor(new Date(dstr(new Date()) + 'T12:00:00').getTime() / 864e5);
+  // A course with no multiple-choice cards has no question of the day; throwing here would stop the rest of startup.
+  if (!pool.length) { $('#potd').hidden = true; return; }
+  $('#potd').hidden = false;
   const it = pool[day % pool.length];
   const sp = spk(it);
   const head = it.q ? `<h3>Phrase of the day</h3><div class="quote-sm">${esc(it.q)}</div><div class="who-sm">${esc(sp.n)}, ${esc(sp.r)}</div>` : `<h3>Question of the day</h3><p class="potd-q">${esc(it.p)}</p>`;
