@@ -1,0 +1,1032 @@
+[
+  {
+    "term": "6(b) authority",
+    "match": [
+      "Section 6(b) authority",
+      "6(b) authority"
+    ],
+    "def": "Power under Section 6(b) of the FTC Act letting the Federal Trade Commission order companies to submit information for studies of an industry, separate from any enforcement case.",
+    "src": "https://www.law.cornell.edu/uscode/text/15/46",
+    "cat": "law"
+  },
+  {
+    "term": "abnormally dangerous activity",
+    "match": [
+      "abnormally dangerous activity",
+      "abnormally dangerous activities"
+    ],
+    "def": "An activity so risky even when done carefully (such as blasting with explosives) that tort law holds whoever carries it out strictly liable for the harm it causes.",
+    "src": "https://www.law.cornell.edu/wex/abnormally_dangerous_activity",
+    "cat": "law"
+  },
+  {
+    "term": "abuse of discretion",
+    "match": [
+      "abuse of discretion"
+    ],
+    "def": "A deferential standard courts use to review a decision-maker's choice: the court overturns it only if it was clearly unreasonable, arbitrary, or unsupported by the facts or law.",
+    "src": "https://www.law.cornell.edu/wex/abuse_of_discretion",
+    "cat": "law"
+  },
+  {
+    "term": "affirmative defense",
+    "match": [
+      "affirmative defense"
+    ],
+    "def": "A defense that raises new facts which defeat liability even if the plaintiff's claims are true. The defendant has to plead and prove it, and it is often resolved only after costly discovery, well into a case.",
+    "src": "https://www.law.cornell.edu/wex/affirmative_defense",
+    "cat": "law"
+  },
+  {
+    "term": "AGI",
+    "match": [
+      "AGI"
+    ],
+    "def": "Artificial general intelligence: a hypothetical AI system that matches or exceeds human ability across most cognitive tasks. Definitions vary and there is no agreed test.",
+    "src": "https://en.wikipedia.org/wiki/Artificial_general_intelligence",
+    "cat": "tech"
+  },
+  {
+    "term": "algorithmic efficiency",
+    "match": [
+      "algorithmic efficiency"
+    ],
+    "def": "How much compute a training method needs to reach a given level of performance. Algorithmic progress lets the same capability be reached with less compute over time.",
+    "src": "https://epoch.ai/blog/algorithmic-progress-in-language-models",
+    "cat": "tech"
+  },
+  {
+    "term": "alignment",
+    "match": [
+      "alignment",
+      "misaligned"
+    ],
+    "def": "In AI, the problem of making a system's goals and behavior match what its developers and users intend. A misaligned model pursues goals other than those intended.",
+    "src": "https://en.wikipedia.org/wiki/AI_alignment",
+    "cat": "tech"
+  },
+  {
+    "term": "antitrust",
+    "match": [
+      "antitrust"
+    ],
+    "def": "The body of law that protects competition, chiefly by banning monopolization and agreements among competitors that restrain trade, such as price-fixing. In the US, mainly the Sherman and Clayton Acts.",
+    "src": "https://www.law.cornell.edu/wex/antitrust",
+    "cat": "law"
+  },
+  {
+    "term": "appropriations",
+    "match": [
+      "appropriations"
+    ],
+    "def": "Legislation that provides money for federal agencies and programs. Congress separately passes authorizing laws that create programs; a program can be authorized yet receive no appropriated funds.",
+    "src": "https://www.everycrsreport.com/reports/R46497.html",
+    "cat": "congress"
+  },
+  {
+    "term": "arbitrary and capricious",
+    "match": [
+      "arbitrary, capricious"
+    ],
+    "def": "A standard under the Administrative Procedure Act for judging agency actions. Courts set aside an action only if it lacked a rational basis, ignored key factors or ran counter to the evidence.",
+    "src": "https://www.law.cornell.edu/uscode/text/5/706",
+    "cat": "law"
+  },
+  {
+    "term": "arbitration clause",
+    "match": [
+      "arbitration clauses"
+    ],
+    "def": "A contract term requiring disputes to be decided by a private arbitrator instead of a court, which can limit a person's ability to sue.",
+    "src": "https://www.law.cornell.edu/wex/arbitration",
+    "cat": "law"
+  },
+  {
+    "term": "attestation",
+    "match": [
+      "attestation"
+    ],
+    "def": "A cryptographically verifiable statement from hardware or software about its own state or activity, such as what a chip was used for.",
+    "src": "https://csrc.nist.gov/glossary/term/attestation",
+    "cat": "tech"
+  },
+  {
+    "term": "automatic stay",
+    "match": [
+      "automatic stay"
+    ],
+    "def": "A stay is a court order pausing a legal proceeding or the effect of a decision while a case is pending. An automatic stay takes effect by default, without a court having to order it.",
+    "src": "https://www.law.cornell.edu/wex/stay",
+    "cat": "law"
+  },
+  {
+    "term": "autonomous weapons",
+    "match": [
+      "autonomous weapons"
+    ],
+    "def": "Weapon systems that, once activated, can select and engage targets without further human intervention.",
+    "src": "https://www.everycrsreport.com/reports/IF11150.html",
+    "cat": "policy"
+  },
+  {
+    "term": "back pay",
+    "match": [
+      "back pay"
+    ],
+    "def": "Wages an employee should have earned but did not because of an employer's unlawful act, such as a retaliatory firing. Courts or agencies can order the employer to pay it.",
+    "src": "https://www.law.cornell.edu/wex/back_pay",
+    "cat": "law"
+  },
+  {
+    "term": "black-box access",
+    "match": [
+      "black-box"
+    ],
+    "def": "Access to an AI model limited to sending inputs and seeing outputs, with no view of its internals such as weights, activations or training data.",
+    "src": "https://arxiv.org/abs/2401.14446",
+    "cat": "tech"
+  },
+  {
+    "term": "cartel",
+    "match": [
+      "cartel"
+    ],
+    "def": "A group of competing firms that agree to coordinate prices, output or markets instead of competing. Such agreements are generally illegal under US antitrust law.",
+    "src": "https://www.law.cornell.edu/wex/cartel",
+    "cat": "law"
+  },
+  {
+    "term": "cause of action",
+    "match": [
+      "cause of action"
+    ],
+    "def": "The legal basis that entitles a person to sue: a set of facts that, if proven, give the plaintiff a right to a remedy from the defendant.",
+    "src": "https://www.law.cornell.edu/wex/cause_of_action",
+    "cat": "law"
+  },
+  {
+    "term": "CBRN",
+    "match": [
+      "CBRN"
+    ],
+    "def": "Chemical, biological, radiological and nuclear: the categories of weapons of mass destruction often used to group the most severe AI misuse risks.",
+    "src": "https://en.wikipedia.org/wiki/CBRN_defense",
+    "cat": "tech"
+  },
+  {
+    "term": "chain-of-thought",
+    "match": [
+      "chain-of-thought"
+    ],
+    "def": "The step-by-step written reasoning a language model produces before giving its final answer.",
+    "src": "https://developers.google.com/machine-learning/glossary#chain-of-thought-prompting",
+    "cat": "tech"
+  },
+  {
+    "term": "chokepoint",
+    "match": [
+      "chokepoint"
+    ],
+    "def": "A narrow point in a supply chain or route, controlled by few firms or places, where restricting access can affect everything downstream.",
+    "src": "https://www.vocabulary.com/dictionary/chokepoint",
+    "cat": "policy"
+  },
+  {
+    "term": "civil penalty",
+    "match": [
+      "civil penalty",
+      "civil penalties"
+    ],
+    "def": "A fine that a government agency or court imposes for breaking a law or regulation, enforced through a civil case without criminal punishment.",
+    "src": "https://www.law.cornell.edu/wex/penalty",
+    "cat": "law"
+  },
+  {
+    "term": "clear and convincing evidence",
+    "match": [
+      "clear and convincing evidence"
+    ],
+    "def": "A standard of proof higher than 'more likely than not' and lower than 'beyond a reasonable doubt': the claim must be shown to be highly probable.",
+    "src": "https://www.law.cornell.edu/wex/clear_and_convincing_evidence",
+    "cat": "law"
+  },
+  {
+    "term": "cloture",
+    "match": [
+      "cloture"
+    ],
+    "def": "The Senate procedure for ending debate and moving to a vote. For most legislation it takes 60 votes, so a failed cloture vote usually blocks a bill from advancing.",
+    "src": "https://www.law.cornell.edu/wex/cloture",
+    "cat": "congress"
+  },
+  {
+    "term": "codify",
+    "match": [
+      "codify",
+      "codifies"
+    ],
+    "def": "In policy usage, to write a rule into statute, often one that previously existed only in agency policy, an executive order or court decisions, so it has the force of law.",
+    "src": "https://www.law.cornell.edu/wex/codify",
+    "cat": "law"
+  },
+  {
+    "term": "collective-action problem",
+    "match": [
+      "collective-action problem"
+    ],
+    "def": "A situation where everyone would be better off cooperating, but each actor has an incentive to hold back, so the shared goal goes unmet.",
+    "src": "https://en.wikipedia.org/wiki/Collective_action_problem",
+    "cat": "policy"
+  },
+  {
+    "term": "collusion",
+    "match": [
+      "collusion",
+      "collusive"
+    ],
+    "def": "A secret or unlawful agreement between parties, such as competitors, to act together in a way that harms others, for example by fixing prices.",
+    "src": "https://www.law.cornell.edu/wex/collusion",
+    "cat": "law"
+  },
+  {
+    "term": "community benefit agreement",
+    "match": [
+      "community benefit agreements"
+    ],
+    "def": "A contract between a developer and community groups or local government in which the developer commits to local benefits (jobs, payments, environmental protections) in exchange for support for a project.",
+    "src": "https://en.wikipedia.org/wiki/Community_benefits_agreement",
+    "cat": "law"
+  },
+  {
+    "term": "companion bill",
+    "match": [
+      "House companion"
+    ],
+    "def": "A bill introduced in one chamber that is identical or substantially similar to a bill in the other chamber, so both can move through committees at the same time.",
+    "src": "https://m.myfloridahouse.gov/Sections/PublicGuide/glossary.aspx?Filter=C",
+    "cat": "congress"
+  },
+  {
+    "term": "conference committee",
+    "match": [
+      "dropped in conference"
+    ],
+    "def": "A temporary panel of House and Senate members that negotiates a single version of a bill when the two chambers have passed different versions. Provisions are often dropped there.",
+    "src": "https://www.everycrsreport.com/reports/98-696GOV.html",
+    "cat": "congress"
+  },
+  {
+    "term": "cosponsor",
+    "match": [
+      "cosponsors",
+      "original cosponsor",
+      "original cosponsors"
+    ],
+    "def": "A member of Congress who formally signs on to support a bill introduced by its sponsor. Original cosponsors are those listed when the bill is first introduced.",
+    "src": "https://www.everycrsreport.com/reports/RS22477.html",
+    "cat": "congress"
+  },
+  {
+    "term": "curtailable load",
+    "match": [
+      "curtailable"
+    ],
+    "def": "A large electricity user that can reduce its power draw on request when the grid is strained, often in exchange for lower rates or faster grid access.",
+    "src": "https://en.wikipedia.org/wiki/Demand_response",
+    "cat": "policy"
+  },
+  {
+    "term": "cutout",
+    "match": [
+      "cutouts"
+    ],
+    "def": "An intermediary used to hide the real party behind a transaction or operation.",
+    "src": "https://www.dictionary.com/browse/cutout",
+    "cat": "policy"
+  },
+  {
+    "term": "deployer",
+    "match": [
+      "deployer",
+      "deployers"
+    ],
+    "def": "An organization that puts an AI system to use in its own products or operations, as distinct from the developer that built the underlying model.",
+    "src": "https://artificialintelligenceact.eu/article/3/",
+    "cat": "policy"
+  },
+  {
+    "term": "design defect",
+    "match": [
+      "design defect"
+    ],
+    "def": "A product-liability claim that a product is unreasonably dangerous because of how it was designed, so every unit carries the flaw.",
+    "src": "https://www.law.cornell.edu/wex/design_defect",
+    "cat": "law"
+  },
+  {
+    "term": "discovery",
+    "match": [
+      "costly discovery"
+    ],
+    "def": "The pretrial phase of a lawsuit in which each side can demand evidence from the other, such as documents and depositions. It is often the most expensive part of litigation.",
+    "src": "https://www.law.cornell.edu/wex/discovery",
+    "cat": "law"
+  },
+  {
+    "term": "discussion draft",
+    "match": [
+      "discussion draft"
+    ],
+    "def": "Bill text that lawmakers circulate for feedback before formally introducing it. It has no bill number and cannot be acted on until it is introduced.",
+    "src": "",
+    "cat": "congress"
+  },
+  {
+    "term": "distillation",
+    "match": [
+      "distillation",
+      "adversarial distillation"
+    ],
+    "def": "Training one model to imitate another, stronger model's outputs. In US policy debates, adversarial distillation means foreign rivals, mainly Chinese AI firms, doing this with US models without permission.",
+    "src": "https://developers.google.com/machine-learning/glossary#distillation",
+    "cat": "tech"
+  },
+  {
+    "term": "DNA synthesis",
+    "match": [
+      "DNA synthesis"
+    ],
+    "def": "Manufacturing DNA molecules to a specified sequence, usually by commercial providers who ship them to customers. It is a key step in turning a genetic design into a working organism.",
+    "src": "https://en.wikipedia.org/wiki/Artificial_gene_synthesis",
+    "cat": "tech"
+  },
+  {
+    "term": "duty of care",
+    "match": [
+      "statutory duty of care",
+      "duty of care"
+    ],
+    "def": "A legal obligation to take reasonable care to avoid foreseeable harm to others. A statutory duty of care is one written into a statute instead of developed by courts.",
+    "src": "https://www.law.cornell.edu/wex/duty_of_care",
+    "cat": "law"
+  },
+  {
+    "term": "elicitation",
+    "match": [
+      "elicitation"
+    ],
+    "def": "In AI evaluations, the effort testers put into drawing out a model's full capabilities, for example through better prompts, tools or fine-tuning. Weak elicitation can understate what a model can do.",
+    "src": "https://metr.org/blog/2024-03-15-guidelines-for-capability-elicitation/",
+    "cat": "tech"
+  },
+  {
+    "term": "exfiltration",
+    "match": [
+      "exfiltrate",
+      "exfiltration"
+    ],
+    "def": "Unauthorized copying or transfer of data out of a system. For AI, the main concern is model weights being copied out of a lab by thieves or insiders, or possibly in future by the model itself.",
+    "src": "https://csrc.nist.gov/glossary/term/exfiltration",
+    "cat": "tech"
+  },
+  {
+    "term": "export controls",
+    "match": [
+      "export controls"
+    ],
+    "def": "Government restrictions on sending certain goods, software or technology abroad, usually for national security. In the US, the Commerce Department's BIS administers controls on dual-use items such as AI chips.",
+    "src": "https://www.bis.gov/regulations/ear",
+    "cat": "policy"
+  },
+  {
+    "term": "failure to warn",
+    "match": [
+      "failure to warn"
+    ],
+    "def": "A product-liability claim that a maker did not give adequate warnings or instructions about a product's non-obvious dangers.",
+    "src": "https://www.law.cornell.edu/wex/products_liability",
+    "cat": "law"
+  },
+  {
+    "term": "fine-tuning",
+    "match": [
+      "fine-tuning",
+      "fine-tunes",
+      "fine-tuned"
+    ],
+    "def": "Further training of an already-trained model on additional data to adapt its behavior. It can also be used to remove a model's safety training.",
+    "src": "https://developers.google.com/machine-learning/glossary#fine-tuning",
+    "cat": "tech"
+  },
+  {
+    "term": "fissile material",
+    "match": [
+      "fissile material"
+    ],
+    "def": "Material, such as highly enriched uranium or plutonium, that can sustain a nuclear chain reaction; it is the essential ingredient of nuclear weapons.",
+    "src": "https://en.wikipedia.org/wiki/Fissile_material",
+    "cat": "policy"
+  },
+  {
+    "term": "FLOP",
+    "match": [
+      "FLOP"
+    ],
+    "def": "Floating-point operation: one arithmetic step, such as an addition or multiplication, on numbers stored in floating-point format. The total FLOP used to train a model is a common measure of its scale, e.g. 10^26.",
+    "src": "https://en.wikipedia.org/wiki/Floating_point_operations_per_second",
+    "cat": "tech"
+  },
+  {
+    "term": "foundation model",
+    "match": [
+      "foundation model",
+      "foundation-model"
+    ],
+    "def": "A large AI model trained on broad data that can be adapted to many different tasks, such as the models behind major chatbots.",
+    "src": "https://developers.google.com/machine-learning/glossary#foundation-model",
+    "cat": "tech"
+  },
+  {
+    "term": "foundry",
+    "match": [
+      "foundries"
+    ],
+    "def": "A chip factory that manufactures chips designed by other companies. TSMC and Samsung are the leading foundries for advanced chips, and TSMC makes most leading AI chips.",
+    "src": "https://en.wikipedia.org/wiki/Foundry_model",
+    "cat": "tech"
+  },
+  {
+    "term": "general-purpose AI",
+    "match": [
+      "general-purpose AI"
+    ],
+    "def": "AI models that can competently perform a wide range of distinct tasks. The EU AI Act sets specific obligations for 'general-purpose AI models'.",
+    "src": "https://artificialintelligenceact.eu/article/3/",
+    "cat": "tech"
+  },
+  {
+    "term": "general-purpose technology",
+    "match": [
+      "general-purpose technology"
+    ],
+    "def": "A technology that spreads across many sectors and spawns further innovation, such as electricity or computers.",
+    "src": "https://en.wikipedia.org/wiki/General-purpose_technology",
+    "cat": "policy"
+  },
+  {
+    "term": "geoengineering",
+    "match": [
+      "geoengineering"
+    ],
+    "def": "Deliberate large-scale intervention in Earth's climate system, such as reflecting sunlight back to space, to counter global warming.",
+    "src": "https://en.wikipedia.org/wiki/Climate_engineering",
+    "cat": "policy"
+  },
+  {
+    "term": "germline genetic engineering",
+    "match": [
+      "germline genetic engineering",
+      "germline"
+    ],
+    "def": "Editing genes in eggs, sperm or embryos, so the changes are inherited by future generations.",
+    "src": "https://www.genome.gov/genetics-glossary/Germ-Line",
+    "cat": "tech"
+  },
+  {
+    "term": "grid interconnection",
+    "match": [
+      "grid interconnection"
+    ],
+    "def": "The process and approval required to connect a new power plant or large electricity user to the transmission grid, often a long queue.",
+    "src": "https://www.energy.gov/eere/i2x/interconnection-innovation-e-xchange",
+    "cat": "policy"
+  },
+  {
+    "term": "immunity",
+    "match": [
+      "immunity",
+      "civil immunity"
+    ],
+    "def": "Legal protection that shields a person or organization from being sued or held liable for certain acts.",
+    "src": "https://www.law.cornell.edu/wex/immunity",
+    "cat": "law"
+  },
+  {
+    "term": "inference",
+    "match": [
+      "inference",
+      "inference compute"
+    ],
+    "def": "Running a trained model to produce outputs, as opposed to training it. Inference compute is the computing power used for this, for example to serve customers.",
+    "src": "https://developers.google.com/machine-learning/glossary#inference",
+    "cat": "tech"
+  },
+  {
+    "term": "infrastructure-as-a-service",
+    "match": [
+      "infrastructure-as-a-service"
+    ],
+    "def": "A cloud service model in which customers rent computing power, storage and networking from a provider instead of owning the hardware.",
+    "src": "https://csrc.nist.gov/glossary/term/infrastructure_as_a_service",
+    "cat": "tech"
+  },
+  {
+    "term": "insider threat",
+    "match": [
+      "insider-threat"
+    ],
+    "def": "The risk that someone with authorized access, such as an employee or contractor, misuses it to cause harm, for example by stealing data.",
+    "src": "https://csrc.nist.gov/glossary/term/insider_threat",
+    "cat": "tech"
+  },
+  {
+    "term": "joint resolution",
+    "match": [
+      "joint resolution"
+    ],
+    "def": "A legislative measure that, like a bill, must pass both chambers and be signed by the President (or pass over a veto) to become law. Used for continuing appropriations and to approve or block executive actions.",
+    "src": "https://www.senate.gov/legislative/common/briefing/leg_laws_acts.htm",
+    "cat": "congress"
+  },
+  {
+    "term": "know-your-customer",
+    "match": [
+      "know-your-customer",
+      "KYC"
+    ],
+    "def": "Rules requiring a business to verify who its customers are and watch for suspicious activity. They originated in banking and are proposed for cloud computing.",
+    "src": "https://www.fincen.gov/resources/statutes-and-regulations/cdd-final-rule",
+    "cat": "policy"
+  },
+  {
+    "term": "lame duck",
+    "match": [
+      "lame duck",
+      "lame-duck"
+    ],
+    "def": "The period after a November election and before the new Congress takes office in January. A lame-duck session is Congress meeting then, including members who lost or are retiring.",
+    "src": "https://www.senate.gov/legislative/LameDuckSessions.htm",
+    "cat": "congress"
+  },
+  {
+    "term": "lithography",
+    "match": [
+      "lithography",
+      "DUV"
+    ],
+    "def": "The chipmaking step that uses light to print circuit patterns onto silicon wafers. Deep-ultraviolet (DUV) tools are the older generation, still essential for making advanced chips.",
+    "src": "https://www.asml.com/en/products/duv-lithography-systems",
+    "cat": "tech"
+  },
+  {
+    "term": "major questions doctrine",
+    "match": [
+      "major-questions"
+    ],
+    "def": "A Supreme Court doctrine under which courts reject agency actions of vast economic or political significance unless Congress clearly authorized them.",
+    "src": "https://www.law.cornell.edu/wex/major_questions_doctrine",
+    "cat": "law"
+  },
+  {
+    "term": "market allocation",
+    "match": [
+      "market allocation"
+    ],
+    "def": "An agreement among competitors to divide customers, territories or products among themselves instead of competing for them. US antitrust law treats it as illegal per se.",
+    "src": "https://www.justice.gov/atr/price-fixing-bid-rigging-and-market-allocation-schemes",
+    "cat": "law"
+  },
+  {
+    "term": "markup",
+    "match": [
+      "markup"
+    ],
+    "def": "The committee meeting where members debate, amend and vote on a bill, deciding whether and in what form to send it to the full chamber.",
+    "src": "https://www.everycrsreport.com/reports/98-245GOV.html",
+    "cat": "congress"
+  },
+  {
+    "term": "merger review",
+    "match": [
+      "merger review"
+    ],
+    "def": "Government examination of a proposed merger or acquisition to decide whether it may substantially lessen competition, in which case enforcers can sue to block or reshape it.",
+    "src": "https://www.law.cornell.edu/uscode/text/15/18",
+    "cat": "law"
+  },
+  {
+    "term": "mission creep",
+    "match": [
+      "mission creep"
+    ],
+    "def": "The gradual expansion of a program or institution's activities beyond its original goals.",
+    "src": "https://en.wikipedia.org/wiki/Mission_creep",
+    "cat": "policy"
+  },
+  {
+    "term": "model card",
+    "match": [
+      "model card",
+      "model cards",
+      "system card"
+    ],
+    "def": "A document published with an AI model describing its intended uses, how it was evaluated, its limitations and safety test results. A system card covers a model plus its surrounding product.",
+    "src": "https://arxiv.org/abs/1810.03993",
+    "cat": "tech"
+  },
+  {
+    "term": "model weights",
+    "match": [
+      "model weights",
+      "weights"
+    ],
+    "def": "The numerical parameters a neural network learns during training. Whoever holds a model's weights can run, copy or modify it, including stripping its safeguards.",
+    "src": "https://developers.google.com/machine-learning/glossary#weight",
+    "cat": "tech"
+  },
+  {
+    "term": "negligence",
+    "match": [
+      "negligence",
+      "negligence standard"
+    ],
+    "def": "Failure to use the care a reasonably prudent person would use in similar circumstances. A negligence standard makes a defendant liable only for harm caused by such a failure.",
+    "src": "https://www.law.cornell.edu/wex/negligence",
+    "cat": "law"
+  },
+  {
+    "term": "open-weight",
+    "match": [
+      "open-weight"
+    ],
+    "def": "Describes an AI model whose trained weights are published for anyone to download, run and modify.",
+    "src": "https://www.ntia.gov/issues/artificial-intelligence/open-model-weights-report",
+    "cat": "tech"
+  },
+  {
+    "term": "overhang",
+    "match": [
+      "overhang",
+      "capability overhang"
+    ],
+    "def": "A buildup of unused potential, such as spare compute, efficiency gains or ideas, that could produce a sudden jump in AI capabilities once a constraint is lifted.",
+    "src": "https://wiki.aiimpacts.org/ai_timelines/hardware_and_ai_timelines/hardware_overhang",
+    "cat": "tech"
+  },
+  {
+    "term": "per se",
+    "match": [
+      "per se"
+    ],
+    "def": "Latin for 'by itself.' In antitrust, a per se violation is conduct (such as price-fixing) treated as automatically illegal, with no weighing of its actual effects on competition.",
+    "src": "https://www.law.cornell.edu/wex/per_se",
+    "cat": "law"
+  },
+  {
+    "term": "preemption",
+    "match": [
+      "preemption",
+      "preempt",
+      "preempts",
+      "preempting"
+    ],
+    "def": "The doctrine, based on the Constitution's Supremacy Clause, that valid federal law overrides conflicting state law. Congress can preempt state law expressly or by implication.",
+    "src": "https://www.law.cornell.edu/wex/preemption",
+    "cat": "law"
+  },
+  {
+    "term": "price-fixing",
+    "match": [
+      "price-fixing"
+    ],
+    "def": "An agreement among competitors to raise, lower or stabilize prices instead of setting them independently. It is illegal per se under US antitrust law.",
+    "src": "https://www.law.cornell.edu/wex/price_fixing",
+    "cat": "law"
+  },
+  {
+    "term": "product liability",
+    "match": [
+      "product-liability"
+    ],
+    "def": "The legal responsibility of makers and sellers for injuries caused by defective products, usually through claims of design defect, manufacturing defect or failure to warn.",
+    "src": "https://www.law.cornell.edu/wex/products_liability",
+    "cat": "law"
+  },
+  {
+    "term": "public benefit corporation",
+    "match": [
+      "public benefit corporation"
+    ],
+    "def": "A for-profit corporation whose charter commits it to a stated public benefit, and whose directors must balance that benefit and stakeholders' interests against shareholders' financial interests.",
+    "src": "https://www.law.cornell.edu/wex/public_benefit_corporation",
+    "cat": "law"
+  },
+  {
+    "term": "punitive damages",
+    "match": [
+      "punitive damages"
+    ],
+    "def": "Money a court awards on top of compensation for harm, meant to punish especially bad conduct and deter others from similar conduct.",
+    "src": "https://www.law.cornell.edu/wex/punitive_damages",
+    "cat": "law"
+  },
+  {
+    "term": "race to the bottom",
+    "match": [
+      "races to the bottom"
+    ],
+    "def": "Competition in which actors keep lowering standards, such as safety or regulation, to gain an advantage over rivals.",
+    "src": "https://en.wikipedia.org/wiki/Race_to_the_bottom",
+    "cat": "policy"
+  },
+  {
+    "term": "reasonable care",
+    "match": [
+      "reasonable care"
+    ],
+    "def": "The degree of caution a reasonably prudent person would use in the same situation. Failing to exercise it is the core of negligence.",
+    "src": "https://www.law.cornell.edu/wex/reasonable_care",
+    "cat": "law"
+  },
+  {
+    "term": "reconciliation",
+    "match": [
+      "reconciliation bill"
+    ],
+    "def": "A fast-track budget procedure that lets certain tax, spending and debt-limit bills pass the Senate by simple majority, without a filibuster. Under the Byrd rule, provisions with no or merely incidental budget effect can be struck.",
+    "src": "https://www.law.cornell.edu/wex/reconciliation",
+    "cat": "congress"
+  },
+  {
+    "term": "recursive self-improvement",
+    "match": [
+      "recursive self-improvement"
+    ],
+    "def": "A hypothesized process in which AI systems improve the design of their own successors, which then improve further, potentially speeding progress.",
+    "src": "https://en.wikipedia.org/wiki/Recursive_self-improvement",
+    "cat": "tech"
+  },
+  {
+    "term": "red-teaming",
+    "match": [
+      "red-teaming"
+    ],
+    "def": "Deliberately probing a system the way an adversary would, to find weaknesses before real attackers or users do.",
+    "src": "https://csrc.nist.gov/glossary/term/red_team",
+    "cat": "tech"
+  },
+  {
+    "term": "regulatory capture",
+    "match": [
+      "lobbying and capture",
+      "invites capture",
+      "monitors get captured"
+    ],
+    "def": "When a regulator or monitor comes to serve the interests of the industry it oversees, at the expense of the public it is meant to protect.",
+    "src": "https://en.wikipedia.org/wiki/Regulatory_capture",
+    "cat": "policy"
+  },
+  {
+    "term": "reinforcement learning",
+    "match": [
+      "reinforcement learning"
+    ],
+    "def": "A training method in which a model learns by trial and error, receiving rewards for desired behavior. It is widely used to train AI models after pretraining.",
+    "src": "https://developers.google.com/machine-learning/glossary#reinforcement-learning-rl",
+    "cat": "tech"
+  },
+  {
+    "term": "reinsurance",
+    "match": [
+      "reinsurance"
+    ],
+    "def": "Insurance for insurers: an insurer passes part of its risk to another company, or a government backstop, to limit losses from very large or correlated claims.",
+    "src": "https://en.wikipedia.org/wiki/Reinsurance",
+    "cat": "policy"
+  },
+  {
+    "term": "safe harbor",
+    "match": [
+      "safe harbor",
+      "safe harbors"
+    ],
+    "def": "A legal provision that protects a party from liability or penalty as long as it meets specified conditions.",
+    "src": "https://www.law.cornell.edu/wex/safe_harbor",
+    "cat": "law"
+  },
+  {
+    "term": "safety case",
+    "match": [
+      "safety case",
+      "safety cases"
+    ],
+    "def": "A structured, evidence-backed argument that a system is acceptably safe in a particular context. Some regulators require them, for example for nuclear plants and offshore oil and gas in the UK.",
+    "src": "https://www.aisi.gov.uk/work/safety-cases-at-aisi",
+    "cat": "tech"
+  },
+  {
+    "term": "sandbagging",
+    "match": [
+      "sandbagging"
+    ],
+    "def": "An AI model strategically underperforming on an evaluation, hiding capabilities it actually has.",
+    "src": "https://arxiv.org/abs/2406.07358",
+    "cat": "tech"
+  },
+  {
+    "term": "sandbox",
+    "match": [
+      "sandbox",
+      "sandboxing"
+    ],
+    "def": "An isolated computing environment that limits what software inside it can access, used to test or contain programs.",
+    "src": "https://csrc.nist.gov/glossary/term/sandbox",
+    "cat": "tech"
+  },
+  {
+    "term": "Senate confirmation",
+    "match": [
+      "Senate confirmation",
+      "Senate-confirmed",
+      "advice and consent"
+    ],
+    "def": "The Senate's constitutional 'advice and consent' power to approve or reject the President's nominees for senior federal posts. Lower-level officials can be appointed without it.",
+    "src": "https://www.senate.gov/about/powers-procedures/nominations.htm",
+    "cat": "congress"
+  },
+  {
+    "term": "sense of Congress",
+    "match": [
+      "sense of Congress"
+    ],
+    "def": "A provision or resolution that states Congress's opinion. It has no binding legal effect, even when included in a bill that becomes law.",
+    "src": "https://www.everycrsreport.com/reports/98-825GOV.html",
+    "cat": "congress"
+  },
+  {
+    "term": "severability clause",
+    "match": [
+      "severability clause"
+    ],
+    "def": "A provision stating that if a court strikes down one part of a law or contract, the remaining parts stay in effect.",
+    "src": "https://www.law.cornell.edu/wex/severability_clause",
+    "cat": "law"
+  },
+  {
+    "term": "shell company",
+    "match": [
+      "shell companies"
+    ],
+    "def": "A company with few or no real operations or assets, sometimes used to hide who is actually behind a transaction.",
+    "src": "https://www.law.cornell.edu/wex/shell_company",
+    "cat": "law"
+  },
+  {
+    "term": "state capacity",
+    "match": [
+      "state capacity"
+    ],
+    "def": "A government's ability to carry out its policies effectively, including expertise, staff, funding and administrative reach.",
+    "src": "https://en.wikipedia.org/wiki/State_capacity",
+    "cat": "policy"
+  },
+  {
+    "term": "strict liability",
+    "match": [
+      "strict liability"
+    ],
+    "def": "Liability for harm regardless of fault or how much care was taken. US courts apply it to abnormally dangerous activities and, in most states, to some defective-product claims.",
+    "src": "https://www.law.cornell.edu/wex/strict_liability",
+    "cat": "law"
+  },
+  {
+    "term": "structural separation",
+    "match": [
+      "structural separation"
+    ],
+    "def": "A remedy that bars one company from operating in two connected lines of business, such as owning cloud infrastructure and the AI models that run on it.",
+    "src": "https://www.law.berkeley.edu/sidebar/tejas-narechania-regulating-ai-technology/",
+    "cat": "policy"
+  },
+  {
+    "term": "subpoena power",
+    "match": [
+      "subpoena power"
+    ],
+    "def": "Authority to issue subpoenas: legal orders compelling a person to testify or hand over documents, backed by penalties for refusing.",
+    "src": "https://www.law.cornell.edu/wex/subpoena",
+    "cat": "law"
+  },
+  {
+    "term": "sunset provision",
+    "match": [
+      "sunset"
+    ],
+    "def": "A clause that makes a law, program or agency expire automatically after a set period unless lawmakers renew it.",
+    "src": "https://www.law.cornell.edu/wex/sunset_law",
+    "cat": "law"
+  },
+  {
+    "term": "superintelligence",
+    "match": [
+      "superintelligence"
+    ],
+    "def": "Hypothetical AI that greatly exceeds human cognitive ability in virtually all domains.",
+    "src": "https://en.wikipedia.org/wiki/Superintelligence",
+    "cat": "tech"
+  },
+  {
+    "term": "telemetry",
+    "match": [
+      "telemetry"
+    ],
+    "def": "Data collected automatically from a device and sent elsewhere for monitoring, such as a chip's power draw or usage.",
+    "src": "https://csrc.nist.gov/glossary/term/telemetry",
+    "cat": "tech"
+  },
+  {
+    "term": "Tenth Amendment",
+    "match": [
+      "Tenth Amendment"
+    ],
+    "def": "The constitutional amendment reserving to the states, or the people, powers not delegated to the federal government.",
+    "src": "https://www.law.cornell.edu/constitution/tenth_amendment",
+    "cat": "law"
+  },
+  {
+    "term": "test-time compute",
+    "match": [
+      "test-time compute",
+      "inference-time scaling"
+    ],
+    "def": "Computing power spent while a model is answering, for example letting it reason longer, which can improve performance without further training.",
+    "src": "https://en.wikipedia.org/wiki/Neural_scaling_law",
+    "cat": "tech"
+  },
+  {
+    "term": "tort",
+    "match": [
+      "tort",
+      "tort liability"
+    ],
+    "def": "A civil wrong, other than breach of contract, that causes harm and lets the injured person sue for damages. Negligence is the most common tort.",
+    "src": "https://www.law.cornell.edu/wex/tort",
+    "cat": "law"
+  },
+  {
+    "term": "trade secret",
+    "match": [
+      "trade-secret"
+    ],
+    "def": "Confidential business information, such as a formula, process or technique, that has value because competitors do not know it. The law protects it against theft and misuse.",
+    "src": "https://www.law.cornell.edu/wex/trade_secret",
+    "cat": "law"
+  },
+  {
+    "term": "training run",
+    "match": [
+      "training run",
+      "training runs"
+    ],
+    "def": "One complete process of training an AI model on data, which for frontier models can take months and vast amounts of compute.",
+    "src": "https://developers.google.com/machine-learning/glossary#training",
+    "cat": "tech"
+  },
+  {
+    "term": "unanimous consent",
+    "match": [
+      "unanimous consent",
+      "unanimous-consent"
+    ],
+    "def": "A way for the Senate to act quickly by setting aside its normal rules. It succeeds only if no senator objects, so any single senator can block it.",
+    "src": "https://www.everycrsreport.com/files/20101201_96-548_b31e48c7ecd79f248928781ce74bbf8f6e210fc7.html",
+    "cat": "congress"
+  },
+  {
+    "term": "uplift",
+    "match": [
+      "uplift"
+    ],
+    "def": "In AI safety testing, how much a model improves someone's ability to do a task, such as building a weapon, compared with existing resources like internet search.",
+    "src": "https://www.rand.org/pubs/research_reports/RRA2977-2.html",
+    "cat": "tech"
+  },
+  {
+    "term": "vested equity",
+    "match": [
+      "vested equity"
+    ],
+    "def": "Company shares or stock options an employee has fully earned under a vesting schedule, so they belong to the employee even after leaving the company.",
+    "src": "https://en.wikipedia.org/wiki/Vesting",
+    "cat": "law"
+  },
+  {
+    "term": "willful misconduct",
+    "match": [
+      "willful misconduct"
+    ],
+    "def": "Wrongful conduct done intentionally and knowingly, as opposed to by accident or carelessness. It is a much higher bar to prove than negligence.",
+    "src": "https://www.law.cornell.edu/wex/willful",
+    "cat": "law"
+  }
+]
