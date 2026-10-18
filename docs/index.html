@@ -5,38 +5,25 @@
 <title>WonkoLingo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&family=Source+Serif+4:ital,opsz,wght@1,8..60,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700;800&family=Alegreya+Sans+SC:wght@500;700;800&family=Source+Serif+4:ital,opsz,wght@1,8..60,500&display=swap">
 <style>
-/* Layout: sticky stat bar; zigzag lesson path under unit banners, beside a narrow side column; lessons open as a full-screen drill whose footer turns green or red on Check. */
+/* Layout: sticky top bar; four tab views (Today, Courses, Group, Me) plus a course page, switched by a bottom tab bar on phones and a side nav on wide screens; lessons open as a full-screen drill whose footer turns green or red on Check. */
 :root {
-  --bg: #f6f7fb; --surface: #ffffff; --fg: #162033; --muted: #5a6479; --line: #dbe0ea; --line-deep: #c3cad8;
-  --primary: #2f5fd0; --primary-deep: #1e3f96; --primary-soft: #e4ecfd; --on-primary: #ffffff;
-  --brass: #a8720c; --brass-soft: #fbf0d6;
-  --good: #2f8a2a; --good-deep: #1f6a1b; --good-bg: #e3f4dc;
-  --bad: #c93a32; --bad-deep: #9a2620; --bad-bg: #fbe4e2;
-  --locked: #d3d9e3; --locked-deep: #b5bdcc; --locked-fg: #7d879a;
-  --f-ui: "Nunito", ui-rounded, "Segoe UI", system-ui, sans-serif;
+  /* Night library palette (chosen 2026-10-18): ink-blue ground, warm off-white text, brass gold accent. The app is dark only. */
+  --bg: #0e141b; --surface: #18212b; --surface-2: #131b23; --fg: #e6e1d6; --muted: #9aa4ae; --line: #222c37; --line-deep: #2f3b48;
+  --primary: #e8b75a; --primary-deep: #a67c2c; --primary-soft: #2a2417; --on-primary: #0e141b;
+  --brass: #e8b75a; --brass-soft: #2a2417;
+  --good: #82c784; --good-deep: #3f7f3d; --good-bg: #16261a;
+  --bad: #ef7b6e; --bad-deep: #a3453c; --bad-bg: #2e1a19;
+  --locked: #222c37; --locked-deep: #18212b; --locked-fg: #6b7682;
+  --f-ui: "Karla", system-ui, sans-serif;
+  --f-label: "Alegreya Sans SC", "Karla", system-ui, sans-serif;
   --f-quote: "Source Serif 4", Georgia, "Times New Roman", serif;
+  color-scheme: dark;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #0e1320; --surface: #171f31; --fg: #e6ebf5; --muted: #99a4ba; --line: #28324a; --line-deep: #344060;
-  --primary: #7398f2; --primary-deep: #3d5fb8; --primary-soft: #1d2a4a; --on-primary: #0e1320;
-  --brass: #e3ae49; --brass-soft: #3a2f17;
-  --good: #6cc65e; --good-deep: #3f8f34; --good-bg: #18301c;
-  --bad: #f2766d; --bad-deep: #b04640; --bad-bg: #3b1c1b;
-  --locked: #2a3349; --locked-deep: #1f2638; --locked-fg: #6f7a91;
-  color-scheme: dark } }
-:root[data-theme="dark"] {
-  --bg: #0e1320; --surface: #171f31; --fg: #e6ebf5; --muted: #99a4ba; --line: #28324a; --line-deep: #344060;
-  --primary: #7398f2; --primary-deep: #3d5fb8; --primary-soft: #1d2a4a; --on-primary: #0e1320;
-  --brass: #e3ae49; --brass-soft: #3a2f17;
-  --good: #6cc65e; --good-deep: #3f8f34; --good-bg: #18301c;
-  --bad: #f2766d; --bad-deep: #b04640; --bad-bg: #3b1c1b;
-  --locked: #2a3349; --locked-deep: #1f2638; --locked-fg: #6f7a91;
-  color-scheme: dark }
 
 html, body { height: 100%; }
-body { background: var(--bg); color: var(--fg); font-family: var(--f-ui); font-size: 16px; line-height: 1.45; font-weight: 600; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-ui); font-size: 16px; line-height: 1.45; font-weight: 500; }
 body.in-lesson { overflow: hidden; }
 button { font: inherit; color: inherit; cursor: pointer; }
 button:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
@@ -379,45 +366,178 @@ svg { display: block; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ===== redesign (2026-10-18): Night library colors, Moonlit layout, tab navigation ===== */
+.top { border-bottom: 1px solid var(--line); }
+.top-in { max-width: 1100px; padding-block: 14px; }
+.brand { background: none; border: 0; padding: 0; font-family: var(--f-label); font-weight: 800; font-size: 22px; letter-spacing: .06em; color: var(--brass); }
+.stats { gap: 6px; font-weight: 700; font-size: 13px; }
+.chip { background: var(--surface); border-radius: 99px; padding: 5px 11px; }
+.chip.streak { color: var(--brass); }
+.chip.xp { color: var(--fg); }
+.app { max-width: 1100px; margin: 0 auto; }
+.views { padding: 16px 16px 110px; display: block; }
+.view { display: grid; gap: 16px; max-width: 640px; }
+.view[hidden] { display: none; }
+.vtitle { margin: 4px 0 0; font-family: var(--f-label); font-weight: 700; font-size: 26px; letter-spacing: .04em; }
+.sec-h { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.sec-h h2, .sec-h h3 { margin: 0; font-family: var(--f-label); font-weight: 700; font-size: 18px; letter-spacing: .06em; }
+.sec-h p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; }
+.card p, .card .meta { color: var(--muted); }
+.btn { box-shadow: none; border-radius: 14px; letter-spacing: .02em; text-transform: none; font-weight: 800; }
+.btn:active:not(:disabled) { box-shadow: none; }
+.btn.ghost { box-shadow: none; background: transparent; border: 1px solid var(--line-deep); color: var(--fg); }
+.btn:disabled { box-shadow: none; }
+.lfoot.good .btn, .lfoot.bad .btn { box-shadow: none; }
+.lfoot.good .btn { color: var(--bg); }
+.lfoot.bad .btn { color: var(--bg); }
+.linkbtn { color: var(--brass); text-decoration: none; font-weight: 700; }
+.linkbtn:hover { text-decoration: underline; }
+.opt, .tile, .chip-o, .cbtn, .gbtn, .chip { border-width: 1px; }
+.opt, .tile { border-bottom-width: 1px; background: var(--surface-2); border-color: var(--line-deep); }
+.prompt { font-weight: 800; }
+.kicker { color: var(--brass); font-family: var(--f-label); font-size: 15px; font-weight: 700; letter-spacing: .1em; text-transform: none; }
+
+/* tabs: bottom bar on phones, side nav on wide screens */
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; background: var(--bg); border-top: 1px solid var(--line); padding: 8px 10px calc(10px + env(safe-area-inset-bottom, 0px)); }
+.tabb { background: none; border: 0; border-radius: 99px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 7px 0; min-height: 48px; color: var(--muted); font-family: var(--f-label); font-weight: 700; font-size: 14px; letter-spacing: .05em; }
+.tabb svg { width: 22px; height: 22px; }
+.tabb.on { color: var(--brass); }
+@media (min-width: 900px) {
+  .app { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 24px; padding-inline: 16px; }
+  .tabs { position: sticky; top: 76px; align-self: start; grid-template-columns: 1fr; border: 0; padding: 16px 0; background: none; }
+  .tabb { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 12px 14px; font-size: 17px; border-radius: 12px; }
+  .tabb.on { background: var(--surface); }
+  .views { padding: 20px 0 64px; }
+}
+
+/* today hero */
+.today { background: var(--surface); color: var(--fg); border-radius: 24px; padding: 22px 20px 0; display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch; gap: 6px; box-shadow: none; overflow: hidden; }
+.today .t-day { font-family: var(--f-label); font-weight: 700; font-size: 15px; letter-spacing: .1em; color: var(--muted); }
+.today h2 { margin: 0; font-size: 28px; font-weight: 800; line-height: 1.12; }
+.today h2 .gold { color: var(--brass); }
+.today p { margin: 0; color: var(--muted); font-size: 15px; opacity: 1; max-width: 40ch; }
+.today .t-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: 8px; }
+.today .t-row .btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.today .btn { background: var(--brass); color: var(--on-primary); box-shadow: none; padding: 13px 30px; min-width: 0; }
+.today .btn.ghost { background: transparent; color: var(--fg); }
+.today .m-hero { width: 118px; margin-right: -6px; }
+.today.done .btn { background: var(--brass); color: var(--on-primary); border: 0; box-shadow: none; }
+.today.done { background: var(--surface); border: 0; }
+
+/* course rows (Today mix, Courses tab) */
+.mix { display: grid; gap: 10px; }
+.crow { width: 100%; text-align: left; background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: grid; gap: 8px; color: var(--fg); }
+.crow:hover { border-color: var(--line-deep); }
+.crow .ct { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.crow b { font-size: 16px; font-weight: 700; }
+.crow .cn { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.crow .cs { font-size: 13px; color: var(--muted); }
+.thin { height: 4px; background: var(--line-deep); border-radius: 99px; overflow: hidden; }
+.thin > i { display: block; height: 100%; background: var(--brass); }
+.cline { display: flex; align-items: center; gap: 12px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; padding: 10px 12px 10px 14px; }
+.cline .copen { flex: 1; min-width: 0; background: none; border: 0; padding: 4px 0; text-align: left; display: grid; gap: 2px; color: var(--fg); }
+.cline .copen b { font-size: 16px; font-weight: 700; }
+.cline .copen span { font-size: 13px; color: var(--muted); }
+.switch { flex: none; width: 52px; height: 32px; border: 0; border-radius: 99px; background: var(--line-deep); padding: 3px; display: flex; justify-content: flex-start; }
+.switch::after { content: ""; width: 26px; height: 26px; border-radius: 50%; background: var(--fg); }
+.switch[aria-pressed="true"] { background: var(--good-deep); justify-content: flex-end; }
+.note { font-size: 14px; color: var(--muted); background: var(--surface-2); border-radius: 12px; padding: 10px 12px; margin: 0; }
+.glink { width: 100%; background: none; border: 0; padding: 0 4px; display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 14px; text-align: left; }
+.glink b { color: var(--brass); }
+
+/* course page */
+.chead { display: grid; gap: 10px; }
+.back { justify-self: start; background: none; border: 0; padding: 4px 0; color: var(--brass); font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 4px; }
+.back svg { width: 18px; height: 18px; }
+.chead .ctop { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.chead h1 { margin: 0; font-size: 26px; font-weight: 800; line-height: 1.15; }
+.chead .cmeta { color: var(--muted); font-size: 14px; }
+.perday { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 14px; color: var(--muted); }
+.perday button { background: var(--surface-2); border: 1px solid var(--line-deep); border-radius: 10px; padding: 5px 13px; color: var(--muted); font-weight: 700; }
+.perday button[aria-pressed="true"] { border-color: var(--brass); color: var(--brass); background: var(--brass-soft); }
+.path { gap: 12px; }
+.ublock { background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.ublock.cur { border-color: var(--brass); }
+.uhead { width: 100%; background: none; border: 0; padding: 14px; display: flex; align-items: center; gap: 12px; text-align: left; color: var(--fg); }
+.uhead .ut { flex: 1; display: grid; gap: 6px; }
+.uhead b { font-size: 16px; font-weight: 700; }
+.uhead .uc { font-size: 13px; color: var(--muted); }
+.uhead svg { width: 18px; height: 18px; color: var(--muted); transition: transform .15s; }
+.ublock.open .uhead > svg { transform: rotate(180deg); }
+.ublock.done .uhead b::before { content: "✓ "; color: var(--good); }
+.lessons { border-top: 1px solid var(--line); display: grid; }
+.lessons[hidden] { display: none; }
+.lrow { width: 100%; background: none; border: 0; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 12px; padding: 12px 14px; min-height: 48px; text-align: left; color: var(--fg); }
+.lrow:first-child { border-top: 0; }
+.lrow:hover { background: var(--surface); }
+.lrow .ld { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--line-deep); display: grid; place-items: center; }
+.lrow .ld svg { width: 14px; height: 14px; }
+.lrow.done .ld { background: var(--brass); border-color: var(--brass); color: var(--on-primary); }
+.lrow.next { background: var(--brass-soft); }
+.lrow.next .ld { border-color: var(--brass); }
+.lrow .lt { flex: 1; font-weight: 600; font-size: 15px; }
+.lrow .ls { font-size: 13px; color: var(--muted); }
+.lrow.next .ls { color: var(--brass); font-weight: 700; }
+.welcome { background: var(--surface); border: 0; }
+.welcome h2 { font-weight: 800; }
+.steps li::before { background: var(--brass-soft); color: var(--brass); }
 </style>
 
 <header class="top">
   <div class="top-in">
-    <div class="brand">
-      <svg viewBox="0 0 32 32" aria-hidden="true" fill="currentColor"><rect x="15" y="2" width="2" height="5" rx="1"/><path d="M8 17a8 8 0 0 1 16 0z"/><rect x="5" y="17" width="22" height="3" rx="1"/><rect x="7" y="21" width="2.5" height="6"/><rect x="12" y="21" width="2.5" height="6"/><rect x="17.5" y="21" width="2.5" height="6"/><rect x="22.5" y="21" width="2.5" height="6"/><rect x="4" y="27" width="24" height="3" rx="1"/></svg>
-      WonkoLingo
-    </div>
+    <button class="brand" id="brand" aria-label="WonkoLingo, go to Today">WonkoLingo</button>
     <div class="stats">
-      <div class="stat streak" title="Day streak"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.5 2c.6 3.4 4.9 5.6 4.9 10.6A5.4 5.4 0 0 1 12 18a5.4 5.4 0 0 1-5.4-5.4c0-2.4 1.2-4 2.4-5 0 2 .9 3.2 2 3.4-.3-3.3.5-6.4 1.5-9z"/><path d="M8 19.5h8v2.5H8z" opacity=".5"/></svg><span id="streak">0</span><span class="sr" hidden>day streak</span></div>
-      <div class="stat xp" title="Total XP"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 2 4 14h6.5L9.5 22 20 9.5h-6.5z"/></svg><span id="xp">0</span></div>
+      <div class="chip streak" title="Day streak"><span id="streak">0</span> day<span id="streakS">s</span></div>
+      <div class="chip xp" title="Total XP"><span id="xp">0</span> XP</div>
     </div>
   </div>
 </header>
 
-<main class="home" id="home">
-  <div class="path-col">
-    <div id="todayWrap"></div>
-    <div id="pickWrap"></div>
-    <div class="cinfo" id="cinfo" hidden></div>
-    <div class="path" id="path"></div>
-  </div>
-  <aside class="side">
-    <section class="card" id="group"></section>
-    <section class="card" id="potd"></section>
-    <section class="card" id="streakCard"></section>
-    <section class="card" id="progressCard">
-      <h3>Your progress</h3>
-      <div class="kv"><span>Lessons</span><span id="pDone">0 / 0</span></div>
-      <div class="bar-mini"><i id="pBar" style="width:0"></i></div>
-      <div class="kv"><span>Cards in your reviews</span><span id="pCards">0</span></div>
-      <div class="kv"><span>Due tomorrow</span><span id="pTomorrow">0</span></div>
-      <p>Keys: 1 to 4 picks an answer, Enter checks, Esc quits. On typed answers, Cmd+Enter (Ctrl+Enter) checks.</p>
-      <p class="meta" id="pSync"></p>
-      <button class="linkbtn" id="resetBtn">Reset progress</button>
+<div class="app">
+  <nav class="tabs" id="tabs" aria-label="Main">
+    <button class="tabb" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Today</span></button>
+    <button class="tabb" data-tab="courses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/></svg><span>Courses</span></button>
+    <button class="tabb" data-tab="group"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg><span>Group</span></button>
+    <button class="tabb" data-tab="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Me</span></button>
+  </nav>
+  <main class="views" id="home">
+    <section class="view" id="v-today">
+      <div id="todayWrap"></div>
+      <div id="mixWrap"></div>
+      <div id="groupLine"></div>
+      <section class="card" id="potd" hidden></section>
     </section>
-    <section class="card" id="caveat"></section>
-  </aside>
-</main>
+    <section class="view" id="v-courses" hidden>
+      <div id="coursesBody"></div>
+    </section>
+    <section class="view" id="v-course" hidden>
+      <div id="courseHead"></div>
+      <div class="cinfo" id="cinfo" hidden></div>
+      <div class="path" id="path"></div>
+      <section class="card" id="caveat"></section>
+    </section>
+    <section class="view" id="v-group" hidden>
+      <h1 class="vtitle">Group</h1>
+      <section class="card" id="group"></section>
+    </section>
+    <section class="view" id="v-me" hidden>
+      <h1 class="vtitle">Me</h1>
+      <section class="card" id="streakCard"></section>
+      <section class="card" id="progressCard">
+        <h3>Your progress</h3>
+        <div class="kv"><span>Lessons, all courses</span><span id="pDone">0 / 0</span></div>
+        <div class="bar-mini"><i id="pBar" style="width:0"></i></div>
+        <div class="kv"><span>Cards in your reviews</span><span id="pCards">0</span></div>
+        <div class="kv"><span>Due tomorrow</span><span id="pTomorrow">0</span></div>
+        <p>Keys: 1 to 4 picks an answer, Enter checks, Esc quits. On typed answers, Cmd+Enter (Ctrl+Enter) checks.</p>
+        <p class="meta" id="pSync"></p>
+        <button class="linkbtn" id="resetBtn">Reset progress</button>
+      </section>
+    </section>
+  </main>
+</div>
 
 <section class="overlay" id="lesson" hidden>
   <div class="lbar">
@@ -5802,6 +5922,7 @@ const COURSES = {
 const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const WEEKDAYS = [false, true, true, true, true, true, false];
 let LESSONS = [];
+let VIEW = 'today';
 function buildLessons() {
   const C = COURSES[state.course];
   LESSONS = [];
@@ -5835,66 +5956,52 @@ function load() {
     if (!s.activeDays) { // older saves only kept a streak count: rebuild the days it implies
       s.activeDays = [];
       for (let i = 0; s.last && i < Math.min(s.streak || 0, 400); i++) { const d = new Date(s.last + 'T12:00:00'); d.setDate(d.getDate() - i); s.activeDays.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')); }
-    } if (s.course && !COURSES[s.course]) { if (String(s.course).startsWith('c:')) s.wantCourse = s.course; s.course = null; } return s; } } catch (e) {}
-  return { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: null, srs: {}, hints: {}, activeDays: [], settings: defaultStreakSettings() };
+    }
+    if (!s.mix) { // before the daily mix: put the current course and every course with cards in review into it
+      s.mix = {};
+      const keys = new Set(Object.keys(s.srs).map(courseKeyForCard).filter(Boolean));
+      if (s.course) keys.add(s.course);
+      keys.forEach(k => s.mix[k] = { on: true, perDay: 5 });
+    }
+    if (s.course && !COURSES[s.course]) { if (String(s.course).startsWith('c:')) s.wantCourse = s.course; s.course = null; } return s; } } catch (e) {}
+  return { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: null, srs: {}, hints: {}, activeDays: [], settings: defaultStreakSettings(), mix: {} };
 }
 function defaultStreakSettings() { return { days: [true, true, true, true, true, true, true], pauses: [] }; }
 function save(noSync) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} if (!noSync && typeof scheduleSync === 'function') scheduleSync(); }
 
-function unlocked(i) {
-  if (i === 0) return true;
-  if (state.done[LESSONS[i - 1].id]) return true;
-  return state.jumped.includes(jumpKey(LESSONS[i].unit));
-}
+function unlocked(i) { return true; }
 
 let toastTimer;
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => t.hidden = true, 2600); }
 
-/* ---------- home ---------- */
+/* ---------- home: header, tabs and whichever view is open ---------- */
 function renderHome() {
-  renderToday();
+  if (VIEW === 'course' && !COURSES[state.course]) VIEW = 'courses';
+  const si = streakInfo();
   $('#xp').textContent = state.xp;
-  $('#streak').textContent = streakInfo().streak;
-  renderStreakCard();
+  $('#streak').textContent = si.streak; $('#streakS').textContent = si.streak === 1 ? '' : 's';
+  ['today', 'courses', 'course', 'group', 'me'].forEach(v => $('#v-' + v).hidden = v !== VIEW);
+  document.querySelectorAll('#tabs .tabb').forEach(b => { const on = b.dataset.tab === (VIEW === 'course' ? 'courses' : VIEW); b.classList.toggle('on', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+  if (VIEW === 'today') { renderToday(); renderMix(); renderGroupLine(); }
+  if (VIEW === 'courses') renderCourses();
+  if (VIEW === 'course') renderCourseView();
+  if (VIEW === 'me') { renderStreakCard(); renderProgress(); }
+}
+function renderProgress() {
   $('#pSync').textContent = G ? 'Progress syncs across your devices through ' + G.groupName + '.' : 'Progress is saved on this device only. Join a group to sync it.';
-  const cur = LESSONS.findIndex((l, i) => !state.done[l.id] && unlocked(i));
-  let h = '', k = 0;
-  const CI = COURSES[state.course];
-  const nCourses = Object.keys(COURSES).length;
-  $('#pickWrap').innerHTML = `<button class="picker" id="pickBtn" aria-haspopup="dialog"><span class="pk-main"><span class="pk-k">${CI ? 'Course' : 'Choose a course'}</span><span class="pk-n">${CI ? esc(CI.name) : nCourses + ' courses to try, or make your own'}</span></span>${CI ? `<span class="pk-p">${courseProgress(state.course).done} of ${courseProgress(state.course).total}</span>` : ''}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>`;
-  ['#caveat', '#potd', '#progressCard'].forEach(id => $(id).hidden = !CI);
-  if (!CI) { $('#cinfo').hidden = true; $('#path').innerHTML = welcomeHTML(); return; }
-  const mine = CI.group && G && CI.authorId === G.player.id;
-  $('#cinfo').hidden = !CI.group;
-  $('#cinfo').innerHTML = CI.group ? `<span>${esc(CI.meta)}</span>${mine ? `<button class="linkbtn" id="ciReports">${CI.openReports} open report${CI.openReports === 1 ? '' : 's'}</button><button class="linkbtn" id="ciUpdate">Upload new version</button><button class="linkbtn" id="ciDelete">Remove course</button>` : ''}${CI.description ? `<span class="cdesc">${esc(CI.description)}</span>` : ''}` : '';
-  const C = COURSES[state.course];
-  $('#caveat').innerHTML = `<h3>How sure are these answers?</h3>${C.caveat.map(t => `<p>${esc(t)}</p>`).join('')}<div class="meta">${esc(C.meta)}</div>`;
-  curUnits().forEach((u, ui) => {
-    const first = LESSONS.findIndex(l => l.unit === ui);
-    const uLocked = !unlocked(first);
-    const nDone = LESSONS.filter(l => l.unit === ui && state.done[l.id]).length;
-    h += `<section class="unit${uLocked ? ' is-locked' : ''}"><div class="banner"><div><div class="eyebrow">Unit ${ui + 1} · ${nDone} of ${u.lessons.length} done</div><h2>${esc(u.title)}</h2><p>${esc(u.desc)}</p></div>${uLocked ? `<button class="jump" data-jump="${ui}">Jump here</button>` : ''}</div><div class="nodes">`;
-    LESSONS.forEach((l, i) => {
-      if (l.unit !== ui) return;
-      const cls = state.done[l.id] ? 'done' : i === cur ? 'current' : unlocked(i) ? 'open' : 'locked';
-      const icon = cls === 'done' ? ICON.check : cls === 'locked' ? ICON.lock : ICON.star;
-      h += `<div class="node-wrap" style="--x:${OFFS[k++ % OFFS.length]}px">${cls === 'current' ? '<span class="start">Start</span>' : ''}<button class="node ${cls}" data-idx="${i}" aria-label="${esc(l.title)}${cls === 'locked' ? ' (locked)' : cls === 'done' ? ' (done)' : ''}">${icon}</button><span class="node-label">${esc(l.title)}</span></div>`;
-    });
-    h += '</div></section>';
-  });
-  $('#path').innerHTML = h;
-  const nd = LESSONS.filter(l => state.done[l.id]).length;
-  $('#pDone').textContent = nd + ' / ' + LESSONS.length;
-  $('#pBar').style.width = (nd / LESSONS.length * 100) + '%';
+  let done = 0, total = 0;
+  Object.keys(COURSES).forEach(k => { const p = courseProgress(k); done += p.done; total += p.total; });
+  $('#pDone').textContent = done + ' / ' + total;
+  $('#pBar').style.width = (total ? done / total * 100 : 0) + '%';
   const td = dstr(new Date());
   $('#pCards').textContent = Object.keys(state.srs).length;
   $('#pTomorrow').textContent = Object.values(state.srs).filter(c => c.due <= addDays(td, 1) && c.due > td).length;
 }
 
 $('#path').addEventListener('click', e => {
-  const j = e.target.closest('[data-jump]');
-  if (j) { const ui = +j.dataset.jump; const key = jumpKey(ui); if (!state.jumped.includes(key)) state.jumped.push(key); save(); renderHome(); return; }
-  const n = e.target.closest('.node');
+  const u = e.target.closest('[data-unit]');
+  if (u) { const b = u.closest('.ublock'); const l = b.querySelector('.lessons'); l.hidden = !l.hidden; b.classList.toggle('open', !l.hidden); u.setAttribute('aria-expanded', String(!l.hidden)); return; }
+  const n = e.target.closest('[data-idx]');
   if (!n) return;
   const i = +n.dataset.idx;
   if (!unlocked(i)) { toast('Finish the lesson before this one, or use Jump here on the unit.'); return; }
@@ -5918,13 +6025,13 @@ function renderPotd() {
 let resetArmed = false;
 $('#resetBtn').onclick = () => {
   if (!resetArmed) { resetArmed = true; $('#resetBtn').textContent = 'Click again to erase all progress'; setTimeout(() => { resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; }, 4000); return; }
-  state = { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: state.course, srs: {}, hints: {}, activeDays: [], settings: state.settings, settingsAt: Date.now() }; save(); resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; renderHome(); toast('Progress reset.');
+  state = { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: state.course, srs: {}, hints: {}, activeDays: [], settings: state.settings, settingsAt: Date.now(), mix: state.mix, mixAt: state.mixAt }; save(); resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; renderHome(); toast('Progress reset.');
 };
 
 /* ---------- spaced repetition: FSRS-4.5 with its published default weights ---------- */
 const FSRS_W = [0.4872, 1.4003, 3.7145, 13.8206, 5.1618, 1.2298, 0.8975, 0.031, 1.6474, 0.1367, 1.0461, 2.1072, 0.0793, 0.3246, 1.587, 0.2272, 2.8755];
 const FSRS_DECAY = -0.5, FSRS_FACTOR = 19 / 81, TARGET_RETENTION = 0.9, MAX_INTERVAL = 365;
-const SESSION_REVIEWS = 20, SESSION_NEW = 5;
+const SESSION_REVIEWS = 30, SESSION_NEW = 5;
 const clampD = d => Math.min(10, Math.max(1, d));
 const dayDiff = (a, b) => Math.round((Date.parse(b + 'T12:00:00') - Date.parse(a + 'T12:00:00')) / 864e5);
 const addDays = (day, n) => { const d = new Date(day + 'T12:00:00'); d.setDate(d.getDate() + n); return dstr(d); };
@@ -5956,14 +6063,29 @@ function courseCards(key) {
   return out;
 }
 function cardIndex() { const m = new Map(); Object.keys(COURSES).forEach(k => courseCards(k).forEach(c => m.set(c.id, c))); return m; }
+// Which course a card id belongs to, from its lesson-id prefix. Works before group courses have loaded.
+function courseKeyForCard(id) {
+  id = String(id);
+  if (id.startsWith('c:')) return 'c:' + id.split(':')[1];
+  const pre = (id.match(/^([a-z]*)u\d+l\d+#/) || [])[1];
+  if (pre === undefined) return null;
+  return Object.keys(COURSES).find(k => !COURSES[k].group && COURSES[k].pre === pre) || null;
+}
+const inMix = k => !!(state.mix && state.mix[k] && state.mix[k].on);
+const mixKeys = () => Object.keys(state.mix || {}).filter(k => inMix(k) && COURSES[k]);
+const perDay = k => (state.mix && state.mix[k] && state.mix[k].perDay) || SESSION_NEW;
+function setMix(k, on) { state.mix = state.mix || {}; state.mix[k] = { on, perDay: perDay(k) }; state.mixAt = Date.now(); save(); }
+function setPerDay(k, n) { state.mix = state.mix || {}; state.mix[k] = { on: inMix(k), perDay: n }; state.mixAt = Date.now(); save(); }
+// Reviews come only from courses in the daily mix; courses switched off keep their schedule and pick up again when switched back on.
 function dueCards(today) {
   const idx = cardIndex();
-  return Object.entries(state.srs).filter(([id, c]) => c.due <= today && idx.has(id))
+  return Object.entries(state.srs).filter(([id, c]) => c.due <= today && idx.has(id) && inMix(idx.get(id).course))
     .map(([id, c]) => ({ ...idx.get(id), r: retrievability(Math.max(0, dayDiff(c.last, today)), c.s) }))
     .sort((a, b) => a.r - b.r);
 }
-const newCardsAvailable = () => courseCards(state.course).filter(c => !state.srs[c.id]);
-const newAllowanceToday = today => Math.max(0, SESSION_NEW - (state.newDay === today ? state.newCount : 0));
+const newCardsAvailable = (k = state.course) => courseCards(k).filter(c => !state.srs[c.id]);
+// Each course in the mix adds up to its own number of new cards a day.
+const newAllowanceToday = (today, k) => Math.max(0, perDay(k) - (state.newDay === today ? ((state.newCounts || {})[k] || 0) : 0));
 function markLessonDone(lessonId, course) {
   const cards = courseCards(course).filter(c => c.lessonId === lessonId);
   if (cards.length && cards.every(c => state.srs[c.id])) state.done[lessonId] = true;
@@ -5974,7 +6096,8 @@ function srsRecord(it, g) {
   const today = dstr(new Date()), prev = state.srs[it._card];
   state.srs[it._card] = fsrsNext(prev, g, today);
   if (!prev) {
-    if (state.newDay !== today) { state.newDay = today; state.newCount = 0; }
+    if (state.newDay !== today) { state.newDay = today; state.newCount = 0; state.newCounts = {}; }
+    state.newCounts = state.newCounts || {}; state.newCounts[it._course] = (state.newCounts[it._course] || 0) + 1;
     state.newCount++; run.newSeen++; run.xp += g > 1 ? 5 : 1;
   } else {
     // Only reviews that were actually due earn full credit, so replaying fresh material can't farm XP.
@@ -6000,10 +6123,18 @@ function startLesson(i, challenge) {
   show('#lesson');
   nextItem();
 }
+// New cards for today: each course in the mix up to its allowance (or its daily number again for "Learn more"), interleaved.
+function freshForToday(today, extra) {
+  const lists = mixKeys().map(k => newCardsAvailable(k).slice(0, extra ? perDay(k) : newAllowanceToday(today, k)));
+  const out = [];
+  for (let i = 0; lists.some(l => i < l.length); i++) lists.forEach(l => { if (i < l.length) out.push(l[i]); });
+  return out;
+}
 function startSession(extra) {
   const today = dstr(new Date());
+  if (!mixKeys().length) { toast('Add a course to your daily mix first.'); go('courses'); return; }
   const due = dueCards(today).slice(0, SESSION_REVIEWS);
-  const fresh = newCardsAvailable().slice(0, extra ? SESSION_NEW : newAllowanceToday(today));
+  const fresh = freshForToday(today, extra);
   const cards = due.concat(fresh);
   if (!cards.length) { toast('Nothing to review right now.'); return; }
   run = newRun({ mode: 'session', hearts: Infinity, total: cards.length,
@@ -6302,13 +6433,13 @@ function finishSession() {
   const today = dstr(new Date());
   const acc = run.reviewed ? Math.round(run.remembered / run.reviewed * 100) : 100;
   groupPostSession(run.xp, acc, run.reviewed, run.newSeen);
-  const more = dueCards(today).length, canLearn = newCardsAvailable().length;
+  const more = dueCards(today).length, canLearn = mixKeys().some(k => newCardsAvailable(k).length);
   const tomorrow = Object.values(state.srs).filter(c => c.due === addDays(today, 1)).length;
   const parts = [];
   if (run.reviewed) parts.push(`You remembered ${run.remembered} of ${run.reviewed} review${run.reviewed === 1 ? '' : 's'}`);
   if (run.newSeen) parts.push(`learned ${run.newSeen} new card${run.newSeen === 1 ? '' : 's'}`);
   $('#result').classList.remove('failed');
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${more ? more + ' more reviews are due.' : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${G ? `<p>Posted to ${esc(G.groupName)}.</p>` : ''}<div class="rbtns"><button class="btn" id="rHome">Done</button>${more || canLearn ? `<button class="btn ghost" id="rMore">${more ? 'Keep reviewing' : 'Learn 5 more'}</button>` : ''}</div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${more ? more + ' more reviews are due.' : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${G ? `<p>Posted to ${esc(G.groupName)}.</p>` : ''}<div class="rbtns"><button class="btn" id="rHome">Done</button>${more || canLearn ? `<button class="btn ghost" id="rMore">${more ? 'Keep reviewing' : 'Learn more'}</button>` : ''}</div>`;
   show('#result');
   $('#rHome').onclick = goHome; $('#rHome').focus();
   if ($('#rMore')) $('#rMore').onclick = () => startSession(true);
@@ -6316,7 +6447,7 @@ function finishSession() {
 function fail() {
   const i = run.idx;
   $('#result').classList.add('failed');
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/skeptic.webp" alt=""><h2>Out of hearts.</h2><p>Five misses ends the lesson. You’ve now seen the explanations, so the second pass usually goes faster.</p><div class="rbtns"><button class="btn" id="rRetry">Try again</button><button class="btn ghost" id="rHome">Back to path</button></div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/skeptic.webp" alt=""><h2>Out of hearts.</h2><p>Five misses ends the lesson. You’ve now seen the explanations, so the second pass usually goes faster.</p><div class="rbtns"><button class="btn" id="rRetry">Try again</button><button class="btn ghost" id="rHome">Back</button></div>`;
   show('#result');
   $('#rRetry').onclick = () => startLesson(i); $('#rHome').onclick = goHome; $('#rRetry').focus();
 }
@@ -6364,7 +6495,7 @@ async function refreshBoard() {
   if (!G) return renderGroup();
   try { board = await apiCall('/api/board?today=' + dstr(new Date())); gOffline = false; G.groupName = board.groupName; saveG(); }
   catch (e) { if (e.status === 401) { G = null; saveG(); board = null; gErr = 'That group sign-in no longer works. Join again or use a recovery code.'; } else gOffline = true; }
-  renderGroup();
+  renderGroup();  if (VIEW === 'today') renderGroupLine();
 }
 
 function renderGroup() {
@@ -6464,6 +6595,8 @@ setInterval(() => { if (G && !document.hidden && !run) refreshBoard(); }, 60000)
 document.addEventListener('visibilitychange', () => { if (G && !document.hidden && !run) refreshBoard(); });
 
 buildLessons();
+VIEW = viewFromHash();
+if (joinParam && !G) VIEW = 'group';
 renderHome();
 renderPotd();
 /* ---------- group-made courses ---------- */
@@ -6564,7 +6697,7 @@ $('#addBody').addEventListener('click', async e => {
     try {
       const d = await apiCall('/api/courses', { course: addState.check.course });
       closeSheet('#addc'); toast(d.updated ? `Updated to version ${d.version}.` : 'Course published to your group.');
-      state.course = 'c:' + d.slug; save(); await loadCourses();
+      setMix('c:' + d.slug, true); state.course = 'c:' + d.slug; save(); await loadCourses(); go('course', 'c:' + d.slug);
     } catch (err) { addState.busy = false; addState.err = netMsg(err); renderAdd(); }
   }
 });
@@ -6624,7 +6757,7 @@ function welcomeHTML() {
   return `<section class="welcome"><img class="mascot m-welcome" src="mascot/wave.webp" alt="WonkoLingo owl waving"><p class="kicker">Welcome to WonkoLingo</p><h2>Learn anything with your friends</h2>
     <p>Pick any topic. Your AI assistant turns it into a bite-size course in a few minutes. Then you and your friends play each other’s courses and compete on streaks and points.</p>
     <ol class="steps"><li><span><b>Start a group</b> and invite friends, or just use it yourself.</span></li><li><span><b>Make a course</b> by pasting our prompt into Claude or another AI assistant.</span></li><li><span><b>Play and compete</b> on your group’s weekly leaderboard.</span></li></ol>
-    <div class="row"><button class="btn" id="wCreate">Create your first course</button><button class="btn ghost" id="wBrowse">Try an example course</button></div></section>`;
+    <div class="row"><button class="btn" id="wCreate">Create your first course</button><button class="btn ghost" id="wBrowse">Browse courses</button></div></section>`;
 }
 function selectCourse(key) {
   state.course = key; save(); buildLessons(); renderHome(); renderPotd(); window.scrollTo(0, 0);
@@ -6653,15 +6786,14 @@ function renderPick() {
   $('#pickBody').innerHTML = h;
 }
 function openPicker() { pickQ = ''; renderPick(); openSheet('#pick'); }
-$('#pickWrap').addEventListener('click', e => { if (e.target.closest('#pickBtn')) openPicker(); });
-$('#path').addEventListener('click', e => {
+document.addEventListener('click', e => {
   if (e.target.closest('#wCreate')) openAdd();
-  if (e.target.closest('#wBrowse')) openPicker();
+  if (e.target.closest('#wBrowse')) go('courses');
 });
 $('#pickBody').addEventListener('click', e => {
   if (e.target.closest('#pkCreate, #pkCreate2')) { closeSheet('#pick'); openAdd(); return; }
   const b = e.target.closest('[data-course]'); if (!b) return;
-  closeSheet('#pick'); selectCourse(b.dataset.course);
+  closeSheet('#pick'); go('course', b.dataset.course);
 });
 $('#pickBody').addEventListener('input', e => {
   if (e.target.id !== 'pickQ') return;
@@ -6669,27 +6801,132 @@ $('#pickBody').addEventListener('input', e => {
   const inp = $('#pickQ'); inp.focus(); inp.setSelectionRange(pos, pos);
 });
 
-/* ---------- today: the daily session is the main thing ---------- */
+/* ---------- navigation: tabs, the course page, and the URL hash ---------- */
+function go(view, course) {
+  if (course && COURSES[course]) { state.course = course; save(); buildLessons(); renderPotd(); }
+  VIEW = view;
+  const h = view === 'course' ? '#course/' + encodeURIComponent(state.course) : view === 'today' ? '' : '#' + view;
+  if (location.hash !== h) history.replaceState(null, '', h || location.pathname + location.search);
+  renderHome(); window.scrollTo(0, 0);
+}
+function viewFromHash() {
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (h.startsWith('course/') && COURSES[h.slice(7)]) { state.course = h.slice(7); buildLessons(); return 'course'; }
+  return ['courses', 'group', 'me'].includes(h) ? h : 'today';
+}
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) go(b.dataset.tab); });
+$('#brand').onclick = () => go('today');
+window.addEventListener('hashchange', () => { VIEW = viewFromHash(); renderHome(); });
+
+/* ---------- today: the daily session from your mix ---------- */
+function todayCounts(today) {
+  const due = dueCards(today), byDue = {};
+  due.forEach(c => byDue[c.course] = (byDue[c.course] || 0) + 1);
+  const byNew = {};
+  mixKeys().forEach(k => byNew[k] = Math.min(newCardsAvailable(k).length, newAllowanceToday(today, k)));
+  const nDue = Math.min(due.length, SESSION_REVIEWS), nNew = Object.values(byNew).reduce((a, b) => a + b, 0);
+  return { due: due.length, nDue, nNew, byDue, byNew };
+}
+function nextLessonTitle(k) {
+  const C = COURSES[k]; if (!C) return '';
+  for (let ui = 0; ui < C.units.length; ui++) for (let li = 0; li < C.units[ui].lessons.length; li++) if (!state.done[C.pre + 'u' + ui + 'l' + li]) return C.units[ui].title;
+  return 'All lessons done';
+}
 function renderToday() {
   const el = $('#todayWrap'); if (!el) return;
   const today = dstr(new Date());
-  const learned = Object.keys(state.srs).length;
-  if (!learned && !COURSES[state.course]) { el.innerHTML = ''; return; }
-  const due = dueCards(today).length, sessDue = Math.min(due, SESSION_REVIEWS);
-  const avail = newCardsAvailable().length, nNew = Math.min(avail, newAllowanceToday(today));
-  if (sessDue + nNew > 0) {
-    const mins = Math.max(1, Math.round(sessDue * 0.6 + nNew * 0.4));
-    const what = [sessDue ? `${sessDue} review${sessDue === 1 ? '' : 's'}` : '', nNew ? `${nNew} new` : ''].filter(Boolean).join(' · ');
-    el.innerHTML = `<section class="today"><div class="today-main"><p class="kicker">Today</p><h2>${what}</h2><p>About ${mins} minute${mins === 1 ? '' : 's'}. You type answers from memory and AI grades them.${due > SESSION_REVIEWS ? ` ${due - SESSION_REVIEWS} more are waiting for later sessions.` : ''}</p></div><button class="btn" id="todayGo">Start</button></section>`;
+  if (!mixKeys().length && !Object.keys(state.srs).length) { el.innerHTML = welcomeHTML(); return; }
+  const t = todayCounts(today), total = t.nDue + t.nNew;
+  const day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date().getDay()];
+  if (total > 0) {
+    const mins = Math.max(1, Math.round(t.nDue * 0.6 + t.nNew * 0.4));
+    const parts = [t.nDue ? `${t.nDue} review${t.nDue === 1 ? '' : 's'}` : '', t.nNew ? `${t.nNew} new` : ''].filter(Boolean).join(' and ');
+    el.innerHTML = `<section class="today"><div class="t-day">${day}</div><h2>Ready when you are.<br><span class="gold">${total} card${total === 1 ? '' : 's'}</span> today.</h2><p>${parts}, about ${mins} minute${mins === 1 ? '' : 's'}.${t.due > SESSION_REVIEWS ? ` ${t.due - SESSION_REVIEWS} more reviews wait for a later session.` : ''}</p><div class="t-row"><div class="btns"><button class="btn" id="todayGo">Start</button></div><img class="mascot m-hero" src="mascot/read.webp" alt=""></div></section>`;
   } else {
-    const next = Object.values(state.srs).map(c => c.due).filter(d => d > today).sort()[0];
-    el.innerHTML = `<section class="today done"><img class="mascot m-today" src="mascot/read.webp" alt=""><div class="today-main"><p class="kicker">Today</p><h2>All caught up</h2><p>${next ? 'Your next reviews are due ' + whenText(next) + '.' : ''}${avail ? ' You can learn more now if you want.' : ''}</p></div>${avail ? '<button class="btn ghost" id="todayMore">Learn 5 more</button>' : ''}</section>`;
+    const next = Object.entries(state.srs).filter(([id, c]) => c.due > today && inMix(courseKeyForCard(id))).map(([, c]) => c.due).sort()[0];
+    const canLearn = mixKeys().some(k => newCardsAvailable(k).length);
+    el.innerHTML = `<section class="today done"><div class="t-day">${day}</div><h2>All caught up.</h2><p>${next ? 'Your next reviews are due ' + whenText(next) + '.' : 'Nothing is scheduled yet.'}${canLearn ? ' You can learn more now if you want.' : ''}</p><div class="t-row"><div class="btns">${canLearn ? '<button class="btn" id="todayMore">Learn more</button>' : '<button class="btn ghost" id="todayCourses">Add a course</button>'}</div><img class="mascot m-hero" src="mascot/think.webp" alt=""></div></section>`;
   }
 }
 $('#todayWrap').addEventListener('click', e => {
   if (e.target.closest('#todayGo')) startSession(false);
   if (e.target.closest('#todayMore')) startSession(true);
+  if (e.target.closest('#todayCourses')) go('courses');
 });
+function renderMix() {
+  const el = $('#mixWrap'), keys = mixKeys();
+  if (!keys.length) { el.innerHTML = Object.keys(state.srs).length ? `<div class="sec-h"><h2>In your mix</h2><button class="linkbtn" data-go="courses">Choose courses</button></div><p class="note">No courses are in your daily mix, so nothing new is scheduled. Switch some on in Courses.</p>` : ''; return; }
+  const t = todayCounts(dstr(new Date()));
+  el.innerHTML = `<div class="mix"><div class="sec-h"><h2>In your mix</h2><button class="linkbtn" data-go="courses">Edit</button></div>${keys.map(k => {
+    const C = COURSES[k], p = courseProgress(k), d = t.byDue[k] || 0, n = t.byNew[k] || 0;
+    const pct = p.total ? Math.round(p.done / p.total * 100) : 0;
+    const counts = d && n ? `${d} + ${n} new` : d ? `${d} review${d === 1 ? '' : 's'}` : n ? `${n} new` : 'Done for today';
+    return `<button class="crow" data-open="${esc(k)}"><span class="ct"><b>${esc(C.name)}</b><span class="cn">${counts}</span></span><span class="cs">Next: ${esc(nextLessonTitle(k))}</span><span class="thin"><i style="width:${Math.max(pct, 2)}%"></i></span></button>`;
+  }).join('')}</div>`;
+}
+function renderGroupLine() {
+  const el = $('#groupLine');
+  if (!G) { el.innerHTML = `<button class="glink" data-go="group"><span>Play with friends: start or join a group</span><b>Group</b></button>`; return; }
+  if (!board) { el.innerHTML = ''; return; }
+  const rows = board.players.slice().sort((a, b) => b.week - a.week);
+  const me = rows.findIndex(r => r.id === board.me), lead = rows[0];
+  const gap = lead && me > 0 ? lead.week - rows[me].week : 0;
+  el.innerHTML = `<button class="glink" data-go="group"><span>${esc(G.groupName)} · you're ${me + 1}${['st', 'nd', 'rd'][me] || 'th'} this week</span><b>${me === 0 ? 'In the lead' : gap + ' XP to 1st'}</b></button>`;
+}
+
+/* ---------- courses: choose your daily mix ---------- */
+function courseLine(k) {
+  const C = COURSES[k], p = courseProgress(k), on = inMix(k);
+  const by = C.group ? (G && C.authorId === G.player.id ? 'By you' : 'By ' + C.author) : '';
+  const meta = [by, p.done ? `${p.done} of ${p.total} lessons` : `${p.total} lessons`, on ? `${perDay(k)} new a day` : ''].filter(Boolean).join(' · ');
+  return `<div class="cline"><button class="copen" data-open="${esc(k)}"><b>${esc(C.name)}</b><span>${esc(meta)}</span></button><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="${esc(C.name)} in your daily mix"></button></div>`;
+}
+function renderCourses() {
+  const keys = Object.keys(COURSES), on = keys.filter(inMix), off = keys.filter(k => !inMix(k));
+  const groupOff = off.filter(k => COURSES[k].group), builtinOff = off.filter(k => !COURSES[k].group);
+  const t = todayCounts(dstr(new Date()));
+  let h = `<div class="sec-h"><h1 class="vtitle">Courses</h1><button class="btn ghost sm" id="cMake">+ Make one</button></div>`;
+  h += `<div class="sec-h"><div><h2>In your daily mix</h2><p>Today's session pulls reviews and new cards from these.</p></div></div>`;
+  h += on.length ? `<div class="mix">${on.map(courseLine).join('')}</div><p class="note">Today: about ${t.nNew} new cards and ${t.nDue} reviews. Open a course to change its new cards a day or browse its units.</p>` : `<p class="note">Nothing in your mix yet. Switch on a course below to start.</p>`;
+  if (groupOff.length) h += `<div class="sec-h"><h2>From ${esc(G ? G.groupName : 'your group')}</h2></div><div class="mix">${groupOff.map(courseLine).join('')}</div>`;
+  if (builtinOff.length) h += `<div class="sec-h"><h2>More courses</h2></div><div class="mix">${builtinOff.map(courseLine).join('')}</div>`;
+  if (!G) h += `<p class="note">Friends' courses show up here once you're in a group.</p>`;
+  $('#coursesBody').innerHTML = h;
+}
+
+/* ---------- one course: settings and its units ---------- */
+function renderCourseView() {
+  const k = state.course, C = COURSES[k]; if (!C) return;
+  const p = courseProgress(k), on = inMix(k), cards = courseCards(k).length;
+  $('#courseHead').innerHTML = `<div class="chead"><button class="back" data-go="courses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg> Courses</button>
+    <div class="ctop"><div><h1>${esc(C.name)}</h1><div class="cmeta">${cards} cards · ${C.units.length} unit${C.units.length === 1 ? '' : 's'} · ${p.done} of ${p.total} lessons</div></div><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="In your daily mix"></button></div>
+    ${on ? `<div class="perday"><span>New cards a day</span>${[3, 5, 10, 20].map(n => `<button data-perday="${n}" aria-pressed="${perDay(k) === n}">${n}</button>`).join('')}</div>` : `<p class="note">Not in your daily mix. Switch it on to get its cards in Today, or tap any lesson to try it.</p>`}
+    ${C.description ? `<p class="cmeta">${esc(C.description)}</p>` : ''}</div>`;
+  const mine = C.group && G && C.authorId === G.player.id;
+  $('#cinfo').hidden = !C.group;
+  $('#cinfo').innerHTML = C.group ? `<span>${esc(C.meta)}</span>${mine ? `<button class="linkbtn" id="ciReports">${C.openReports} open report${C.openReports === 1 ? '' : 's'}</button><button class="linkbtn" id="ciUpdate">Upload new version</button><button class="linkbtn" id="ciDelete">Remove course</button>` : ''}` : '';
+  $('#caveat').innerHTML = `<h3>How sure are these answers?</h3>${C.caveat.map(t => `<p>${esc(t)}</p>`).join('')}<div class="meta">${esc(C.meta)}</div>`;
+  const next = LESSONS.findIndex(l => !state.done[l.id]);
+  const curUnit = next >= 0 ? LESSONS[next].unit : -1;
+  $('#path').innerHTML = C.units.map((u, ui) => {
+    const ls = LESSONS.map((l, i) => [l, i]).filter(([l]) => l.unit === ui);
+    const nd = ls.filter(([l]) => state.done[l.id]).length, all = nd === ls.length;
+    const open = ui === curUnit;
+    return `<section class="ublock${open ? ' open cur' : ''}${all ? ' done' : ''}"><button class="uhead" data-unit="${ui}" aria-expanded="${open}"><span class="ut"><b>${ui + 1} · ${esc(u.title)}</b>${nd && !all ? `<span class="thin"><i style="width:${nd / ls.length * 100}%"></i></span>` : ''}</span><span class="uc">${nd}/${ls.length}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="lessons"${open ? '' : ' hidden'}>${ls.map(([l, i]) => { const d = state.done[l.id], isNext = i === next; return `<button class="lrow${d ? ' done' : ''}${isNext ? ' next' : ''}" data-idx="${i}"><span class="ld">${d ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>' : ''}</span><span class="lt">${esc(l.title)}</span><span class="ls">${d ? 'In reviews' : isNext ? 'Up next' : ''}</span></button>`; }).join('')}</div></section>`;
+  }).join('');
+}
+
+/* ---------- shared clicks: open a course, toggle the mix, new cards a day ---------- */
+document.addEventListener('click', e => {
+  const g = e.target.closest('[data-go]'); if (g) { go(g.dataset.go); return; }
+  const o = e.target.closest('[data-open]'); if (o) { go('course', o.dataset.open); return; }
+  const m = e.target.closest('[data-mix]');
+  if (m) { const k = m.dataset.mix, on = !inMix(k); setMix(k, on); toast(on ? `${COURSES[k].name} is in your daily mix.` : `${COURSES[k].name} is out of your mix. Its progress is kept.`); renderHome(); return; }
+  const pd = e.target.closest('[data-perday]'); if (pd) { setPerDay(state.course, +pd.dataset.perday); renderHome(); return; }
+  if (e.target.closest('#cMake')) openAdd();
+});
+
 function groupPostSession(xp, acc, reviewed, fresh) {
   if (!G || !xp) return;
   const title = reviewed ? `today’s review (${reviewed} card${reviewed === 1 ? '' : 's'})` : `${fresh} new card${fresh === 1 ? '' : 's'}`;
@@ -6751,7 +6988,7 @@ $('#streakBody').addEventListener('click', e => {
 
 /* ---------- sync progress to the server ---------- */
 let syncTimer = null, syncBusy = false, syncAgain = false;
-function syncPayload() { const { srs, done, jumped, activeDays, xp, settings, settingsAt, newDay, newCount, hints, accepted } = state; return { v: 1, srs, done, jumped, activeDays, xp, settings, settingsAt, newDay, newCount, hints, accepted }; }
+function syncPayload() { const { srs, done, jumped, activeDays, xp, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt } = state; return { v: 1, srs, done, jumped, activeDays, xp, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt }; }
 // Merges another device's progress into this one: the most-reviewed copy of each card wins, practice days are combined.
 function mergeStates(a, b) {
   const out = { ...a };
@@ -6763,8 +7000,13 @@ function mergeStates(a, b) {
   out.activeDays = [...new Set([...(b.activeDays || []), ...(a.activeDays || [])])].sort();
   out.xp = Math.max(a.xp || 0, b.xp || 0);
   if ((b.settingsAt || 0) > (a.settingsAt || 0) && b.settings) { out.settings = b.settings; out.settingsAt = b.settingsAt; }
-  if ((b.newDay || '') > (a.newDay || '')) { out.newDay = b.newDay; out.newCount = b.newCount; }
-  else if (b.newDay === a.newDay) out.newCount = Math.max(a.newCount || 0, b.newCount || 0);
+  if ((b.newDay || '') > (a.newDay || '')) { out.newDay = b.newDay; out.newCount = b.newCount; out.newCounts = b.newCounts || {}; }
+  else if (b.newDay === a.newDay) {
+    out.newCount = Math.max(a.newCount || 0, b.newCount || 0);
+    out.newCounts = { ...(a.newCounts || {}) };
+    Object.entries(b.newCounts || {}).forEach(([k, n]) => out.newCounts[k] = Math.max(out.newCounts[k] || 0, n));
+  }
+  if ((b.mixAt || 0) > (a.mixAt || 0) && b.mix) { out.mix = b.mix; out.mixAt = b.mixAt; }
   out.hints = { ...(b.hints || {}), ...(a.hints || {}) };
   out.accepted = { ...(b.accepted || {}), ...(a.accepted || {}) };
   return out;
