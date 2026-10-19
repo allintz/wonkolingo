@@ -280,7 +280,8 @@
     "match": [
       "cosponsors",
       "original cosponsor",
-      "original cosponsors"
+      "original cosponsors",
+      "cosponsor"
     ],
     "def": "A member of Congress who formally signs on to support a bill introduced by its sponsor. Original cosponsors are those listed when the bill is first introduced.",
     "src": "https://www.everycrsreport.com/reports/RS22477.html",
@@ -667,7 +668,8 @@
     "term": "overhang",
     "match": [
       "overhang",
-      "capability overhang"
+      "capability overhang",
+      "overhangs"
     ],
     "def": "A buildup of unused potential, such as spare compute, efficiency gains or ideas, that could produce a sudden jump in AI capabilities once a constraint is lifted.",
     "src": "https://wiki.aiimpacts.org/ai_timelines/hardware_and_ai_timelines/hardware_overhang",
@@ -751,7 +753,9 @@
   {
     "term": "reconciliation",
     "match": [
-      "reconciliation bill"
+      "reconciliation bill",
+      "reconciliation bills",
+      "reconciliation"
     ],
     "def": "A fast-track budget procedure that lets certain tax, spending and debt-limit bills pass the Senate by simple majority, without a filibuster. Under the Byrd rule, provisions with no or merely incidental budget effect can be struck.",
     "src": "https://www.law.cornell.edu/wex/reconciliation",
@@ -837,7 +841,8 @@
     "term": "sandbox",
     "match": [
       "sandbox",
-      "sandboxing"
+      "sandboxing",
+      "sandboxes"
     ],
     "def": "An isolated computing environment that limits what software inside it can access, used to test or contain programs.",
     "src": "https://csrc.nist.gov/glossary/term/sandbox",
