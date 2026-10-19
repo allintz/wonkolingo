@@ -55,7 +55,7 @@ function validateCourse(raw) {
             const q = str(it.q, w + '.q', 300, false), p = str(it.p, w + '.p', 300, false);
             if (!q && !p) err(w, 'needs a question (p) or a quote (q)');
             if (q) out.q = q; if (p) out.p = p;
-            if (it.who !== undefined) { if (typeof it.who !== 'string' || !c.speakers[it.who]) err(w + '.who', 'must be a key from speakers'); else out.who = it.who; }
+            if (it.who !== undefined) { if (typeof it.who !== 'string' || !Object.prototype.hasOwnProperty.call(c.speakers, it.who)) err(w + '.who', 'must be a key from speakers'); else out.who = it.who; }
             const ask = str(it.ask, w + '.ask', 300, false); if (ask) out.ask = ask;
             if (it.news !== undefined) out.news = { h: str(it.news && it.news.h, w + '.news.h', 160), d: str(it.news && it.news.d, w + '.news.d', 60) };
             if (it.predict !== undefined) { if (typeof it.predict !== 'boolean') err(w + '.predict', 'must be true or false'); else if (it.predict) out.predict = true; }
@@ -106,6 +106,9 @@ function computeStreak(days, settings, today) {
   const ok = d => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d);
   const set = new Set((days || []).filter(ok));
   const sched = settings && Array.isArray(settings.days) && settings.days.length === 7 && settings.days.some(Boolean) ? settings.days.map(Boolean) : [true, true, true, true, true, true, true];
+  // settings.past: [{ until, days }] keeps the schedule that applied up to each change, so changing days never rewrites history.
+  const past = settings && Array.isArray(settings.past) ? settings.past.filter(p => p && ok(p.until) && Array.isArray(p.days) && p.days.length === 7 && p.days.some(Boolean)).sort((x, y) => x.until < y.until ? -1 : x.until > y.until ? 1 : 0) : [];
+  const schedFor = d => { const p = past.find(q => d <= q.until); return p ? p.days.map(Boolean) : sched; };
   const pauses = settings && Array.isArray(settings.pauses) ? settings.pauses.filter(p => p && ok(p.from)) : [];
   const paused = d => pauses.some(p => d >= p.from && (!p.to || d <= p.to));
   const dow = d => new Date(d + 'T12:00:00Z').getUTCDay();
@@ -117,7 +120,7 @@ function computeStreak(days, settings, today) {
   if (sorted.length) {
     for (let d = sorted[0]; d < today; d = next(d)) {
       if (set.has(d)) practice();
-      else if (paused(d) || !sched[dow(d)]) { /* off day: no change */ }
+      else if (paused(d) || !schedFor(d)[dow(d)]) { /* off day: no change */ }
       else if (bank > 0) { bank--; frozen.push(d); }
       else streak = 0;
       best = Math.max(best, streak);
