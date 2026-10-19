@@ -6394,14 +6394,15 @@ function pointsHTML(d) {
 }
 function showTyped(it, score, feedback, conf, source, detail) {
   run.phase = 'feedback'; it._detail = detail || null;
-  it._snap = { prev: state.srs[it._card], graded: run.graded.has(it._card), xp: run.xp, reviewed: run.reviewed, remembered: run.remembered, newSeen: run.newSeen, newCount: state.newCount, newCounts: { ...(state.newCounts || {}) }, newDay: state.newDay, doneHad: !!state.done[it._lesson], correct: run.correct, qlen: run.queue.length, wrongHad: run.wrong.has(it.key) };
+  it._snap = { prev: state.srs[it._card], graded: run.graded.has(it._card), xp: run.xp, reviewed: run.reviewed, remembered: run.remembered, newSeen: run.newSeen, newCount: state.newCount, newCounts: { ...(state.newCounts || {}) }, newDay: state.newDay, doneHad: !!state.done[it._lesson], hearts: run.hearts, correct: run.correct, qlen: run.queue.length, wrongHad: run.wrong.has(it.key) };
   const pct = detail && Number.isFinite(detail.percent) ? detail.percent : null;
   const g = pct !== null ? fsrsFromPct(pct) : fsrsFrom(score, conf);
   srsRecord(it, it._hinted ? Math.min(2, g) : g);
   if (state.srs[it._card]) { state.srs[it._card].miss = conf === 'cold' && score === 0; save(); }
   run.correct++;
   if (score <= 1) run.wrong.add(it.key);
-  if (score === 0) { run.correct--; run.queue.push({ ...it, _retry: true, _hinted: false }); }
+  // A typed miss (graded 0, or "I don't know") costs a heart in lessons, like a wrong choice. Sessions have no hearts.
+  if (score === 0) { run.correct--; run.queue.push({ ...it, _retry: true, _hinted: false }); if (isFinite(run.hearts)) run.hearts--; }
   updateBar();
   const ok = score >= 2;
   $('#foot').className = 'lfoot ' + (ok ? 'good' : 'bad');
@@ -6415,7 +6416,7 @@ function undoTyped(it) {
   const sn = it._snap; if (!sn) return;
   if (sn.prev) state.srs[it._card] = sn.prev; else delete state.srs[it._card];
   if (!sn.graded) run.graded.delete(it._card);
-  Object.assign(run, { xp: sn.xp, reviewed: sn.reviewed, remembered: sn.remembered, newSeen: sn.newSeen, correct: sn.correct });
+  Object.assign(run, { xp: sn.xp, reviewed: sn.reviewed, remembered: sn.remembered, newSeen: sn.newSeen, correct: sn.correct, hearts: sn.hearts });
   state.newCount = sn.newCount; state.newCounts = sn.newCounts; state.newDay = sn.newDay; if (!sn.doneHad) delete state.done[it._lesson]; run.queue.length = sn.qlen;
   if (!sn.wrongHad) run.wrong.delete(it.key);
   save(); updateBar();
