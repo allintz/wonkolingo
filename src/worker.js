@@ -3,7 +3,7 @@
 
 import { validateCourse, COURSE_LIMITS, computeStreak } from './course-format.js';
 import Anthropic from '@anthropic-ai/sdk';
-import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor } from './grade.js';
+import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor, defineTerm } from './grade.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -103,7 +103,7 @@ async function api(req, env, path) {
   }
 
   // Grading and hints work without a group: visitors are counted by a hash of their IP for the daily cap.
-  if (m === 'POST' && (path === '/api/grade' || path === '/api/hint' || path === '/api/dispute')) {
+  if (m === 'POST' && (path === '/api/grade' || path === '/api/hint' || path === '/api/dispute' || path === '/api/define')) {
     const who = await graderId(req, env);
     if (m === 'POST' && path === '/api/grade') {
       if (!env.ANTHROPIC_API_KEY) return fail('Answer grading isn’t set up.', 503);
@@ -144,6 +144,24 @@ async function api(req, env, path) {
         return json({ score: g.score, percent: g.percent, points: g.points, missed: g.missed, feedback: g.feedback, outcome: g.outcome, reply: g.reply });
       } catch (e) {
         if (e instanceof Anthropic.APIError) return fail('The second grader had an error. Your note was saved for review.', 502);
+        throw e;
+      }
+    }
+
+    // Definition of a phrase the learner selected in a card. Shares the grading quota.
+    if (m === 'POST' && path === '/api/define') {
+      if (!env.ANTHROPIC_API_KEY) return fail('Definitions aren’t set up.', 503);
+      const b = await body(req);
+      const term = String(b.term || '').replace(/\s+/g, ' ').trim();
+      if (term.length < 2 || term.length > 80) return fail('Select a word or short phrase to define.');
+      const capped = await takeGradeQuota(env, who);
+      if (capped) return fail(capped, 429);
+      try {
+        const d = await defineTerm(env, { term, context: String(b.context || '') });
+        if (d === null) return fail('No definition available for that.', 422);
+        return json({ term, definition: d });
+      } catch (e) {
+        if (e instanceof Anthropic.APIError) return fail('Couldn’t get a definition right now.', 502);
         throw e;
       }
     }

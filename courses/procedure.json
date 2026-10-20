@@ -1,0 +1,784 @@
+{
+ "units": [
+  {
+   "title": "The Basic Path",
+   "desc": "How a bill gets from an idea to the floor.",
+   "lessons": [
+    {
+     "title": "Introduction and referral",
+     "items": [
+      {
+       "t": "order",
+       "p": "Put the usual steps in order.",
+       "ends": [
+        "First",
+        "Last"
+       ],
+       "items": [
+        "A member introduces the bill",
+        "It’s referred to a committee",
+        "The committee holds a hearing",
+        "The committee marks it up",
+        "The committee reports it",
+        "The full chamber considers it"
+       ],
+       "x": "This is the textbook path, often called regular order. Many bills skip the hearing, and leadership sometimes skips committee entirely by bringing a bill straight to the floor."
+      },
+      {
+       "t": "mc",
+       "p": "Who can formally introduce a bill in the House?",
+       "o": [
+        "Any member of the House",
+        "Any member, or the White House",
+        "Any registered lobbyist",
+        "Only committee chairs"
+       ],
+       "a": 0,
+       "x": "Only members can introduce bills. Agencies, the White House and outside groups often write the text, but a member has to put it in. In the House that means dropping it in the “hopper,” a box on the floor."
+      },
+      {
+       "t": "mc",
+       "p": "Under the Constitution, which bills must start in the House?",
+       "o": [
+        "Bills raising revenue",
+        "All bills over $1 billion",
+        "Treaties",
+        "Bills about elections"
+       ],
+       "a": 0,
+       "x": "The Origination Clause (Article I, Section 7) requires revenue bills to start in the House, and by custom appropriations bills do too. The Senate works around this by taking a House-passed bill and replacing its text. The Affordable Care Act moved on H.R. 3590, which began as a tax bill about homeownership for service members."
+      },
+      {
+       "t": "match",
+       "p": "Match each term to its meaning.",
+       "pairs": [
+        [
+         "Sponsor",
+         "The member who introduces the bill and leads on it"
+        ],
+        [
+         "Cosponsor",
+         "A member who formally signs on in support"
+        ],
+        [
+         "Companion bill",
+         "A matching bill introduced in the other chamber"
+        ],
+        [
+         "Referral",
+         "Sending a bill to the committee with jurisdiction"
+        ],
+        [
+         "Hopper",
+         "The box on the House floor where new bills are dropped"
+        ]
+       ],
+       "x": "A long cosponsor list shows support, but it doesn’t move a bill. The committee does."
+      }
+     ]
+    },
+    {
+     "title": "Inside committee",
+     "items": [
+      {
+       "t": "mc",
+       "p": "Who usually decides whether a bill gets a hearing or a markup?",
+       "o": [
+        "The chair of the committee",
+        "The bill’s sponsor",
+        "The minority leader",
+        "The chamber’s parliamentarian"
+       ],
+       "a": 0,
+       "x": "The chair controls the committee’s agenda. A bill the chair won’t schedule usually goes nowhere, whatever its cosponsor count."
+      },
+      {
+       "t": "mc",
+       "p": "In the House, who refers a new bill to committee?",
+       "o": [
+        "The Speaker, advised by the parliamentarian",
+        "The bill’s sponsor, who names a committee when introducing it",
+        "The Rules Committee",
+        "The Clerk, who assigns new bills to committees by lottery"
+       ],
+       "a": 0,
+       "x": "Referral is formally the Speaker’s call, made in practice on the parliamentarian’s advice about jurisdiction. A bill can go to several committees, and each one becomes a place where it can stall."
+      },
+      {
+       "t": "mc",
+       "who": "t",
+       "q": "“The chair is going to mark up her own substitute.”",
+       "p": "What does that tell you?",
+       "o": [
+        "The committee will mark up the chair’s rewrite instead of the original",
+        "The bill is dead and won’t get a markup at all",
+        "The chair is leaving the committee and naming a substitute",
+        "The bill skips markup and goes straight to the floor"
+       ],
+       "a": 0,
+       "x": "Committees often mark up an “amendment in the nature of a substitute,” which replaces the whole bill. The substitute is the text that matters from then on, so get a copy as soon as it circulates."
+      },
+      {
+       "t": "mc",
+       "p": "Roughly what share of introduced bills become law in a typical recent Congress?",
+       "o": [
+        "A few percent",
+        "About a tenth",
+        "About a third",
+        "Most of them"
+       ],
+       "a": 0,
+       "x": "Only a few percent of bills become law, and most never get a committee vote. Many are introduced to stake out a position, with no real plan to pass them."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The House Floor",
+   "desc": "The majority controls the House floor, mostly through the Rules Committee.",
+   "lessons": [
+    {
+     "title": "The Rules Committee",
+     "items": [
+      {
+       "t": "mc",
+       "p": "What does a “rule” from the Rules Committee do?",
+       "o": [
+        "Sets debate time and allowed amendments for one bill",
+        "Permanently changes the House’s standing rules for all future bills",
+        "Decides whether a bill is constitutional",
+        "Schedules committee hearings"
+       ],
+       "a": 0,
+       "x": "Most major bills reach the House floor under a special rule written for that bill. The House has to adopt the rule by majority vote before it can debate the bill."
+      },
+      {
+       "t": "match",
+       "p": "Match each type of rule to what it allows.",
+       "pairs": [
+        [
+         "Open rule",
+         "Any germane amendment can be offered"
+        ],
+        [
+         "Structured rule",
+         "Only amendments the Rules Committee lists"
+        ],
+        [
+         "Closed rule",
+         "No amendments at all"
+        ],
+        [
+         "Self-executing rule",
+         "Adopting the rule automatically changes the bill’s text"
+        ]
+       ],
+       "x": "Open rules have become rare. Most major bills now come up under structured or closed rules, which lets the majority avoid amendment votes it doesn’t want."
+      },
+      {
+       "t": "mc",
+       "p": "Why is Rules called “the Speaker’s committee”?",
+       "o": [
+        "The majority holds 9 of its 13 seats, and the Speaker picks them",
+        "The Speaker chairs it",
+        "It only meets when the Speaker attends",
+        "It writes the Speaker’s floor schedule"
+       ],
+       "a": 0,
+       "x": "The 9 to 4 split and the Speaker’s control over majority appointments make Rules an arm of leadership. That control can slip: as part of his 2023 deal to become Speaker, Kevin McCarthy put hardliners on the committee who could block rules."
+      },
+      {
+       "t": "mc",
+       "news": {
+        "h": "Majority members vote down their own party’s rule",
+        "d": "Happened repeatedly in 2023 and 2024"
+       },
+       "p": "What happens when a rule fails on the floor?",
+       "o": [
+        "Leadership needs a new rule or another route to bring the bill up",
+        "The bill passes automatically without a separate vote",
+        "The Senate takes up its own version of the bill instead",
+        "The Speaker is removed and a new one must be elected"
+       ],
+       "a": 0,
+       "x": "Rule votes used to be party-line formalities. Since 2023, hardliners in the majority have sunk rules to protest leadership, which can stall a bill even when it has the votes to pass."
+      }
+     ]
+    },
+    {
+     "title": "Shortcuts and end-runs",
+     "items": [
+      {
+       "t": "mc",
+       "p": "Under “suspension of the rules,” what does a bill need to pass?",
+       "o": [
+        "Two-thirds of those voting",
+        "A simple majority of those voting",
+        "60 votes",
+        "Unanimous consent"
+       ],
+       "a": 0,
+       "x": "Most bills the House passes go through suspension, usually noncontroversial ones like naming post offices. It skips the Rules Committee entirely, at the cost of a two-thirds threshold."
+      },
+      {
+       "t": "mc",
+       "news": {
+        "h": "Petition to force a vote on releasing the Epstein files gets its 218th signature",
+        "d": "November 12, 2025"
+       },
+       "p": "What does reaching 218 signatures do?",
+       "o": [
+        "After a waiting period, it can force a vote over leadership’s objection",
+        "It passes the bill without a recorded floor vote",
+        "It sends the bill straight to the Senate, skipping a House vote",
+        "It removes the committee chair who blocked the bill"
+       ],
+       "a": 0,
+       "x": "A discharge petition lets a majority of the House pull a bill out of committee. It rarely succeeds, because majority members don’t like to cross their own leaders. This one reached 218 when newly sworn-in Rep. Adelita Grijalva signed, after a delay in seating her that critics said was meant to stall the vote."
+      },
+      {
+       "t": "mc",
+       "p": "What is the motion to recommit?",
+       "o": [
+        "The minority’s last chance to send a bill back to committee",
+        "A motion to restart the bill from scratch",
+        "A Senate motion to reconsider a vote that the chamber already took",
+        "A vote to override a veto"
+       ],
+       "a": 0,
+       "x": "It comes right before the final vote and almost always fails. Since 2021, House rules have barred attaching amendment instructions to it, which used to make it the minority’s favorite tool for forcing awkward votes."
+      },
+      {
+       "t": "order",
+       "p": "Put a major House bill’s floor steps in order.",
+       "ends": [
+        "First",
+        "Last"
+       ],
+       "items": [
+        "Rules Committee reports a rule",
+        "House adopts the rule",
+        "General debate",
+        "Amendments the rule allows",
+        "Motion to recommit",
+        "Final passage vote"
+       ],
+       "x": "If the rule fails at the second step, nothing after it happens."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The Senate Floor",
+   "desc": "Unlimited debate means the Senate runs on agreement, and one senator can slow almost anything.",
+   "lessons": [
+    {
+     "title": "Consent and holds",
+     "items": [
+      {
+       "t": "mc",
+       "p": "Why does the Senate do most of its business by unanimous consent?",
+       "o": [
+        "Debate is nearly unlimited, so consent is much faster",
+        "The Constitution requires consent for most Senate business",
+        "The Vice President prefers it when presiding over the Senate",
+        "It makes votes easier to count"
+       ],
+       "a": 0,
+       "x": "Consent agreements set when votes happen, which amendments get votes and how long debate lasts. Any one senator can object, which is where individual senators get their power."
+      },
+      {
+       "t": "mc",
+       "p": "A senator puts a hold on a nominee. What can the majority leader do?",
+       "o": [
+        "Bring it to the floor anyway and file cloture",
+        "Nothing at all until the senator decides to lift it",
+        "Ask the parliamentarian to cancel the senator’s hold",
+        "Send the nomination to the House for its approval instead"
+       ],
+       "a": 0,
+       "x": "A hold signals that the senator will object to fast-tracking. Leadership can get around it through cloture, but floor time is scarce, so holds on lower-priority items often work."
+      },
+      {
+       "t": "mc",
+       "who": "t",
+       "q": "“We’ll have to file cloture on the motion to proceed first.”",
+       "p": "What is the staffer telling you?",
+       "o": [
+        "Even starting debate can be filibustered and needs 60 votes",
+        "The bill has passed",
+        "The bill is going to conference",
+        "The motion to proceed is just a formality before the real debate"
+       ],
+       "a": 0,
+       "x": "The motion to start debating a bill is itself debatable. Opponents can force two cloture fights, one to begin debate and one to end it, and each one eats days of floor time."
+      },
+      {
+       "t": "match",
+       "p": "Match each term to its meaning.",
+       "pairs": [
+        [
+         "Unanimous consent",
+         "Skipping normal procedure by agreement; one objection blocks it"
+        ],
+        [
+         "Hold",
+         "A senator’s warning they’ll object to moving something quickly"
+        ],
+        [
+         "Quorum call",
+         "A roll call often used as a pause while senators negotiate"
+        ],
+        [
+         "Motion to proceed",
+         "The motion to begin debate on a bill"
+        ],
+        [
+         "Parliamentarian",
+         "Nonpartisan staff who advise on what the rules allow"
+        ]
+       ],
+       "x": "When C-SPAN shows a quorum call, the real work is usually happening off the floor."
+      }
+     ]
+    },
+    {
+     "title": "Cloture and the filibuster",
+     "items": [
+      {
+       "t": "mc",
+       "p": "How many votes does cloture on a bill usually need?",
+       "o": [
+        "60, three-fifths of the Senate",
+        "51",
+        "67, two-thirds of the full Senate",
+        "50 plus the Vice President to break a tie"
+       ],
+       "a": 0,
+       "x": "The rule is three-fifths of senators “duly chosen and sworn,” which is 60 when no seats are vacant. Ending debate on a change to the Senate’s rules takes two-thirds of those voting."
+      },
+      {
+       "t": "mc",
+       "p": "Does a senator have to keep talking on the floor to filibuster today?",
+       "o": [
+        "No. Without 60 votes for cloture, it’s stuck",
+        "Yes, without stopping, or the bill moves to a vote",
+        "Yes, for at least 24 hours of continuous floor speeches",
+        "Only on bills, not nominations"
+       ],
+       "a": 0,
+       "x": "The modern filibuster is the 60-vote threshold itself. Long speeches still happen, but they’re for attention and don’t decide the outcome."
+      },
+      {
+       "t": "order",
+       "p": "Put the cloture process in order.",
+       "ends": [
+        "First",
+        "Last"
+       ],
+       "items": [
+        "A senator files a cloture motion",
+        "One full day of session passes",
+        "The Senate votes on cloture",
+        "Up to 30 more hours of debate",
+        "Vote on the bill itself"
+       ],
+       "x": "Each cloture fight takes days. That time cost, as much as the 60 votes, is why leaders can only push a handful of contested bills through each year."
+      },
+      {
+       "t": "mc",
+       "news": {
+        "h": "Senate Republicans change precedent to confirm nominees in batches",
+        "d": "September 11, 2025"
+       },
+       "p": "How could they change Senate practice with a simple majority?",
+       "o": [
+        "They overruled the chair by majority vote",
+        "They passed a constitutional amendment allowing it",
+        "They found 67 votes to change the written rules",
+        "The parliamentarian signed off on the new practice"
+       ],
+       "a": 0,
+       "x": "Changing the Senate’s written rules needs two-thirds to end debate, but a simple majority can set a new precedent by overruling the presiding officer. Democrats did this for most nominations in 2013, Republicans for Supreme Court nominees in 2017, and Republicans again in 2025 for batches of sub-Cabinet nominees. Cabinet and judicial nominees still go one at a time."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Money",
+   "desc": "Spending runs on its own calendar and its own rules.",
+   "lessons": [
+    {
+     "title": "Authorize, then appropriate",
+     "items": [
+      {
+       "t": "match",
+       "p": "Match each term to its meaning.",
+       "pairs": [
+        [
+         "Authorization",
+         "A law that creates or continues a program"
+        ],
+        [
+         "Appropriation",
+         "A law that actually provides the money"
+        ],
+        [
+         "Continuing resolution",
+         "Stopgap funding, usually at last year’s levels"
+        ],
+        [
+         "Omnibus",
+         "Many appropriations bills combined into one"
+        ],
+        [
+         "Earmark",
+         "Funding a member directs to a specific project"
+        ]
+       ],
+       "x": "Authorizers write the rules for a program. Appropriators decide how much it gets each year. An authorized program with no appropriation has no money."
+      },
+      {
+       "t": "mc",
+       "p": "How many regular appropriations bills does Congress write each year?",
+       "o": [
+        "12 bills",
+        "Just 1 bill",
+        "Only 4 bills",
+        "24 or more bills"
+       ],
+       "a": 0,
+       "x": "There’s one for each pair of House and Senate appropriations subcommittees. Congress rarely passes all twelve on time, so it leans on continuing resolutions and omnibus packages."
+      },
+      {
+       "t": "mc",
+       "news": {
+        "h": "Longest shutdown in U.S. history ends after 43 days",
+        "d": "November 12, 2025"
+       },
+       "p": "What causes a shutdown?",
+       "o": [
+        "Appropriations lapse with no stopgap in place",
+        "The country hits the debt limit",
+        "The President vetoes the year’s budget resolution",
+        "The Senate rejects the President’s budget director"
+       ],
+       "a": 0,
+       "x": "The fiscal year starts October 1. If neither the regular bills nor a continuing resolution is law by then, agencies without funding stop most work. Programs on mandatory spending, like Social Security payments, keep going."
+      },
+      {
+       "t": "mc",
+       "p": "Which of these is NOT funded through the annual appropriations bills?",
+       "o": [
+        "Social Security benefits",
+        "The military",
+        "NASA’s space exploration programs",
+        "The FBI’s agents and field offices"
+       ],
+       "a": 0,
+       "x": "Social Security, Medicare and most of Medicaid are “mandatory” spending, set by permanent law. Annual appropriations cover “discretionary” spending, roughly a quarter of the federal budget."
+      }
+     ]
+    },
+    {
+     "title": "Reconciliation",
+     "items": [
+      {
+       "t": "mc",
+       "p": "What makes reconciliation special in the Senate?",
+       "o": [
+        "Debate is capped, so a simple majority can pass it",
+        "It needs no House vote",
+        "It doesn’t need the President’s signature to become law",
+        "It allows amendments without votes"
+       ],
+       "a": 0,
+       "x": "Reconciliation is the main way a majority passes big tax and spending changes without 60 votes. The tradeoff is the Byrd rule, which limits it to provisions that are mainly budgetary."
+      },
+      {
+       "t": "order",
+       "p": "Put the reconciliation process in order.",
+       "ends": [
+        "First",
+        "Last"
+       ],
+       "items": [
+        "Congress adopts a budget resolution with reconciliation instructions",
+        "Committees write their pieces",
+        "The Budget Committee packages them",
+        "Senate debate, capped at 20 hours",
+        "Vote-a-rama on amendments",
+        "Final passage"
+       ],
+       "x": "The budget resolution comes first because it unlocks the process. Without one, there’s no reconciliation bill."
+      },
+      {
+       "t": "mc",
+       "p": "Who advises on whether a provision violates the Byrd rule?",
+       "o": [
+        "The Senate parliamentarian",
+        "The CBO director",
+        "The Chief Justice",
+        "The House Rules Committee"
+       ],
+       "a": 0,
+       "x": "Staff run provisions past the parliamentarian in a process nicknamed the “Byrd bath.” A provision that fails can be struck unless 60 senators vote to waive the rule."
+      },
+      {
+       "t": "mc",
+       "news": {
+        "h": "Senate passes the One Big Beautiful Bill Act 51-50, Vice President breaks the tie",
+        "d": "July 1, 2025"
+       },
+       "p": "Why could it pass with 51 votes instead of 60?",
+       "o": [
+        "It moved through reconciliation",
+        "It was a proposed constitutional amendment",
+        "The minority agreed to skip cloture",
+        "It was a conference report"
+       ],
+       "a": 0,
+       "x": "Final passage came after a vote-a-rama, the long series of amendment votes that follows once debate time runs out. Debate is capped, but senators can keep offering amendments, so these often run through the night."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Between the Chambers",
+   "desc": "Nothing becomes law until both chambers pass the exact same text.",
+   "lessons": [
+    {
+     "title": "Getting to one text",
+     "items": [
+      {
+       "t": "mc",
+       "p": "The House and Senate pass different versions of a bill. What has to happen?",
+       "o": [
+        "Both chambers must pass identical text",
+        "The President picks which version becomes law",
+        "The longer version wins and goes to the President",
+        "The Senate’s version is final and goes to the President"
+       ],
+       "a": 0,
+       "x": "The text has to match word for word. Differences get resolved by passing the bill back and forth with amendments, or through a conference committee."
+      },
+      {
+       "t": "match",
+       "p": "Match each term to its meaning.",
+       "pairs": [
+        [
+         "Ping-pong",
+         "Chambers trade amendments until the text matches"
+        ],
+        [
+         "Conference committee",
+         "Negotiators from both chambers write a compromise"
+        ],
+        [
+         "Conference report",
+         "The compromise text, voted up or down with no amendments"
+        ],
+        [
+         "Engrossed bill",
+         "The official copy as passed by one chamber"
+        ],
+        [
+         "Enrolled bill",
+         "The final version, passed by both and sent to the President"
+        ]
+       ],
+       "x": "If you hear a bill is “enrolled,” Congress is done with it."
+      },
+      {
+       "t": "mc",
+       "p": "Why are formal conference committees rarer than they used to be?",
+       "o": [
+        "In the Senate, setting one up takes several steps that can be filibustered",
+        "Both chambers voted to ban them in 2011 to speed up bills",
+        "The Constitution limits how often the two chambers can use them",
+        "The President must approve each one before it can meet"
+       ],
+       "a": 0,
+       "x": "Leaders now usually work out the deal privately and move it through ping-pong. That puts the final text in a few hands, which matters if you’re trying to get a provision in."
+      }
+     ]
+    },
+    {
+     "title": "Vehicles and shells",
+     "items": [
+      {
+       "t": "mc",
+       "who": "t",
+       "q": "“We’ll use a House-passed shell.”",
+       "p": "What does that mean?",
+       "o": [
+        "The Senate swaps its text into a House-passed bill",
+        "The bill will be left empty",
+        "The House will rewrite the Senate bill and send it back",
+        "They’ll wait for the next Congress and reintroduce the bill"
+       ],
+       "a": 0,
+       "x": "Starting from a bill the House already passed saves a step and satisfies the rule that revenue bills start in the House. The original bill may have nothing to do with the final law."
+      },
+      {
+       "t": "mc",
+       "p": "What happens to bills that haven’t passed when a two-year Congress ends?",
+       "o": [
+        "They die and must start over",
+        "They carry over automatically to the next Congress",
+        "They go to the President for a final decision",
+        "They become resolutions for the next Congress"
+       ],
+       "a": 0,
+       "x": "Each Congress starts fresh. The 119th Congress ends January 3, 2027, so anything still pending then starts over in the 120th."
+      },
+      {
+       "t": "mc",
+       "p": "Why do so many unrelated provisions end up in the NDAA?",
+       "o": [
+        "It’s must-pass and has become law every year for over 60 years",
+        "It can’t be amended once it reaches the floor",
+        "It skips the Senate and goes straight to the President",
+        "It’s exempt from committee review in both chambers"
+       ],
+       "a": 0,
+       "x": "The annual defense authorization almost always becomes law, so members attach whatever they can get germane to it, including many AI and tech measures."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Endgame",
+   "desc": "What the President can do, and what Congress can undo.",
+   "lessons": [
+    {
+     "title": "Sign or veto",
+     "items": [
+      {
+       "t": "mc",
+       "p": "How long does the President have to act on a bill?",
+       "o": [
+        "10 days, not counting Sundays",
+        "30 days, not counting weekends or holidays",
+        "Until the current session of Congress ends",
+        "48 hours"
+       ],
+       "a": 0,
+       "x": "If the President does nothing and Congress is in session, the bill becomes law without a signature after 10 days (Sundays excepted)."
+      },
+      {
+       "t": "mc",
+       "p": "What is a pocket veto?",
+       "o": [
+        "The bill dies unsigned because Congress adjourned",
+        "A veto the President announces privately, with no public message",
+        "A veto of one section of a bill, letting the rest become law",
+        "A veto issued before the bill has passed both chambers"
+       ],
+       "a": 0,
+       "x": "A regular veto can be overridden. A pocket veto can’t, because Congress never gets the bill back to vote on. Which adjournments allow one has long been disputed between Congress and Presidents."
+      },
+      {
+       "t": "mc",
+       "p": "What does overriding a veto take?",
+       "o": [
+        "Two-thirds of those voting in each chamber",
+        "60 in the Senate and a majority in the House",
+        "Three-fifths of each chamber",
+        "A majority plus the Vice President"
+       ],
+       "a": 0,
+       "x": "Overrides are rare. Congress has overridden only about 7 percent of regular vetoes in its history."
+      },
+      {
+       "t": "mc",
+       "p": "Can the President veto just part of a bill?",
+       "o": [
+        "No. The Supreme Court struck it down in 1998",
+        "Yes, for individual line items in spending bills",
+        "Yes, as long as a Senate majority consents to it",
+        "Only during wartime or a declared national emergency"
+       ],
+       "a": 0,
+       "x": "In Clinton v. City of New York, the Court held that letting the President cancel parts of a signed law violated the Constitution’s process for making laws. A President who dislikes part of a bill has to veto all of it."
+      },
+      {
+       "t": "order",
+       "p": "Put a veto fight in order.",
+       "ends": [
+        "First",
+        "Last"
+       ],
+       "items": [
+        "Both chambers pass the bill",
+        "It’s presented to the President",
+        "The President vetoes it and returns it with objections",
+        "The chamber where it started votes on override",
+        "The other chamber votes on override"
+       ],
+       "x": "The bill goes back to the chamber where it started. If that chamber fails to override, the other one never votes."
+      }
+     ]
+    },
+    {
+     "title": "Undoing agency rules",
+     "items": [
+      {
+       "t": "mc",
+       "p": "What does the Congressional Review Act let Congress do?",
+       "o": [
+        "Overturn recent agency rules on a fast track",
+        "Rewrite any agency rule through a committee vote alone",
+        "Overturn federal court rulings on agency regulations",
+        "Fire the agency heads responsible for unpopular rules"
+       ],
+       "a": 0,
+       "x": "The resolution still needs the President’s signature, so it mostly gets used right after a new President of the other party takes office, to undo the previous administration’s late rules."
+      },
+      {
+       "t": "mc",
+       "p": "A rule comes out in an outgoing administration’s final months. Why can the next Congress still overturn it?",
+       "o": [
+        "The CRA’s lookback covers rules sent in roughly the last 60 days of session before",
+        "New rules aren’t final until a full year after they’re published",
+        "Courts automatically send late rules back for the next administration",
+        "It can’t, because the rule is already final"
+       ],
+       "a": 0,
+       "x": "That’s why rules finished in an administration’s last months are the most exposed, and why agencies race to finalize rules earlier in an election year."
+      },
+      {
+       "t": "mc",
+       "p": "After Congress overturns a rule under the CRA, what can the agency do?",
+       "o": [
+        "It can’t issue a “substantially the same” rule unless Congress authorizes it",
+        "Reissue the same rule the next day under a new name",
+        "Appeal the resolution to the Supreme Court for review",
+        "Nothing changes, because the rule stays in effect exactly as written"
+       ],
+       "a": 0,
+       "x": "This is sometimes called “salting the earth,” and it’s why CRA votes matter more than they look. Nobody is sure how different a new rule has to be."
+      },
+      {
+       "t": "mc",
+       "p": "Before 2017, how many times had the CRA been used successfully?",
+       "o": [
+        "Once",
+        "Never",
+        "About 50",
+        "Every year"
+       ],
+       "a": 0,
+       "x": "It overturned a workplace ergonomics rule in 2001, and that was it until 2017, when Congress used it to repeal 16 Obama-era rules. It has been used again after later transitions."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

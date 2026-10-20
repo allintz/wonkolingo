@@ -1,0 +1,628 @@
+{
+ "units": [
+  {
+   "title": "The Polite No",
+   "desc": "Most meetings end warmly. Learn to tell warmth from commitment.",
+   "lessons": [
+    {
+     "title": "Holding phrases",
+     "items": [
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“We’re monitoring the issue closely.”",
+       "o": [
+        "They’re quietly drafting their own bill on it",
+        "No position, and no plans for one soon",
+        "They support it but can’t say so publicly",
+        "They’re opposed and plan to work against it"
+       ],
+       "a": 1,
+       "x": "“Monitoring” is the standard holding phrase. It commits the office to nothing. If they were drafting something, they would usually say so, because offices want advocates to know they’re leading.",
+       "ask": "“Is the boss likely to take a position this Congress, or is this one you’re watching for now?”"
+      },
+      {
+       "t": "mc",
+       "who": "p",
+       "q": "“I’ll definitely take this back to the boss.”",
+       "o": [
+        "The member will read your materials personally and get back to you",
+        "A routine way to close; it tells you little either way",
+        "A soft yes",
+        "A soft no"
+       ],
+       "a": 1,
+       "x": "Staff say this at the end of nearly every meeting. The real signal comes later: a follow-up email with specific questions means it went somewhere. Silence means it probably didn’t.",
+       "ask": "“What would be most useful for me to send before you brief her?”"
+      },
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“The senator is supportive of the goals of the bill.”",
+       "o": [
+        "She’ll cosponsor if asked; the office just needs a formal request",
+        "She likes the idea but isn’t ready to sign on to this text",
+        "She’s already a cosponsor",
+        "She opposes it"
+       ],
+       "a": 1,
+       "x": "Praising the “goals” separates the idea from the bill. It lets the office say nice things without signing on. For now, it usually means no cosponsorship.",
+       "ask": "“What would need to change in the text for her to sign on?”"
+      },
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“That’s a heavy lift this Congress.”",
+       "o": [
+        "It’s hard, but the office will push for it anyway",
+        "It probably won’t move this Congress",
+        "They need help counting votes before it can move",
+        "It’s headed to markup soon, though the vote will be close"
+       ],
+       "a": 1,
+       "x": "“Heavy lift” is usually a polite forecast that nothing will happen. Sometimes it’s an accurate read of the floor; sometimes it covers the office not wanting to try. Either way, don’t plan around passage.",
+       "ask": "“What would make it lighter: a different vehicle, a narrower version, or more Republicans on board?”"
+      }
+     ]
+    },
+    {
+     "title": "Reading the temperature",
+     "items": [
+      {
+       "t": "mc",
+       "who": "p",
+       "q": "“Happy to keep the lines of communication open.”",
+       "o": [
+        "They want monthly check-ins",
+        "The meeting is over and nothing was committed",
+        "They want to be the lead office",
+        "They want you to testify"
+       ],
+       "a": 1,
+       "x": "This is a goodbye. It keeps the relationship friendly without promising anything. A follow-up is fine, but don’t read this line as interest."
+      },
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“We’d want to see who else is on before we commit.”",
+       "o": [
+        "A polite brush-off, since they expect no one else will sign on",
+        "A real condition: they want other offices to sign on first",
+        "They want your donor list",
+        "A firm yes"
+       ],
+       "a": 1,
+       "x": "One of the more useful lines you’ll hear. Offices want political cover, especially from the other party or their own state delegation. It’s a request for information you can actually meet.",
+       "ask": "“Which offices’ support would matter most to the senator?”"
+      },
+      {
+       "t": "mc",
+       "who": "p",
+       "q": "“The boss has some concerns.”",
+       "o": [
+        "A firm no",
+        "Real but unnamed objections, about policy or politics",
+        "They want a bigger, more ambitious version before signing on",
+        "They didn’t read it"
+       ],
+       "a": 1,
+       "x": "Concerns can mean a fixable drafting problem or an in-district company lobbying against the bill. The office often won’t say which unless you ask, so your job is to find out.",
+       "ask": "“Are the concerns about the policy itself, or about who’s opposing it?”"
+      },
+      {
+       "t": "order",
+       "p": "Put these in order from coldest to warmest.",
+       "ends": [
+        "Coldest",
+        "Warmest"
+       ],
+       "items": [
+        "“We’re monitoring it.”",
+        "“The boss supports the goals.”",
+        "“We’d want to see who else is on.”",
+        "“Can you send the text and the cosponsor list?”",
+        "“Who should I talk to in the lead sponsor’s office?”"
+       ],
+       "x": "Roughly: watching, then praising the idea, then naming a condition, then asking for materials, then asking how to join. Treat this as a rule of thumb. A particular staffer’s habits can reshuffle the middle."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Process Words",
+   "desc": "The vocabulary of how a bill actually moves.",
+   "lessons": [
+    {
+     "title": "Committee and cost",
+     "items": [
+      {
+       "t": "match",
+       "p": "Match each term to its meaning.",
+       "pairs": [
+        [
+         "Markup",
+         "Committee session where members amend and vote on a bill"
+        ],
+        [
+         "Vehicle",
+         "A bill likely to pass that other provisions can ride on"
+        ],
+        [
+         "Pay-for",
+         "A spending cut or revenue that offsets a bill’s cost"
+        ],
+        [
+         "Score",
+         "CBO’s estimate of what a bill would cost"
+        ],
+        [
+         "Dear Colleague",
+         "A letter one office sends to all offices, often seeking cosponsors"
+        ]
+       ],
+       "x": "These five come up in almost every legislative meeting."
+      },
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“Has it been scored?”",
+       "p": "Why would a staffer ask this?",
+       "o": [
+        "They want your organization’s scorecard rating of the member’s votes",
+        "They’re checking for a CBO cost estimate, a sign they’re thinking about passage",
+        "They want polling numbers showing how the bill plays back home",
+        "They’re asking about the vote count from the committee markup"
+       ],
+       "a": 1,
+       "x": "Cost matters once a bill might actually move, so this question is usually a sign of real interest. If there’s no score yet, expect to hear the question again."
+      },
+      {
+       "t": "mc",
+       "who": "t",
+       "q": "“We’d need to find a vehicle for this.”",
+       "o": [
+        "The bill needs a new sponsor",
+        "It needs to ride on a must-pass bill instead of moving alone",
+        "They need a press event",
+        "It needs an identical companion bill introduced in the House before it can move"
+       ],
+       "a": 1,
+       "x": "Most standalone bills never get floor time. Provisions often ride on bills that have to pass, like the NDAA (the annual defense authorization) or appropriations. A lot of AI policy has moved this way.",
+       "ask": "“Which vehicle looks realistic, and when does that text get locked?”"
+      },
+      {
+       "t": "mc",
+       "who": "t",
+       "q": "“The Chair wants regular order on this.”",
+       "o": [
+        "Leadership will write the final text behind closed doors",
+        "It should get hearings and markup before the floor",
+        "It should pass by unanimous consent",
+        "It should be attached to the budget and skip committee review"
+       ],
+       "a": 1,
+       "x": "“Regular order” means the textbook process: hearings, markup, then the floor. Hearing it from committee staff means you’ll work through them, and the timeline will be slower."
+      }
+     ]
+    },
+    {
+     "title": "Floor mechanics",
+     "items": [
+      {
+       "t": "match",
+       "p": "Match each term to its meaning.",
+       "pairs": [
+        [
+         "Hold",
+         "A senator’s notice they’ll object to fast-tracking a bill or nominee"
+        ],
+        [
+         "Unanimous consent",
+         "Senate action taken with no objection; one senator can block it"
+        ],
+        [
+         "Cloture",
+         "Senate vote to end debate; usually needs 60"
+        ],
+        [
+         "Suspension",
+         "House fast track: limited debate, needs two-thirds"
+        ],
+        [
+         "Hotline",
+         "Leadership asks every Senate office whether it objects to passing something by UC"
+        ]
+       ],
+       "x": "All five are about speed: how a bill skips steps, and how one member can stop it."
+      },
+      {
+       "t": "mc",
+       "who": "t",
+       "q": "“We could try to hotline it.”",
+       "o": [
+        "Call the White House and ask it to weigh in on the bill",
+        "Pass it quickly in the Senate if no office objects",
+        "Leak it to the press",
+        "Move it to the House floor under suspension of the rules"
+       ],
+       "a": 1,
+       "x": "Hotlining works for noncontroversial bills. A single hold stops it, which is why staff will ask whether anyone is likely to object."
+      },
+      {
+       "t": "mc",
+       "who": "p",
+       "q": "“Honestly, it’s a messaging bill.”",
+       "o": [
+        "A bill about telecommunications and media policy",
+        "A bill to make a point, not expected to pass",
+        "A bill drafted by the member’s press office staff",
+        "A bill that already passed by a quick voice vote"
+       ],
+       "a": 1,
+       "x": "Messaging bills stake out a position for the party or a campaign. Cosponsoring one is cheap, so it tells you less about how the member would vote on a real deal."
+      },
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“That’s a Byrd rule problem.”",
+       "o": [
+        "It would violate the Senate’s ethics rules on member conduct",
+        "In reconciliation, provisions that aren’t mainly budgetary can be struck",
+        "It needs 67 votes to get through the Senate",
+        "It conflicts with a House rule on how bills are drafted"
+       ],
+       "a": 1,
+       "x": "Reconciliation bills pass the Senate with a simple majority, but the Byrd rule lets senators strike provisions that aren’t mainly about the budget. In 2025, the proposed moratorium on state AI laws was rewritten around broadband funding to survive it; the Senate then voted 99-1 to remove it anyway."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Who’s Who",
+   "desc": "Who you meet tells you how the office is treating your issue.",
+   "lessons": [
+    {
+     "title": "The staff ladder",
+     "items": [
+      {
+       "t": "match",
+       "p": "Match each title to the job.",
+       "pairs": [
+        [
+         "LD",
+         "Legislative Director: runs the policy staff and agenda"
+        ],
+        [
+         "LA",
+         "Legislative Assistant: covers a portfolio of issues"
+        ],
+        [
+         "LC",
+         "Legislative Correspondent: answers constituent mail, often junior"
+        ],
+        [
+         "Chief of Staff",
+         "Runs the office and makes the political calls"
+        ],
+        [
+         "PSM",
+         "Professional Staff Member: committee staffer who works on text"
+        ]
+       ],
+       "x": "Personal offices have the LD, LAs and LCs. Committees have their own staff, who usually write the text."
+      },
+      {
+       "t": "mc",
+       "p": "You asked for a meeting on AI safety. The office books you with the LC instead of the tech LA. What’s the best read?",
+       "o": [
+        "You’ve been snubbed and should escalate",
+        "Lower priority for now, but the LC may write the memo the LA reads",
+        "The office has no tech LA",
+        "The LC is the decision-maker"
+       ],
+       "a": 1,
+       "x": "Junior staff often take first meetings. Take them seriously: LCs write memos, get promoted, and remember who was useful.",
+       "ask": "“How does this usually get in front of the LA?”"
+      },
+      {
+       "t": "mc",
+       "who": "p",
+       "q": "“That’s really a question for committee staff.”",
+       "o": [
+        "Go away",
+        "The committee writes the text; this office won’t lead",
+        "You should take this to the Rules Committee staff instead",
+        "They want you to testify at an upcoming committee hearing"
+       ],
+       "a": 1,
+       "x": "Offices whose member isn’t on the committee that handles the bill rarely shape its text. If they offer an introduction to committee staff, that’s a real step forward.",
+       "ask": "“Would you be willing to connect me with the right person on the committee?”"
+      },
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“The boss is a yes, but she won’t lead on it.”",
+       "o": [
+        "She’ll introduce it herself next month and look for cosponsors",
+        "She’ll vote yes or cosponsor, but won’t push for it",
+        "She opposes it",
+        "She’ll whip votes for it"
+       ],
+       "a": 1,
+       "x": "Members have limited bandwidth to lead. A “yes but won’t lead” office gives you a cosponsor, not a champion. You still need a champion somewhere else."
+      }
+     ]
+    },
+    {
+     "title": "Jurisdiction and money",
+     "items": [
+      {
+       "t": "mc",
+       "p": "A bill funds grants to state election offices. Which Senate committee handles election administration law?",
+       "o": [
+        "Judiciary",
+        "Rules and Administration",
+        "Homeland Security and Governmental Affairs",
+        "Commerce, Science, and Transportation"
+       ],
+       "a": 1,
+       "x": "Senate Rules and Administration handles federal election law. In the House it’s the Committee on House Administration. The grant money itself runs through appropriations."
+      },
+      {
+       "t": "mc",
+       "p": "A bill requires frontier AI developers to report safety incidents. Where would it most likely go in the Senate?",
+       "o": [
+        "Commerce",
+        "Rules and Administration",
+        "Finance",
+        "Agriculture"
+       ],
+       "a": 0,
+       "x": "Commerce handles most tech regulation, though AI bills can also land in Judiciary, Homeland Security or Armed Services depending on how they’re written. Drafting choices can steer a bill toward a friendlier committee."
+      },
+      {
+       "t": "mc",
+       "who": "t",
+       "q": "“Could we do this in report language instead?”",
+       "o": [
+        "Put it in a press release",
+        "Put it in a spending bill’s committee report instead of in law",
+        "Ask CRS to write a report",
+        "Enter it into the Congressional Record during floor debate on the bill"
+       ],
+       "a": 1,
+       "x": "Report language isn’t binding law, but agencies usually follow it because the same committee funds them next year. It’s a much easier ask than a statute and a common win for advocates."
+      },
+      {
+       "t": "mc",
+       "who": "p",
+       "q": "“Leadership hasn’t weighed in yet.”",
+       "o": [
+        "Leadership quietly opposes it but doesn’t want to say so publicly",
+        "Offices are waiting to see if leaders will back it or give it floor time",
+        "It’s already scheduled for a floor vote next week",
+        "It’s dead, since leadership never takes up bills like this"
+       ],
+       "a": 1,
+       "x": "Leadership controls the floor. Many offices won’t commit before they know where leadership stands, especially on anything that splits the caucus.",
+       "ask": "“Do you know who in leadership’s office is working on this?”"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Real Interest",
+   "desc": "The signals that mean an office is actually moving.",
+   "lessons": [
+    {
+     "title": "Buying signals",
+     "items": [
+      {
+       "t": "mc",
+       "p": "Which of these is the strongest sign of real interest?",
+       "o": [
+        "“Thanks so much for coming in.”",
+        "“This is really helpful context.”",
+        "“Can you send the bill text and who else has signed on?”",
+        "“We’ll keep it in mind.”"
+       ],
+       "a": 2,
+       "x": "Requests for specific materials mean someone is preparing to brief the member or make a decision. Thanks and praise are just good manners."
+      },
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“What’s the strongest argument against this?”",
+       "p": "A staffer asks you this. What’s the best read?",
+       "o": [
+        "They’re hostile and looking for a reason to oppose the bill",
+        "A good sign: they’re preparing to brief the boss",
+        "They want to end the meeting and are signaling you should leave",
+        "They’re testing your loyalty to the coalition behind the bill"
+       ],
+       "a": 1,
+       "x": "Staff who might recommend a yes need to know what the boss will be asked. Answer honestly. Spin here costs credibility fast."
+      },
+      {
+       "t": "mc",
+       "who": "p",
+       "q": "“Could you help us with some language on this?”",
+       "o": [
+        "A polite brush-off to end the meeting on a friendly note",
+        "A strong signal: they want drafting help",
+        "They want you to write a press statement for the boss",
+        "They want you to proofread a bill they’ve already finished"
+       ],
+       "a": 1,
+       "x": "Small offices rely on outside groups for help with text (staff call this technical assistance, or “TA”). If they want your language, your idea may be going into a bill, though maybe not the bill you came to pitch.",
+       "ask": "“Is this for something the boss is planning to introduce?”"
+      },
+      {
+       "t": "mc",
+       "who": "p",
+       "q": "“Send me a one-pager.”",
+       "o": [
+        "Always a brush-off",
+        "Ambiguous: it depends on whether they asked anything specific",
+        "Always a strong signal",
+        "They want a longer memo"
+       ],
+       "a": 1,
+       "x": "Sometimes it’s how staff end a meeting. Sometimes they really need something to forward. If they asked pointed questions during the meeting, it’s probably real."
+      }
+     ]
+    },
+    {
+     "title": "After the meeting",
+     "items": [
+      {
+       "t": "mc",
+       "p": "After the meeting, which follow-up from the office means the most?",
+       "o": [
+        "An auto-reply",
+        "A thank-you note",
+        "The staffer introduces you to committee staff on the issue",
+        "You get added to the office newsletter and its event invitation list"
+       ],
+       "a": 2,
+       "x": "An introduction spends some of the staffer’s own credibility. When they make one, they’re betting your issue is worth the committee’s time."
+      },
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“We’re hearing from a lot of stakeholders on this.”",
+       "o": [
+        "There’s broad support for it from many outside groups",
+        "Other groups, often opponents, are lobbying too",
+        "They want you to bring more groups into the coalition",
+        "They’re running a poll"
+       ],
+       "a": 1,
+       "x": "This usually means industry or other groups are making the opposite case. It’s an opening to find out what they’re hearing.",
+       "ask": "“Who are you hearing from, and what are they saying?”"
+      },
+      {
+       "t": "order",
+       "p": "Order these follow-ups from weakest to strongest signal.",
+       "ends": [
+        "Weakest",
+        "Strongest"
+       ],
+       "items": [
+        "You’re added to the office newsletter",
+        "“Thanks again, we’ll be in touch.”",
+        "An email asking two specific questions about the bill",
+        "An introduction to the committee staffer on the issue",
+        "A request for help drafting language"
+       ],
+       "x": "Effort is the signal. The more work the staffer does after the meeting, the more the issue is moving. Treat the exact order as a rule of thumb."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Ask the Next Question",
+   "desc": "Decoding the phrase is half the job. The follow-up gets you the truth.",
+   "lessons": [
+    {
+     "title": "Turn vague into specific",
+     "items": [
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“The senator is very engaged on AI, and we’re looking at a range of approaches.”",
+       "p": "What’s the best follow-up?",
+       "o": [
+        "“Great. So will she sign on as a cosponsor of our bill?”",
+        "“Is she drafting her own bill on this?”",
+        "“I’ll send over a one-pager summarizing our bill.”",
+        "“Thanks for your time.”"
+       ],
+       "a": 1,
+       "x": "Members who want to lead on an issue rarely cosponsor a rival bill. If she’s drafting her own, the realistic win is getting your language into hers."
+      },
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“That’s a heavy lift.”",
+       "p": "What’s the best follow-up?",
+       "o": [
+        "“I understand. Thanks anyway for your time today.”",
+        "“What would make it lighter?”",
+        "“Other offices we’ve met with think it’s easy.”",
+        "“Can I meet with the senator directly about it?”"
+       ],
+       "a": 1,
+       "x": "This turns a vague no into a list of specific obstacles, some of which you might be able to remove."
+      },
+      {
+       "t": "mc",
+       "who": "p",
+       "q": "“The boss has some concerns.”",
+       "p": "What’s the best follow-up?",
+       "o": [
+        "“Understood, and thanks for flagging them. What are they?”",
+        "“Are they about the policy, or who’s opposing it?”",
+        "“Other members we’ve met with don’t have any concerns.”",
+        "“Can we deal with those later, after the boss signs on?”"
+       ],
+       "a": 1,
+       "x": "“What are they?” is fine, but separating policy from politics gets you more. Drafting problems can be fixed with text. Political problems need validators or cover."
+      }
+     ]
+    },
+    {
+     "title": "Pin it down",
+     "items": [
+      {
+       "t": "mc",
+       "who": "p",
+       "q": "“We’ll get back to you.”",
+       "p": "What’s the best follow-up?",
+       "o": [
+        "“Great, thanks. I’ll wait to hear from you.”",
+        "“When should I check back, and who should I follow up with?”",
+        "“Can you commit now, before I leave the office?”",
+        "“I’ll just email your boss directly to follow up.”"
+       ],
+       "a": 1,
+       "x": "Get a time and a name. It’s polite, and it makes silence informative: if they haven’t answered by then, you’ve learned something."
+      },
+      {
+       "t": "mc",
+       "who": "m",
+       "q": "“We’d want to see who else is on.”",
+       "p": "What’s the best follow-up?",
+       "o": [
+        "“Don’t worry, everyone’s already on board with it.”",
+        "“Which offices matter most to the senator?”",
+        "“That’s not a good reason to hold off on signing.”",
+        "“OK, thanks. I’ll check back with you in a few weeks.”"
+       ],
+       "a": 1,
+       "x": "Get specific names. Same-state colleagues, committee members and offices from the other party tend to matter most, but each office has its own list."
+      },
+      {
+       "t": "mc",
+       "who": "t",
+       "q": "“We don’t usually take positions before markup.”",
+       "p": "What’s the best follow-up?",
+       "o": [
+        "“Could you make an exception, given how much is at stake?”",
+        "“Understood. Is the senator weighing any amendments?”",
+        "“Then I’ll check back with you after the markup is over.”",
+        "“That seems evasive.”"
+       ],
+       "a": 1,
+       "x": "Committee members often avoid public positions before markup to keep room to negotiate. Amendments are where they actually shape the bill, so ask about those."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

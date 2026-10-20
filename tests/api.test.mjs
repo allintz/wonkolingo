@@ -107,4 +107,6 @@ r = await call('/api/grade', { body: { question: 'q', answer: 'a', response: 'so
 r = await call('/api/hint', { body: { question: '', answer: '' } }); ok([400, 503].includes(r.s), 'hint: missing fields', r);
 r = await call('/api/dispute', { body: { question: 'q', answer: 'a' } }); ok([400, 503].includes(r.s), 'dispute: missing response', r);
 
+r = await call('/api/define', { body: { term: 'x' } }); ok([400, 503].includes(r.s), 'define: too-short term or no key', r);
+r = await call('/api/define', { body: { term: 'statutory duty of care', context: 'q' } }); ok([200, 503].includes(r.s), 'define: ok or no key locally', r);
 console.log(`PASS ${pass}  FAIL ${failN}`); fails.forEach(f => console.log('FAIL', f));

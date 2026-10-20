@@ -7,8 +7,12 @@ SRC="$HOME/Documents/Obsidian Vault/05_Reference/WonkoLingo/wonkolingo.html"  # 
   echo '<!doctype html>'
   echo '<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
   echo '<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>'
+  # Installable app (iPhone "Add to Home Screen", Android, desktop): manifest, icons, full-screen mode, offline service worker.
+  echo '<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">'
+  echo '<meta name="theme-color" content="#0e141b"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="WonkoLingo">'
   echo '</head><body>'
   cat "$SRC"
+  echo '<script>if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});</script>'
   echo '</body></html>'
 } > docs/index.html
 
@@ -21,4 +25,6 @@ SRC="$HOME/Documents/Obsidian Vault/05_Reference/WonkoLingo/wonkolingo.html"  # 
 cp course-guide.md docs/course-guide.md 2>/dev/null || true
 # Mascot images live next to the page source in the vault; the page loads them from mascot/.
 mkdir -p docs/mascot && cp "$(dirname "$SRC")"/mascot/*.webp docs/mascot/
+mkdir -p docs/icons && cp "$(dirname "$SRC")"/icons/*.png docs/icons/
+cp pwa/manifest.webmanifest pwa/sw.js docs/
 cp example-course.json docs/example-course.json 2>/dev/null || true

@@ -35,6 +35,7 @@ function validateCourse(raw) {
     });
   }
   let total = 0;
+  const ids = new Set();
   c.units = arr(raw.units, 'units', 1, COURSE_LIMITS.units).map((u, ui) => {
     const uw = `units[${ui}]`;
     u = u || {};
@@ -47,6 +48,15 @@ function validateCourse(raw) {
           const w = `${lw}.items[${ii}]`;
           it = it || {};
           const x = str(it.x, w + '.x (explanation)', 700);
+          // Optional stable id: keeps players' review history when the author edits or reorders questions.
+          const withId = o => {
+            if (o && it.id !== undefined) {
+              if (typeof it.id !== 'string' || !/^[a-z0-9][a-z0-9-]{0,39}$/.test(it.id)) err(w + '.id', 'must be 1 to 40 lowercase letters, numbers or hyphens');
+              else if (ids.has(it.id)) err(w + '.id', `"${it.id}" is used by another question`);
+              else { ids.add(it.id); o.id = it.id; }
+            }
+            return o;
+          };
           if (it.t === 'mc') {
             const o = arr(it.o, w + '.o (options)', 2, 5).map((s, k) => str(s, `${w}.o[${k}]`, 200));
             const out = { t: 'mc', o, a: it.a, x };
@@ -65,14 +75,30 @@ function validateCourse(raw) {
             }
             if (it.keys !== undefined) out.keys = arr(it.keys, w + '.keys', 1, 5).map((t, k) => str(t, `${w}.keys[${k}]`, 160));
             const hint = str(it.hint, w + '.hint', 200, false); if (hint) out.hint = hint;
-            return out;
+            return withId(out);
           }
           if (it.t === 'recall') {
             const out = { t: 'recall', p: str(it.p, w + '.p', 300), answer: str(it.answer, w + '.answer', 400), x };
             const hint = str(it.hint, w + '.hint', 200, false); if (hint) out.hint = hint;
             if (it.keys !== undefined) out.keys = arr(it.keys, w + '.keys', 1, 5).map((t, k) => str(t, `${w}.keys[${k}]`, 160));
             if (it.open !== undefined) { if (typeof it.open !== 'boolean') err(w + '.open', 'must be true or false'); else if (it.open) out.open = true; }
-            return out;
+            // Optional multiple-choice version, used while a player is still learning the card.
+            if (it.choice !== undefined) {
+              const ch = it.choice, cw = w + '.choice';
+              if (!ch || typeof ch !== 'object' || Array.isArray(ch)) err(cw, 'must be an object with o, a and optional p and ow');
+              else {
+                const o = arr(ch.o, cw + '.o (options)', 2, 5).map((t, k) => str(t, `${cw}.o[${k}]`, 200));
+                if (!Number.isInteger(ch.a) || ch.a < 0 || ch.a >= o.length) err(cw + '.a', 'must be the 0-based position of the right option');
+                if (new Set(o).size !== o.length) err(cw + '.o', 'has duplicate options');
+                const co = { o, a: ch.a }; const cp = str(ch.p, cw + '.p', 300, false); if (cp) co.p = cp;
+                if (ch.ow !== undefined) {
+                  if (!Array.isArray(ch.ow) || ch.ow.length !== o.length) err(cw + '.ow', 'must be a list with one entry per option (use "" for the right one)');
+                  else co.ow = ch.ow.map((t, k) => str(t, `${cw}.ow[${k}]`, 300, false) || '');
+                }
+                out.choice = co;
+              }
+            }
+            return withId(out);
           }
           if (it.t === 'match') {
             const pairs = arr(it.pairs, w + '.pairs', 3, 6).map((pr, k) => {
@@ -81,13 +107,13 @@ function validateCourse(raw) {
             });
             if (new Set(pairs.map(pr => pr[0])).size !== pairs.length) err(w + '.pairs', 'has duplicate terms');
             if (new Set(pairs.map(pr => pr[1])).size !== pairs.length) err(w + '.pairs', 'has duplicate meanings; each meaning must be different or the game can’t tell which one was meant');
-            return { t: 'match', p: str(it.p, w + '.p', 300), pairs, x };
+            return withId({ t: 'match', p: str(it.p, w + '.p', 300), pairs, x });
           }
           if (it.t === 'order') {
             const ends = arr(it.ends, w + '.ends', 2, 2).map((s, k) => str(s, `${w}.ends[${k}]`, 30));
             const items = arr(it.items, w + '.items', 3, 7).map((s, k) => str(s, `${w}.items[${k}]`, 160));
             if (new Set(items).size !== items.length) err(w + '.items', 'has duplicate entries');
-            return { t: 'order', p: str(it.p, w + '.p', 300), ends, items, x };
+            return withId({ t: 'order', p: str(it.p, w + '.p', 300), ends, items, x });
           }
           err(w + '.t', 'must be "mc", "recall", "match" or "order"');
           return null;

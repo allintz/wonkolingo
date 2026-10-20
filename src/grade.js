@@ -161,3 +161,26 @@ export async function hintFor(env, { question, answer, keys }) {
   if (msg.stop_reason === 'refusal' || !msg.parsed_output) return null;
   return clip(msg.parsed_output.hint, 200);
 }
+
+// Definitions for phrases a learner selects in a card (terms the built-in glossary doesn't cover).
+const DefineSchema = z.object({ is_term: z.boolean(), definition: z.string() });
+const DEFINE_SYSTEM = `You define jargon for a quiz app for adults learning about AI policy, law and government.
+The learner selected a phrase while reading a quiz card. Write a plain-English definition of the phrase as it is used in that card: one or two short sentences, at most 240 characters, for a smart reader who isn't a specialist.
+Rules:
+- Define the general meaning of the phrase. Never answer, or hint at the answer to, the card's question.
+- Be factual and neutral. If the meaning is contested, give the common meaning without taking a side.
+- No em dashes or en dashes.
+- If the selection isn't a meaningful term or phrase (a fragment like "of the", a whole sentence, or something you can't define with confidence), set is_term to false and definition to "".`;
+export async function defineTerm(env, { term, context }) {
+  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  const msg = await client.messages.parse({
+    model: 'claude-haiku-5-5',
+    max_tokens: 1500,
+    output_config: { effort: 'low', format: zodOutputFormat(DefineSchema) },
+    system: DEFINE_SYSTEM,
+    messages: [{ role: 'user', content: `<selected_phrase>${clip(term, 80)}</selected_phrase>\n<card_text>${clip(context, 700)}</card_text>` }],
+  });
+  if (msg.stop_reason === 'refusal' || !msg.parsed_output) return null;
+  const o = msg.parsed_output;
+  return o.is_term && o.definition.trim() ? clip(o.definition.trim().replace(/[–—]/g, ','), 260) : '';
+}

@@ -13,8 +13,10 @@ Your job: build one course on the topic the user names, as a single JSON file th
 5. **Build up.** Order units from basics to harder material. Each lesson should take two to four minutes: about 4 to 6 questions.
 6. **Mix question types.** Use mostly multiple choice, plus about one short-answer (`recall`) question per lesson and some matching and ordering.
 7. **Be honest about uncertainty.** Use the course `caveat` to say what the course simplifies, where facts change quickly, and what date the facts are current as of.
-8. **Write right answers that stand on their own.** WonkoLingo is a spaced-repetition app. Players type their answer to a multiple-choice question from memory, and an AI grader compares it with your right option (they can tap "Show choices" to see the options instead). So the right option must be a complete, correct answer to the question by itself ("60 votes, three-fifths of the Senate"), never "Both A and C" or "None of the above".
-9. **Explain wrong options when you can.** The optional `ow` field explains why each wrong option is wrong. Players who pick one see that note, which helps undo the pull of a plausible wrong answer.
+8. **Write right answers that stand on their own.** WonkoLingo is a spaced-repetition app, and cards get harder as a player learns them: a new card is asked as multiple choice, a familiar one is recalled from memory and self-rated, and now and then a player types an answer that an AI grader checks against your right option. So the right option must be a complete, correct answer to the question by itself ("60 votes, three-fifths of the Senate"), never "Both A and C" or "None of the above".
+9. **Give every short-answer card a multiple-choice version** (`choice`, below), so players can learn it as multiple choice before recalling it from memory.
+10. **Give every question an `id`.** It keeps players' review history attached to the right question when you upload a new version that adds, removes or reorders questions.
+11. **Explain wrong options when you can.** The optional `ow` field explains why each wrong option is wrong. Players who pick one see that note, which helps undo the pull of a plausible wrong answer.
 
 ### Writing questions players can answer well
 
@@ -65,6 +67,7 @@ The app shuffles answer options, match pairs and ordering steps itself, so write
 | `units` | 1 to 12 units. Each has `title` (up to 60 characters), optional `desc` (up to 200) and `lessons`. |
 | `lessons` | 1 to 8 per unit. Each has `title` (up to 60 characters) and `items`. |
 | `items` | 2 to 15 questions per lesson, and at most 400 questions in the whole course. |
+| `id` (on any question) | Optional but recommended: 1 to 40 lowercase letters, numbers or hyphens, unique within the course (for example `"cloture-votes"`). Keep a question's `id` when you edit its wording; give it a new one if it now asks something different. |
 
 Keep the whole file under 200 KB. Fields not listed here are ignored.
 
@@ -110,7 +113,20 @@ Keep the whole file under 200 KB. Fields not listed here are ignored.
 }
 ```
 
-The player types an answer, says how sure they are, and an AI grader scores it from 0 to 3 against `answer` and `keys`. `p` (up to 300 characters), `answer` (up to 400) and `x` are required; `keys` and `hint` work the same as for multiple choice. Ask about something with a clear answer that can be stated in a sentence. "Why" and "what happens when" questions work well; open-ended opinion questions don't.
+Depending on how well they know the card, the player sees its multiple-choice version, recalls the answer in their head and rates themselves, or types an answer that an AI grader scores against `answer` and `keys`. `p` (up to 300 characters), `answer` (up to 400) and `x` are required; `keys` and `hint` work the same as for multiple choice. Ask about something with a clear answer that can be stated in a sentence. "Why" and "what happens when" questions work well; open-ended opinion questions don't.
+
+**Multiple-choice version (`"choice"`).** Add a multiple-choice form of the question for players who are still learning it:
+
+```json
+"choice": {
+  "p": "Which of these explains why one senator can slow almost any bill?",
+  "o": ["Most business needs unanimous consent, so one objection forces slow formal procedure", "Any senator can veto a bill in committee", "Bills need 60 cosponsors to reach the floor", "The majority leader must poll every senator"],
+  "a": 0,
+  "ow": ["", "Committees vote by majority; no single member has a veto.", "There is no cosponsor threshold for floor action.", "Leaders hotline bills, but no poll is required."]
+}
+```
+
+`o` (2 to 5 options, 4 is best), `a` (0-based position of the right option) and `ow` (optional, one entry per option) follow the multiple-choice rules above. `p` (optional, up to 300 characters) rewords the question for the choice version, which you need for "name two" questions: ask "Which of these is one policy proposed to address X?" with one right policy and three that address different problems. Keep options similar in length, so the right one doesn't stand out.
 
 **Open questions (`"open": true`).** Some questions have many right answers, like "Name two policies that would reduce this risk." Add `"open": true` and write `answer` as a list of examples ("Examples: A; B; C"). The grader then gives full credit for any specific, correct answer, even one that isn't on your list, and the player sees your list under "Some good answers". Ask for one or two items, never "all of them": nobody can reliably recall a whole list. Opinion questions still don't work, even as open questions.
 
@@ -154,6 +170,7 @@ Check that:
 - every `ow` list has exactly one entry per option;
 - no field is over its length limit, and every lesson has at least 2 questions;
 - every `who` matches a key in `speakers`;
+- every question has a unique `id`, and every `recall` question has a `choice` version whose right option is correct on its own;
 - every fact, number and date is one you verified, and every `news` card describes a real event with its real date.
 
 Give the user the finished course as **one `.json` file** named after the `id` (for example `state-ai-bills.json`), with nothing else in the file. Tell them to open WonkoLingo, choose **+ Add course**, and upload it. If the app lists problems, it will show them as `units[0].lessons[1].items[2].a: ...` paths; fix exactly those and send a new file.

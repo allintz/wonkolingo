@@ -2,8 +2,8 @@
  "format": "wonkolingo-course/1",
  "id": "frontier-act",
  "title": "The FRONTIER Act",
- "description": "How the leading bipartisan House frontier AI bill (H.R. 9925) would work: tiers, reporting, outside auditors, emergency orders and state preemption.",
- "caveat": "Based on the introduced text of H.R. 9925 (July 23, 2026) and coverage through mid-October 2026. Simplified: check the bill text before relying on details. The bill could change in committee.",
+ "description": "How the bipartisan House frontier AI bill (H.R. 9925) would work: tiers, reporting, outside auditors, emergency orders and state preemption.",
+ "caveat": "Based on the introduced text of H.R. 9925 (July 23, 2026). Status, cosponsors and reactions checked October 19, 2026. Simplified: check the bill text before relying on details. The bill could change in committee.",
  "units": [
   {
    "title": "Meet the bill",
@@ -28,25 +28,25 @@
        "t": "mc",
        "p": "Which House committees was it referred to?",
        "o": [
-        "Energy and Commerce, plus Science, Space, and Technology",
+        "Energy and Commerce; Science, Space, and Technology",
         "Judiciary only",
-        "Armed Services and Intelligence",
-        "Ways and Means"
+        "Armed Services, plus the Permanent Select Committee on Intelligence",
+        "Ways and Means, plus Financial Services and Small Business"
        ],
        "a": 0,
-       "x": "Energy and Commerce oversees the Commerce Department, which would run the new rules. As of mid-October 2026, neither committee had held a markup."
+       "x": "Energy and Commerce oversees the Commerce Department, which would run the new rules. As of October 19, 2026, congress.gov listed no committee action since the July 23 referral, so neither committee had held a markup."
       },
       {
        "t": "mc",
-       "p": "As of October 2026, what does the bill's cosponsor list look like?",
+       "p": "As of mid-October 2026, what does the bill's cosponsor list look like?",
        "o": [
-        "11 cosponsors, split 6 Democrats and 5 Republicans",
+        "11: 6 Democrats and 5 Republicans",
         "More than 100 cosponsors, all Republicans",
-        "No cosponsors",
-        "40 cosponsors, all Democrats"
+        "No cosponsors beyond the bill's sponsor",
+        "About 40 cosponsors, all of them Democrats"
        ],
        "a": 0,
-       "x": "Five original cosponsors joined on July 23, and six more signed on in September and October. The near-even party split is a big part of why people treat it as the most serious bipartisan frontier AI bill in the House."
+       "x": "Five original cosponsors joined on July 23, and six more signed on between September 16 and October 1 (congress.gov, checked October 19, 2026). Several groups quoted in a July 28 release from Rep. Trahan's office praised it; the AI Verification & Evaluation Research Institute called it \"the strongest federal proposal to date.\""
       },
       {
        "t": "mc",
@@ -64,10 +64,10 @@
        "t": "mc",
        "p": "Which agency would run the new rules?",
        "o": [
-        "The Commerce Department, through a new Under Secretary of Commerce for AI Security",
-        "A new independent AI agency",
-        "The Department of Energy",
-        "The Federal Trade Commission"
+        "The Commerce Department, via a new Under Secretary for AI Security",
+        "A new independent AI agency led by a bipartisan commission",
+        "The Department of Energy, through its national labs",
+        "The Federal Trade Commission, through a new AI bureau"
        ],
        "a": 0,
        "x": "The bill creates an Under Secretary of Commerce for AI Security to write rules, license auditors and receive reports. The Secretary of Commerce keeps the power to issue emergency orders."
@@ -81,10 +81,10 @@
        "t": "mc",
        "p": "What makes an AI model a \"frontier model\" under the bill?",
        "o": [
-        "It's a foundation model trained with more than 10^26 operations of computing power",
-        "It has more than 1 billion users",
-        "It can pass the bar exam",
-        "Its developer has more than 500 employees"
+        "It's a foundation model trained with over 10^26 operations",
+        "It has more than 1 billion monthly users worldwide",
+        "It can pass the bar exam and other expert-level tests",
+        "Its developer has more than 500 full-time employees"
        ],
        "a": 0,
        "x": "The bill uses a compute threshold: more than 10^26 integer or floating-point operations. That's roughly the scale of the largest training runs, so only a handful of companies' models qualify."
@@ -93,9 +93,9 @@
        "t": "mc",
        "p": "A lab fine-tunes its own model that was trained with slightly under 10^26 operations, pushing the total over the line. Is the result a frontier model?",
        "o": [
-        "Yes. Fine-tuning, reinforcement learning and other substantial modifications count toward the total",
-        "No. Only the original training run counts",
-        "Only if the fine-tuning alone exceeds 10^26",
+        "Yes. Fine-tuning compute counts toward the total",
+        "No. Only the original pre-training run counts toward the threshold",
+        "Only if the fine-tuning run by itself exceeds 10^26 operations",
         "Only if the model is released publicly"
        ],
        "a": 0,
@@ -105,10 +105,10 @@
        "t": "mc",
        "p": "Under the bill's definition, how big does a single incident have to be to count as \"catastrophic\"?",
        "o": [
-        "Death or serious injury to more than 50 people, or more than $1 billion in property damage",
-        "Any death",
+        "Over 50 deaths or serious injuries, or over $1 billion in property damage",
+        "Any death or serious injury the model contributes to, however few people are hurt",
         "More than $100 million in losses",
-        "Harm to more than 1,000 people"
+        "Death or serious injury to more than 1,000 people, or over $10 billion in property damage"
        ],
        "a": 0,
        "x": "Those thresholds come from the definition of catastrophic risk. The harm also has to come from specific kinds of model behavior, such as weapons help or acting without human oversight."
@@ -178,8 +178,8 @@
        "t": "mc",
        "p": "Why does the bill require both a revenue test and an AI-spending test for the bigger tiers?",
        "o": [
-        "So the heaviest duties fall only on companies that are both big and spending heavily on frontier AI",
-        "So any company with little revenue still gets the heaviest duties",
+        "So the heaviest duties fall only on big companies spending heavily on frontier AI",
+        "So any company with little revenue still gets the heaviest duties if it trains a frontier model",
         "Because the Constitution requires two tests",
         "To exempt every lab from all duties until it turns a profit"
        ],
@@ -190,9 +190,9 @@
        "t": "mc",
        "p": "A very large frontier developer has to follow which rules?",
        "o": [
-        "Its own tier's rules plus every rule for frontier and large frontier developers",
+        "The rules of all three tiers",
         "Only the very large tier's rules",
-        "Only the rules it opts into",
+        "Only the rules it chooses to opt into",
         "None until an auditor is licensed"
        ],
        "a": 0,
@@ -202,13 +202,13 @@
        "t": "mc",
        "p": "Can the Under Secretary change the 10^26 compute threshold or the dollar thresholds?",
        "o": [
-        "Only upward, by regulation, with a review at least every 2 years",
+        "Only upward, by regulation, with regular reviews",
         "Yes, up or down at any time",
-        "No, only Congress can change them",
-        "Only the President can, by executive order"
+        "No, only Congress can change them, by passing a new law",
+        "Only the President can, by issuing an executive order"
        ],
        "a": 0,
-       "x": "The bill lets the Under Secretary raise the thresholds as algorithms, hardware and costs change, but not lower them. Some friendly critics worry a fixed threshold could still go stale as smaller models get more capable."
+       "x": "The bill lets the Under Secretary raise the thresholds as algorithms, hardware and costs change, but not lower them. Daniel King, a Foundation for American Innovation research fellow who praised the bill, argued the compute threshold should also be able to move down, since algorithmic gains could let smaller training runs reach the same capabilities."
       }
      ]
     },
@@ -248,15 +248,15 @@
         "None, because it's voluntary"
        ],
        "a": 0,
-       "x": "Analysts like Dan Parshall of the Canary Institute have estimated about five top-tier developers, which supporters cite as a reason the burden is narrow."
+       "x": "Dan Parshall of the Canary Institute estimates the top tier is \"roughly five companies.\" He presents this as a gap: emergency orders can reach any frontier developer, but the only required early warning, an IVO's duty to refer imminent risks, covers just those five."
       },
       {
        "t": "mc",
        "p": "Before a large frontier developer can develop, deploy or operate a frontier model, what does it have to file with the Under Secretary?",
        "o": [
-        "A disclosure statement listing its ownership and contacts, plus a fee",
+        "A disclosure statement and a fee",
         "A license application approved by Congress",
-        "Its model weights",
+        "A copy of its model weights for government safekeeping",
         "Nothing"
        ],
        "a": 0,
@@ -277,10 +277,10 @@
        "t": "mc",
        "p": "What is a \"frontier AI framework\"?",
        "o": [
-        "A developer's documented protocols for managing, assessing and mitigating catastrophic risks",
-        "A federal technical standard every model must meet",
+        "A developer's documented protocols for managing catastrophic risks",
+        "A federal technical standard that every frontier model must meet before release",
         "A list of banned AI uses",
-        "A contract between a lab and the government"
+        "A binding contract between a lab and the government setting its safety duties"
        ],
        "a": 0,
        "x": "Large frontier developers must write, follow and publish one. It has to explain their risk thresholds, how they decide whether to deploy or use a model internally, how they secure model weights and how they respond to incidents. The Under Secretary sets minimum requirements by regulation."
@@ -295,7 +295,7 @@
         "Whether the developer paid its taxes"
        ],
        "a": 0,
-       "x": "It's a compliance check against the lab's own rules. Judging whether those rules are adequate is the job of the independent verification organizations, and only for the very largest developers. Friendly critics have flagged that gap for the middle tier."
+       "x": "It's a compliance check against the lab's own rules. Judging whether those rules are adequate is the job of the independent verification organizations, and only for the very largest developers. Daniel King, a Foundation for American Innovation research fellow who praised the bill, flagged this gap: for large developers, \"the merits of that framework are not finely evaluated.\""
       },
       {
        "t": "mc",
@@ -303,7 +303,7 @@
        "o": [
         "Tying the auditor's pay to the audit's results",
         "Paying the auditor at all",
-        "Letting the auditor see unredacted materials",
+        "Letting the auditor see unredacted internal materials",
         "Using the same auditor two years in a row"
        ],
        "a": 0,
@@ -313,9 +313,9 @@
        "t": "mc",
        "p": "When a large frontier developer makes a material change to its framework, what must it do?",
        "o": [
-        "Publish a justification for the change within 30 days",
-        "Get the Under Secretary's approval first",
-        "Nothing until the annual review",
+        "Publish a justification within 30 days",
+        "Get the Under Secretary's written approval first",
+        "Nothing until the annual review comes around",
         "Notify Congress"
        ],
        "a": 0,
@@ -353,9 +353,9 @@
        "t": "mc",
        "p": "Which of these counts as a \"critical safety incident\"?",
        "o": [
-        "A model using deception to get around its developer's monitoring, outside a test designed to provoke it",
+        "A model deceiving its developer to evade monitoring, outside a test meant to provoke it",
         "A model giving a wrong answer to a math question",
-        "A user complaining about a chatbot's tone",
+        "A user filing a formal complaint with the developer about a chatbot's rude or offensive tone",
         "A server outage"
        ],
        "a": 0,
@@ -366,7 +366,7 @@
        "p": "A lab releases a new frontier model. When must it publish its transparency report?",
        "o": [
         "Before or at the same time as deployment",
-        "Within one year",
+        "Within one year after the model is first deployed",
         "Only if asked",
         "After the first incident"
        ],
@@ -377,10 +377,10 @@
        "t": "mc",
        "p": "What's the maximum civil penalty for violating the transparency and reporting rules?",
        "o": [
-        "$1 million per violation, with each day counting as a separate violation",
-        "$10,000 total",
-        "$100 million per violation",
-        "There's no penalty"
+        "$1 million per violation, with each day a separate violation",
+        "$10,000 total, no matter how many violations",
+        "$100 million per violation, plus a share of revenue",
+        "There's no penalty, only a public warning"
        ],
        "a": 0,
        "x": "The U.S. Attorney General can sue. State attorneys general who opt in can also sue after notifying federal officials; the Attorney General can join the case or file its own, which pauses the state's suit."
@@ -390,9 +390,9 @@
        "p": "Who can see incident reports filed with the Under Secretary?",
        "o": [
         "Only federal staff who need to know, plus state attorneys general who opt in",
-        "Anyone, through a public database",
-        "Only the developer",
-        "Only Congress"
+        "Anyone, through a searchable public database on the Commerce website",
+        "Only the developer that filed them",
+        "Only members of Congress, in closed session"
        ],
        "a": 0,
        "x": "Reports stay confidential. Each year the Under Secretary sends Congress and the President an anonymized, aggregated report, the first due by January 1, 2028. Members of the public can also file incident reports through the same confidential channel."
@@ -412,22 +412,22 @@
        "t": "mc",
        "p": "What does an independent verification organization (IVO) judge that a regular compliance auditor doesn't?",
        "o": [
-        "Whether the developer's safeguards are adequate to reach acceptable levels of catastrophic risk mitigation",
-        "Whether the developer followed its own framework",
+        "Whether the developer's safeguards are adequate",
+        "Whether the developer followed its own framework as written",
         "Whether the model's financial projections are accurate",
-        "Whether the model is biased"
+        "Whether the model's outputs show political or racial bias"
        ],
        "a": 0,
-       "x": "IVOs assess adequacy, not just compliance. \"Acceptable\" means the model's expected benefits outweigh its catastrophic risk, considering probability and size."
+       "x": "IVOs judge whether the safeguards are adequate, a step beyond checking compliance. \"Acceptable\" means the model's expected benefits outweigh its catastrophic risk, considering probability and size."
       },
       {
        "t": "mc",
        "p": "Who licenses IVOs?",
        "o": [
-        "The Under Secretary of Commerce for AI Security",
-        "The developers they review",
-        "State attorneys general",
-        "The National Academy of Sciences"
+        "The Under Secretary for AI Security",
+        "The developers they review, through an industry group",
+        "State attorneys general, each in their own state",
+        "The National Academies of Sciences, Engineering, and Medicine"
        ],
        "a": 0,
        "x": "Applicants must show independence from the AI industry and submit a plan with their methods. The Under Secretary must revoke a license if, for example, the IVO's methods become obsolete or its independence is compromised."
@@ -436,20 +436,20 @@
        "t": "mc",
        "p": "Does IVO review cover models a lab only uses internally?",
        "o": [
-        "Yes. It covers internal use as well as models released to others",
-        "No. Only publicly released models",
-        "Only if the lab agrees",
+        "Yes. Internal use is covered too",
+        "No. Only publicly released models are covered",
+        "Only if the lab agrees to it in writing",
         "Only for military labs"
        ],
        "a": 0,
-       "x": "Supporters highlight this because many risks, like a model sabotaging its own lab's safety work, could appear before a model is ever released. Here, outside IVO review and emergency orders both reach internal use, not just released models."
+       "x": "Dan Parshall of the Canary Institute says including internal use \"matters a lot, since the most capable models at any moment are the ones running inside the labs.\" Both outside IVO review and emergency orders reach internal use as well as released models."
       },
       {
        "t": "mc",
        "p": "How often must an IVO send an assessment report?",
        "o": [
-        "At least every 6 months, more often if it judges the risk calls for it",
-        "Once, before the first release",
+        "At least every 6 months, or more often if needed",
+        "Once, before the model is first released to the public",
         "Every 5 years",
         "Only when asked by Congress"
        ],
@@ -460,10 +460,10 @@
        "t": "mc",
        "p": "What must an IVO do if it finds a model poses an imminent catastrophic risk?",
        "o": [
-        "Refer it to the Secretary of Commerce within 72 hours, for a possible emergency order",
+        "Refer it to the Secretary of Commerce within 72 hours",
         "Shut the model down itself",
-        "Publish the finding on social media",
-        "Wait for the next scheduled report"
+        "Publish the finding on social media to warn the public right away",
+        "Wait and include it in the next scheduled assessment report"
        ],
        "a": 0,
        "x": "IVOs can't halt models themselves. They escalate to the Secretary, who decides whether to issue an emergency order."
@@ -492,13 +492,13 @@
        "t": "mc",
        "p": "Can an IVO be sued if a model it reviewed causes a catastrophe?",
        "o": [
-        "Only for death or serious injury caused by willful misconduct, proven by clear and convincing evidence",
-        "Yes, by anyone for any harm",
-        "Never, under any circumstances",
-        "Only by the developer"
+        "Only for willful misconduct causing death or serious injury, by clear and convincing proof",
+        "Yes, by anyone for any harm the model causes, under ordinary negligence rules",
+        "Never, under any circumstances, however serious the harm",
+        "Only by the developer that hired it"
        ],
        "a": 0,
-       "x": "Licensed IVOs get broad immunity. The one exception is a federal claim for willful misconduct causing death or serious physical injury, and acting in line with the rules counts as no willful misconduct. The goal is to make the auditing business viable."
+       "x": "Licensed IVOs get broad immunity. The one exception is a federal claim for willful misconduct causing death or serious physical injury, and acting in line with the rules counts as no willful misconduct."
       },
       {
        "t": "mc",
@@ -506,8 +506,8 @@
        "o": [
         "The Government Accountability Office (GAO)",
         "The developers",
-        "The White House",
-        "The IVOs themselves"
+        "The White House Office of Science and Technology Policy",
+        "The IVOs themselves, through a joint industry report"
        ],
        "a": 0,
        "x": "GAO, Congress's watchdog, reports each year on how many IVOs exist, whether they can meet demand and whether they're truly independent of the industry."
@@ -516,9 +516,9 @@
        "t": "mc",
        "p": "An IVO's license is at risk if a model it verified fails anyway. When is it protected?",
        "o": [
-        "When it flagged the problem, recommended adequate fixes, and the developer didn't make them",
-        "When the developer paid it enough",
-        "When the failure happened overseas",
+        "When it flagged the problem and proposed adequate fixes the developer didn't make",
+        "When the developer paid it enough to cover the full review",
+        "When the failure happened overseas, outside United States jurisdiction",
         "It's never protected"
        ],
        "a": 0,
@@ -526,15 +526,15 @@
       },
       {
        "t": "mc",
-       "p": "Why do some supporters of the bill worry about timing for IVOs?",
+       "p": "Why does Americans for Responsible Innovation (ARI) worry about the timing of IVO review?",
        "o": [
-        "Preemption of state law would start right away, but an IVO market could take years to set up",
-        "IVOs expire after one year",
-        "IVOs can only review open-source models",
-        "The bill bans IVOs until 2030"
+        "Preemption is immediate; IVOs may take years",
+        "IVO licenses expire one year after they're issued",
+        "IVOs could only review open-source models, not closed ones",
+        "The bill bars any IVO from starting work until 2030"
        ],
        "a": 0,
-       "x": "Americans for Responsible Innovation raised this. Very large developers don't have to hire an IVO until a year after the first one is licensed, while the limits on state law apply once the bill is enacted."
+       "x": "ARI president Brad Carson said the bill's preemption \"would be effective immediately,\" while its private assurance market \"will take years to set up.\" Very large developers don't have to hire an IVO until a year after the first one is licensed, while the limits on state law apply once the bill is enacted."
       }
      ]
     }
@@ -551,10 +551,10 @@
        "t": "mc",
        "p": "Who can order a lab to suspend or restrict a frontier model?",
        "o": [
-        "The Secretary of Commerce, after finding an imminent catastrophic risk",
+        "The Secretary of Commerce",
         "The Under Secretary, without the Secretary",
-        "Any IVO",
-        "Any state attorney general"
+        "Any licensed IVO, on its own authority",
+        "Any state attorney general, for models used in that state"
        ],
        "a": 0,
        "x": "The Secretary must consult the Under Secretary but holds final authority. An order can cover development, deployment or internal use, in whole or in part."
@@ -594,9 +594,9 @@
        "t": "mc",
        "p": "Does an emergency order cover a fine-tuned copy of the model?",
        "o": [
-        "Yes, unless the order says otherwise. It also covers models trained largely on the original's outputs or weights",
-        "No, only the exact model named",
-        "Only if the copy is released publicly",
+        "Yes, unless the order says otherwise, plus models trained largely on its outputs",
+        "No, only the exact model the order names, not any modified copies",
+        "Only if the fine-tuned copy is later released to the public",
         "Only for 7 days"
        ],
        "a": 0,
@@ -606,10 +606,10 @@
        "t": "mc",
        "p": "What can someone face for willfully violating an emergency order?",
        "o": [
-        "A fine of up to $1 million per violation and up to 10 years in prison",
-        "Only a warning letter",
+        "Up to a $1 million fine per violation and 10 years in prison",
+        "Only a warning letter from the Secretary of Commerce",
         "Loss of their driver's license",
-        "A $500 fine"
+        "A $500 fine per violation, with no prison time"
        ],
        "a": 0,
        "x": "That's the criminal penalty. Separately, anyone bound by an order who violates it faces civil penalties of up to $10 million per violation, with each day counting separately."
@@ -640,7 +640,7 @@
        "p": "Which congressional committees get notice within 3 days of an emergency order?",
        "o": [
         "Senate Commerce, House Energy and Commerce, and both Judiciary Committees",
-        "Only the Intelligence Committees",
+        "Only the House and Senate Intelligence Committees, in a closed classified briefing",
         "All of Congress, in a public session",
         "None"
        ],
@@ -651,20 +651,20 @@
        "t": "mc",
        "p": "What does the bill's exclusivity clause do?",
        "o": [
-        "Makes this process the only way the federal government, including the President, can halt a frontier model on imminent catastrophic-risk grounds",
-        "Gives Commerce exclusive rights to frontier models",
-        "Makes the bill the only AI law in the country",
-        "Lets only one company build frontier models"
+        "Makes this the only federal way to halt a model over imminent catastrophic risk",
+        "Gives the Commerce Department exclusive legal rights over every frontier model built in the U.S.",
+        "Makes the bill the only AI law in the country, replacing every state and federal AI statute",
+        "Lets only one government-chosen company build frontier models in the United States"
        ],
        "a": 0,
-       "x": "Any other attempt by the executive branch to halt a frontier model on those grounds is unenforceable unless a later law expressly refers to this section. Supporters see it as a strong check on executive overreach; it also means other emergency powers can't be used for this purpose."
+       "x": "Any other attempt by the executive branch to halt a frontier model on those grounds is unenforceable unless a later law expressly refers to this section. Dan Parshall of the Canary Institute reads it as Congress \"trying to wrest back some control from the Executive branch.\" It also means other emergency powers can't be used for this purpose."
       },
       {
        "t": "mc",
        "p": "A lab sues over a final order. Does the order stop applying while the case goes on?",
        "o": [
-        "No. There's no automatic stay unless the court orders one",
-        "Yes, always",
+        "No, unless the court orders a stay",
+        "Yes, the order is always paused until the case ends",
         "Only if the lab posts bond",
         "Only for Republican-led labs"
        ],
@@ -686,10 +686,10 @@
        "t": "mc",
        "p": "Which three areas would states be barred from adding new rules on?",
        "o": [
-        "Catastrophic-risk transparency, third-party auditing, and incident reporting",
-        "Kids' safety, privacy and consumer protection",
-        "Election deepfakes, hiring and housing",
-        "All AI regulation of any kind"
+        "Catastrophic-risk transparency, audits and incident reports",
+        "Children's online safety, personal data privacy and consumer protection",
+        "Election deepfakes, hiring algorithms, and housing and lending decisions",
+        "All AI regulation of any kind, from chatbots to self-driving cars"
        ],
        "a": 0,
        "x": "Section 9 blocks states from imposing new substantive obligations on AI developers in those three \"covered subject areas,\" all tied to catastrophic risk."
@@ -698,13 +698,13 @@
        "t": "mc",
        "p": "Does the preemption clause reach only companies over the 10^26 threshold?",
        "o": [
-        "No. It applies to all AI developers, for rules in the covered areas",
+        "No, every AI developer",
         "Yes, only frontier developers",
         "Only very large developers",
-        "Only foreign developers"
+        "Only foreign AI developers"
        ],
        "a": 0,
-       "x": "The federal duties apply only above the compute line, but the limit on states covers any AI developer's catastrophic-risk transparency, auditing and incident reporting. That asymmetry is a big part of critics' concern."
+       "x": "The federal duties apply only above the compute line, but the limit on states covers any AI developer's catastrophic-risk transparency, auditing and incident reporting. Section 9 defines an AI developer as any entity that builds, trains or owns an AI model, so states couldn't add rules in these areas even for developers the federal duties don't reach."
       },
       {
        "t": "mc",
@@ -723,24 +723,24 @@
        "p": "Which existing state laws' frontier provisions would the preemption clause most directly hit?",
        "o": [
         "California's SB 53 and New York's RAISE Act",
-        "Texas's oil and gas regulations",
-        "Illinois's biometric privacy law",
-        "Florida's voter ID law"
+        "Texas's oil and gas drilling and pipeline regulations",
+        "Illinois's Biometric Information Privacy Act (BIPA)",
+        "Florida's voter ID and voter registration laws"
        ],
        "a": 0,
-       "x": "Both require frontier developers to publish safety frameworks and report incidents, which falls in the covered areas. Supporters argue the federal rules replace them with one national standard; critics say it trades binding state rules for a federal system that isn't built yet."
+       "x": "Both require frontier developers to publish safety frameworks and report incidents, which falls in the covered areas. The sponsors pitch the bill as \"a single, clear national standard\" (Trahan's words) in place of a state patchwork. Critics such as ARI say state rules would end immediately while the federal system takes years to build."
       },
       {
        "t": "mc",
        "p": "How do state attorneys general fit into the federal scheme?",
        "o": [
-        "They can opt in to receive reports and can sue to enforce the federal rules",
+        "They can opt in to receive reports and sue to enforce federal rules",
         "They're shut out entirely",
         "They run the IVO licensing",
-        "They can veto emergency orders"
+        "They can veto any emergency order issued against a lab based in their state"
        ],
        "a": 0,
-       "x": "This is the bill's main concession to states. In September 2026, 26 state attorneys general led by New York's Letitia James wrote to Congress asking for full state enforcement authority and no preemption, though their letter didn't name this bill.",
+       "x": "This keeps a role for states in enforcement. In September 2026, 26 state attorneys general led by New York's Letitia James wrote to Congress asking for full state enforcement authority and no preemption, though their letter didn't name this bill.",
        "news": {
         "h": "26 state attorneys general ask Congress to regulate frontier AI without preempting the states",
         "d": "September 23, 2026"
@@ -755,51 +755,51 @@
        "t": "mc",
        "p": "What's the main objection from groups like Americans for Responsible Innovation?",
        "o": [
-        "Preemption creates a gap: state rules would end before the federal system is running",
+        "Preemption ends state rules before the federal system is running",
         "The bill is too weak on kids' safety",
-        "The bill bans open-source AI",
+        "The bill would ban the release of open-source AI models",
         "The bill raises taxes"
        ],
        "a": 0,
-       "x": "ARI called preemption \"a serious hole in regulatory oversight.\" It also noted the bill has no sunset and leaves the decision to deploy with developers."
+       "x": "ARI president Brad Carson said the preemption clause leaves \"a serious hole in regulatory oversight of AI models.\" ARI also noted there's no sunset on the preemption and that the bill leaves the decision to release risky models with developers."
       },
       {
        "t": "mc",
        "p": "Which of these is a criticism of the bill's structure raised by Dan Parshall of the Canary Institute?",
        "o": [
-        "The Under Secretary isn't Senate-confirmed and the bill authorizes no appropriations",
-        "It creates too many Senate-confirmed posts",
+        "No Senate confirmation for the Under Secretary, and no appropriations",
+        "It creates too many new Senate-confirmed posts across the Commerce Department",
         "It gives states too much power",
         "It requires model weights to be published"
        ],
        "a": 0,
-       "x": "The Under Secretary is appointed by the Secretary of Commerce, and the text funds only the registration system, through fees. Parshall also noted the bill has no severability clause and lacks the whistleblower protections found in an earlier proposal."
+       "x": "The Under Secretary is appointed by the Secretary of Commerce, and the text funds only the registration system, through fees. Parshall also noted the bill has no severability clause and drops the whistleblower protections in the Great American AI Act discussion draft it grew out of."
       },
       {
        "t": "mc",
        "p": "Why did OpenAI's statement on the bill matter?",
        "o": [
-        "OpenAI said it \"can support\" the IVO requirement, a sign the biggest labs might accept outside verification",
-        "OpenAI threatened to leave the U.S.",
+        "A top lab said it \"can support\" the IVO requirement",
+        "OpenAI threatened to move out of the U.S. if the bill passed",
         "OpenAI wrote the bill",
         "OpenAI opposed every provision"
        ],
        "a": 0,
-       "x": "Industry acceptance matters for passage. Outside the industry, the Foundation for American Innovation called it \"Congress's best AI bill yet,\" and Charlie Bullock of the Institute for Law & AI praised it too."
+       "x": "OpenAI's Chris Lehane told reporters on September 15, 2026 that the company \"can support\" the IVO requirement, though a spokesperson said OpenAI hadn't endorsed the whole bill. Outside industry, Foundation for American Innovation research fellow Daniel King called it \"Congress's best AI bill yet,\" and the Institute for Law & AI's Charlie Bullock called it \"by far the best AI safety bill ever introduced\" in a statement released by Rep. Trahan's office."
       },
       {
        "t": "mc",
        "p": "What's the biggest obstacle to the bill passing this Congress?",
        "o": [
-        "No markup scheduled, and the Energy and Commerce chair has been noncommittal about acting in the lame duck",
-        "It already passed and was vetoed",
-        "The Senate passed a ban on AI bills",
+        "The Energy and Commerce chair doesn't want to rush it",
+        "It already passed both chambers and was vetoed by the President",
+        "The Senate already voted to ban taking up any new AI bills",
         "The Supreme Court struck it down"
        ],
        "a": 0,
-       "x": "Chairman Brett Guthrie was reported as noncommittal in September 2026. Any bill not passed by January 3, 2027 dies with the 119th Congress and would have to be reintroduced.",
+       "x": "Chairman Brett Guthrie said on September 16, 2026, \"I'm not going to say that the bill is going to move,\" and that he wouldn't want to act quickly in a lame duck session. As of October 19, 2026, congress.gov showed no committee action. Any bill not passed by January 3, 2027 dies with the 119th Congress and would have to be reintroduced.",
        "news": {
-        "h": "Energy and Commerce chair noncommittal on lame-duck action for the FRONTIER Act",
+        "h": "Energy and Commerce chair Brett Guthrie won't commit to moving the FRONTIER Act and warns against rushing it in the lame duck",
         "d": "September 16, 2026"
        }
       },
@@ -807,13 +807,13 @@
        "t": "mc",
        "p": "How does the Senate's Cruz-Klobuchar-Thune draft reportedly differ from the FRONTIER Act?",
        "o": [
-        "It relies on a legal duty of care, with government power to block unsafe releases that companies could challenge in court",
-        "It has nothing about preemption",
-        "It bans all frontier models",
-        "It's identical"
+        "It relies on a legal duty of care",
+        "It has nothing about preemption of state laws",
+        "It bans the training of all frontier models outright",
+        "It's identical, word for word, to the House bill"
        ],
        "a": 0,
-       "x": "The Senate draft hasn't been released, so its details come from reporting. In blocking a different bill, Cruz said he wanted independent judges rather than the Commerce Department alone making these calls. Any final deal would need to reconcile the two designs."
+       "x": "No Senate text had been made public as of mid-October 2026, so these details come from Reuters' September 11 report citing Senate aides, which said the draft would also preempt some state laws. When Cruz blocked a separate Democratic AI safety bill on September 29, he objected to its \"unbounded discretion\" for the federal government and suggested approaches \"like involving independent judges.\" Any final deal would need to reconcile the two designs."
       }
      ]
     }
