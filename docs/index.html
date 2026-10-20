@@ -14932,7 +14932,8 @@ saveA();
 // var, so save() can call nativeSoon() safely whenever it runs.
 var Native = null, nativeTimer = null, widgetSig = '', remSig = '', remPerm = '';
 if (NATIVE) {
-  const P = name => window.Capacitor.registerPlugin(name);
+  // The page isn't bundled with @capacitor/core, so plugins are called through the native bridge directly.
+  const P = name => new Proxy({}, { get: (_, m) => m === 'addListener' ? (ev, cb) => window.Capacitor.addListener(name, ev, cb) : o => window.Capacitor.nativePromise(name, m, o || {}) });
   Native = { notes: P('LocalNotifications'), haptics: P('Haptics'), app: P('App'), wonko: P('WonkoNative') };
   Native.app.addListener('appStateChange', s => { if (!s.isActive) return; remPerm = ''; if (!run) renderHome(); nativeSync(); });
   Native.app.addListener('appUrlOpen', e => { if (!run && /today/.test(e.url || '')) go('today'); });
@@ -14991,6 +14992,8 @@ async function scheduleReminders() {
   if (!Native) return;
   const r = remPrefs(), now = Date.now(), list = [], terms = Object.keys(state.myTerms || {});
   const at = (d, hm) => { const [h, m] = String(hm).split(':').map(Number); const t = new Date(d + 'T00:00:00'); t.setHours(h || 0, m || 0, 0, 0); return t; };
+  // Sent as calendar fields: the plugin delivers at once any notification whose date it can't read.
+  const on = t => ({ year: t.getFullYear(), month: t.getMonth() + 1, day: t.getDate(), hour: t.getHours(), minute: t.getMinutes() });
   const pick = (arr, d) => arr[[...d].reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 1000003, 7) % arr.length];
   if (r.on) dayPlan(14).forEach((p, i) => {
     if (p.off || p.done) return;
@@ -14999,14 +15002,14 @@ async function scheduleReminders() {
     if (daily && risk && Math.abs(daily - risk) < 3600000) daily = null; // one nudge is enough when they'd come close together
     if (daily && daily > now + 60000) {
       const body = terms.length && i % 3 === 1 ? `Remember what “${pick(terms, p.d)}” means? Quick check.` : pick(REM_DAILY, p.d);
-      list.push({ id: 100 + i, title: 'WonkoLingo', body, schedule: { at: daily, allowWhileIdle: true }, extra: { go: 'today' } });
+      list.push({ id: 100 + i, title: 'WonkoLingo', body, schedule: { on: on(daily), allowWhileIdle: true }, extra: { go: 'today' } });
     }
     if (risk && risk > now + 60000) {
       const body = i === 0 && p.streak > 1 ? `Your ${p.streak}-day streak would love a quick visit tonight.` : p.freezes ? 'A freeze would cover today, but a quick round saves it for later.' : pick(REM_RISK, p.d);
-      list.push({ id: 200 + i, title: 'Keep your streak going', body, schedule: { at: risk, allowWhileIdle: true }, extra: { go: 'today' } });
+      list.push({ id: 200 + i, title: 'Keep your streak going', body, schedule: { on: on(risk), allowWhileIdle: true }, extra: { go: 'today' } });
     }
   });
-  const sig = JSON.stringify(list.map(n => [n.id, +n.schedule.at, n.body]));
+  const sig = JSON.stringify(list.map(n => [n.id, n.schedule.on, n.body]));
   if (sig === remSig) return;
   remSig = sig;
   try {

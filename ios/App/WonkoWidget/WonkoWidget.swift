@@ -58,20 +58,24 @@ struct StreakWidgetView: View {
     private var days: String { s.streak == 1 ? "day" : "days" }
 
     private var small: some View {
-        ZStack(alignment: .bottomTrailing) {
-            Image(s.mood.rawValue).resizable().scaledToFit().frame(width: 78, height: 78).offset(x: 8, y: 8)
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    flame.font(.system(size: 22, weight: .bold))
-                    Text("\(s.streak)").font(.system(size: 36, weight: .heavy, design: .rounded)).foregroundStyle(ink)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .top, spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        flame.font(.system(size: 20, weight: .bold))
+                        Text("\(s.streak)").font(.system(size: 34, weight: .heavy, design: .rounded)).foregroundStyle(ink)
+                            .minimumScaleFactor(0.6).lineLimit(1)
+                    }
+                    Text(days).font(.system(size: 13, weight: .semibold, design: .rounded)).foregroundStyle(muted)
                 }
-                Text(days).font(.system(size: 13, weight: .semibold, design: .rounded)).foregroundStyle(muted)
-                Spacer(minLength: 0)
-                Text(s.line).font(.system(size: 13, weight: .bold, design: .rounded)).foregroundStyle(s.done ? brass : ink)
-                    .lineLimit(3).frame(maxWidth: 82, alignment: .leading)
+                Spacer(minLength: 4)
+                Image(s.mood.rawValue).resizable().scaledToFit().frame(width: 62, height: 62)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            Spacer(minLength: 4)
+            Text(s.line).font(.system(size: 14, weight: .bold, design: .rounded)).foregroundStyle(s.done ? brass : ink)
+                .lineLimit(2).minimumScaleFactor(0.8)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .containerBackground(for: .widget) { Color("WidgetBackground") }
     }
 
