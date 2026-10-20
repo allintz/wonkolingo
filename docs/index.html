@@ -14405,9 +14405,10 @@ $('#installCard').addEventListener('click', async e => {
 function renderStyleCard() {
   const st = answerStyle();
   $('#styleCard').innerHTML = `<h3>Daily sessions</h3>
-    <p class="meta">Answer style</p>
+    <p class="meta">Default answer style</p>
     <div class="seg"><button data-style="mixed" class="${st === 'mixed' ? 'on' : ''}">Mixed</button><button data-style="short" class="${st === 'short' ? 'on' : ''}">Short answers</button><button data-style="typed" class="${st === 'typed' ? 'on' : ''}">Type everything</button></div>
     <p>${st === 'mixed' ? 'New cards are multiple choice. Once you know a card, you recall it in your head, reveal the answer and rate yourself. One card you know well each session is typed and checked by AI.' : st === 'short' ? 'Short-answer cards always ask you to type your answer, and AI grades it. Multiple-choice cards stay multiple choice. More thinking per card than Mixed.' : 'Every multiple-choice and short-answer card asks you to type your answer, and AI grades it. Slower, but the most practice.'}</p>
+    ${Object.keys((state.prefs || {}).courseStyle || {}).length ? `<p class="meta">Some courses have their own style, set on their course page.</p>` : `<p class="meta">Each course can also have its own, on its course page.</p>`}
     <p class="meta">Cards per session</p>
     <div class="seg">${[[8, '8'], [12, '12'], [20, '20'], [0, 'No limit']].map(([n, t]) => `<button data-size="${n}" class="${sessionSize() === n ? 'on' : ''}">${t}</button>`).join('')}</div>
     <p>Reviews come first, then new cards. Anything left over waits for “Keep going” or tomorrow.</p>`;
@@ -14592,8 +14593,8 @@ function startSession(extra) {
   run = newRun({ mode: 'session', total: cards.length,
     queue: cards.map((c, k) => ({ ...c.item, key: k, _card: c.id, _course: c.course, _lesson: c.lessonId, _new: !state.srs[c.id] })) });
   // Mixed style: one card you know well comes back as a typed, AI-checked answer, to keep self-ratings honest.
-  if (answerStyle() !== 'typed') {
-    const pool = run.queue.filter(q => !q._new && (q.t === 'recall' || q.t === 'mc') && okOf(state.srs[q._card]) >= 3);
+  {
+    const pool = run.queue.filter(q => !q._new && styleFor(q._course) !== 'typed' && (q.t === 'recall' || q.t === 'mc') && okOf(state.srs[q._card]) >= 3);
     if (pool.length) pool[Math.floor(Math.random() * pool.length)]._spot = true;
   }
   show('#lesson');
@@ -14630,7 +14631,9 @@ function nextItem() {
    Mixed (default): a card starts as multiple choice when it has options, moves to "recall it, then reveal" after two passes in a row,
    and each session picks one well-known card to type as an AI-checked spot check. A miss drops a card back to multiple choice.
    Always type: the original style, where multiple-choice and short-answer cards are typed first. */
+// The default answer style (Me), and each course's own choice from its course page (state.prefs.courseStyle[key]).
 const answerStyle = () => (state.prefs && state.prefs.style) || 'mixed';
+const styleFor = k => ((state.prefs && state.prefs.courseStyle) || {})[k] || answerStyle();
 // Cards per session (reviews first, then new); 0 means no limit. Short sessions make a daily habit easier.
 const sessionSize = () => { const n = state.prefs && state.prefs.sessionSize; return n === undefined ? 12 : n; };
 const hasChoice = it => it.t === 'mc' || !!(it.t === 'recall' && it.choice && Array.isArray(it.choice.o) && it.choice.o.length >= 2);
@@ -14638,9 +14641,10 @@ function askMode(it) {
   if (it.t === 'match' || it.t === 'order') return 'native';
   if (it._choices) return hasChoice(it) ? 'choice' : (it.t === 'recall' ? 'reveal' : 'choice');
   // "Short answers": short-answer cards are typed every time, retries too; multiple-choice cards work as in Mixed.
-  if (answerStyle() === 'short' && it.t === 'recall') return 'typed';
+  const st = styleFor(it._course);
+  if (st === 'short' && it.t === 'recall') return 'typed';
   if (it._retry) return hasChoice(it) ? 'choice' : (it.t === 'recall' ? 'reveal' : 'choice');
-  if (answerStyle() === 'typed') return 'typed';
+  if (st === 'typed') return 'typed';
   if (it._spot) return 'typed';
   const ok = okOf(state.srs[it._card]);
   if (ok < 2 && hasChoice(it)) return 'choice';
@@ -14649,7 +14653,7 @@ function askMode(it) {
 // Shows a short-answer card through its multiple-choice version.
 function asChoice(it) {
   if (it.t !== 'recall') return;
-  if (run && !it._choices) run.mcRecall = (run.mcRecall || 0) + 1;
+  if (run && !it._choices) { run.mcRecall = (run.mcRecall || 0) + 1; (run.mcCourses = run.mcCourses || new Set()).add(it._course); }
   it._asMC = true; it.o = it.choice.o; it.a = it.choice.a; it.ow = it.choice.ow; it._mcp = it.choice.p;
 }
 function cardTag(it) {
@@ -15117,16 +15121,21 @@ $('#remCard').addEventListener('change', e => {
   if (e.target.id === 'remDailyT' && e.target.value) setRem({ daily: e.target.value });
   if (e.target.id === 'remRiskT' && e.target.value) setRem({ risk: e.target.value });
 });
-// After a session where short-answer cards came up as multiple choice, mention the Short answers style (at most three times).
+// Suggests the Short answers style after the 1st, 4th and 8th sessions that showed short-answer cards as multiple choice, then never again.
+const STYLE_TIP_AT = [1, 4, 8];
 function styleTipHTML() {
   const pr = state.prefs || {};
-  if (answerStyle() !== 'mixed' || !run || !run.mcRecall || pr.styleTipOff || (pr.styleTipShown || 0) >= 3 || remAskHTML()) return '';
-  state.prefs = { ...pr, styleTipShown: (pr.styleTipShown || 0) + 1 }; save();
-  return `<div class="remask stylet"><p>Rather type your answers? <b>Short answers</b> asks every short-answer card that way, graded by AI.</p><div class="row"><button class="btn ghost sm" id="rStyleShort">Turn on Short answers</button><button class="linkbtn" id="rStyleNo">No thanks</button></div></div>`;
+  if (!run || !run.mcRecall || pr.styleTipOff) return '';
+  const n = (pr.styleTipSessions || 0) + 1;
+  state.prefs = { ...pr, styleTipSessions: n }; state.prefsAt = Date.now(); save();
+  if (!STYLE_TIP_AT.includes(n) || remAskHTML()) return '';
+  const names = [...(run.mcCourses || [])].filter(k => COURSES[k]).map(k => COURSES[k].name);
+  run.tipCourses = [...(run.mcCourses || [])];
+  return `<div class="remask stylet"><p>Rather type your answers? <b>Short answers</b> asks short-answer cards that way, graded by AI${names.length ? ` (for ${esc(names.join(' and '))})` : ''}.</p><div class="row"><button class="btn ghost sm" id="rStyleShort">Turn on Short answers</button><button class="linkbtn" id="rStyleNo">No thanks</button></div></div>`;
 }
 $('#resultIn').addEventListener('click', e => {
   const on = e.target.closest('#rStyleShort'), no = e.target.closest('#rStyleNo'); if (!on && !no) return;
-  if (on) { setStyle('short'); toast('Short answers on. Change it any time in Me or on a course page.'); }
+  if (on) { (run && run.tipCourses || []).forEach(k => setCourseStyle(k, 'short')); toast('Short answers on. Change it on a course page or in Me.'); }
   else { state.prefs = { ...(state.prefs || {}), styleTipOff: true }; state.prefsAt = Date.now(); save(); }
   const box = $('#resultIn .stylet'); if (box) box.remove();
 });
@@ -15897,15 +15906,21 @@ function renderCourseView() {
   }).join('');
 }
 
-// Answer style on a course page, for courses with short-answer cards (the only cards it changes). It's one setting for all courses.
+// Answer style on a course page, for courses with short-answer cards (the only cards it changes). Each course can have its own.
 const STYLE_OPTS = [['mixed', 'Mixed'], ['short', 'Short answers'], ['typed', 'Type everything']];
 const STYLE_BLURB = { mixed: 'New cards are multiple choice; once you know one, you recall it in your head.', short: 'Short-answer cards are always typed and graded by AI.', typed: 'Every card is typed and graded by AI.' };
 function styleRowHTML(k) {
   if (!courseCards(k).some(c => c.item.t === 'recall')) return '';
-  const st = answerStyle();
-  return `<div class="perday"><span>Answer style</span>${STYLE_OPTS.map(([v, l]) => `<button data-cstyle="${v}" aria-pressed="${st === v}">${l}</button>`).join('')}</div><p class="cmeta">${STYLE_BLURB[st]} Applies to all courses; also in Me.</p>`;
+  const st = styleFor(k), own = ((state.prefs || {}).courseStyle || {})[k];
+  const def = (STYLE_OPTS.find(o => o[0] === answerStyle()) || [])[1];
+  return `<div class="perday"><span>Answer style</span>${STYLE_OPTS.map(([v, l]) => `<button data-cstyle="${v}" aria-pressed="${st === v}">${l}</button>`).join('')}</div><p class="cmeta">${STYLE_BLURB[st]} ${own ? `Just for this course. <button class="linkbtn" data-cstyle="">Use my default (${def})</button>` : `This is your default (${def}, set in Me); tap another to change it for this course only.`}</p>`;
 }
-function setStyle(v) { state.prefs = { ...(state.prefs || {}), style: v }; state.prefsAt = Date.now(); save(); }
+// One course's answer style; '' clears it so the course follows the default in Me.
+function setCourseStyle(k, v) {
+  const cs = { ...((state.prefs || {}).courseStyle || {}) };
+  if (v) cs[k] = v; else delete cs[k];
+  state.prefs = { ...(state.prefs || {}), courseStyle: cs }; state.prefsAt = Date.now(); save();
+}
 /* ---------- shared clicks: open a course, toggle the mix, new cards a day ---------- */
 document.addEventListener('click', e => {
   const g = e.target.closest('[data-go]'); if (g) { go(g.dataset.go); return; }
@@ -15913,7 +15928,7 @@ document.addEventListener('click', e => {
   const m = e.target.closest('[data-mix]');
   if (m) { const k = m.dataset.mix, on = !inMix(k); setMix(k, on); toast(on ? `${COURSES[k].name} is in your daily mix.` : `${COURSES[k].name} is out of your mix. Its progress is kept.`); renderHome(); return; }
   const pd = e.target.closest('[data-perday]'); if (pd) { setPerDay(state.course, +pd.dataset.perday); renderHome(); return; }
-  const cs = e.target.closest('[data-cstyle]'); if (cs) { setStyle(cs.dataset.cstyle); renderHome(); toast(cs.dataset.cstyle === 'short' ? 'Short answers on: short-answer cards are typed.' : 'Answer style changed.'); return; }
+  const cs = e.target.closest('[data-cstyle]'); if (cs) { const v = cs.dataset.cstyle; setCourseStyle(state.course, v); renderHome(); toast(!v ? 'This course follows your default style again.' : v === 'short' ? `Short answers on for ${COURSES[state.course].name}.` : `Answer style changed for ${COURSES[state.course].name}.`); return; }
   if (e.target.closest('#cMake')) openAdd();
 });
 
