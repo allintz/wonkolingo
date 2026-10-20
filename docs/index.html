@@ -14634,6 +14634,9 @@ function nextItem() {
 // The default answer style (Me), and each course's own choice from its course page (state.prefs.courseStyle[key]).
 const answerStyle = () => (state.prefs && state.prefs.style) || 'mixed';
 const styleFor = k => ((state.prefs && state.prefs.courseStyle) || {})[k] || answerStyle();
+// Defined here, before startup renders a course page (opening the site on #course/... renders one right away).
+const STYLE_OPTS = [['mixed', 'Mixed'], ['short', 'Short answers'], ['typed', 'Type everything']];
+const STYLE_BLURB = { mixed: 'New cards are multiple choice; once you know one, you recall it in your head.', short: 'Short-answer cards are always typed and graded by AI.', typed: 'Every card is typed and graded by AI.' };
 // Cards per session (reviews first, then new); 0 means no limit. Short sessions make a daily habit easier.
 const sessionSize = () => { const n = state.prefs && state.prefs.sessionSize; return n === undefined ? 12 : n; };
 const hasChoice = it => it.t === 'mc' || !!(it.t === 'recall' && it.choice && Array.isArray(it.choice.o) && it.choice.o.length >= 2);
@@ -15907,8 +15910,6 @@ function renderCourseView() {
 }
 
 // Answer style on a course page, for courses with short-answer cards (the only cards it changes). Each course can have its own.
-const STYLE_OPTS = [['mixed', 'Mixed'], ['short', 'Short answers'], ['typed', 'Type everything']];
-const STYLE_BLURB = { mixed: 'New cards are multiple choice; once you know one, you recall it in your head.', short: 'Short-answer cards are always typed and graded by AI.', typed: 'Every card is typed and graded by AI.' };
 function styleRowHTML(k) {
   if (!courseCards(k).some(c => c.item.t === 'recall')) return '';
   const st = styleFor(k), own = ((state.prefs || {}).courseStyle || {})[k];
