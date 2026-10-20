@@ -12,13 +12,13 @@ It's a single self-contained page (`docs/index.html`). Your own progress is save
 
 ## Group play
 
-Start a group or join one with a 6-letter invite code to see everyone's streaks, weekly and all-time XP, and recent lessons, and to challenge each other with "Beat it." There are no passwords: each player gets a random token, shown as a recovery code for moving to another device. Scores are self-reported, so this is for friendly competition only.
+Start a group or join one with a 6-letter invite code to see everyone's streaks, weekly and all-time XP, and recent lessons, and to challenge each other with "Beat it." Scores are self-reported, so this is for friendly competition only.
 
 ## Making your own courses
 
 Anyone in a group can add a course with **+ Add course**. Give your AI assistant the [course format guide](course-guide.md) (also at https://wonkolingo.alex-l-lintz.workers.dev/course-guide.md), upload the `.json` file it produces, and the app checks it before publishing it to your group. Everyone's lessons count toward the same leaderboard. Players can report wrong answers; only the author sees the reports. See [example-course.json](example-course.json) for a small complete course.
 
-Streaks are forgiving: you choose which days count (every day, weekdays or custom), can pause, and earn a streak freeze every 5 practice days (up to 3) that covers a missed day automatically. If you're in a group, progress syncs to the server so it follows you across devices.
+Streaks are forgiving: you choose which days count (every day, weekdays or custom), can pause, and earn a streak freeze every 5 practice days (up to 3) that covers a missed day automatically. Progress saves to an account that every player gets automatically once they answer their first cards, so it follows you across devices; groups are optional on top. There are no emails or passwords. To sign in on another device, use a passkey (Face ID, Touch ID or a device PIN), a single-use 8-character code shown on a device that's already signed in (10 minutes), or the recovery code. A player outside a group sits in a private one-person "home" group on the server (`groups.solo = 1`); joining or leaving a group moves the same account. See `src/accounts.js`.
 
 The previous lesson-path version is tagged `v1-lesson-path`.
 

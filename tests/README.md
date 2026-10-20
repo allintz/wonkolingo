@@ -1,7 +1,8 @@
 # Tests
 
 - `node tests/unit.test.mjs`: streak rules (including schedule history) and course validation.
-- `node tests/api.test.mjs http://127.0.0.1:8799`: 69 API checks (groups, auth, isolation, sync, courses, reports, size limits). Run against a LOCAL server only, never production, because it creates groups and courses:
+- `node tests/accounts.test.mjs http://127.0.0.1:8799`: 48 account checks (accounts without a group, joining and leaving with the same account, sign-in codes, rate limits, and passkeys via a software authenticator built from node's crypto). Passkeys are tested at origin `http://localhost:8799`. Local only: it creates accounts.
+- `node tests/api.test.mjs http://127.0.0.1:8799`: 71 API checks (groups, auth, isolation, sync, courses, reports, size limits). Run against a LOCAL server only, never production, because it creates groups and courses:
 
 ```
 wrangler d1 execute hill-speak --local --file schema.sql

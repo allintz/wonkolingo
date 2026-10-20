@@ -2,7 +2,8 @@
 CREATE TABLE IF NOT EXISTS groups (
   code TEXT PRIMARY KEY,
   name TEXT NOT NULL,
-  created_at INTEGER NOT NULL
+  created_at INTEGER NOT NULL,
+  solo INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS players (
   id TEXT PRIMARY KEY,
@@ -76,3 +77,45 @@ CREATE TABLE IF NOT EXISTS disputes (
   created_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_disputes_status ON disputes(status, created_at);
+-- Accounts (2026-10-20). Every player has an account; a player who isn't in a group sits in a private one-person
+-- "home" group (groups.solo = 1) that can't be joined, so players.group_code can stay NOT NULL.
+-- On an existing database also run: ALTER TABLE groups ADD COLUMN solo INTEGER NOT NULL DEFAULT 0;
+-- Extra signed-in devices: each has its own token secret (the players.key_hash token is the recovery code).
+CREATE TABLE IF NOT EXISTS sessions (
+  player_id TEXT NOT NULL,
+  key_hash TEXT NOT NULL,
+  label TEXT NOT NULL DEFAULT '',
+  created_at INTEGER NOT NULL,
+  PRIMARY KEY (player_id, key_hash)
+);
+-- Passkeys (WebAuthn). id is the credential id (base64url); public_key is base64url COSE.
+CREATE TABLE IF NOT EXISTS passkeys (
+  id TEXT PRIMARY KEY,
+  player_id TEXT NOT NULL,
+  public_key TEXT NOT NULL,
+  counter INTEGER NOT NULL DEFAULT 0,
+  transports TEXT NOT NULL DEFAULT '[]',
+  created_at INTEGER NOT NULL,
+  last_used INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_passkeys_player ON passkeys(player_id);
+CREATE TABLE IF NOT EXISTS webauthn_challenges (
+  id TEXT PRIMARY KEY,
+  player_id TEXT,
+  challenge TEXT NOT NULL,
+  kind TEXT NOT NULL,
+  expires INTEGER NOT NULL
+);
+-- Short codes for signing in on another device (single use, 10 minutes).
+CREATE TABLE IF NOT EXISTS link_codes (
+  code TEXT PRIMARY KEY,
+  player_id TEXT NOT NULL,
+  expires INTEGER NOT NULL,
+  used INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS rate_limits (
+  key TEXT NOT NULL,
+  day TEXT NOT NULL,
+  n INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (key, day)
+);

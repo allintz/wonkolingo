@@ -1,9 +1,11 @@
 // WonkoLingo group play API. Static files come from ./docs; only /api/* reaches this code.
 // Identity is a random token per player (no passwords). The token doubles as a recovery code.
+// Every player has an account; groups are optional (see accounts.js for passkeys, sign-in codes and home groups).
 
 import { validateCourse, COURSE_LIMITS, computeStreak } from './course-format.js';
 import Anthropic from '@anthropic-ai/sdk';
 import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor, defineTerm } from './grade.js';
+import { randomString, sha256, accountInfo, publicAccountApi, accountApi } from './accounts.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -16,14 +18,6 @@ const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', ...CORS } });
 const fail = (msg, status = 400) => json({ error: msg }, status);
 
-function randomString(n, alphabet) {
-  const bytes = crypto.getRandomValues(new Uint8Array(n));
-  return Array.from(bytes, b => alphabet[b % alphabet.length]).join('');
-}
-async function sha256(s) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
-  return Array.from(new Uint8Array(buf), b => b.toString(16).padStart(2, '0')).join('');
-}
 function cleanName(s, max) {
   return String(s || '').replace(/[\u0000-\u001f<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, max);
 }
@@ -44,9 +38,13 @@ async function auth(req, env) {
   const tok = h.startsWith('Bearer ') ? h.slice(7).trim() : '';
   const [id, secret] = tok.split('.');
   if (!id || !secret) return null;
-  const p = await env.DB.prepare('SELECT p.id, p.name, p.group_code, p.key_hash, g.name AS group_name FROM players p JOIN groups g ON g.code = p.group_code WHERE p.id = ?').bind(id).first();
-  if (!p || p.key_hash !== await sha256(secret)) return null;
-  return p;
+  const p = await env.DB.prepare('SELECT p.id, p.name, p.group_code, p.key_hash, g.name AS group_name, g.solo FROM players p JOIN groups g ON g.code = p.group_code WHERE p.id = ?').bind(id).first();
+  if (!p) return null;
+  const h2 = await sha256(secret);
+  if (p.key_hash === h2) return p;
+  // Devices signed in by passkey or sign-in code have their own secret.
+  const s = await env.DB.prepare('SELECT 1 FROM sessions WHERE player_id = ? AND key_hash = ?').bind(id, h2).first();
+  return s ? p : null;
 }
 
 // Identity for grading quotas: the signed-in player, or a salted hash of the visitor's IP.
@@ -61,6 +59,16 @@ async function createPlayer(env, code, name) {
   const secret = randomString(24, 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789');
   await env.DB.prepare('INSERT INTO players (id, group_code, name, key_hash, created_at) VALUES (?, ?, ?, ?, ?)').bind(id, code, name, await sha256(secret), Date.now()).run();
   return { id, token: id + '.' + secret };
+}
+// A signed-in player joins or starts a group: the same account moves, keeping its progress.
+// Coming from a home group, lesson results move too and the home group is removed.
+async function moveToGroup(env, me, code, name) {
+  const stmts = [env.DB.prepare('UPDATE players SET group_code = ?, name = ? WHERE id = ?').bind(code, name, me.id)];
+  if (me.solo) stmts.push(
+    env.DB.prepare('UPDATE completions SET group_code = ? WHERE player_id = ? AND group_code = ?').bind(code, me.id, me.group_code),
+    env.DB.prepare('UPDATE OR IGNORE courses SET group_code = ? WHERE group_code = ?').bind(code, me.group_code),
+    env.DB.prepare('DELETE FROM groups WHERE code = ? AND solo = 1 AND NOT EXISTS (SELECT 1 FROM courses WHERE group_code = ?)').bind(me.group_code, me.group_code));
+  await env.DB.batch(stmts);
 }
 
 async function api(req, env, path) {
@@ -78,6 +86,8 @@ async function api(req, env, path) {
       code = null;
     }
     if (!code) return fail('Could not create a group. Try again.', 500);
+    const me = await auth(req, env);
+    if (me) { await moveToGroup(env, me, code, pname); return json({ code, groupName: gname, player: { id: me.id, name: pname } }); }
     const p = await createPlayer(env, code, pname);
     return json({ code, groupName: gname, player: { id: p.id, name: pname }, token: p.token });
   }
@@ -92,15 +102,20 @@ async function api(req, env, path) {
     const b = await body(req);
     const code = String(b.code || '').trim().toUpperCase(), pname = cleanName(b.name, 24);
     if (!pname) return fail('Pick a display name.');
-    const g = await env.DB.prepare('SELECT name FROM groups WHERE code = ?').bind(code).first();
+    const g = await env.DB.prepare('SELECT name FROM groups WHERE code = ? AND solo = 0').bind(code).first();
     if (!g) return fail('No group with that code.', 404);
-    const taken = await env.DB.prepare('SELECT 1 FROM players WHERE group_code = ? AND lower(name) = lower(?)').bind(code, pname).first();
-    if (taken) return fail('Someone in this group already uses that name. If it’s you, use your recovery code.', 409);
+    const me = await auth(req, env);
+    const taken = await env.DB.prepare('SELECT 1 FROM players WHERE group_code = ? AND lower(name) = lower(?) AND id != ?').bind(code, pname, me ? me.id : '').first();
+    if (taken) return fail('Someone in this group already uses that name. If it’s you, sign in to your account instead.', 409);
     const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM players WHERE group_code = ?').bind(code).first();
-    if (n.n >= 200) return fail('This group is full.', 403);
+    if (n.n >= 200 && !(me && me.group_code === code)) return fail('This group is full.', 403);
+    if (me) { await moveToGroup(env, me, code, pname); return json({ code, groupName: g.name, player: { id: me.id, name: pname } }); }
     const p = await createPlayer(env, code, pname);
     return json({ code, groupName: g.name, player: { id: p.id, name: pname }, token: p.token });
   }
+
+  const acct = await publicAccountApi(req, env, path, { json, fail, body });
+  if (acct) return acct;
 
   // Grading and hints work without a group: visitors are counted by a hash of their IP for the daily cap.
   if (m === 'POST' && (path === '/api/grade' || path === '/api/hint' || path === '/api/dispute' || path === '/api/define')) {
@@ -183,9 +198,14 @@ async function api(req, env, path) {
   }
 
   const me = await auth(req, env);
-  if (!me) return fail('Not signed in to a group.', 401);
+  if (!me) return fail('Not signed in.', 401);
 
-  if (m === 'GET' && path === '/api/me') return json({ code: me.group_code, groupName: me.group_name, player: { id: me.id, name: me.name } });
+  if (m === 'GET' && path === '/api/me') {
+    const info = await accountInfo(env, me);
+    return json({ ...info, code: info.group ? info.group.code : null, groupName: info.group ? info.group.groupName : null });
+  }
+  const mine = await accountApi(req, env, path, me, { json, fail, body });
+  if (mine) return mine;
 
   if (m === 'POST' && path === '/api/complete') {
     const b = await body(req);

@@ -19,6 +19,7 @@
   "homepage": "https://github.com/allintz/wonkolingo#readme",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.135.0",
+    "@simplewebauthn/server": "^13.3.3",
     "zod": "^4.6.7"
   },
   "private": true

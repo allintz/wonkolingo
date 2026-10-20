@@ -494,6 +494,14 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .defbtn { position: fixed; z-index: 51; background: var(--brass); color: var(--on-primary); border: 0; border-radius: 99px; padding: 6px 14px; font: 800 14px/1 var(--f-ui); box-shadow: 0 4px 14px rgba(0,0,0,.4); }
 .glpop .gladd { display: block; margin-top: 8px; background: none; border: 1px solid var(--line-deep); border-radius: 10px; padding: 5px 10px; color: var(--brass); font: 700 13px/1.2 var(--f-ui); }
 .glpop .gladd.in { color: var(--good); border-color: var(--good-deep); }
+/* Accounts: the saved indicator in the top bar and the sign-in code */
+.chip.sv { display: inline-flex; align-items: center; gap: 4px; border-style: solid; border-color: var(--line); color: var(--muted); font-family: inherit; cursor: pointer; }
+.chip.sv[hidden] { display: none; }
+.chip.sv svg { width: 16px; height: 16px; }
+.chip.sv[data-s="saved"] { color: var(--good); }
+.chip.sv[data-s="offline"] { color: var(--bad); }
+@media (max-width: 420px) { .chip.sv .svt { display: none; } }
+.rec.acode { font: 800 26px/1.2 var(--f-label); letter-spacing: .14em; text-align: center; padding: 10px; }
 </style>
 
 <header class="top">
@@ -502,6 +510,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
     <div class="stats">
       <div class="chip streak" title="Day streak"><span id="streak">0</span> day<span id="streakS">s</span></div>
       <div class="chip xp" title="Total XP"><span id="xp">0</span> XP</div>
+      <button class="chip sv" id="saved" data-go="me" hidden></button>
     </div>
   </div>
 </header>
@@ -535,6 +544,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
     </section>
     <section class="view" id="v-me" hidden>
       <h1 class="vtitle">Me</h1>
+      <section class="card" id="acctCard"></section>
       <section class="card" id="streakCard"></section>
       <section class="card" id="installCard" hidden></section>
       <section class="card" id="styleCard"></section>
@@ -545,7 +555,6 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
         <div class="kv"><span>Cards in your reviews</span><span id="pCards">0</span></div>
         <div class="kv"><span>Due tomorrow</span><span id="pTomorrow">0</span></div>
         <p>Keys: 1 to 4 picks an answer, Enter checks, Esc quits. On typed answers, Cmd+Enter (Ctrl+Enter) checks.</p>
-        <p class="meta" id="pSync"></p>
         <button class="linkbtn" id="resetBtn">Reset progress</button>
       </section>
     </section>
@@ -14273,7 +14282,7 @@ function load() {
     if (s.course && !COURSES[s.course]) { if (String(s.course).startsWith('c:')) s.wantCourse = s.course; s.course = null; } return s; } } catch (e) {}
   return blankState();
 }
-function blankState() { return { done: {}, xp: 0, streak: 0, last: null, jumped: [], course: null, srs: {}, hints: {}, activeDays: [], settings: defaultStreakSettings(), mix: {} }; }
+function blankState() { return { done: {}, xp: 0, xpBase: 0, xpBy: {}, streak: 0, last: null, jumped: [], course: null, srs: {}, hints: {}, activeDays: [], settings: defaultStreakSettings(), mix: {} }; }
 function defaultStreakSettings() { return { days: [true, true, true, true, true, true, true], pauses: [] }; }
 // XP is stored as a legacy base plus a running total per device, so merging two devices adds their earnings.
 const DEV = (() => { try { let d = localStorage.getItem('wl-device'); if (!d) { d = Math.random().toString(36).slice(2, 10); localStorage.setItem('wl-device', d); } return d; } catch (e) { return 'nodevice'; } })();
@@ -14334,12 +14343,13 @@ function renderHome() {
   const si = streakInfo();
   $('#xp').textContent = state.xp;
   $('#streak').textContent = si.streak; $('#streakS').textContent = si.streak === 1 ? '' : 's';
+  renderSaved();
   ['today', 'courses', 'course', 'group', 'me'].forEach(v => $('#v-' + v).hidden = v !== VIEW);
   document.querySelectorAll('#tabs .tabb').forEach(b => { const on = b.dataset.tab === (VIEW === 'course' ? 'courses' : VIEW); b.classList.toggle('on', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
   if (VIEW === 'today') { renderToday(); renderMix(); renderGroupLine(); }
   if (VIEW === 'courses') renderCourses();
   if (VIEW === 'course') renderCourseView();
-  if (VIEW === 'me') { renderStreakCard(); renderInstallCard(); renderStyleCard(); renderProgress(); }
+  if (VIEW === 'me') { renderAcctCard(); renderStreakCard(); renderInstallCard(); renderStyleCard(); renderProgress(); }
 }
 /* ---------- install as an app (home screen) ---------- */
 let installPrompt = null;
@@ -14352,7 +14362,7 @@ function renderInstallCard() {
   if (isStandalone() || (!isIOS() && !installPrompt)) { el.hidden = true; return; }
   el.hidden = false;
   el.innerHTML = `<h3>Put WonkoLingo on your home screen</h3>` + (isIOS()
-    ? `<p>${onSite ? 'In Safari, tap the Share button, then <b>Add to Home Screen</b>.' : `Open <a href="${SITE}" target="_blank" rel="noopener">${SITE.replace('https://', '')}</a> in Safari, tap Share, then <b>Add to Home Screen</b>.`} It opens full screen like an app, and works offline (answers are self-graded until you're back online).</p>`
+    ? `<p>${onSite ? 'In Safari, tap the Share button, then <b>Add to Home Screen</b>.' : `Open <a href="${SITE}" target="_blank" rel="noopener">${SITE.replace('https://', '')}</a> in Safari, tap Share, then <b>Add to Home Screen</b>.`} It opens full screen like an app, and works offline (answers are self-graded until you're back online).</p>${onSite ? '<p class="meta">The home-screen app starts signed out. Add a passkey in Account above first, then sign in with it there.</p>' : ''}`
     : `<p>Install it as an app: it opens in its own window and works offline.</p><div class="row"><button class="btn sm" id="installBtn">Install app</button></div>`);
 }
 $('#installCard').addEventListener('click', async e => {
@@ -14374,7 +14384,6 @@ $('#styleCard').addEventListener('click', e => {
   state.prefs = { ...(state.prefs || {}), ...(b.dataset.style ? { style: b.dataset.style } : { sessionSize: +b.dataset.size }) }; state.prefsAt = Date.now(); save(); renderStyleCard();
 });
 function renderProgress() {
-  $('#pSync').textContent = G ? 'Progress syncs across your devices through ' + G.groupName + '.' : 'Progress is saved on this device only. Join a group to sync it.';
   let done = 0, total = 0;
   Object.keys(COURSES).forEach(k => { const p = courseProgress(k); done += p.done; total += p.total; });
   $('#pDone').textContent = done + ' / ' + total;
@@ -14897,14 +14906,21 @@ const SITE = 'https://wonkolingo.alex-l-lintz.workers.dev';
 const API = /workers\.dev$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) ? '' : SITE;
 const FLAME = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.5 2c.6 3.4 4.9 5.6 4.9 10.6A5.4 5.4 0 0 1 12 18a5.4 5.4 0 0 1-5.4-5.4c0-2.4 1.2-4 2.4-5 0 2 .9 3.2 2 3.4-.3-3.3.5-6.4 1.5-9z"/></svg>';
 let G = (() => { try { return JSON.parse(localStorage.getItem(GKEY)); } catch (e) { return null; } })();
-let board = null, gTab = 'week', gMode = 'join', gErr = '', gBusy = false, gOffline = false, recShown = false, leaveArmed = false;
+let board = null, gTab = 'week', gMode = 'join', gErr = '', gBusy = false, gOffline = false, leaveArmed = false;
 const joinParam = (new URLSearchParams(location.search).get('join') || '').toUpperCase().slice(0, 6);
 if (joinParam && !G) gMode = 'join';
 function saveG() { try { G ? localStorage.setItem(GKEY, JSON.stringify(G)) : localStorage.removeItem(GKEY); } catch (e) {} }
+// The account this device is signed in to. Every player has one; G above is only the group they're in, if any.
+const AKEY = 'wl-account';
+let ACCT = (() => { try { return JSON.parse(localStorage.getItem(AKEY)); } catch (e) { return null; } })();
+if (!ACCT && G && G.token && G.player) ACCT = { token: G.token, player: G.player }; // before Oct 2026 the token lived with the group
+function saveA() { try { ACCT ? localStorage.setItem(AKEY, JSON.stringify(ACCT)) : localStorage.removeItem(AKEY); } catch (e) {} }
+saveA();
 
-async function apiCall(path, bodyObj) {
+async function apiCall(path, bodyObj, token) {
   const headers = { 'Content-Type': 'application/json' };
-  if (G && G.token) headers.Authorization = 'Bearer ' + G.token;
+  const tok = token || (ACCT && ACCT.token);
+  if (tok) headers.Authorization = 'Bearer ' + tok;
   const r = await fetch(API + path, { method: bodyObj ? 'POST' : 'GET', headers, body: bodyObj ? JSON.stringify(bodyObj) : undefined });
   let d = {}; try { d = await r.json(); } catch (e) {}
   if (!r.ok) { const e = new Error(d.error || 'Something went wrong.'); e.status = r.status; throw e; }
@@ -14920,22 +14936,201 @@ function ago(ms) {
   return Math.round(h / 24) + 'd ago';
 }
 
+/* ---------- account: saved indicator, passkeys, sign-in codes ---------- */
+let syncState = 'saved', acctPending = null;
+let acctUI = { mode: '', busy: false, err: '', link: null, recShown: false, outArmed: false, merge: null };
+const PASSKEY_OK = !!(window.PublicKeyCredential && navigator.credentials) && (location.origin === SITE || location.hostname === 'localhost');
+const CLOUD = '<path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.9 11a3.75 3.75 0 0 1-.4 7.5z"/>';
+function hasProgress() { return Object.keys(state.srs || {}).length > 0 || xpTotal(state) > 0 || Object.keys(state.myTerms || {}).length > 0; }
+// The first time there's progress worth keeping, this device gets its own account.
+function ensureAccount() {
+  if (ACCT) return Promise.resolve(ACCT);
+  if (!acctPending) acctPending = apiCall('/api/account', {}).then(d => {
+    ACCT = { token: d.token, player: d.player, passkeys: 0 }; saveA();
+    state.owner = d.player.id; save(true);
+    if (VIEW === 'me' && !run) renderAcctCard();
+    return ACCT;
+  }).finally(() => { acctPending = null; });
+  return acctPending;
+}
+// Picks up changes made on other devices: a group joined or left, a passkey added.
+async function refreshAccount() {
+  if (!ACCT) return;
+  try {
+    const d = await apiCall('/api/me');
+    ACCT.player = d.player; ACCT.passkeys = d.passkeys; saveA();
+    const was = G ? G.code : null, now = d.group ? d.group.code : null;
+    if (was !== now) {
+      G = d.group ? { code: d.group.code, groupName: d.group.groupName, player: d.player } : null; saveG(); board = null;
+      try { localStorage.removeItem(CKEY); } catch (e) {}
+      refreshBoard(); loadCourses();
+    } else if (G) { G.player = d.player; G.groupName = d.group.groupName; saveG(); }
+    if (VIEW === 'me' && !run) renderAcctCard();
+  } catch (e) { if (e.status === 401) { acctLost(); if (!run) renderHome(); } }
+}
+// The server no longer accepts this device's sign-in. Keep the progress here; it saves to a new account on the next change.
+function acctLost() {
+  if (!ACCT) return;
+  ACCT = null; G = null; board = null; saveA(); saveG(); delete state.owner; save(true);
+  acctUI.err = 'This device’s sign-in stopped working. Sign in with a passkey, a code or your recovery code to get your account back.' + (hasProgress() ? ' Progress on this device is kept.' : '');
+  installCourses([]);
+}
+function setSync(s) { syncState = s; renderSaved(); const st = document.getElementById('acctStatus'); if (st) st.textContent = acctStatusText(); }
+function renderSaved() {
+  const el = $('#saved'); if (!el) return;
+  el.hidden = !ACCT && !hasProgress(); if (el.hidden) return;
+  const s = syncState, label = { saved: 'Saved', saving: 'Saving', offline: 'Not synced' }[s];
+  const tip = { saved: 'Progress saved to your account', saving: 'Saving your progress', offline: 'Can’t reach the server. Progress is kept on this device and saves when you’re back online.' }[s];
+  el.dataset.s = s; el.title = tip; el.setAttribute('aria-label', tip);
+  el.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${CLOUD}${s === 'saved' ? '<path d="m9.5 13.5 2 2 3.5-4"/>' : s === 'offline' ? '<path d="M4 4l16 16"/>' : ''}</svg><span class="svt">${label}</span>`;
+}
+function acctStatusText() {
+  if (!ACCT && !hasProgress()) return 'Your progress saves to an account automatically once you answer your first cards. No email or password needed.';
+  if (syncState === 'offline') return 'Can’t reach the server right now. Your progress is kept on this device and saves to your account when you’re back online.';
+  if (syncState === 'saving' || !ACCT) return 'Saving your progress…';
+  return 'Your progress is saved to your account.';
+}
+
+// Passkeys (WebAuthn). The server's options use base64url strings; the browser wants bytes.
+const b64u = {
+  enc: buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''),
+  dec: s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4)), c => c.charCodeAt(0))
+};
+async function passkeyCreate(o) {
+  const c = await navigator.credentials.create({ publicKey: { ...o, challenge: b64u.dec(o.challenge), user: { ...o.user, id: b64u.dec(o.user.id) }, excludeCredentials: (o.excludeCredentials || []).map(x => ({ ...x, id: b64u.dec(x.id) })) } });
+  const r = c.response;
+  return { id: c.id, rawId: b64u.enc(c.rawId), type: c.type, clientExtensionResults: c.getClientExtensionResults(), authenticatorAttachment: c.authenticatorAttachment || undefined,
+    response: { clientDataJSON: b64u.enc(r.clientDataJSON), attestationObject: b64u.enc(r.attestationObject), transports: r.getTransports ? r.getTransports() : [] } };
+}
+async function passkeyGet(o) {
+  const c = await navigator.credentials.get({ publicKey: { ...o, challenge: b64u.dec(o.challenge), allowCredentials: (o.allowCredentials || []).map(x => ({ ...x, id: b64u.dec(x.id) })) } });
+  const r = c.response;
+  return { id: c.id, rawId: b64u.enc(c.rawId), type: c.type, clientExtensionResults: c.getClientExtensionResults(), authenticatorAttachment: c.authenticatorAttachment || undefined,
+    response: { clientDataJSON: b64u.enc(r.clientDataJSON), authenticatorData: b64u.enc(r.authenticatorData), signature: b64u.enc(r.signature), userHandle: r.userHandle ? b64u.enc(r.userHandle) : undefined } };
+}
+async function addPasskey() {
+  await ensureAccount();
+  const o = await apiCall('/api/passkey/register-options', {});
+  const resp = await passkeyCreate(o.options);
+  const r = await apiCall('/api/passkey/register', { challengeId: o.challengeId, response: resp });
+  ACCT.passkeys = r.passkeys; saveA(); toast('Passkey added.');
+}
+function acctErr(e) {
+  if (e && e.name === 'NotAllowedError') return 'The passkey request was cancelled or timed out.';
+  if (e && e.name === 'InvalidStateError') return 'This device already has a passkey for your account.';
+  return netMsg(e);
+}
+
+// Signing in to another account: progress already on this device is added to it only if the player says so.
+function beginSignIn(d) {
+  if (ACCT && ACCT.player.id === d.player.id) { acctUI.mode = ''; toast('You’re already signed in to that account.'); return; }
+  if (hasProgress() && state.owner !== d.player.id) { acctUI.merge = d; return; }
+  completeSignIn(d, true);
+}
+function completeSignIn(d, keepLocal) {
+  if (!keepLocal && state.owner !== d.player.id) state = { ...blankState(), course: state.course };
+  state.owner = d.player.id; save(true);
+  ACCT = { token: d.token, player: d.player, passkeys: d.passkeys || 0 }; saveA();
+  G = d.group ? { code: d.group.code, groupName: d.group.groupName, player: d.player } : null; saveG();
+  board = null; try { localStorage.removeItem(CKEY); } catch (e) {}
+  Object.assign(acctUI, { mode: '', merge: null, link: null, recShown: false, outArmed: false, err: '' });
+  installCourses([]); syncNow(); refreshBoard(); loadCourses();
+  toast('Signed in' + (G ? ', in ' + G.groupName : '') + '.');
+  if (!run) renderHome();
+}
+function signOut() {
+  ACCT = null; G = null; board = null; saveA(); saveG();
+  try { localStorage.removeItem(CKEY); } catch (e) {}
+  state = blankState(); save(true); setSync('saved');
+  Object.assign(acctUI, { mode: '', merge: null, link: null, recShown: false, outArmed: false, err: '' });
+  installCourses([]);
+  toast('Signed out. This device is cleared.');
+}
+
+function renderAcctCard() {
+  const el = $('#acctCard'); if (!el) return;
+  const keep = {}; ['aCodeIn', 'aRecIn'].forEach(id => { const x = document.getElementById(id); if (x) keep[id] = x.value; });
+  const a = acctUI, dis = a.busy ? ' disabled' : '', pk = ACCT ? ACCT.passkeys || 0 : 0;
+  let h = `<div class="ghead"><h3>Account</h3>${G ? `<span class="meta">${esc(G.player.name)} in ${esc(G.groupName)}</span>` : ''}</div><p id="acctStatus">${esc(acctStatusText())}</p>`;
+  if (a.merge) {
+    const n = Object.keys(state.srs || {}).length, t = Object.keys(state.myTerms || {}).length, xp = xpTotal(state);
+    const what = [n && `${n} card${n === 1 ? '' : 's'} in your reviews`, t && `${t} saved term${t === 1 ? '' : 's'}`, !n && !t && `${xp} XP`].filter(Boolean).join(' and ');
+    h += `<div class="okbox"><p>This device has progress (${what}) that isn’t in the account you’re signing in to. Add it to that account?</p><div class="row"><button class="btn sm" data-merge="1"${dis}>Add it</button><button class="btn ghost sm" data-merge="0"${dis}>Leave it out</button></div></div>`;
+  } else if (a.mode) {
+    h += `<h4 class="gsub">Sign in to your account</h4>`;
+    if (PASSKEY_OK) h += `<div class="row"><button class="btn sm" id="aPkIn"${dis}>Sign in with a passkey</button></div>`;
+    h += a.mode === 'recovery'
+      ? `<label class="fld"><span>Recovery code</span><input id="aRecIn" autocomplete="off" autocapitalize="off" spellcheck="false"></label><div class="row"><button class="btn ghost sm" id="aRecGo"${dis}>Sign in</button></div>`
+      : `<label class="fld"><span>Code from your other device</span><input id="aCodeIn" maxlength="9" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" placeholder="ABCD-EFGH"></label><div class="row"><button class="btn ghost sm" id="aCodeGo"${dis}>Sign in</button></div><p class="meta">To get a code, open WonkoLingo where you’re already signed in, go to Me and choose “Sign in on another device”.</p>`;
+    h += `<div class="glinks"><button class="linkbtn" id="aMode">${a.mode === 'recovery' ? 'Use a code instead' : 'Use a recovery code instead'}</button><button class="linkbtn" id="aCancel">Cancel</button></div>`;
+  } else if (ACCT) {
+    if (PASSKEY_OK) h += pk ? `<p class="meta">Passkey added. Use it to sign in on any device that has it.</p>` : `<p>Add a passkey to sign in on a new phone or computer with Face ID, Touch ID or your device PIN.</p><div class="row"><button class="btn sm" id="aPk"${dis}>Add a passkey</button></div>`;
+    h += a.link
+      ? `<p>On your other device, open WonkoLingo, go to Me, choose “I already have an account” and enter:</p><code class="rec acode">${esc(a.link.code.slice(0, 4) + '-' + a.link.code.slice(4))}</code><p class="meta">Works once, for 10 minutes. <button class="linkbtn" id="aLink"${dis}>Get a new code</button></p>`
+      : `<div class="row"><button class="btn ghost sm" id="aLink"${dis}>Sign in on another device</button></div>`;
+    if (a.recShown) h += `<p>Keep this somewhere safe. It signs in to your account on any device, and anyone who has it can use your account.</p><code class="rec">${esc(ACCT.token)}</code>`;
+    h += `<div class="glinks"><button class="linkbtn" id="aRec">${a.recShown ? 'Hide recovery code' : 'Recovery code'}</button>${pk && PASSKEY_OK ? `<button class="linkbtn" id="aPk"${dis}>Add another passkey</button>` : ''}<button class="linkbtn" id="aSwitch">Use a different account</button><button class="linkbtn" id="aOut">${a.outArmed ? 'Click again to sign out' : 'Sign out'}</button></div>`;
+    if (a.outArmed) h += `<p class="gerr">Signing out clears this device. ${pk ? 'Sign back in with your passkey or recovery code.' : 'Without a passkey, you’ll need your recovery code to get back in.'}</p>`;
+  } else h += `<div class="row"><button class="btn ghost sm" id="aSwitch">I already have an account</button></div>`;
+  if (a.err) h += `<p class="gerr">${a.err}</p>`;
+  el.innerHTML = h;
+  Object.entries(keep).forEach(([id, v]) => { const x = document.getElementById(id); if (x) x.value = v; });
+}
+$('#acctCard').addEventListener('click', async e => {
+  const t = e.target.closest('button'); if (!t || acctUI.busy) return;
+  const a = acctUI; a.err = '';
+  if (t.id === 'aSwitch') { a.mode = 'code'; a.outArmed = false; renderAcctCard(); const x = $('#aCodeIn'); if (x) x.focus(); return; }
+  if (t.id === 'aCancel') { a.mode = ''; renderAcctCard(); return; }
+  if (t.id === 'aMode') { a.mode = a.mode === 'recovery' ? 'code' : 'recovery'; renderAcctCard(); return; }
+  if (t.id === 'aRec') { a.recShown = !a.recShown; renderAcctCard(); return; }
+  if (t.id === 'aOut') {
+    if (!a.outArmed) { a.outArmed = true; renderAcctCard(); setTimeout(() => { a.outArmed = false; if (VIEW === 'me' && !run) renderAcctCard(); }, 5000); return; }
+    signOut(); return;
+  }
+  if (t.dataset.merge) { completeSignIn(a.merge, t.dataset.merge === '1'); return; }
+  const step = async fn => { a.busy = true; renderAcctCard(); try { await fn(); } catch (err) { a.err = acctErr(err); } a.busy = false; renderAcctCard(); };
+  if (t.id === 'aLink') step(async () => {
+    a.link = await apiCall('/api/link', {});
+    const lk = a.link; setTimeout(() => { if (a.link === lk) { a.link = null; if (VIEW === 'me' && !run) renderAcctCard(); } }, lk.expires - Date.now());
+  });
+  if (t.id === 'aPk') step(addPasskey);
+  if (t.id === 'aPkIn') step(async () => {
+    const o = await apiCall('/api/passkey/login-options', {});
+    const resp = await passkeyGet(o.options);
+    beginSignIn(await apiCall('/api/passkey/login', { challengeId: o.challengeId, response: resp }));
+  });
+  if (t.id === 'aCodeGo') step(async () => {
+    const code = ($('#aCodeIn').value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (code.length !== 8) throw new Error('The code has 8 letters and numbers, like ABCD-EFGH.');
+    beginSignIn(await apiCall('/api/link/claim', { code }));
+  });
+  if (t.id === 'aRecGo') step(async () => {
+    const tok = ($('#aRecIn').value || '').trim();
+    if (!/^[a-z0-9]+\.[A-Za-z0-9]+$/.test(tok)) throw new Error('That doesn’t look like a recovery code.');
+    const d = await apiCall('/api/me', null, tok).catch(err => { throw err.status === 401 ? new Error('That recovery code doesn’t match an account.') : err; });
+    beginSignIn({ ...d, token: tok });
+  });
+});
+$('#acctCard').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); const b = $('#aCodeGo') || $('#aRecGo'); if (b && !acctUI.busy) b.click(); } });
+// "Sign in" links elsewhere open the sign-in form in Me.
+document.addEventListener('click', e => { if (e.target.closest('[data-signin]')) { acctUI.mode = acctUI.mode || 'code'; acctUI.merge = null; } }, true);
+
 async function refreshBoard() {
   if (!G) return renderGroup();
   try { board = await apiCall('/api/board?today=' + dstr(new Date())); gOffline = false; G.groupName = board.groupName; saveG(); }
-  catch (e) { if (e.status === 401) { G = null; saveG(); board = null; gErr = 'That group sign-in no longer works. Join again or use a recovery code.'; } else gOffline = true; }
+  catch (e) { if (e.status === 401) acctLost(); else gOffline = true; }
   renderGroup();  if (VIEW === 'today') renderGroupLine();
 }
 
 function renderGroup() {
   const el = $('#group');
   if (!G) {
-    const modes = [['join', 'Join'], ['start', 'Start a group'], ['restore', 'Recovery code']];
+    const modes = [['join', 'Join'], ['start', 'Start a group']];
     let form = '';
     if (gMode === 'join') form = `<label class="fld"><span>Invite code</span><input id="gCode" maxlength="6" autocomplete="off" autocapitalize="characters" value="${esc(joinParam)}"></label><label class="fld"><span>Your display name</span><input id="gName" maxlength="24" autocomplete="nickname"></label><button class="btn sm" id="gGo">Join group</button>`;
     else if (gMode === 'start') form = `<label class="fld"><span>Group name</span><input id="gGroup" maxlength="40"></label><label class="fld"><span>Your display name</span><input id="gName" maxlength="24" autocomplete="nickname"></label><button class="btn sm" id="gGo">Start group</button>`;
-    else form = `<label class="fld"><span>Recovery code</span><input id="gRecIn" autocomplete="off" spellcheck="false"></label><button class="btn sm" id="gGo">Restore</button>`;
-    el.innerHTML = `<h3>Play with friends</h3><p>Join a group to see each other’s streaks and compete on weekly XP. Your display name and finished lessons are visible to the group.</p><div class="seg">${modes.map(([k, t]) => `<button data-gmode="${k}" class="${k === gMode ? 'on' : ''}">${t}</button>`).join('')}</div>${form}${gErr ? `<p class="gerr">${gErr}</p>` : ''}`;
+    else form = `<label class="fld"><span>Group name</span><input id="gGroup" maxlength="40"></label><label class="fld"><span>Your display name</span><input id="gName" maxlength="24" autocomplete="nickname"></label><button class="btn sm" id="gGo">Start group</button>`;
+    el.innerHTML = `<h3>Play with friends</h3><p>Join a group to see each other’s streaks and compete on weekly XP. Your display name and finished lessons are visible to the group.</p><div class="seg">${modes.map(([k, t]) => `<button data-gmode="${k}" class="${k === gMode ? 'on' : ''}">${t}</button>`).join('')}</div>${form}${gErr ? `<p class="gerr">${gErr}</p>` : ''}<p class="meta">In a group on another device? <button class="linkbtn" data-go="me" data-signin="1">Sign in to your account</button> and your group comes with you.</p>`;
     $('#gGo').disabled = gBusy;
     return;
   }
@@ -14954,33 +15149,32 @@ function renderGroup() {
     if (board.feed.length) h += `<h4 class="gsub">Recent</h4><ul class="feed">${board.feed.slice(0, 8).map(f => `<li><b>${esc(f.name)}</b> finished ${esc(f.title)} · ${f.acc}% · ${ago(f.at)}${f.id !== board.me && !String(f.lessonId).startsWith('review-') ? `<button class="beat" data-beat="${esc(f.lessonId)}" data-who="${esc(f.name)}" data-acc="${f.acc}">Beat it</button>` : ''}</li>`).join('')}</ul>`;
     else h += `<p>No lessons finished yet. Be the first.</p>`;
   } else if (!gOffline) h += `<p>Loading…</p>`;
-  h += recShown ? `<p>Save this code to use the same account on another device. Anyone with it can post as you.</p><code class="rec">${esc(G.token)}</code>` : '';
-  h += `<div class="glinks"><button class="linkbtn" id="gRec">${recShown ? 'Hide recovery code' : 'Recovery code'}</button><button class="linkbtn" id="gLeave">${leaveArmed ? 'Click again to leave' : 'Leave group'}</button></div>`;
+  h += `<div class="glinks"><button class="linkbtn" id="gLeave"${gBusy ? ' disabled' : ''}>${leaveArmed ? 'Click again to leave' : 'Leave group'}</button></div>`;
   el.innerHTML = h;
 }
 
+// Join or start a group. A signed-in player's account moves into it; without an account, the server makes one.
+async function joinOrStart(mode, fields) {
+  if (!ACCT && hasProgress()) await ensureAccount();
+  const d = mode === 'start' ? await apiCall('/api/groups', { groupName: fields.group, name: fields.name }) : await apiCall('/api/join', { code: fields.code, name: fields.name });
+  if (d.token) { ACCT = { token: d.token, player: d.player, passkeys: 0 }; state.owner = d.player.id; save(true); }
+  else ACCT.player = d.player;
+  saveA();
+  G = { code: d.code, groupName: d.groupName, player: d.player }; saveG(); syncNow();
+  toast('You’re in ' + d.groupName + '.');
+  return d;
+}
 async function groupSubmit() {
   gErr = ''; gBusy = true; renderGroupKeep();
   try {
-    let d;
-    if (gMode === 'restore') {
-      const tok = ($('#gRecIn').value || '').trim();
-      if (!tok.includes('.')) throw new Error('That doesn’t look like a recovery code.');
-      G = { token: tok }; const me = await apiCall('/api/me'); d = { ...me, token: tok };
-    } else if (gMode === 'start') d = await apiCall('/api/groups', { groupName: $('#gGroup').value, name: $('#gName').value });
-    else d = await apiCall('/api/join', { code: $('#gCode').value, name: $('#gName').value });
-    G = { token: d.token, code: d.code, groupName: d.groupName, player: d.player }; saveG(); syncNow();
+    await joinOrStart(gMode, { group: ($('#gGroup') || {}).value, code: ($('#gCode') || {}).value, name: $('#gName').value });
     if (joinParam) history.replaceState(null, '', location.pathname);
-    toast('You’re in ' + d.groupName + '.');
     gBusy = false; await refreshBoard(); loadCourses();
-  } catch (e) {
-    if (gMode === 'restore') { G = null; }
-    gBusy = false; gErr = netMsg(e); renderGroupKeep();
-  }
+  } catch (e) { gBusy = false; gErr = netMsg(e); renderGroupKeep(); }
 }
 // Re-render the form without wiping what the person typed.
 function renderGroupKeep() {
-  const vals = {}; ['gCode', 'gName', 'gGroup', 'gRecIn'].forEach(id => { const x = document.getElementById(id); if (x) vals[id] = x.value; });
+  const vals = {}; ['gCode', 'gName', 'gGroup'].forEach(id => { const x = document.getElementById(id); if (x) vals[id] = x.value; });
   renderGroup();
   Object.entries(vals).forEach(([id, v]) => { const x = document.getElementById(id); if (x) x.value = v; });
 }
@@ -14995,10 +15189,13 @@ $('#group').addEventListener('click', e => {
     (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(() => toast('Invite link copied.'), () => toast(link));
     return;
   }
-  if (t.id === 'gRec') { recShown = !recShown; renderGroup(); return; }
   if (t.id === 'gLeave') {
     if (!leaveArmed) { leaveArmed = true; renderGroup(); setTimeout(() => { leaveArmed = false; if (G) renderGroup(); }, 4000); return; }
-    G = null; board = null; leaveArmed = false; recShown = false; saveG(); renderGroup(); try { localStorage.removeItem(CKEY); } catch (e) {} installCourses([]); toast('Left the group on this device. Your recovery code still works.'); return;
+    leaveArmed = false; gBusy = true; gErr = ''; renderGroup();
+    apiCall('/api/leave', {}).then(() => {
+      G = null; board = null; saveG(); try { localStorage.removeItem(CKEY); } catch (e) {} installCourses([]); toast('Left the group. Your progress stays in your account.');
+    }, err => { gOffline = err instanceof TypeError; if (!gOffline) toast(err.message); }).finally(() => { gBusy = false; renderGroup(); });
+    return;
   }
   if (t.dataset.beat) {
     const id = t.dataset.beat, course = Object.keys(COURSES).find(k => COURSES[k].pre && id.startsWith(COURSES[k].pre)) || 'lingo';
@@ -15103,10 +15300,8 @@ async function addGroupSubmit() {
   const a = addState, gm = a.groupMode || 'start';
   a.gErr = ''; a.gBusy = true; renderAdd();
   try {
-    const name = $('#agName').value;
-    const d = gm === 'start' ? await apiCall('/api/groups', { groupName: $('#agGroup').value, name }) : await apiCall('/api/join', { code: $('#agCode').value, name });
-    G = { token: d.token, code: d.code, groupName: d.groupName, player: d.player }; saveG(); syncNow();
-    a.gBusy = false; toast('You’re in ' + d.groupName + '.');
+    await joinOrStart(gm, { group: ($('#agGroup') || {}).value, code: ($('#agCode') || {}).value, name: $('#agName').value });
+    a.gBusy = false;
     renderAdd(); refreshBoard(); loadCourses();
   } catch (e) { a.gBusy = false; a.gErr = netMsg(e); renderAdd(); }
 }
@@ -15189,7 +15384,7 @@ function welcomeHTML() {
   return `<section class="welcome"><img class="mascot m-welcome" src="mascot/wave.webp" alt="WonkoLingo owl waving"><p class="kicker">Welcome to WonkoLingo</p><h2>Learn anything with your friends</h2>
     <p>Pick any topic. Your AI assistant turns it into a bite-size course in a few minutes. Then you and your friends play each other’s courses and compete on streaks and points.</p>
     <ol class="steps"><li><span><b>Start a group</b> and invite friends, or just use it yourself.</span></li><li><span><b>Make a course</b> by pasting our prompt into Claude or another AI assistant.</span></li><li><span><b>Play and compete</b> on your group’s weekly leaderboard.</span></li></ol>
-    <div class="row"><button class="btn" id="wCreate">Create your first course</button><button class="btn ghost" id="wBrowse">Browse courses</button></div></section>`;
+    <div class="row"><button class="btn" id="wCreate">Create your first course</button><button class="btn ghost" id="wBrowse">Browse courses</button></div>${ACCT ? '' : '<p class="meta">Used WonkoLingo on another device? <button class="linkbtn" data-go="me" data-signin="1">Sign in</button></p>'}</section>`;
 }
 function selectCourse(key) {
   state.course = key; save(); buildLessons(); renderHome(); renderPotd(); window.scrollTo(0, 0);
@@ -15463,29 +15658,36 @@ function mergeStates(a, b) {
   return out;
 }
 async function syncNow() {
-  if (!G) return;
+  if (!ACCT && !hasProgress()) { renderSaved(); return; }
   if (syncBusy) { syncAgain = true; return; }
-  syncBusy = true; clearTimeout(syncTimer);
+  syncBusy = true; clearTimeout(syncTimer); setSync('saving');
   try {
+    if (!ACCT) await ensureAccount();
     const r = await apiCall('/api/state');
     // Progress on this device belongs to whoever last synced it. Signing in as someone else (a recovery code, or a
     // second player on a shared device) loads their progress instead of merging the previous player's into it.
-    const foreign = state.owner && state.owner !== G.player.id;
+    const foreign = state.owner && state.owner !== ACCT.player.id;
     if (r.state) {
       const m = foreign ? { ...r.state } : mergeStates(state, r.state);
       m.course = state.course; if (state.wantCourse) m.wantCourse = state.wantCourse;
       state = m;
     } else if (foreign) state = { ...blankState(), course: state.course };
-    state.owner = G.player.id;
+    state.owner = ACCT.player.id;
     state.streak = streakInfo().streak; save(true);
     await apiCall('/api/state', { state: syncPayload() });
+    setSync(syncAgain ? 'saving' : 'saved');
     if (!run) renderHome();
-  } catch (e) { /* offline: try again on the next change */ }
+  } catch (e) { if (e.status === 401) acctLost(); setSync('offline'); /* try again on the next change */ }
   finally { syncBusy = false; if (syncAgain) { syncAgain = false; scheduleSync(); } }
 }
-function scheduleSync() { if (!G) return; clearTimeout(syncTimer); syncTimer = setTimeout(syncNow, 3000); }
-document.addEventListener('visibilitychange', () => { if (document.hidden && G) syncNow(); });
+function scheduleSync() {
+  if (!ACCT && !hasProgress()) return;
+  clearTimeout(syncTimer); if (syncState !== 'offline') setSync('saving');
+  syncTimer = setTimeout(syncNow, 3000);
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden) { if (ACCT) syncNow(); } else refreshAccount(); });
 
+refreshAccount();
 refreshBoard();
 loadCourses();
 syncNow();
