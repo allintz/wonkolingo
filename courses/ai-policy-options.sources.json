@@ -1,84 +1,84 @@
 [
  {
   "id": "au0l0#0",
-  "q": "Why does IFP (Institute for Progress, Aug 2026) think faster automation of AI research raises the risk of losing control",
+  "q": "Why could faster automation of AI research make it more likely that labs lose control of their AI models? Also name one ",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au0l0#1",
-  "q": "IFP, drawing on earlier research, says automated AI R&D could raise risk in two ways. One speeds up the timeline, so ris",
+  "q": "One way automating AI research could raise risk is by speeding up the timeline, so dangers that would have come later ar",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au0l0#2",
-  "q": "IFP lists 'offense-dominant capability uplift' as a risk of automated AI R&D. What does 'offense-dominant' mean in IFP's",
+  "q": "Some domains where AI could enable attacks, such as biology, are described as 'offense-dominant'. What does that mean, a",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au0l0#3",
-  "q": "According to IFP, how could accelerating AI R&D automation inside one leading AI company lead to power concentration?",
+  "q": "How could rapid automation of AI research inside one leading AI company lead to a dangerous concentration of power?",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au0l0#4",
-  "q": "IFP's near-term recommendations on automated AI R&D are meant to be 'low-regret'. What makes a policy low-regret, and wh",
+  "q": "When AI risks seem serious but are hard to measure, some analysts favor 'low-regret' policies. What makes a policy low-r",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au0l0#6",
-  "q": "If pacing of automated AI R&D proves necessary, how would the version IFP proposes differ from a pause on AI research?",
+  "q": "How could 'pacing' automated AI research work without pausing it? Describe a targeted version and say why AI progress co",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au0l0#7",
-  "q": "IFP argues that preparing a thoughtful approach to pacing now is better than waiting. What does it say could happen othe",
+  "q": "Why might it be better to design an approach to pacing AI before serious risks from automated AI research appear, instea",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au0l1#0",
-  "q": "The pacing.tech agenda 'Pacing the Frontier' (Douglas, Avin and co-authors, 2026) uses a broad definition of 'pacing'. W",
+  "q": "'Pacing' in the AI debate can mean much more than a pause. What broader idea does it cover, and why does the broader sen",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l1#1",
-  "q": "The pacing.tech authors distinguish a 'hazard' from a 'control surface'. What does each term mean?",
+  "q": "Analysts of AI pacing separate the 'hazard' (the harm to prevent) from 'control surfaces'. What are control surfaces, an",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l1#2",
-  "q": "According to the pacing.tech authors, what is the general tradeoff between control surfaces early in the AI R&D process ",
+  "q": "What is the general tradeoff between interventions early in AI development (for example, on access to chips) and late on",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l1#3",
-  "q": "The pacing.tech authors distinguish rival inputs (like chips) from non-rival ones (like model weights). Why do they say ",
+  "q": "Why are rival inputs to AI, like chips, generally easier to control than non-rival ones, like model weights?",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l1#4",
-  "q": "The pacing.tech authors say capping frontier training runs would not slow AI progress in proportion to the training forg",
+  "q": "Why would capping frontier training runs probably not slow AI progress in proportion to the training forgone?",
   "src": [
    "https://pacing.tech/"
   ]
@@ -92,147 +92,147 @@
  },
  {
   "id": "au0l1#6",
-  "q": "Why do the pacing.tech authors expect actors who must coordinate (e.g. several countries) to choose upstream control sur",
+  "q": "Why might countries that need to coordinate on slowing AI choose to act on upstream inputs such as compute?",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l1#8",
-  "q": "Before pacing, the pacing.tech authors name four sources of information about whether to intervene. Match each to the fu",
+  "q": "Before deciding whether to slow AI, decision-makers can draw on four kinds of information. Match each to what it is best",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l1#10",
-  "q": "The pacing.tech authors say deciding to trigger pacing pits speed, legitimacy and precision against each other: two are ",
+  "q": "One framework holds that deciding when to trigger a slowdown pits speed, legitimacy and precision against each other: tw",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l1#njlnpe5",
-  "q": "What do the pacing.tech authors mean by an 'overhang' created by pacing, and what kind of exit do they suggest to limit ",
+  "q": "What is an 'overhang' from pausing or capping part of AI progress, and how could the exit from such a limit be made safe",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l2#0",
-  "q": "The pacing.tech authors set out an argument that slowing AI down too early could backfire, even for people who think the",
+  "q": "One argument holds that slowing AI down too early could backfire, even for people who think the risks are real. What is ",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l2#1",
-  "q": "The pacing.tech authors argue that being able to slow AI work quickly is valuable even when no one yet knows how to fix ",
+  "q": "Why can the ability to slow AI work quickly be valuable even when no one yet knows how to fix the problem it reveals?",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l2#nqrat6d",
-  "q": "Pacing AI delays large benefits. According to the pacing.tech authors, what kind of harm strengthens the case for precau",
+  "q": "Slowing AI delays large benefits. What kind of potential harm strengthens the case for precaution despite that cost, and",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l2#6",
-  "q": "The pacing.tech authors argue pacing has historically been hard to undo. Why do they think that history could make AI de",
+  "q": "Why could the history of past technology restrictions make AI developers wary of agreeing to pace AI?",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l2#3",
-  "q": "Pacing interventions often need an enforcer, such as a body that monitors compute or inspects lab logs. What risks do th",
+  "q": "Pacing rules often need an enforcer, such as a body that monitors compute or inspects lab logs. What risks does the enfo",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l2#4",
-  "q": "A legally binding pacing rule covers frontier AI developers in some countries but not others. According to the pacing.te",
+  "q": "A legally binding pacing rule covers frontier AI developers in some countries but not others. How might covered develope",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l2#7",
-  "q": "Why do the pacing.tech authors describe financial markets as an 'anti-enforcement measure' for AI pacing?",
+  "q": "Why can financial markets act as an 'anti-enforcement' force against rules that pace AI?",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l0#8",
-  "q": "Why does IFP say AI verification technology matters for any future pacing of AI development?",
+  "q": "Why does verification technology matter for any future agreement to pace AI development?",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au1l0#5",
-  "q": "IFP lists four kinds of AI compute verification technology. Match each to its description.",
+  "q": "Match each proposed kind of AI compute verification technology to how it works.",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au1l0#napj71f",
-  "q": "IFP proposes a verification 'grand challenge': teams run real AI workloads under mock agreements and win prizes for secr",
+  "q": "One proposed verification 'grand challenge' would have teams run real AI workloads under mock agreements and win prizes ",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au1l0#8",
-  "q": "IFP recommends that US intelligence agencies develop their own (unilateral) ways to monitor foreign AI compute. Give the",
+  "q": "Why might US intelligence agencies need their own unilateral ways to monitor foreign AI compute, even if technical verif",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au1l1#nziprch",
-  "q": "IFP argues that before any pacing of automated AI R&D, the US needs a trusted, well-resourced government AI body such as",
+  "q": "Why might the US need a trusted, well-resourced government AI body, such as CAISI, before it could pace automated AI res",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au1l0#14",
-  "q": "IFP recommends extending the US AI lead over China. Name two ways IFP says a bigger lead would help manage the risks of ",
+  "q": "Some argue a bigger US lead over China in AI would make the risks of automated AI research easier to manage. Name two wa",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au1l0#10",
-  "q": "What does IFP want the Bureau of Industry and Security (BIS) to do with information about who buys US AI chips, and what",
+  "q": "How could a government registry of who buys advanced AI chips help manage AI risk? Name two uses.",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au1l0#11",
-  "q": "IFP calls for prototyping a highly secure (Security Level 4 or 5) AI cluster in a government facility. What two things i",
+  "q": "Why might a government want its own highly secure data center for frontier AI models, built to the top security levels? ",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au1l1#nvro0e6",
-  "q": "While urging the US to extend its AI lead, IFP also wants to lay groundwork now for cooperating with China on automated ",
+  "q": "Even while competing with China on AI, why might the US want to lay groundwork now for cooperating on the risks of autom",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au1l1#1",
-  "q": "Match each AI R&D lever from the pacing.tech longlist to what it would measure or require.",
+  "q": "Match each proposed lever for overseeing automated AI research to what it would measure or require.",
   "src": [
    "https://pacing.tech/appendices",
    "https://ifp.org/preparing-for-ai-research-automation/"
@@ -240,7 +240,7 @@
  },
  {
   "id": "au1l1#2",
-  "q": "Why do the pacing.tech authors say mandatory safety cases act as pacing interventions in regulated safety-critical indus",
+  "q": "Why do mandatory safety cases act as a kind of pacing in regulated safety-critical industries?",
   "src": [
    "https://pacing.tech/",
    "https://pacing.tech/appendices"
@@ -255,28 +255,28 @@
  },
  {
   "id": "au1l1#4",
-  "q": "Dario Amodei's plan in 'We Must Pace the Frontier' (Sept 2026) starts with embedded third-party evaluators inside each f",
+  "q": "Anthropic CEO Dario Amodei argues that any plan to pace frontier AI should start with embedded third-party evaluators in",
   "src": [
    "https://darioamodei.com/post/we-must-pace-the-frontier"
   ]
  },
  {
   "id": "au1l1#5",
-  "q": "In 'We Must Pace the Frontier', what basis for pacing does Dario Amodei say he is most enthusiastic about, and what worr",
+  "q": "Anthropic CEO Dario Amodei is most enthusiastic about pacing frontier AI by what models can do and how safe they prove t",
   "src": [
    "https://darioamodei.com/post/we-must-pace-the-frontier"
   ]
  },
  {
   "id": "au1l2#nu5sfvz",
-  "q": "Dario Amodei says pacing within democracies is limited by the US lead over China. Why, in his view, and name one measure",
+  "q": "Anthropic CEO Dario Amodei argues that the US lead over China limits how far democracies can pace frontier AI. Why would",
   "src": [
    "https://darioamodei.com/post/we-must-pace-the-frontier"
   ]
  },
  {
   "id": "au1l1#6",
-  "q": "Dario Amodei floats a US-China 'speed limit' on recursive self-improvement (AI improving its own successors). Why does h",
+  "q": "Anthropic CEO Dario Amodei has floated a US-China 'speed limit' on recursive self-improvement (AI improving its own succ",
   "src": [
    "https://darioamodei.com/post/we-must-pace-the-frontier"
   ]
@@ -292,7 +292,7 @@
  },
  {
   "id": "au1l1#8",
-  "q": "Dario Amodei proposes embedded third-party evaluators (such as METR) inside AI companies, citing bank supervisors as pre",
+  "q": "Supporters of embedded third-party evaluators inside AI labs cite bank supervisors as a precedent. Name two reasons crit",
   "src": [
    "https://www.techpolicy.press/who-should-pace-the-frontier-not-dario-amodei/",
    "https://darioamodei.com/post/we-must-pace-the-frontier"
@@ -300,14 +300,14 @@
  },
  {
   "id": "au1l1#9",
-  "q": "Jeffrey Ding (ChinAI newsletter, Sept 2026) critiqued Dario Amodei's claim that if US labs slow down, China will race ah",
+  "q": "One argument against slowing US AI labs is that China would race ahead. Another common claim is that Chinese labs catch ",
   "src": [
    "https://chinai.substack.com/p/chinai-375-critiquing-anthropics"
   ]
  },
  {
   "id": "au1l1#10",
-  "q": "Which of these positions comes from IFP's Aug 2026 report on automated AI R&D?",
+  "q": "Some critics say the companies building frontier AI shouldn't design the rules that pace it. Which of these approaches b",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/",
    "https://darioamodei.com/post/we-must-pace-the-frontier",
@@ -408,7 +408,7 @@
  },
  {
   "id": "au2l1#n7bm7u7",
-  "q": "CSET's Ren Bin Lee Dixon and Heather Frase propose a 'hybrid' AI incident reporting system. Why do they want more than m",
+  "q": "Why might an AI incident reporting system need voluntary reports from individuals and citizen reports from the public, j",
   "src": [
    "frag-ideas.json#incident-reporting",
    "https://cset.georgetown.edu/publication/an-argument-for-hybrid-ai-incident-reporting/"
@@ -416,7 +416,7 @@
  },
  {
   "id": "au2l1#6",
-  "q": "Match each source to its proposal for overseeing internal deployment (labs' use of models inside the company).",
+  "q": "Proposals would extend oversight to internal deployment (labs' use of models inside the company). Match each proposal to",
   "src": [
    "frag-ideas.json#internal-deployment",
    "https://www.goodwinlaw.com/en/insights/publications/2025/11/alerts-technology-aiml-california-moves-to-regulate-frontier-ai-with-a-focus-on-catastrophic-risk",
@@ -435,7 +435,7 @@
  },
  {
   "id": "au2l1#8",
-  "q": "IFP (Aug 2026) wants Congress to require AI companies to publish their 'model behavior specifications'. What are these d",
+  "q": "What are AI companies' 'model behavior specifications', and why might requiring companies to publish them matter more as",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
@@ -461,7 +461,7 @@
  },
  {
   "id": "au2l2#n760r1c",
-  "q": "The pacing.tech longlist includes, and IFP asks labs to share, reports of how a lab's compute is split across uses such ",
+  "q": "Some proposals would have labs report how their compute is split across uses such as final training runs, experiments, i",
   "src": [
    "https://pacing.tech/appendices",
    "https://ifp.org/preparing-for-ai-research-automation/"
@@ -469,7 +469,7 @@
  },
  {
   "id": "au2l2#4",
-  "q": "The pacing.tech authors ask how transparency about capabilities affects races, citing Armstrong, Bostrom and Shulman's '",
+  "q": "In one well-known game-theory model of AI races, how can better information about rivals' capabilities make a race more ",
   "src": [
    "https://pacing.tech/",
    "https://pacing.tech/appendices"
@@ -513,7 +513,7 @@
  },
  {
   "id": "au3l0#4",
-  "q": "The 'Frontier AI Auditing' paper (Brundage, Anderljung et al., Jan 2026) proposes four 'AI Assurance Levels'. What separ",
+  "q": "Why might rules for frontier AI audits define tiers of assurance, and what would separate the lowest tier from the highe",
   "src": [
    "frag-ideas.json#third-party-audits",
    "https://www.governance.ai/research-paper/frontier-ai-auditing-toward-rigorous-third-party-assessment-of-safety-and-security-practices-at-leading-ai-companies",
@@ -522,7 +522,7 @@
  },
  {
   "id": "au3l0#nnrmnu2",
-  "q": "The 'Frontier AI Auditing' paper (Brundage et al., 2026) argues audits should assess a lab's whole organization as well ",
+  "q": "Why might audits of frontier AI labs need to cover the whole organization as well as its public products? Name two reaso",
   "src": [
    "https://arxiv.org/html/2601.11699",
    "https://arxiv.org/abs/2601.11699"
@@ -576,7 +576,7 @@
  },
  {
   "id": "au3l1#njb4ni6",
-  "q": "Casper et al. ('Black-Box Access is Insufficient for Rigorous AI Audits', 2024) argue auditors need more than black-box ",
+  "q": "Why do rigorous AI audits need more than black-box access (only querying a model and reading its outputs)? Say what acce",
   "src": [
    "https://arxiv.org/abs/2401.14446"
   ]
@@ -674,7 +674,7 @@
  },
  {
   "id": "au4l0#4",
-  "q": "Gabriel Weil proposes adding punitive damages to AI liability cases. What problem does he say this solves?",
+  "q": "One proposal would let courts award punitive damages against AI developers even without malice or recklessness. What pro",
   "src": [
    "frag-ideas.json#product-liability",
    "https://private-law-theory.org/?p=64870",
@@ -722,7 +722,7 @@
  },
  {
   "id": "au4l1#1",
-  "q": "Match each AI insurance proposal to its design.",
+  "q": "Proposals for insuring AI risk, including catastrophic risk, take several forms. Match each design to how it works.",
   "src": [
    "frag-ideas.json#insurance-mandates",
    "https://arxiv.org/abs/2409.06673v1",
@@ -849,14 +849,14 @@
  },
  {
   "id": "au5l0#3",
-  "q": "IFP's Aug. 2026 report discusses the OpenAI-Hugging Face incident, where a model escaped containment. Why could OpenAI s",
+  "q": "In July 2026 unreleased OpenAI models escaped an internal sandbox and attacked outside services, including Hugging Face,",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au5l0#n4ske8w",
-  "q": "Shavit et al. ('Practices for Governing Agentic AI Systems', OpenAI, 2023) suggest that besides the user, the system dep",
+  "q": "Why might the system deployer and the data center operator, as well as the user, need to be able to shut down an AI agen",
   "src": [
    "https://cdn.openai.com/papers/practices-for-governing-agentic-ai-systems.pdf"
   ]
@@ -894,35 +894,35 @@
  },
  {
   "id": "au5l1#3",
-  "q": "Shavit et al. (OpenAI, 2023) recommend requiring human approval before an AI agent takes high-stakes actions, such as an",
+  "q": "Requiring human approval before an AI agent takes high-stakes actions, such as an irreversible large payment, is a stand",
   "src": [
    "https://cdn.openai.com/papers/practices-for-governing-agentic-ai-systems.pdf"
   ]
  },
  {
   "id": "au5l1#4",
-  "q": "Shavit et al. (OpenAI, 2023) warn that hard-coded limits on an AI agent's allowed actions may stop working as agents get",
+  "q": "Why might hard-coded limits on an AI agent's allowed actions stop working as agents get more capable, and what mitigatio",
   "src": [
    "https://cdn.openai.com/papers/practices-for-governing-agentic-ai-systems.pdf"
   ]
  },
  {
   "id": "au5l1#6",
-  "q": "Shavit et al. (OpenAI, 2023) warn that people could lose the ability to shut down AI agents even if no agent escapes. Ho",
+  "q": "How could people lose the ability to shut down AI agents even if no agent escapes, and what legal rule could give develo",
   "src": [
    "https://cdn.openai.com/papers/practices-for-governing-agentic-ai-systems.pdf"
   ]
  },
  {
   "id": "au5l2#1",
-  "q": "In Alaga and Schuett's 'coordinated pausing' scheme (GovAI, 2023), what happens after one developer's model fails a dang",
+  "q": "In a 'coordinated pausing' scheme for frontier AI, what happens after one developer's model fails a dangerous-capability",
   "src": [
    "https://arxiv.org/abs/2310.00374"
   ]
  },
  {
   "id": "au5l2#2",
-  "q": "Match each version of Alaga and Schuett's (2023) coordinated pausing scheme to how it works.",
+  "q": "Coordinated pausing schemes for frontier AI come in several versions. Match each to how it works.",
   "src": [
    "https://arxiv.org/abs/2310.00374",
    "https://www.lawfaremedia.org/article/can-frontier-ai-labs-lawfully-agree-to-pause"
@@ -942,7 +942,7 @@
  },
  {
   "id": "au5l2#5",
-  "q": "A pause or other pacing rule can be written to expire unless renewed, or to run with no set end until lifted. According ",
+  "q": "A pause or other pacing rule can be written to expire unless renewed, or to run with no set end until lifted. What risk ",
   "src": [
    "https://pacing.tech/"
   ]
@@ -1029,7 +1029,7 @@
  },
  {
   "id": "au6l0#5",
-  "q": "IFP (Aug 2026) estimates the US has a 50 to 100x edge over China in producing AI computing power but only about a 10x ed",
+  "q": "By one August 2026 estimate, the US has a 50 to 100x edge over China in producing AI computing power but only about a 10",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
@@ -1117,7 +1117,7 @@
  },
  {
   "id": "au6l2#0",
-  "q": "RAND's 2024 report on securing model weights defined security levels SL1 to SL5. What does SL5 aim to stop?",
+  "q": "Security standards for AI model weights are graded by the strongest attacker they can stop. Why is defending frontier we",
   "src": [
    "frag-ideas.json#model-weight-security"
   ]
@@ -1141,7 +1141,7 @@
  },
  {
   "id": "au6l2#ngg5veh",
-  "q": "IFP's 'speed-for-security bargain' (June 2026) would let AI data centers connect to the power grid faster if they meet s",
+  "q": "One proposal would let AI data centers connect to the power grid faster if they meet security controls for their grid-fa",
   "src": [
    "frag-ideas.json#data-center-security",
    "https://ifp.org/speed-for-security-bargain-for-ai-data-centers/"
@@ -1198,7 +1198,7 @@
  },
  {
   "id": "au7l0#4",
-  "q": "What is 'law-following AI' (LFAI), and how do supporters at the Institute for Law & AI say it would guard against power ",
+  "q": "What is 'law-following AI', and how could it guard against power grabs?",
   "src": [
    "frag-ideas.json#law-following-ai"
   ]
@@ -1215,7 +1215,7 @@
  },
  {
   "id": "au7l0#6",
-  "q": "Forethought researchers (Davidson, Finnveden and Hadshar) propose 'secret-loyalty audits' and distributed control of pow",
+  "q": "What risk are 'secret-loyalty audits' and distributed control of powerful AI meant to address?",
   "src": [
    "frag-ideas.json#law-following-ai",
    "frag-ideas.json#military-ai-limits",
@@ -1319,7 +1319,7 @@
  },
  {
   "id": "au7l2#10",
-  "q": "Suppose countries agree to cap AI training compute. Why do the pacing.tech authors argue verification needs to be strong",
+  "q": "Suppose countries agree to cap AI training compute. Why might verification need to be strongest late in the agreement?",
   "src": [
    "https://pacing.tech/"
   ]

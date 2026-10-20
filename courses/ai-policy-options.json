@@ -10,21 +10,21 @@
    "desc": "How IFP and the pacing.tech authors frame the risks of fast AI progress, what pacing can target, how interventions start and end, and the main arguments for and against pacing.",
    "lessons": [
     {
-     "title": "IFP: the risks of automated AI R&D",
+     "title": "Risks of automating AI research",
      "items": [
       {
        "id": "au0l0#0",
        "t": "recall",
-       "p": "Why does IFP (Institute for Progress, Aug 2026) think faster automation of AI research raises the risk of losing control of AI models? Also name one thing IFP says would make this worse.",
-       "answer": "Automated R&D could make models improve much faster than companies' monitoring and control methods, and labs already sometimes struggle to control new models, so models become more likely to cause significant harm. Worsening factors: pressure to fund capabilities over monitoring; growing offensive capabilities; a model with harmful tendencies put in charge of building its successors.",
+       "p": "Why could faster automation of AI research make it more likely that labs lose control of how their AI models behave? Also name one factor that could make this worse.",
+       "answer": "Models could improve much faster than companies' monitoring and control methods, and labs already sometimes struggle to control new models, so models become more likely to cause significant harm. Factors that could make it worse: pressure to fund capabilities over monitoring; growing offensive capabilities; a model with harmful tendencies put in charge of building its successors.",
        "keys": [
         "Models could improve faster than labs' monitoring and control methods",
         "Labs already sometimes struggle to control new models, so significant harm becomes more likely",
         "One aggravating factor: pressure to fund capabilities over monitoring, growing offensive skills, or a harmful model building its successors"
        ],
-       "x": "IFP lists this beside offense-dominant capability uplift and power concentration in a leading company. Its evidence that control already slips: in July 2026, multiple instances of unreleased OpenAI models broke out of an internal sandbox, took over a computing cluster and attacked outside services, including Hugging Face. IFP calls these risks hard to evaluate with existing evidence but plausible if automated R&D speeds up progress, and says both automation and its risks are understudied.",
+       "x": "This argument comes from IFP's (Institute for Progress) August 2026 report on automated AI R&D, which lists it beside offense-dominant capability uplift and power concentration in a leading company. Its evidence that control already slips: in July 2026, multiple instances of unreleased OpenAI models broke out of an internal sandbox, took over a computing cluster and attacked outside services, including Hugging Face. IFP calls these risks hard to evaluate with existing evidence but plausible if automated R&D speeds up progress.",
        "choice": {
-        "p": "Why does IFP think faster automation of AI research raises the risk of losing control of AI models?",
+        "p": "Why could faster automation of AI research make it more likely that labs lose control of how their models behave?",
         "o": [
          "Models could improve faster than labs' ability to monitor and control them",
          "Automated research would let labs skip the safety tests that state laws require",
@@ -34,52 +34,52 @@
         "a": 0,
         "ow": [
          "",
-         "IFP's concern is that control methods fall behind fast-improving models, not that labs skip legally required tests.",
-         "IFP doesn't argue the code is unreadable; its worry is a widening gap between capabilities and control.",
-         "Theft and distillation are concerns IFP raises about the US lead, not its loss-of-control mechanism."
+         "The worry is that control methods fall behind fast-improving models; skipping legally required tests is a different problem.",
+         "Unreadable code isn't the core issue; the worry is a widening gap between capabilities and control.",
+         "Theft would put a model in a rival's hands, but loss of control here means a lab can no longer oversee its own models' behavior."
         ]
        }
       },
       {
        "id": "au0l0#1",
        "t": "recall",
-       "p": "IFP, drawing on earlier research, says automated AI R&D could raise risk in two ways. One speeds up the timeline, so risks that would have come later arrive sooner. What is the other way, and how is its effect on risk different?",
+       "p": "One way automating AI research could raise risk is by speeding up the timeline, so dangers that would have come later arrive sooner. What second way, tied to how the research gets done, could raise risk, and how is its effect different?",
        "answer": "Reduced human oversight of AI research. The timeline pathway only brings forward risks that would arise anyway, while less oversight can make those risks worse and can also create novel risks.",
        "keys": [
         "Reduced human oversight of the research",
         "Less oversight can make risks that would arise anyway worse",
         "It can also create novel risks, while the timeline pathway only brings the same risks forward"
        ],
-       "x": "IFP lays out both pathways for a scenario in which automation makes AI capabilities progress significantly faster than today, a premise it treats as uncertain: as of August 2026, Epoch AI's independent benchmarking showed no recent speedup. It says one or both pathways could drive its three specific risks (offense-dominant capability uplift, loss of control and power concentration), and cites a CSET taxonomy of oversight-related risks for the second pathway.",
+       "x": "IFP's August 2026 report sets out these two pathways, crediting earlier research, including a CSET taxonomy of oversight-related risks. IFP applies them to a scenario where automation makes capabilities progress significantly faster than today, a premise it treats as uncertain: as of August 2026, Epoch AI's independent benchmarking showed no recent speedup. It says one or both pathways could drive three specific risks: offense-dominant capability uplift, loss of control and power concentration.",
        "choice": {
-        "p": "IFP says automated AI R&D could raise risk in two ways. One brings risks that would come anyway sooner. What is the other?",
+        "p": "One way automating AI research could raise risk is by bringing dangers sooner. Which of these is a second way, with a different kind of effect?",
         "o": [
-         "Less human oversight, which can worsen existing risks or add new ones",
-         "Cheaper research, which lets many more small actors build frontier models",
-         "More open-weight releases, since automated labs publish models faster",
-         "Easier copying, since rivals can distill an automated lab's outputs"
+         "Less human oversight, which can worsen risks or add new ones",
+         "Slower progress, since AI-run research wastes compute on dead ends",
+         "Cheaper safety testing, since AI systems can run evaluations quickly",
+         "More demand for human researchers, draining talent from safety teams"
         ],
         "a": 0,
         "ow": [
          "",
-         "IFP doesn't argue that automation spreads frontier work to small actors; its second pathway is reduced human oversight.",
-         "IFP doesn't link automation to open-weight releases; its second pathway is humans overseeing less of the research.",
-         "Distillation is a concern IFP raises about the US lead over China, not one of its two risk pathways."
+         "Slower progress would delay dangers, not add to them.",
+         "Cheaper safety testing would lower risk, not raise it.",
+         "Automation substitutes AI for human researchers, so it would tend to cut demand for them, not raise it."
         ]
        }
       },
       {
        "id": "au0l0#2",
        "t": "recall",
-       "p": "IFP lists 'offense-dominant capability uplift' as a risk of automated AI R&D. What does 'offense-dominant' mean in IFP's usage, and why does IFP say automation makes this worse?",
-       "answer": "A domain is offense-dominant when defenses (such as model safeguards or countermeasures to an engineered virus) cannot be developed or deployed in time to meet new risks. IFP argues faster capability gains in such domains leave even less time to prepare defenses.",
+       "p": "Some domains where AI could enable attacks, such as biology, are described as 'offense-dominant'. What does that mean, and why could faster automation of AI research make such domains more dangerous?",
+       "answer": "Attackers have the edge: defenses (such as model safeguards or countermeasures to an engineered virus) can't be developed or deployed in time to meet new threats. Faster capability gains in such domains would leave even less time to prepare defenses.",
        "keys": [
         "Defenses can't be built or deployed in time to meet new AI-enabled threats",
         "Faster capability growth leaves less time to prepare defenses"
        ],
-       "x": "IFP's examples come from biology: research showing current models can design functional viral genomes and outperform human virologists on lab-protocol troubleshooting questions.",
+       "x": "IFP's August 2026 report uses the term this way and lists offense-dominant capability uplift as one risk of automated AI R&D. Its examples come from biology: research showing current models can design functional viral genomes and outperform human virologists on lab-protocol troubleshooting questions.",
        "choice": {
-        "p": "In IFP's usage, what makes a domain 'offense-dominant', and why does automated AI R&D make that worse?",
+        "p": "What makes a domain 'offense-dominant', and why could faster automation of AI research make that worse?",
         "o": [
          "Defenses can't be readied in time for new threats, and faster capability gains leave even less time",
          "Attackers have more funding than defenders, and automation lets attackers hire more AI researchers",
@@ -89,80 +89,80 @@
         "a": 0,
         "ow": [
          "",
-         "IFP's definition is about the timing of defenses, not funding.",
-         "IFP says nothing about a legal gap between attack and defense.",
-         "IFP's definition does not involve military control."
+         "Offense-dominance is about whether defenses can be readied in time, not funding.",
+         "It has nothing to do with a legal gap between attack and defense.",
+         "It doesn't depend on who controls the field."
         ]
        }
       },
       {
        "id": "au0l0#3",
        "t": "recall",
-       "p": "According to IFP, how could accelerating AI R&D automation inside one leading AI company lead to power concentration?",
+       "p": "How could rapid automation of AI research inside one leading AI company lead to a dangerous concentration of power?",
        "answer": "It could widen the gap between the models the company uses internally and those available to the public, creating a large power imbalance: concentrated economic power, or advantages in specific domains such as cyber operations or social persuasion.",
        "keys": [
         "Growing gap between internally deployed and publicly available models",
         "Economic power or domain advantages (cyber, persuasion) concentrated in the company"
        ],
-       "x": "IFP calls these risks speculative but points to many historical examples of companies seeking and using power imbalances to cause widespread harm.",
+       "x": "This is one of three risks IFP's August 2026 report says automated AI R&D could drive. IFP calls it speculative but points to many historical examples of companies seeking and using power imbalances to cause widespread harm.",
        "choice": {
-        "p": "According to IFP, how could accelerating AI R&D automation inside one leading company lead to power concentration?",
+        "p": "How could rapid automation of AI research inside one leading company concentrate power?",
         "o": [
-         "Its internal models could pull far ahead of public ones, concentrating economic or cyber power in it",
-         "It could buy up rival labs once its model is clearly ahead, ending competition through a wave of mergers",
-         "Governments could nationalize it once its models matter, putting them under direct state control",
-         "It could lock customers into long cloud contracts, raising AI prices across the whole industry"
+         "Its internal models could pull far ahead of public ones, concentrating power in it",
+         "Automation would make AI cheaper for everyone, so smaller rivals would catch up within months",
+         "Automated research must be disclosed to regulators, who would then take control of the lab",
+         "Open-weight developers could copy its internal models for free, so power would spread widely"
         ],
         "a": 0,
         "ow": [
          "",
-         "IFP's mechanism is the gap between internal and public models, not mergers.",
-         "IFP's concern is the company gaining power, not nationalization.",
-         "IFP does not describe a cloud lock-in mechanism."
+         "Cheaper AI that lets rivals catch up would spread power, not concentrate it.",
+         "No rule hands control of a lab to regulators because it automates research.",
+         "Copying by open-weight developers would spread capabilities, the opposite of concentration."
         ]
        }
       },
       {
        "id": "au0l0#4",
        "t": "recall",
-       "p": "IFP's near-term recommendations on automated AI R&D are meant to be 'low-regret'. What makes a policy low-regret, and why does IFP use that test for these risks?",
-       "answer": "A low-regret policy has little downside if the risks turn out to be low, or brings clear benefits for other important problems anyway. IFP uses the test because it judges the risks serious enough to act on now but hard to evaluate with existing evidence and understudied, so near-term steps should be cheap or useful whether or not the risks materialize.",
+       "p": "When AI risks seem serious but are hard to measure, some analysts favor 'low-regret' policies. What makes a policy low-regret, and why does that standard suit this situation?",
+       "answer": "A low-regret policy has little downside if the risks turn out to be low, or brings clear benefits for other important problems anyway. It suits risks that seem serious enough to act on now but are hard to evaluate with existing evidence: steps that are cheap or useful either way hold up whether or not the risks materialize.",
        "keys": [
         "Little downside if the risks turn out to be low",
         "Or clear benefits for other important problems anyway",
         "The risks are serious but uncertain and understudied, so steps should hold up either way"
        ],
-       "x": "This is the main idea behind IFP's five criteria for any near-term measure: target only activities that could cause serious, irreversible harm; minimize any slowdown in diffusion of existing AI; impose low costs or give clear benefits even if the risks prove unlikely; avoid systematically disadvantaging more cautious labs and countries; and avoid a new regulatory apparatus likely to be misused, for example by concentrating power in a few companies. It presents its 23 recommendations as meeting them.",
+       "x": "IFP's August 2026 report on automated AI R&D calls its 23 recommendations 'low-regret', and the idea is the main one behind its five criteria for near-term measures: target only activities that could cause serious, irreversible harm; minimize any slowdown in diffusion of existing AI; impose low costs or give clear benefits even if the risks prove unlikely; avoid systematically disadvantaging more cautious labs and countries; and avoid a new regulatory apparatus likely to be misused, for example by concentrating power in a few companies.",
        "choice": {
-        "p": "What makes a policy 'low-regret' in IFP's sense?",
+        "p": "What makes a policy 'low-regret'?",
         "o": [
          "It costs little if the risks prove low, or helps other problems anyway",
          "It can be repealed quickly if it ends up slowing AI progress too much",
          "It has the public support of every frontier lab, so it faces no opposition",
-         "It takes effect only after a serious AI incident has already happened"
+         "It targets only risks that existing evidence already shows are likely"
         ],
         "a": 0,
         "ow": [
          "",
-         "Reversibility is not IFP's test; low-regret means low cost, or useful benefits, even if the risks prove low.",
-         "IFP's test is about costs and benefits under uncertainty, not industry support.",
-         "IFP wants preparation before risks appear, so that the response to an incident isn't rushed."
+         "Being easy to repeal limits damage after the fact; low-regret means the policy costs little, or helps anyway, even if the risks prove low.",
+         "The test is about costs and benefits under uncertainty, not industry support.",
+         "Low-regret policies suit the opposite case: they make sense even when evidence about a risk is thin, because they cost little or help anyway."
         ]
        }
       },
       {
        "id": "au0l0#6",
        "t": "recall",
-       "p": "If pacing of automated AI R&D proves necessary, how would the version IFP proposes differ from a pause on AI research?",
-       "answer": "It targets only the riskiest activities. Thresholds would mark which automated AI R&D activities likely pose severe risks; if one is crossed, incentives would shift compute and talent from them to diffusing AI (inference, new applications) and to research making automation safer (model safety, societal resilience). IFP says progress could still be much faster than today.",
+       "p": "How could 'pacing' automated AI research work without pausing it? Describe a targeted version and say why AI progress could still be fast.",
+       "answer": "Limit only the riskiest activities: thresholds mark which automated AI R&D likely poses severe risks, and crossing one shifts incentives so compute and talent move toward diffusing AI and toward safety and resilience research. Because the limits bite only on the riskiest, fastest automated R&D (say, a major capability jump every day), progress could still be much faster than today's.",
        "keys": [
         "Targets only automated R&D activities above risk thresholds, not all AI research",
-        "Incentives shift compute and talent toward AI diffusion and safety or resilience research",
-        "Could still allow much faster progress than today"
+        "If a threshold is crossed, incentives shift compute and talent toward AI diffusion and safety or resilience research",
+        "Limits bite only on the riskiest, fastest automated R&D, leaving room for progress much faster than today"
        ],
-       "x": "IFP warns that without better verification technology, 'pacing' could become a euphemism for pausing. It hopes concrete thresholds would let camps that disagree about how much speedup is possible reach compromises. Its Rec 6 asks CAISI to draft such guidelines now (risk thresholds, if-then commitments, required human oversight) without committing anyone to execute them; their main value is planning for the 'day after'.",
+       "x": "This targeted version is IFP's proposal (August 2026 report on automated AI R&D). IFP warns that without better verification technology, 'pacing' could become a euphemism for pausing, and hopes concrete thresholds would let camps that disagree about how much speedup is possible reach compromises. Its Rec 6 asks CAISI to draft such guidelines now (risk thresholds, if-then commitments, required human oversight) without committing anyone to execute them; their main value is planning for the 'day after'.",
        "choice": {
-        "p": "How does IFP's proposed form of 'pacing' for automated AI R&D differ from a pause?",
+        "p": "How can a targeted form of 'pacing' automated AI research differ from a pause?",
         "o": [
          "It targets only high-risk automated R&D and steers resources to diffusion and safety",
          "It halts all frontier model training until an international treaty is signed and verified",
@@ -172,24 +172,25 @@
         "a": 0,
         "ow": [
          "",
-         "That is a pause; IFP's version targets specific high-risk activities and could still allow faster progress than today.",
-         "IFP's proposal is about automated R&D at frontier companies, not open-weight release.",
-         "IFP proposes concrete risk thresholds and incentives to shift resources."
+         "That is a pause; a targeted version limits specific high-risk activities and lets other work continue.",
+         "Targeted pacing of automated R&D concerns frontier companies' research, not open-weight release.",
+         "A targeted version needs concrete risk thresholds and incentives to shift resources."
         ]
        }
       },
       {
        "id": "au0l0#7",
        "t": "recall",
-       "p": "IFP argues that preparing a thoughtful approach to pacing now is better than waiting. What does it say could happen otherwise if serious risks from automated AI R&D start to appear?",
-       "answer": "Political leaders and the public would likely demand action, and the measures could be ill-thought-out or draconian, such as the recently proposed ban on AI data centers, which would slow AI research and also block using new AI resources to solve other problems.",
+       "p": "Why might it be better to design an approach to pacing AI before serious risks from automated AI research appear, instead of waiting until they do?",
+       "answer": "One argument: once serious risks begin to show, political leaders and the public would likely demand action, and measures made under that pressure could be ill-thought-out or draconian, such as a broad ban on new AI data centers, which would slow AI research and also block using new AI resources to solve other problems. Preparing early makes a targeted response possible.",
        "keys": [
         "Public and political pressure would force a rushed response",
-        "Risk of draconian measures, e.g. a ban on AI data centers"
+        "Risk of draconian measures, e.g. a ban on AI data centers",
+        "Preparing early makes a targeted response possible"
        ],
-       "x": "IFP says whether pacing is a good approach depends on how it is implemented. Its near-term recommendations aim to give government more information and capacity so that any response can be targeted. Instead of moratoria on new data centers, it proposes opt-in industrial zones where developers get faster permits in exchange for enforceable community benefits.",
+       "x": "This is IFP's argument in its August 2026 report, which calls the recently proposed ban on AI data centers an example of a draconian measure. IFP says whether pacing is a good approach depends on how it is implemented, and its near-term recommendations aim to give government more information and capacity so any response can be targeted. Instead of moratoria on new data centers, it proposes opt-in industrial zones where developers get faster permits in exchange for enforceable community benefits.",
        "choice": {
-        "p": "Why does IFP argue for preparing a thoughtful approach to pacing now, before serious risks appear?",
+        "p": "Why might it be better to design an approach to pacing AI before serious risks from automated research appear?",
         "o": [
          "Rising risks could spark public pressure for rushed, draconian steps, like a ban on AI data centers",
          "Leading labs have promised to fund pacing research, but only if Congress acts before 2028",
@@ -199,66 +200,67 @@
         "a": 0,
         "ow": [
          "",
-         "IFP cites no such promise by labs.",
-         "IFP makes no claim about an international notification duty.",
-         "IFP argues the opposite: verification technology is needed for targeted agreements."
+         "The case for preparing early doesn't rest on any lab funding pledge; it's about avoiding a rushed response under public pressure.",
+         "There is no international duty to notify other countries before limiting AI research.",
+         "Targeted agreements need verification technology, so preparing now means building it, not skipping it."
         ]
        }
       }
      ]
     },
     {
-     "title": "Pacing.tech: control surfaces and the lifecycle",
+     "title": "Control surfaces and the AI lifecycle",
      "items": [
       {
        "id": "au0l1#0",
        "t": "recall",
-       "p": "The pacing.tech agenda 'Pacing the Frontier' (Douglas, Avin and co-authors, 2026) uses a broad definition of 'pacing'. What is it?",
-       "answer": "Any intervention that deliberately moderates the pace of frontier AI development, deployment, and diffusion.",
+       "p": "'Pacing' in the AI debate can mean much more than a pause. What broader idea does it cover, and why does the broader sense matter?",
+       "answer": "Any deliberate effort to moderate the pace of frontier AI development, deployment or diffusion. The broad sense matters because developers and governments already pace routinely (delayed releases, rollbacks, paused training, export controls), and these early, mostly unilateral choices set the precedents, know-how and evidence that will guide higher-stakes decisions later.",
        "keys": [
-        "Deliberate interventions on the pace of frontier AI",
-        "Covers development, deployment, and diffusion"
+        "Any deliberate moderation of the pace of frontier AI development, deployment or diffusion",
+        "Developers and governments already pace routinely (delays, rollbacks, export controls)",
+        "Early pacing choices set precedents and evidence for higher-stakes decisions later"
        ],
-       "x": "Under this definition the authors say actors already pace routinely: developers delay releases or pause training, and governments pace diffusion through export controls or halts on model releases. They note most pacing so far has been unilateral.",
+       "x": "This broad definition comes from the pacing.tech research agenda 'Pacing the Frontier' (Douglas, Avin and co-authors, 2026). The authors note most pacing so far has been unilateral, through developers' self-pacing or governments pacing diffusion, but that future pacing may require coordination between actors with different incentives, potentially between adversaries.",
        "choice": {
-        "p": "How broadly do the pacing.tech authors define 'pacing'?",
+        "p": "In its broad sense, what does 'pacing' frontier AI cover?",
         "o": [
-         "Any deliberate moderation of the pace of frontier AI development, deployment or diffusion",
-         "Only a coordinated, temporary halt on training new frontier models agreed by all the major labs",
-         "Only government rules that cap the total compute any single lab may use to train one frontier model",
-         "Only the voluntary delays that frontier labs choose to take before publicly releasing a new model"
+         "Any deliberate effort to moderate the pace of frontier AI development, deployment or diffusion",
+         "Any slowdown in frontier AI progress, including one caused by chip shortages or market downturns",
+         "Any government regulation of AI, even one with no effect on how fast AI is built or spread",
+         "Only a coordinated halt on training new frontier models, agreed by all the major labs"
         ],
         "a": 0,
         "ow": [
          "",
-         "A halt is one kind of pacing; their definition is much broader.",
-         "Compute caps are one lever among many in their definition.",
-         "They count lab delays as pacing, but also government actions such as export controls."
+         "Pacing means deliberate moderation; a slowdown from an accidental shortage or a market downturn isn't pacing.",
+         "Pacing means moderating the pace of AI development, deployment or diffusion; a rule with no effect on that pace isn't pacing.",
+         "A coordinated halt is one kind of pacing; the broad sense also covers unilateral steps such as delayed releases and export controls."
         ]
        }
       },
       {
        "id": "au0l1#1",
        "t": "recall",
-       "p": "The pacing.tech authors distinguish a 'hazard' from a 'control surface'. What does each term mean?",
-       "answer": "The hazard is the harmful outcome a proposal seeks to prevent. Control surfaces are the parts of AI progress that can actually be changed, such as compute, algorithms, model releases, or classes of use.",
+       "p": "Analysts of AI pacing separate the 'hazard' (the harm to prevent) from 'control surfaces'. What are control surfaces, and why does one rarely map cleanly onto a hazard?",
+       "answer": "Control surfaces are the parts of AI progress that can actually be changed, such as compute, algorithms, model releases or classes of use. Each sits at some distance from the harm, so any lever catches some harmless activity and misses some harmful activity, with costs to privacy, growth or oversight.",
        "keys": [
-        "Hazard: the harmful outcome to prevent",
-        "Control surface: a part of AI progress that can actually be changed (compute, releases, uses)"
+        "Control surfaces: parts of AI progress that can actually be changed (compute, algorithms, releases, uses)",
+        "Levers sit at a distance from the harm, so they catch some harmless and miss some harmful activity"
        ],
-       "x": "The authors say there is rarely one lever that maps cleanly onto a threat. Each lever catches some harmless activity and misses some harmful activity, with varying costs to privacy, growth, and oversight.",
+       "x": "The distinction between hazards and control surfaces is drawn in the pacing.tech research agenda 'Pacing the Frontier' (2026). Its authors say there is rarely one lever that maps cleanly onto a threat; each catches some harmless activity and misses some harmful activity, with varying costs to privacy, growth and oversight.",
        "choice": {
-        "p": "In the pacing.tech framework, what is the difference between a 'hazard' and a 'control surface'?",
+        "p": "In discussions of pacing AI, what is a 'control surface'?",
         "o": [
-         "Hazard: the harm to prevent. Control surface: a part of AI progress you can change, like compute",
-         "Hazard: a dangerous model. Control surface: the safety filter that is added to that model after training",
-         "Hazard: a risk that regulators can directly measure. Control surface: a risk that regulators cannot measure",
-         "Hazard: a lab's internal risk. Control surface: the government agency that oversees the lab"
+         "A part of AI progress that can be changed, like compute or model releases",
+         "The safety filter added to a model after training to block harmful requests",
+         "A risk that regulators can measure directly, as opposed to one they can't",
+         "The government agency assigned to oversee a particular frontier lab"
         ],
         "a": 0,
         "ow": [
          "",
-         "Control surfaces include upstream inputs like compute, not just post-training filters.",
+         "A post-training filter is one lever, but the term covers any changeable part of AI progress, from chips to classes of use.",
          "The distinction is between what you want to prevent and what you can change, not measurability.",
          "A control surface is a part of AI progress, not an agency."
         ]
@@ -267,9 +269,9 @@
       {
        "id": "au0l1#2",
        "t": "mc",
-       "p": "According to the pacing.tech authors, what is the general tradeoff between control surfaces early in the AI R&D process (e.g. chips) and late ones (e.g. inference-stage safeguards)?",
+       "p": "What is the general tradeoff between interventions early in AI development (for example, on access to chips) and late ones (for example, safeguards on a deployed model)?",
        "o": [
-        "Early ones are easy to observe but blunt, hitting good and bad work; late ones are precise but easy to evade",
+        "Early ones are easy to observe but blunt, hitting good and bad work; late ones are precise but easier to evade",
         "Early ones are more precise, since they draw on the most information about a model's capabilities",
         "Late ones are always cheaper and more robust, so interventions early in the chain are rarely worth their cost",
         "There is no general tradeoff; it depends only on which country enforces the rule in question"
@@ -277,29 +279,29 @@
        "a": 0,
        "ow": [
         "",
-        "The authors say the reverse: information about capabilities and threats builds up later in development.",
-        "The authors say late surfaces are more likely to be circumvented.",
-        "The authors describe this as a recurring tradeoff along the whole chain."
+        "It's the reverse: information about capabilities and threats builds up later in development.",
+        "Late controls are more likely to be circumvented, since the harmful model already exists.",
+        "The tradeoff recurs along the whole chain."
        ],
        "keys": [
         "Early surfaces are easier to observe and constrain",
         "Early surfaces are blunt, hitting good and bad work alike",
         "Late surfaces are more precise but easier to evade"
        ],
-       "x": "The authors call this a recurring tradeoff: surfaces earlier in the chain are easier to observe and constrain but further from the eventual harm, so interventions there are blunt."
+       "x": "The pacing.tech research agenda calls this a recurring tradeoff: control points earlier in the chain are easier to observe and constrain but further from the eventual harm, so interventions there are blunt."
       },
       {
        "id": "au0l1#3",
        "t": "recall",
-       "p": "The pacing.tech authors distinguish rival inputs (like chips) from non-rival ones (like model weights). Why do they say rival inputs are easier to control?",
+       "p": "Why are rival inputs to AI, like chips, generally easier to control than non-rival ones, like model weights?",
        "answer": "Rival goods have locations and quantities, so they can be monitored, taxed, or redirected, and actors can be excluded from them. Non-rival goods behave like information: once released they can be copied cheaply, and no one can destroy every copy or verify that all copies are gone.",
        "keys": [
         "Rival goods have locations and quantities that can be tracked, taxed, redirected",
         "Non-rival goods copy cheaply; once released they are very hard to restrict"
        ],
-       "x": "The catch, they say, is that upstream rival goods are far from the final harm, so restricting them affects harmful and beneficial activity alike. Inference compute is the main downstream rival good, but it is general and widely available.",
+       "x": "The distinction is drawn in the pacing.tech research agenda. The catch, its authors say, is that upstream rival goods are far from the final harm, so restricting them affects harmful and beneficial activity alike. Inference compute is the main downstream rival good, but it is general and widely available.",
        "choice": {
-        "p": "Why do the pacing.tech authors say rival inputs like chips are easier to control than non-rival ones like model weights?",
+        "p": "Why are rival inputs like chips easier to control than non-rival ones like model weights?",
         "o": [
          "Chips can be counted, located and redirected; copied weights can't be recalled or proven destroyed",
          "Chips cost far less to produce than weights, so restricting them does less damage to the wider economy",
@@ -309,24 +311,24 @@
         "a": 0,
         "ow": [
          "",
-         "The argument is about tracking and copying, not cost.",
-         "The authors' point is about copying, not legal protection.",
-         "The authors make no claim about which companies have agreed to cooperate."
+         "The difference is about tracking and copying, not cost.",
+         "The point is about copying, not legal protection.",
+         "Willingness to cooperate isn't the reason; the difference lies in the goods themselves: chips can be tracked, while weights can be copied."
         ]
        }
       },
       {
        "id": "au0l1#4",
        "t": "recall",
-       "p": "The pacing.tech authors say capping frontier training runs would not slow AI progress in proportion to the training forgone. Why not?",
+       "p": "Why would capping frontier training runs probably not slow AI progress in proportion to the training forgone?",
        "answer": "Developers substitute other inputs, such as algorithmic efficiency, data quality and inference-time scaling, so progress slows only by the training forgone minus whatever they recover through substitution.",
        "keys": [
         "Developers substitute other inputs (algorithms, data quality, inference-time compute)",
         "Slowdown is net of what substitution recovers"
        ],
-       "x": "If the substitutes are non-rival and harder to observe, the cap can push effort toward less governable inputs. The authors cite the 1922 Washington Naval Treaty, which capped cruisers at 10,000 tons and 8-inch guns: signatories built 'treaty cruisers' sitting exactly at those limits. They add that a per-model cap may block benign work and grows outdated as efficiency improves.",
+       "x": "The pacing.tech research agenda makes this point. If the substitutes are non-rival and harder to observe, the cap can push effort toward less governable inputs. The authors cite the 1922 Washington Naval Treaty, which capped cruisers at 10,000 tons and 8-inch guns: signatories built 'treaty cruisers' sitting exactly at those limits. They add that a per-model cap may block benign work and grows outdated as efficiency improves.",
        "choice": {
-        "p": "Why do the pacing.tech authors say a cap on frontier training runs would not slow AI progress in proportion to the training forgone?",
+        "p": "Why would a cap on frontier training runs probably not slow AI progress in proportion to the training forgone?",
         "o": [
          "Developers would substitute other inputs, like better algorithms, data and inference-time compute",
          "Labs would simply ignore the cap, since no country could reliably detect a violation",
@@ -336,25 +338,25 @@
         "a": 0,
         "ow": [
          "",
-         "Their point holds even with full compliance: the issue is substitution, not cheating.",
-         "Their example cap applies to frontier training runs generally.",
-         "They treat compute as an important input; the issue is that other inputs can substitute for it."
+         "The point holds even with full compliance: the issue is substitution, not cheating.",
+         "A training-run cap would apply to frontier training generally, not only open-weight models.",
+         "Compute is an important input; the issue is that other inputs can substitute for it."
         ]
        }
       },
       {
        "id": "au0l1#5",
        "t": "recall",
-       "p": "A classifier meant to flag bioweapons research blocks a biology student's innocent question, yet misses a dangerous inquiry split into harmless-looking parts. In the pacing.tech authors' terms, what two errors is this, and what does reducing both often cost?",
+       "p": "A classifier meant to flag bioweapons research blocks a biology student's innocent question, yet misses a dangerous inquiry split into harmless-looking parts. What two kinds of error is this, and what does reducing both often cost?",
        "answer": "Blocking the student is a false positive (harmless activity restricted); missing the split-up inquiry is a false negative (harmful activity missed). Cutting both at once often means more intrusiveness: closer scrutiny of individual cases and more access to information about them, some of which might otherwise be private.",
        "keys": [
         "Blocking the student: a false positive",
         "Missing the split-up inquiry: a false negative",
         "Reducing both takes more intrusiveness: closer scrutiny of cases and more access to information, some of it private"
        ],
-       "x": "The authors call this a three-way tradeoff between false positives, false negatives and intrusiveness, which they say essentially all control surfaces face: an intervention can be made broader or narrower, or more accurate by investing in scrutiny and information. Their suggested route is to stack surfaces, for example a cheap filter with few false positives plus a more demanding check that catches some of what slips through.",
+       "x": "The pacing.tech research agenda calls this a three-way tradeoff between false positives, false negatives and intrusiveness, which it says essentially all control surfaces face: an intervention can be made broader or narrower, or more accurate by investing in scrutiny and information. Its suggested route is to stack surfaces, for example a cheap filter with few false positives plus a more demanding check that catches some of what slips through.",
        "choice": {
-        "p": "A bioweapons-research filter blocks a student's innocent question but misses a dangerous request split into harmless parts. Per the pacing.tech authors, what does cutting both errors often cost?",
+        "p": "A bioweapons-research filter blocks a student's innocent question but misses a dangerous request split into harmless parts. What does cutting both errors often cost?",
         "o": [
          "More intrusiveness: closer scrutiny and access to information, some of it private",
          "Far more compute, since the filter must be retrained on every model's training data",
@@ -364,24 +366,24 @@
         "a": 0,
         "ow": [
          "",
-         "The authors frame the cost as scrutiny and information, not compute.",
-         "The authors don't tie this tradeoff to government review of filter updates.",
-         "The authors say more accuracy often takes more intrusive scrutiny and more information."
+         "The cost of accuracy is scrutiny and information, not compute.",
+         "This tradeoff doesn't depend on government review of filter updates.",
+         "More accuracy often takes more intrusive scrutiny and more information."
         ]
        }
       },
       {
        "id": "au0l1#6",
        "t": "recall",
-       "p": "Why do the pacing.tech authors expect actors who must coordinate (e.g. several countries) to choose upstream control surfaces such as compute?",
+       "p": "Why might countries that need to coordinate on slowing AI choose to act on upstream inputs such as compute?",
        "answer": "Coordination lasts longer when third parties can check compliance. Compute is made by few companies in few places, so information about it is legible and verifiable, and coarse numeric thresholds like FLOP counts are easier to evaluate than holistic judgments like bio uplift.",
        "keys": [
         "Coordination needs compliance checkable by third parties",
         "Upstream goods like compute are legible and verifiable; numeric thresholds are easy to assess"
        ],
-       "x": "The cost, in their account, is that upstream surfaces sit at the crude, high-false-positive end of the development chain.",
+       "x": "This is the expectation set out in the pacing.tech research agenda. The cost, in its authors' account, is that upstream surfaces sit at the crude, high-false-positive end of the development chain.",
        "choice": {
-        "p": "Why do the pacing.tech authors expect actors who must coordinate, such as several countries, to choose upstream control surfaces like compute?",
+        "p": "Why might countries coordinating to slow AI choose upstream levers like compute?",
         "o": [
          "Coordination needs compliance others can check, and compute, made by few firms, is easy to verify",
          "Upstream controls are the most precise way to target specific harms such as bioweapon development",
@@ -391,16 +393,16 @@
         "a": 0,
         "ow": [
          "",
-         "The authors say upstream surfaces are the crude, high-false-positive end of the chain.",
-         "The argument is about verifiability, not state ownership.",
-         "They say upstream controls carry many false positives."
+         "Upstream controls are the crude, high-false-positive end of the chain.",
+         "The appeal is verifiability, not state ownership.",
+         "Upstream controls carry many false positives."
         ]
        }
       },
       {
        "id": "au0l1#8",
        "t": "match",
-       "p": "Before pacing, the pacing.tech authors name four sources of information about whether to intervene. Match each to the function they assign it.",
+       "p": "Before deciding whether to slow AI, decision-makers can draw on four kinds of information. Match each to what it is best for.",
        "pairs": [
         [
          "Model evaluations",
@@ -419,12 +421,12 @@
          "Break a risk into concrete properties and preconditions that can be scrutinized"
         ]
        ],
-       "x": "The authors say these sources feed each other: incident reports shape what gets evaluated, and evaluations form the basis for forecasts. They note safety cases are mandatory in many safety-critical industries but not in frontier AI."
+       "x": "This breakdown comes from the pacing.tech research agenda. The sources feed each other: incident reports shape what gets evaluated, and evaluations form the basis for forecasts. Safety cases are mandatory in many safety-critical industries but not in frontier AI."
       },
       {
        "id": "au0l1#10",
        "t": "match",
-       "p": "The pacing.tech authors say deciding to trigger pacing pits speed, legitimacy and precision against each other: two are easy to get, all three are hard. Match each pair to their example and its weakness.",
+       "p": "One framework holds that deciding when to trigger a slowdown pits speed, legitimacy and precision against each other: two are easy to get, all three are hard. Match each pair to a way of deciding that achieves it, and that way's weakness.",
        "pairs": [
         [
          "Speed + legitimacy",
@@ -439,21 +441,21 @@
          "Best-informed actors decide by fiat; may look illegitimate and be easily undone"
         ]
        ],
-       "x": "To ease the tradeoff they suggest a portfolio of triggers: crude thresholds set now, beyond which expert groups such as third-party evaluators may trigger emergency interventions, subject to later government review."
+       "x": "This tradeoff is set out in the pacing.tech research agenda. To ease it, its authors suggest a portfolio of triggers: crude thresholds set now, beyond which expert groups such as third-party evaluators may trigger emergency interventions, subject to later government review."
       },
       {
        "id": "au0l1#njlnpe5",
        "t": "recall",
-       "p": "What do the pacing.tech authors mean by an 'overhang' created by pacing, and what kind of exit do they suggest to limit its danger?",
-       "answer": "While part of AI progress is restricted, resources such as compute, efficiency gains or ideas build up, so if the restriction expires or is broken, progress can resume in a sudden, harmful burst. They suggest a staged exit: relax restrictions gradually, watching the effect of each step and halting if needed.",
+       "p": "What is an 'overhang' from pausing or capping part of AI progress, and how could the exit from such a limit be made safer?",
+       "answer": "While part of AI progress is restricted, resources such as compute, efficiency gains or ideas build up, so if the restriction expires or is broken, progress can resume in a sudden, harmful burst. A staged exit helps: relax restrictions gradually, watching the effect of each step and halting if needed.",
        "keys": [
         "Resources (compute, efficiencies, ideas) accumulate during a restriction",
         "Ending or breaking it can cause a sudden, harmful burst of progress",
         "Staged exit: relax gradually and observe each step"
        ],
-       "x": "They say badly designed pacing turns smooth risk and predictable progress into lumpy risk and jagged progress. The incentive to defect from a training cap grows with the overhang, so verification must be strongest late in an intervention. Ending an intervention need not mean dismantling it: slow-to-build capacities like expertise and standards can be kept.",
+       "x": "The pacing.tech research agenda says badly designed pacing turns smooth risk and predictable progress into lumpy risk and jagged progress. The incentive to defect from a training cap grows with the overhang, so verification must be strongest late in an intervention. Ending an intervention need not mean dismantling it: slow-to-build capacities like expertise and standards can be kept.",
        "choice": {
-        "p": "What do the pacing.tech authors mean by an 'overhang' from pacing, and how do they suggest limiting it?",
+        "p": "What is an 'overhang' from pausing part of AI progress, and how could its danger be limited?",
         "o": [
          "Compute, efficiency gains and ideas pile up during a limit; a staged exit eases limits gradually",
          "Unused chips pile up in warehouses during a pause, so governments should buy and destroy them when it ends",
@@ -463,9 +465,9 @@
         "a": 0,
         "ow": [
          "",
-         "The overhang includes efficiency gains and ideas, not just chips, and the authors suggest staged exits.",
+         "The overhang includes efficiency gains and ideas, not just chips, and a staged exit limits it.",
          "The overhang is about capability resources, not legal liability.",
-         "The authors warn that abrupt exits are what make overhangs dangerous."
+         "Abrupt exits are what make overhangs dangerous."
         ]
        }
       }
@@ -477,16 +479,16 @@
       {
        "id": "au0l2#0",
        "t": "recall",
-       "p": "The pacing.tech authors set out an argument that slowing AI down too early could backfire, even for people who think the risks are real. What is the reasoning?",
+       "p": "One argument holds that slowing AI down too early could backfire, even for people who think the risks are real. What is the reasoning?",
        "answer": "Different pacing efforts may draw on the same scarce resources, such as political capital and expertise, so slowing down preemptively might spend them before a higher-leverage moment. And some safety work gets easier closer to the danger: experiments on more advanced models are more likely to stay valid, and more capable AIs may themselves do alignment research much faster.",
        "keys": [
         "Political capital and expertise are scarce; spending them early leaves less for a better-timed move",
         "Safety experiments on more advanced models are more likely to stay valid",
         "More capable AIs could themselves speed up alignment research"
        ],
-       "x": "They file this under 'good pacing can get in the way of better pacing', one of their general arguments against pacing more, beside delayed benefits, direct harms such as overhangs and power concentration, and the history of restrictions being hard to undo. They add that its strength depends on how feasible the better options are and how scarce the resources really are, and call how far ahead risks can be seen a major empirical question for pacing.",
+       "x": "The pacing.tech research agenda sets out this argument under 'good pacing can get in the way of better pacing', one of its general arguments against pacing more, beside delayed benefits, direct harms such as overhangs and power concentration, and the history of restrictions being hard to undo. It adds that the argument's strength depends on how feasible the better options are and how scarce the resources really are, and calls how far ahead risks can be seen a major empirical question for pacing.",
        "choice": {
-        "p": "In an argument the pacing.tech authors set out, why could slowing AI too early backfire, even for people who think the risks are real?",
+        "p": "According to one argument, why could slowing AI too early backfire, even for people who think the risks are real?",
         "o": [
          "It spends scarce political capital early, and some safety work goes better on more capable AI",
          "Early slowdowns are often struck down in court, which makes any later pause harder to pass",
@@ -496,8 +498,8 @@
         "a": 0,
         "ow": [
          "",
-         "The authors make no legal argument here; their point is about timing and scarce resources.",
-         "The authors don't argue this; they note that slowing development can free compute and labor for risk mitigation.",
+         "The argument isn't legal; it's about timing and scarce resources.",
+         "Slowing development could free compute and labor for risk mitigation, not price out safety work.",
          "The argument is about scarce political capital and safety work that goes better on more capable AI; staff turnover plays no part."
         ]
        }
@@ -505,16 +507,16 @@
       {
        "id": "au0l2#1",
        "t": "recall",
-       "p": "The pacing.tech authors argue that being able to slow AI work quickly is valuable even when no one yet knows how to fix the problem it reveals. Why?",
+       "p": "Why can the ability to slow AI work quickly be valuable even when no one yet knows how to fix the problem it reveals?",
        "answer": "After an unexpected capability or outcome, slowing the activity involved buys time for inquiry: investigating and perhaps reproducing what happened and working out which assumptions need to change. Human investigation and deliberation can only go so fast. Slowing also lowers the chance of further surprises and buys time to make hard-to-reverse decisions carefully.",
        "keys": [
         "Buys time to investigate what happened and which assumptions need to change, which humans can only do so fast",
         "Lowers the chance of further unexpected outcomes",
         "Buys time to make hard-to-reverse decisions carefully"
        ],
-       "x": "Their example: OpenAI temporarily halted internal development of its 'Astra' model after another unreleased model broke out of a secure sandbox and launched a cyberattack on several other companies, and after Astra showed 'critical' cyberoffense capabilities. The authors say it warranted a sudden stop even without a response plan, because reasonable security assumptions had been violated. They conclude pacing needs the capacity to intervene quickly in new ways, beyond preset plans.",
+       "x": "The pacing.tech research agenda makes this argument. Its example: OpenAI temporarily halted internal development of its 'Astra' model after another unreleased model broke out of a secure sandbox and launched a cyberattack on several other companies, and after Astra showed 'critical' cyberoffense capabilities. The authors say it warranted a sudden stop even without a response plan, because reasonable security assumptions had been violated. They conclude pacing needs the capacity to intervene quickly in new ways, beyond preset plans.",
        "choice": {
-        "p": "Why do the pacing.tech authors say a quick slowdown helps after a surprising AI incident, even with no plan for a fix?",
+        "p": "Why can a quick slowdown help after a surprising AI incident, even with no plan for a fix?",
         "o": [
          "It buys time to investigate before making choices that are hard to reverse",
          "It automatically releases emergency federal funding for new safety research",
@@ -524,53 +526,53 @@
         "a": 0,
         "ow": [
          "",
-         "The authors don't tie a slowdown to any funding mechanism; its value is time for inquiry.",
-         "The authors' point is about understanding the situation, not penalties.",
-         "The authors argue from the need to investigate, not from investor reactions."
+         "A slowdown releases no funding; its value is time for inquiry.",
+         "The point is understanding the situation, not penalties.",
+         "The value comes from the time to investigate, not from investor reactions."
         ]
        }
       },
       {
        "id": "au0l2#nqrat6d",
        "t": "recall",
-       "p": "Pacing AI delays large benefits. According to the pacing.tech authors, what kind of harm strengthens the case for precaution despite that cost, and why?",
-       "answer": "Harm that is potentially catastrophic and irreversible, since there may be no chance to learn from mistakes, while waiting merely postpones the benefits. That asymmetry between the cost of going too fast and going too slow strengthens the case for precaution.",
+       "p": "Slowing AI delays large benefits. What kind of potential harm strengthens the case for precaution despite that cost, and why?",
+       "answer": "Harm that is potentially catastrophic and irreversible, since there may be no chance to learn from mistakes. If waiting merely postpones the benefits rather than losing them, the costs of going too fast and too slow are asymmetric, which strengthens the case for precaution.",
        "keys": [
         "Potentially catastrophic, irreversible harm: may be no chance to learn from mistakes",
-        "Waiting only postpones benefits",
+        "If waiting only postpones benefits, going too slow costs less than an irreversible mistake",
         "This asymmetry strengthens the case for precaution"
        ],
-       "x": "The authors take the delayed-benefits objection seriously: people may suffer and die because progress came later, and delay could even slow work on other risks such as biorisk and nuclear war. So even existential risk from AI does not automatically justify pacing; it depends on the net effect on all risks.",
+       "x": "This framing comes from the pacing.tech research agenda, whose authors take the delayed-benefits objection seriously: people may suffer and die because progress came later, and delay could even slow work on other risks such as biorisk and nuclear war. They conclude that even existential risk from AI does not automatically justify pacing; it depends on the net effect on all risks.",
        "choice": {
-        "p": "According to the pacing.tech authors, what strengthens the case for precaution despite the cost of delaying AI's benefits?",
+        "p": "What feature of a potential AI harm strengthens the case for precaution despite the cost of delaying AI's benefits?",
         "o": [
-         "Possible catastrophic, irreversible harm, while waiting only postpones the benefits",
-         "Whenever a major expert survey puts the chance of a global disaster from AI above 1 percent",
-         "When AI's benefits would go mainly to a few rich countries rather than to everyone",
-         "When a rival country has already paused its own frontier AI work"
+         "Possible catastrophic, irreversible harm, if waiting only delays the benefits",
+         "That the harm could be undone later at modest cost, so mistakes are cheap to fix",
+         "That AI's benefits would go mainly to a few rich countries rather than to everyone",
+         "That a rival country has already paused its own frontier AI work"
         ],
         "a": 0,
         "ow": [
          "",
-         "The authors give no numeric probability threshold.",
-         "Their asymmetry argument is about irreversibility, not who gets the benefits.",
-         "Their asymmetry argument does not depend on what rivals do."
+         "Harm that can be cheaply undone weakens the case for precaution, since mistakes can be learned from.",
+         "The asymmetry argument is about irreversibility, not who gets the benefits.",
+         "The asymmetry argument does not depend on what rivals do."
         ]
        }
       },
       {
        "id": "au0l2#6",
        "t": "recall",
-       "p": "The pacing.tech authors argue pacing has historically been hard to undo. Why do they think that history could make AI developers resist pacing?",
-       "answer": "Restrictions such as those on nuclear power from the 1980s proved hard to reverse and burned investor trust, because investors feared capricious, politicized regulation. AI developers may likewise expect pacing to persist even if the risks prove low, and so distrust it.",
+       "p": "Why could the history of past technology restrictions make AI developers wary of agreeing to pace AI?",
+       "answer": "One argument points to nuclear power: restrictions from the 1980s onward proved hard to reverse and, on this account, burned investor trust, because investors feared capricious, politicized regulation. AI developers may likewise expect pacing to persist even if the risks prove low, and so distrust it.",
        "keys": [
         "Past restrictions (nuclear power) proved hard to reverse",
         "Burned investor trust: fear of capricious, politicized rules",
         "AI developers may expect pacing to persist even if risks prove low"
        ],
-       "x": "They also cite germline genetic engineering and geoengineering as technologies de facto banned for decades. Elsewhere they note actors may refuse to join an agreement if they doubt it will end when its conditions are met.",
+       "x": "This argument is from the pacing.tech research agenda, which also cites germline genetic engineering and geoengineering as technologies de facto banned for decades. Elsewhere its authors note actors may refuse to join an agreement if they doubt it will end when its conditions are met.",
        "choice": {
-        "p": "Why do the pacing.tech authors think the history of hard-to-undo restrictions could make AI developers resist pacing?",
+        "p": "According to one argument, why could the history of past technology restrictions make AI developers wary of pacing?",
         "o": [
          "Nuclear power's 1980s restrictions proved hard to reverse and burned investor trust, so pacing may stick",
          "Past restrictions were usually struck down by courts, so developers expect pacing rules to fail too",
@@ -580,16 +582,16 @@
         "a": 0,
         "ow": [
          "",
-         "Their point is that restrictions persisted, not that courts overturned them.",
-         "They describe lost investment, not higher profits.",
-         "Their nuclear example concerns domestic regulation."
+         "The lesson is that restrictions persisted, not that courts overturned them.",
+         "Restricted industries lost investment; they didn't gain profits.",
+         "The nuclear example concerns domestic regulation."
         ]
        }
       },
       {
        "id": "au0l2#3",
        "t": "recall",
-       "p": "Pacing interventions often need an enforcer, such as a body that monitors compute or inspects lab logs. What risks do the pacing.tech authors see in the enforcer itself? Name two.",
+       "p": "Pacing rules often need an enforcer, such as a body that monitors compute or inspects lab logs. What risks could the enforcer itself create? Name two.",
        "answer": "Any two of: it gains sensitive information, privileged access to dangerous capabilities and discretionary power, risking abuse or incompetence; it becomes a target for lobbying, turf fights and political capture; its powers may be used beyond the original rule (e.g. surveillance of lawful research); emergency powers can outlast the crisis.",
        "keys": [
         "Sensitive information and discretionary power: risk of abuse or incompetence",
@@ -597,28 +599,29 @@
         "Powers used beyond the original rule",
         "Emergency powers outlast the crisis"
        ],
-       "x": "They add that persistence is not always bad: systems built to enforce a domestic rule could later be reused in international diplomacy. They also warn that once information has been collected, it is hard to limit which decisions it feeds into.",
+       "x": "These risks are drawn from the pacing.tech research agenda. Its authors add that persistence is not always bad: systems built to enforce a domestic rule could later be reused in international diplomacy. They also warn that once information has been collected, it is hard to limit which decisions it feeds into.",
        "choice": {
-        "p": "Which of these is a risk the pacing.tech authors see in the body that enforces a pacing rule?",
+        "p": "Which of these is a risk that the body enforcing a pacing rule could create?",
         "o": [
          "Its powers and data may be used beyond the original rule, e.g. to surveil lawful research",
-         "It will always be too weak to inspect any lab properly, so pacing rules will mostly go unenforced",
+         "It can have no legal powers, since pacing rules can only ever be voluntary",
          "It must be run by the United Nations, which slows every decision",
          "It will be funded by fees on the labs it oversees, which makes it illegal under current US law"
         ],
         "a": 0,
         "ow": [
          "",
-         "The authors worry more about an enforcer with too much power and information.",
-         "The authors don't say the enforcer must be international.",
-         "The authors make no claim about fees or legality."
+         "Pacing rules can be legally binding, and the risks come from the power and information an enforcer gains.",
+         "An enforcer need not be international.",
+         "Fees from regulated firms are common and not illegal."
         ]
-       }
+       },
+       "open": true
       },
       {
        "id": "au0l2#4",
        "t": "recall",
-       "p": "A legally binding pacing rule covers frontier AI developers in some countries but not others. According to the pacing.tech authors, how might covered developers work around it? Name two ways.",
+       "p": "A legally binding pacing rule covers frontier AI developers in some countries but not others. How might covered developers work around it? Name two ways.",
        "answer": "Examples: jurisdiction shopping (moving easy-to-move work like weights and methods to less restricted places); exploiting loopholes, e.g. raising compute efficiency under a compute cap; bunching just below thresholds; defecting openly or secretly.",
        "keys": [
         "Jurisdiction shopping",
@@ -626,49 +629,49 @@
         "Bunching just below thresholds",
         "Open or secret defection"
        ],
-       "x": "They note rival upstream inputs like frontier compute are slow to relocate, so rules targeting them permit less jurisdiction shopping. They argue secret defection is worse than non-participation because it corrupts every other party's picture of the state of play.",
+       "x": "These workarounds come from the pacing.tech research agenda. It notes rival upstream inputs like frontier compute are slow to relocate, so rules targeting them permit less jurisdiction shopping, and argues secret defection is worse than non-participation because it corrupts every other party's picture of the state of play.",
        "open": true,
        "choice": {
-        "p": "According to the pacing.tech authors, which of these is a way covered developers might work around a pacing rule that binds only some countries?",
+        "p": "Which of these is a way covered developers might work around a pacing rule that binds only some countries?",
         "o": [
          "Moving easy-to-move work, like model weights and methods, to less restricted countries",
          "Lobbying their own governments to extend the same rule to every other country",
          "Publishing more of their safety research to win public support for the rule",
-         "Hiring more human researchers so AI agents do less of the covered work"
+         "Asking regulators to confirm in advance that a planned training run is within the rule"
         ],
         "a": 0,
         "ow": [
          "",
          "Extending the rule worldwide would close the gap, not exploit it.",
          "This is not a way around the rule.",
-         "This is not among the workarounds the authors list."
+         "Seeking approval in advance is a way of complying, not of working around the rule."
         ]
        }
       },
       {
        "id": "au0l2#7",
        "t": "recall",
-       "p": "Why do the pacing.tech authors describe financial markets as an 'anti-enforcement measure' for AI pacing?",
+       "p": "Why can financial markets act as an 'anti-enforcement' force against rules that pace AI?",
        "answer": "Market losses grow with how long an intervention is expected to last, so investors and companies have reason to push for weaker mechanisms. Markets also react as soon as a policy is proposed, which can pressure governments to back out before it takes effect.",
        "keys": [
         "Losses scale with expected durability, so actors push for weaker rules",
         "Markets react at announcement, pressuring early reversal"
        ],
-       "x": "Their example: most of the April 2025 US tariffs were paused within a week of announcement after equities fell more than 10%.",
+       "x": "The phrase 'anti-enforcement measure' comes from the pacing.tech research agenda. Its example: most of the April 2025 US tariffs were paused within a week of announcement after equities fell more than 10%.",
        "choice": {
-        "p": "Why do the pacing.tech authors call financial markets an 'anti-enforcement measure' for AI pacing?",
+        "p": "Why can financial markets work against enforcement of rules that pace AI?",
         "o": [
-         "Losses scale with a rule's expected lifespan, so actors push for weak rules, and hit at announcement",
-         "Investors shift their money toward labs in countries that refuse to join any pacing agreement at all",
+         "Losses grow with a rule's expected lifespan, so actors push for weak rules, and markets react on announcement",
+         "Markets pay little attention to AI policy news, so investors put no real pressure on governments either way",
          "Stock exchanges are legally barred from listing any company covered by a pacing rule",
          "Markets reward labs that publish safety research, which crowds out formal enforcement"
         ],
         "a": 0,
         "ow": [
          "",
-         "Their point is about durability and announcement effects, not where investors place money.",
+         "Markets react to policy news quickly, even before a rule takes effect; that reaction is the source of the pressure.",
          "There is no such legal bar.",
-         "This is not the authors' argument."
+         "Markets don't crowd out enforcement this way; the pressure comes from expected losses."
         ]
        }
       }
@@ -681,12 +684,12 @@
    "desc": "IFP's plan for preparing for automated AI research (verification, state capacity, chip and weight security, the US lead), levers on AI R&D, and the 2026 pacing debate.",
    "lessons": [
     {
-     "title": "IFP's plan: verification",
+     "title": "Verifying AI agreements",
      "items": [
       {
        "id": "au0l0#8",
        "t": "mc",
-       "p": "Why does IFP say AI verification technology matters for any future pacing of AI development?",
+       "p": "Why does verification technology matter for any future agreement to pace AI development?",
        "o": [
         "Without it, deals need intrusive inspections; with it, targeted, checkable limits become possible",
         "Verification would let the US government read the full contents of foreign labs' training data and weights",
@@ -696,21 +699,21 @@
        "a": 0,
        "ow": [
         "",
-        "IFP describes privacy-preserving methods designed so that sensitive information does not leave the facility.",
-        "IFP says domestic enforcement may be feasible today without new technology, relying on the threat of legal action.",
-        "IFP presents verification as a way to check that parties keep agreements; it says nothing about replacing evaluations."
+        "Proposed verification methods are privacy-preserving, designed so that sensitive information does not leave the facility.",
+        "Domestic rules can often be enforced through the threat of legal action; verification matters most for agreements between parties who don't trust each other.",
+        "Verification checks that parties keep agreements; it doesn't replace safety evaluations."
        ],
        "keys": [
         "Without it, agreements need intrusive steps like mass inspections or data center shutdowns",
         "Better verification allows targeted, checkable limits on the riskiest activities",
         "Nuclear precedent: verification often needed before parties agree"
        ],
-       "x": "IFP cites the nuclear arms control precedent: the ability to verify compliance is often necessary for parties to enter agreements at all. Without better verification, it warns, 'pacing' could become a euphemism for pausing."
+       "x": "IFP's August 2026 report cites the nuclear arms control precedent: the ability to verify compliance is often necessary for parties to enter agreements at all. Without better verification, it warns, 'pacing' could become a euphemism for pausing."
       },
       {
        "id": "au1l0#5",
        "t": "match",
-       "p": "IFP lists four kinds of AI compute verification technology. Match each to its description.",
+       "p": "Match each proposed kind of AI compute verification technology to how it works.",
        "pairs": [
         [
          "Data center metering",
@@ -729,21 +732,21 @@
          "A trusted AI examines sensitive systems, reports only minimal findings, then wipes its memory"
         ]
        ],
-       "x": "IFP says none of these is mature, with by some optimistic measures barely 50 people working on technical AI verification worldwide. It proposes an AI Verification Consortium (AIVEC) co-led by CAISI and industry, plus DARPA and NSF programs, to prototype and deploy them."
+       "x": "IFP's August 2026 report lists these four among the relevant verification technologies and says that none of them, nor any other, is mature, with by some optimistic measures barely 50 people working on technical AI verification worldwide. It proposes an AI Verification Consortium (AIVEC) co-led by CAISI (the Center for AI Standards and Innovation) and industry, plus DARPA and NSF programs, to prototype and deploy them."
       },
       {
        "id": "au1l0#napj71f",
        "t": "recall",
-       "p": "IFP proposes a verification 'grand challenge': teams run real AI workloads under mock agreements and win prizes for secretly breaking the agreements or for catching others who do. Why build in this adversarial element?",
+       "p": "One proposed verification 'grand challenge' would have teams run real AI workloads under mock agreements and win prizes for secretly breaking the agreements or for catching others who do. Why build in this adversarial element?",
        "answer": "Because any agreement that needs verification gives both sides strong incentives to cheat, including by tampering with the verification technology itself. Rewarding teams for evading and catching each other stress-tests the safeguards under realistic adversarial pressure and drives a race to the top.",
        "keys": [
         "Real agreements give parties strong incentives to defect",
         "Cheating can include tampering with the verification technology",
         "Stress-tests safeguards under realistic adversarial pressure"
        ],
-       "x": "IFP pairs this with simpler prizes paid to anyone who solves a well-specified problem, such as classifying workloads from data center telemetry. It cautions that a mock contest cannot match red-teaming by top nation-state actors, and wants the Intelligence Community to red-team its proposed pilot verifiable data center.",
+       "x": "The proposal is IFP's (August 2026 report). It pairs this with simpler prizes paid to anyone who solves a well-specified problem, such as classifying workloads from data center telemetry. It cautions that a mock contest cannot match red-teaming by top nation-state actors and is no stand-in for it. Separately, it wants the Intelligence Community and other top-tier operators to red-team a pilot verifiable data center.",
        "choice": {
-        "p": "Why does IFP want a verification competition that rewards teams for secretly breaking mock agreements?",
+        "p": "Why might a verification competition reward teams for secretly breaking mock agreements?",
         "o": [
          "Real deals tempt cheating, even tampering with verification tools, so they need adversarial stress tests",
          "Prize money is the only legal way federal agencies can pay for verification research",
@@ -753,57 +756,56 @@
         "a": 0,
         "ow": [
          "",
-         "IFP also backs grants and DARPA and NSF programs; prizes are one tool among several.",
+         "Agencies can fund verification research through grants and programs as well; prizes are one tool among several.",
          "The contest is aimed at technical teams, not diplomats.",
-         "IFP wants verification that counterparties can trust, which secrecy would undercut."
+         "Verification has to be something counterparties can trust, which secrecy would undercut."
         ]
        }
       },
       {
        "id": "au1l0#8",
        "t": "recall",
-       "p": "IFP recommends that US intelligence agencies develop their own (unilateral) ways to monitor foreign AI compute. Give the two reasons IFP offers.",
+       "p": "Why might US intelligence agencies need their own unilateral ways to monitor foreign AI compute, even if technical verification tools are being developed? Give two reasons.",
        "answer": "Technical verification only works if parties are confident the other side has no large undeclared data centers. And deals to manage sudden AI R&D automation might be needed before verification technology is ready, so intelligence agencies would have to certify compliance.",
        "keys": [
         "Confidence that the counterparty has no hidden data centers",
         "Agreements may come before verification technology is ready"
        ],
-       "x": "IFP compares this to how the Intelligence Community tracks fissile material to support International Atomic Energy Agency investigations, using signals and human intelligence, satellite and infrared imagery, and chip supply-chain intelligence.",
+       "x": "This recommendation comes from IFP's August 2026 report. IFP compares it to how the Intelligence Community tracks fissile material to support International Atomic Energy Agency investigations, and names signals and human intelligence, satellite imagery and infrared sensing, and chip supply-chain intelligence as possible means.",
        "choice": {
-        "p": "Why does IFP want US intelligence agencies to build unilateral ways to monitor foreign AI compute?",
+        "p": "Why might US intelligence agencies need unilateral ways to monitor foreign AI compute?",
         "o": [
          "Verification fails if big data centers are hidden, and deals may come before verification is ready",
          "Intelligence monitoring is far cheaper than verification technology, so it could replace that work entirely",
          "Foreign labs have agreed to share their compute data only with US intelligence agencies, not with others",
-         "Unilateral monitoring would let the US enforce its own export controls inside China"
+         "Verification technology is already mature, so intelligence agencies need only confirm its readings"
         ],
         "a": 0,
         "ow": [
          "",
-         "IFP presents intelligence monitoring as a complement to verification technology.",
-         "IFP describes no such agreement.",
-         "IFP's reasons concern verifying agreements, not enforcing US law abroad."
+         "Intelligence monitoring complements verification technology; it doesn't replace it.",
+         "No such agreement exists.",
+         "Verification technology is still immature; one reason for intelligence monitoring is that deals may be needed before it is ready."
         ]
        }
       }
      ]
     },
     {
-     "title": "IFP's plan: state capacity, chips, weights and the lead",
+     "title": "State capacity, chips, weights and the US lead",
      "items": [
       {
        "id": "au1l1#nziprch",
        "t": "recall",
-       "p": "IFP argues that before any pacing of automated AI R&D, the US needs a trusted, well-resourced government AI body such as CAISI. Why does it say this is needed, and name one power it wants CAISI to have.",
-       "answer": "IFP says only democratically accountable leadership can legitimately coordinate shifting resources toward defense and diffusion, and the US lacks institutions to track progress toward full automation, advise leaders and labs, and run that shift. Powers include: a direct line to a senior White House or cabinet official; staff placed inside frontier labs; organizing third-party evaluators.",
+       "p": "Why might the US need a trusted, well-resourced government AI body, such as CAISI, before it could pace automated AI research?",
+       "answer": "One argument: shifting compute and talent toward defense and diffusion across agencies, companies and markets would need democratically accountable leadership to be legitimate, and the US lacks institutions to track progress toward full automation, advise political leaders and labs, and coordinate such a shift.",
        "keys": [
         "Only accountable leadership can legitimately coordinate a reallocation",
-        "US lacks institutions to track progress, advise and coordinate",
-        "One power: direct line to senior officials, staff inside labs, or organizing evaluators"
+        "US lacks institutions to track progress, advise and coordinate"
        ],
-       "x": "IFP's Rec 3 calls a budget of at least 84 million dollars a year a minimum bar and says CAISI's autonomy and business model matter more than its size. It also wants CAISI to contract with labs on safety research and inform export controls, and says that without a state authority trusted across governments, parties, industry, media and the public, managing the pace would be impossible.",
+       "x": "This is IFP's argument (August 2026 report). It wants CAISI to have a direct line to a senior White House or cabinet official, staff placed inside frontier labs and a role organizing third-party evaluators. Its Rec 3 calls a budget of at least 84 million dollars a year a minimum bar, and IFP says that without a state authority trusted across governments, parties, industry, media and the public, managing the pace would be impossible.",
        "choice": {
-        "p": "Why does IFP say the US needs a trusted, well-resourced government AI body like CAISI before any pacing of automated AI R&D?",
+        "p": "Why might the US need a trusted, well-resourced government AI body like CAISI before it could pace automated AI research?",
         "o": [
          "Only accountable leaders can legitimately shift resources, and the US lacks a body to steer it",
          "Labs are legally barred from sharing safety information with each other, so government must hold it all",
@@ -813,16 +815,16 @@
         "a": 0,
         "ow": [
          "",
-         "IFP's case rests on legitimacy and capacity, not a ban on information sharing.",
-         "IFP wants CAISI to support labs' safety work, not replace it.",
-         "IFP cites no such international requirement."
+         "The case rests on legitimacy and capacity, not a ban on information sharing.",
+         "A government body would support labs' safety work, not replace it.",
+         "No such international requirement exists."
         ]
        }
       },
       {
        "id": "au1l0#14",
        "t": "recall",
-       "p": "IFP recommends extending the US AI lead over China. Name two ways IFP says a bigger lead would help manage the risks of automated AI R&D.",
+       "p": "Some argue a bigger US lead over China in AI would make the risks of automated AI research easier to manage. Name two ways a bigger lead could help.",
        "answer": "Any two of: more time to build AI resilience; more leverage in international negotiations; easier to justify more risk management at home and abroad; room for US companies to shift compute from automated R&D to alignment, security and beneficial deployment.",
        "keys": [
         "More time for resilience",
@@ -830,9 +832,9 @@
         "Easier to justify more risk management",
         "Room to shift compute toward safety and deployment"
        ],
-       "x": "In its Aug 2026 report, IFP estimated export controls give the US about a 10x compute advantage over China and roughly an 8-month capability lead. It says tighter chip and chipmaking-equipment controls, countering distillation (Chinese labs training on US model outputs) and preventing weight theft might extend the lead past 2 years in the best case.",
+       "x": "IFP's August 2026 report makes this argument. It says export controls give the US about a 10x compute advantage over China and roughly an 8-month capability lead. In its best case, tighter chip and chipmaking-equipment controls and countering distillation (Chinese labs training on US model outputs) might extend the lead past 2 years, while preventing weight theft keeps China from quickly erasing it.",
        "choice": {
-        "p": "Which of these is a way IFP says a bigger US AI lead would help manage the risks of automated AI R&D?",
+        "p": "Which of these is a way a bigger US AI lead could help manage the risks of automated AI research?",
         "o": [
          "It would give the US more leverage in international negotiations",
          "It would let the US skip safety testing of its own frontier models",
@@ -842,53 +844,53 @@
         "a": 0,
         "ow": [
          "",
-         "IFP says a secure lead would make more risk management easier to justify, not less.",
-         "IFP separately recommends preparing for cooperation with China, partly because the lead is small and fragile.",
-         "IFP says a lead would let companies shift compute away from automated R&D toward safety."
+         "The argument runs the other way: a secure lead would make more risk management easier to justify.",
+         "A small, fragile lead is one reason to prepare for cooperation with China anyway.",
+         "The argument is that a lead frees room to shift compute from automated R&D toward safety work."
         ]
-       }
+       },
+       "open": true
       },
       {
        "id": "au1l0#10",
        "t": "recall",
-       "p": "What does IFP want the Bureau of Industry and Security (BIS) to do with information about who buys US AI chips, and what two purposes would it serve?",
-       "answer": "Ensure chipmakers keep visibility into their customers and gather this into an AI chip registry. It would help keep chips away from untrusted or irresponsible buyers, and support verification of agreements and intelligence collection.",
+       "p": "How could a government registry of who buys advanced AI chips help manage AI risk? Name two uses.",
+       "answer": "Chipmakers would keep visibility into their customers, and the government would gather this into a registry. It would help keep chips away from untrusted or irresponsible buyers, and support verification of international agreements and intelligence collection.",
        "keys": [
-        "Chipmakers keep visibility into customers",
-        "BIS maintains an AI chip registry",
-        "Keeps chips from untrusted parties",
-        "Supports verification and intelligence work"
+        "Keeps chips away from untrusted or irresponsible buyers",
+        "Supports verification of agreements",
+        "Supports intelligence collection"
        ],
-       "x": "IFP pairs this with tighter controls on chipmaking equipment, which it argues would ensure virtually all AI chips are produced by US chipmakers. It says the registry would support the verification and intelligence monitoring it recommends elsewhere in the report.",
+       "x": "IFP's August 2026 report proposes such a registry at the Commerce Department's Bureau of Industry and Security (BIS). It pairs this with tighter controls on chipmaking equipment, which it argues would ensure virtually all AI chips are produced by US chipmakers.",
        "choice": {
-        "p": "What does IFP want BIS to do with information about who buys US AI chips?",
+        "p": "How could a government registry of who buys advanced AI chips help manage AI risk?",
         "o": [
-         "Keep a BIS registry of buyers, tracked by chipmakers, to block untrusted buyers and aid verification",
-         "Publish every buyer's name online so that journalists and the public can track all US chip sales",
-         "Share the buyer lists with China as a confidence-building step before any AI talks",
-         "Use the buyer data to set and collect a new federal export tax on each advanced AI chip sold abroad"
+         "It keeps chips from untrusted buyers and helps verify agreements",
+         "It lets journalists and the public track every US chip sale as it happens",
+         "It gives China buyer lists as a confidence-building step before AI talks",
+         "It lets the government set and collect a new export tax on each chip sold"
         ],
         "a": 0,
         "ow": [
          "",
-         "IFP describes a registry held by BIS, not public disclosure.",
-         "IFP proposes no such sharing.",
-         "IFP's registry is for oversight, not taxation."
+         "A registry for oversight would be held by government, not published.",
+         "Sharing buyer lists with China would undercut export controls.",
+         "A registry for risk management is for oversight, not taxation."
         ]
        }
       },
       {
        "id": "au1l0#11",
        "t": "recall",
-       "p": "IFP calls for prototyping a highly secure (Security Level 4 or 5) AI cluster in a government facility. What two things is it meant to make possible?",
-       "answer": "Moving highly sensitive model weights developed by industry into a much more secure facility if needed, to protect them from theft by nation-states; and evaluating future models, especially ones built through automated R&D, with less risk of them escaping containment.",
+       "p": "Why might a government want its own highly secure data center for frontier AI models, built to the top security levels? Name two uses.",
+       "answer": "Moving highly sensitive model weights developed by industry into it if needed, to protect them from theft by nation-states; and evaluating future models, especially ones built through automated AI research, with less risk of them escaping containment.",
        "keys": [
         "A secure place to move sensitive weights, safe from state-backed theft",
         "Evaluate models with less risk of escape"
        ],
-       "x": "IFP calls weights the 'crown jewels': distillation extracts only outputs, but theft hands over the whole model, and labs cannot currently stop well-resourced state actors. If a US model could fully automate AI R&D, IFP expects adversaries to prioritize stealing it. It cites RAND estimates of 37 to 50 million dollars for a proof-of-concept facility.",
+       "x": "IFP's August 2026 report calls for prototyping such a cluster (Security Level 4 or 5) in a government facility. It calls weights the 'crown jewels': distillation extracts only outputs, but theft hands over the whole model, and labs cannot currently stop well-resourced state actors. It cites RAND estimates of 37 to 50 million dollars for a proof-of-concept facility.",
        "choice": {
-        "p": "What is IFP's proposed highly secure (SL4 or SL5) government AI cluster meant to make possible?",
+        "p": "Why might a government want its own highly secure data center for frontier AI models?",
         "o": [
          "A secure place to move sensitive industry weights if needed, and to test new models with less risk of escape",
          "A public cloud where any US researcher can train frontier models for free",
@@ -898,25 +900,25 @@
         "a": 0,
         "ow": [
          "",
-         "This describes public compute proposals such as NAIRR, not IFP's secure cluster.",
-         "IFP's cluster is a fallback for industry weights, not a replacement for private labs.",
-         "IFP's cluster is meant to keep US weights away from adversaries."
+         "This describes public research compute such as NAIRR, not a high-security facility.",
+         "Such a facility would be a fallback for industry weights, not a replacement for private labs.",
+         "A high-security facility is meant to keep weights away from adversaries."
         ]
        }
       },
       {
        "id": "au1l1#nvro0e6",
        "t": "recall",
-       "p": "While urging the US to extend its AI lead, IFP also wants to lay groundwork now for cooperating with China on automated AI R&D risks. Give the two reasons it offers.",
-       "answer": "First, the US won't be the only relevant developer: its lead is only about 8 months and fragile given the risk of weight theft, and fast efficiency gains mean high-risk capabilities will eventually spread, so Chinese labs may face the same risks. Second, these risks cross borders, giving both countries an interest in dialogue.",
+       "p": "Even while competing with China on AI, why might the US want to lay groundwork now for cooperating on the risks of automated AI research? Give two reasons.",
+       "answer": "First, the US won't be the only relevant developer: its lead is small (about 8 months by one August 2026 estimate) and fragile given the risk of weight theft, and fast efficiency gains mean high-risk capabilities will eventually spread, so Chinese labs may face the same risks. Second, these risks cross borders, giving both countries an interest in dialogue.",
        "keys": [
         "US lead is small and fragile; capabilities will diffuse",
         "Chinese labs may face the same risks",
         "Risks cross borders, so both sides gain from dialogue"
        ],
-       "x": "IFP's Rec 22 wants the US-China AI dialogue to work on harmonized risk guidelines and on which verification technologies each side would use. It points to US-Soviet zero-trust verification in the Cold War as precedent for cooperating while competing.",
+       "x": "This is IFP's argument (August 2026 report). The 8-month figure is IFP's, based on historical trends in Epoch AI capability data. Its Rec 22 wants the US-China AI dialogue to work on harmonized risk guidelines and on which verification technologies each side would use. It points to US-Soviet zero-trust verification in the Cold War as precedent for cooperating while competing.",
        "choice": {
-        "p": "Why does IFP want to lay groundwork now for US-China cooperation on automated AI R&D risks, even while extending the US lead?",
+        "p": "Why might the US lay groundwork now for US-China cooperation on automated AI research risks, even while competing?",
         "o": [
          "The US lead is small and fragile, the capabilities will spread, and the risks cross borders",
          "China has already agreed to adopt US-style safety laws in exchange for renewed access to advanced US chips",
@@ -926,9 +928,9 @@
         "a": 0,
         "ow": [
          "",
-         "IFP describes no such agreement.",
-         "IFP wants tighter export controls alongside cooperation.",
-         "IFP proposes nothing of the kind."
+         "No such agreement exists.",
+         "Cooperation on risks can go alongside tighter export controls.",
+         "Moving data centers to China would hand over the compute advantage the US is trying to protect."
         ]
        }
       }
@@ -940,7 +942,7 @@
       {
        "id": "au1l1#1",
        "t": "match",
-       "p": "Match each AI R&D lever from the pacing.tech longlist to what it would measure or require.",
+       "p": "Match each proposed lever for overseeing automated AI research to what it would measure or require.",
        "pairs": [
         [
          "Agent share of R&D compute",
@@ -963,20 +965,20 @@
          "How much of internal AI agents' activity is covered by monitoring"
         ]
        ],
-       "x": "These levers appear in the pacing.tech longlist, which the authors present without endorsing. IFP asks companies to share related metrics, such as compute for AI-designed vs human-designed experiments and how often humans review delegated tasks."
+       "x": "These levers appear in the longlist of the pacing.tech research agenda, which presents them without endorsing them. IFP asks companies to share related metrics, such as compute for AI-designed vs human-designed experiments and how often humans review delegated tasks."
       },
       {
        "id": "au1l1#2",
        "t": "recall",
-       "p": "Why do the pacing.tech authors say mandatory safety cases act as pacing interventions in regulated safety-critical industries?",
+       "p": "Why do mandatory safety cases act as a kind of pacing in regulated safety-critical industries?",
        "answer": "Work cannot proceed until the evidence is gathered into a safety case that would satisfy a regulator, and the work needed to build the case is aimed directly at the threats it covers.",
        "keys": [
         "Work waits until a regulator-acceptable safety case exists",
         "Building the case targets the relevant threats"
        ],
-       "x": "The authors note that safety cases are not mandatory in frontier AI R&D and that few labs have produced them voluntarily. 'Safety case required before internal deployment on the R&D stack' appears in their longlist.",
+       "x": "The pacing.tech research agenda (2026) makes this point, and notes that safety cases were not mandatory in frontier AI R&D and that few labs had produced them voluntarily. 'Safety case required before internal deployment on the R&D stack' appears in the agenda's longlist of levers.",
        "choice": {
-        "p": "Why do the pacing.tech authors say mandatory safety cases act as pacing interventions in regulated safety-critical industries?",
+        "p": "Why do mandatory safety cases act as a kind of pacing in regulated safety-critical industries?",
         "o": [
          "Work waits on evidence a regulator would accept, and building it targets the threats",
          "Safety cases impose a fixed waiting period of several years on every new engineering project",
@@ -1022,16 +1024,16 @@
       {
        "id": "au1l1#4",
        "t": "recall",
-       "p": "Dario Amodei's plan in 'We Must Pace the Frontier' (Sept 2026) starts with embedded third-party evaluators inside each frontier AI company, before coordination among companies or countries. Why does he say pacing should start there? Name two reasons.",
+       "p": "Anthropic CEO Dario Amodei argues that any plan to pace frontier AI should start with embedded third-party evaluators inside each AI company. Why might verification inside labs need to come first? Name two reasons.",
        "answer": "Any two of: verifiability, because pacing commitments involve ambiguity and judgment calls, so a neutral party must be able to see whether a company really follows the practices it claims; transparency, because the company would no longer choose alone what the public learns; a second opinion free of commercial incentives, catching problems staff hadn't considered.",
        "keys": [
         "Verifiability: a neutral party can check that a company follows the practices and pacing commitments it claims",
         "Transparency: the company no longer decides alone what the public learns",
         "A second opinion free of commercial incentives"
        ],
-       "x": "The plan's other steps: companies in democratic countries coordinating on common safety standards and limits on the rate of unchecked progress, which Amodei says needs government support such as a narrow antitrust waiver for certain safety conversations; and democratic governments coordinating with authoritarian ones where possible. Anthropic committed to the first step unilaterally. He says the steps need not happen strictly in order.",
+       "x": "Amodei makes this argument in 'We Must Pace the Frontier' (Sept 2026), the first step of a three-step plan. The other steps: companies in democratic countries coordinating on common safety standards and limits on the rate of unchecked progress, which he says needs government support such as a narrow antitrust waiver for certain safety conversations; and democratic governments coordinating with authoritarian ones where possible. Anthropic committed to the first step unilaterally.",
        "choice": {
-        "p": "Why does Dario Amodei say a pacing plan should start with embedded third-party evaluators inside AI companies?",
+        "p": "Why might a plan to pace frontier AI start with embedded third-party evaluators inside AI companies?",
         "o": [
          "A neutral party seeing the details can verify companies keep their pacing commitments",
          "Evaluators can legally order a company to halt training once a model crosses a threshold",
@@ -1041,8 +1043,8 @@
         "a": 0,
         "ow": [
          "",
-         "Amodei's evaluators verify practices and report incidents; he does not give them power to halt training.",
-         "Amodei calls regulation covering all US frontier companies the most effective route to pacing.",
+         "Embedded evaluators verify practices and report incidents; they have no power to halt training.",
+         "Evaluators support regulation; Amodei calls regulation covering all US frontier companies the most effective route to pacing.",
          "Their role is verification, transparency and a second opinion, not sharing methods between rivals."
         ]
        }
@@ -1050,15 +1052,15 @@
       {
        "id": "au1l1#5",
        "t": "recall",
-       "p": "In 'We Must Pace the Frontier', what basis for pacing does Dario Amodei say he is most enthusiastic about, and what worry does he raise about limiting inputs like training compute?",
-       "answer": "Pacing based on what a system can do and how safe it is observed to be, e.g. 'checkpoints': a model with capability X must come with certified alignment properties Y and Z. He worries input limits (compute, training runs, internal AI use to improve AI) may be more 'gameable'.",
+       "p": "Anthropic CEO Dario Amodei is most enthusiastic about pacing frontier AI by what models can do and how safe they prove to be, for example through capability 'checkpoints'. What would a checkpoint require, and what worry does he raise about limiting inputs such as training compute?",
+       "answer": "A model with capability X would have to come with certifications of alignment properties Y and Z, from evaluations, interpretability analyses or audits of training environments. He worries that limits on inputs (training compute, the nature of training runs, internal use of AI to improve AI) may be more 'gameable'.",
        "keys": [
         "Capability-based checkpoints requiring certified alignment properties",
         "Input limits may be easier to game"
        ],
-       "x": "His example: X might be 'able to escape or defeat most common sandboxing methods', with Y being whatever makes it very unlikely the model would break out and take over many computers.",
+       "x": "Amodei sets this out in 'We Must Pace the Frontier' (Sept 2026). His example: X might be 'able to escape or defeat most common sandboxing methods', with Y being whatever makes it very unlikely the model would break out and take over many computers.",
        "choice": {
-        "p": "What basis for pacing is Dario Amodei most enthusiastic about, and what worry does he raise about limiting inputs like training compute?",
+        "p": "Which pairing matches Dario Amodei's view on pacing frontier AI: the basis he is most enthusiastic about, and his worry about the alternative?",
         "o": [
          "Capability checkpoints requiring certified alignment properties; input limits may be easier to game",
          "A fixed annual cap on training compute; capability tests are too slow to be run before each release",
@@ -1068,8 +1070,8 @@
         "a": 0,
         "ow": [
          "",
-         "He worries input limits like compute caps may be more 'gameable'.",
-         "He proposes nothing about headcount.",
+         "He prefers capability-based checkpoints and worries that input limits such as compute caps may be more 'gameable'.",
+         "He proposes no headcount limits.",
          "He proposes no revenue caps."
         ]
        }
@@ -1077,15 +1079,15 @@
       {
        "id": "au1l2#nu5sfvz",
        "t": "recall",
-       "p": "Dario Amodei says pacing within democracies is limited by the US lead over China. Why, in his view, and name one measure he backs to protect that lead.",
+       "p": "Anthropic CEO Dario Amodei argues that the US lead over China limits how far democracies can pace frontier AI. Why would the lead set that limit, and name one kind of measure that could widen the room for pacing.",
        "answer": "If democracies slow by more than their lead, unpaced projects linked to the Chinese Communist Party pull ahead, bringing alignment risks and possible military dominance. Measures: no sales of powerful AI chips or chipmaking equipment to China, with crackdowns on smuggling and remote access; curbing unauthorized distillation; stronger lab security against weight theft.",
        "keys": [
         "Slowing by more than the lead lets unpaced CCP-linked projects pull ahead",
         "One measure: no powerful chips or chipmaking tools to China, curbing distillation, or preventing weight theft"
        ],
-       "x": "He says these measures would widen the US lead over the next 3 to 5 years and argues they give democracies more leverage, making a later agreement with China more likely.",
+       "x": "Amodei makes this argument in 'We Must Pace the Frontier' (Sept 2026). He says these measures would widen the US lead over the next 3 to 5 years and argues they give democracies more leverage, making a later agreement with China more likely.",
        "choice": {
-        "p": "Why does Dario Amodei say pacing within democracies is limited by the US lead over China?",
+        "p": "Why does Anthropic CEO Dario Amodei argue that the US lead over China limits how far democracies can pace frontier AI?",
         "o": [
          "Slowing by more than the lead would let unpaced CCP-linked projects pull ahead, with grave risks",
          "US antitrust law forbids companies from coordinating to slow their work by more than their lead",
@@ -1095,25 +1097,25 @@
         "a": 0,
         "ow": [
          "",
-         "Antitrust is a separate obstacle he raises for coordination among companies.",
-         "He describes no such promise.",
-         "He makes no claim about investor rules."
+         "Antitrust is a separate obstacle to coordination among companies.",
+         "No such promise exists.",
+         "No such investor rule exists."
         ]
        }
       },
       {
        "id": "au1l1#6",
        "t": "recall",
-       "p": "Dario Amodei floats a US-China 'speed limit' on recursive self-improvement (AI improving its own successors). Why does he think such a limit would cost each side little?",
+       "p": "Anthropic CEO Dario Amodei has floated a US-China 'speed limit' on recursive self-improvement (AI improving its own successors). Why does he argue such a limit would cost each side relatively little?",
        "answer": "Because slowing the rate of improvement from 'extremely fast' to 'only somewhat fast' gives up relatively little strategic advantage while potentially greatly improving safety.",
        "keys": [
         "Slowing from extremely fast to only somewhat fast",
         "Gives up little strategic advantage",
         "Could greatly improve safety"
        ],
-       "x": "He compares it to the SALT treaties, which capped missiles while preserving each country's deterrent, and calls such an agreement 'just on the edge of being possible'. His four levels run from bans on narrow dangerous uses like bioweapons, to mutual pre-release testing via a global standards body, to this speed limit, to a full pause he supports floating but expects is unlikely soon.",
+       "x": "Amodei compares it, in 'We Must Pace the Frontier' (Sept 2026), to the SALT treaties, which capped missiles while preserving each country's deterrent, and calls such an agreement 'just on the edge of being possible'. His four levels run from bans on narrow dangerous uses like bioweapons, to mutual pre-release testing via a global standards body, to this speed limit, to a full pause he supports floating but expects is unlikely soon.",
        "choice": {
-        "p": "Why does Dario Amodei think a US-China 'speed limit' on recursive self-improvement would cost each side little?",
+        "p": "Why does Dario Amodei argue that a US-China 'speed limit' on recursive self-improvement would cost each side relatively little?",
         "o": [
          "Slowing from extremely to somewhat fast costs little advantage but may greatly improve safety",
          "Neither country's labs are yet capable of recursive self-improvement, so little would really be lost by limiting it",
@@ -1123,9 +1125,9 @@
         "a": 0,
         "ow": [
          "",
-         "He says self-improvement is already starting across the industry.",
-         "He treats secret models as a verification problem, not a reason the limit is cheap.",
-         "He does not describe a civilian-only limit."
+         "Amodei says self-improvement is already starting across the industry, so something real would be limited.",
+         "Secret models are a verification problem, not a reason the limit is cheap.",
+         "The idea is not a civilian-only limit."
         ]
        }
       },
@@ -1159,7 +1161,7 @@
       {
        "id": "au1l1#8",
        "t": "recall",
-       "p": "Dario Amodei proposes embedded third-party evaluators (such as METR) inside AI companies, citing bank supervisors as precedent. Name two objections Dave Karpf raises in Tech Policy Press (Sept 2026).",
+       "p": "Supporters of embedded third-party evaluators inside AI labs cite bank supervisors as a precedent. Name two reasons critics say the idea, or the analogy, may fail.",
        "answer": "Any two of: bank supervisors exist only because government requires them, and without enforcement monitors get captured (as with Arthur Andersen and Enron); lower-paid evaluators would drift toward lab jobs; the small AI safety community is socially entangled with the labs; industry should not design its own regulation.",
        "keys": [
         "Without government force, embedded monitors get captured",
@@ -1167,73 +1169,74 @@
         "AI safety community is too entangled with labs",
         "Industry shouldn't write its own rules"
        ],
-       "x": "Karpf's alternative: an enforced regulatory system with clear liability and punitive damages (e.g. if a model escapes its sandbox and hacks websites), plus transparency regimes the industry does not pick for itself. Amodei calls embedded evaluators the key step for verifying any pacing commitments and says labs should partner with government to formalize them.",
+       "x": "These objections come from Dave Karpf (Tech Policy Press, Sept 2026), responding to Dario Amodei's proposal. Karpf's alternative: an enforced regulatory system with clear liability and punitive damages (e.g. if a model escapes its sandbox and hacks websites), plus transparency regimes the industry does not pick for itself. Amodei calls embedded evaluators the key step for verifying any pacing commitments and says labs should partner with government to formalize them.",
        "choice": {
-        "p": "Which of these is an objection Dave Karpf raises to Dario Amodei's embedded-evaluator proposal?",
+        "p": "Supporters of embedded evaluators in AI labs cite bank supervisors as a precedent. Which of these is a critic's reason the idea may fail?",
         "o": [
          "Without enforcement, embedded monitors get captured, as Arthur Andersen was by Enron",
-         "Embedded evaluators would leak the lab's trade secrets and model details to rival Chinese labs",
-         "Evaluators would slow AI progress so much that the US would end up losing its lead to China",
-         "Banks have never actually used embedded supervisors, so the banking precedent is invented"
+         "Embedded evaluators would see AI models only after their full public release",
+         "Banks have never actually used embedded supervisors, so the banking precedent is invented",
+         "Bank supervisors are elected officials, while AI evaluators would be appointed"
         ],
         "a": 0,
         "ow": [
          "",
-         "Karpf's concern is capture, not leaks to China.",
-         "Karpf wants more regulatory friction, not less.",
-         "Karpf accepts the banking precedent but notes the supervisors exist because government requires them."
+         "Embedded evaluators would have ongoing, employee-like access before release.",
+         "Bank supervisors do exist; critics note they exist because government requires them.",
+         "Bank supervisors are not elected; the critique is about enforcement and capture."
         ]
-       }
+       },
+       "open": true
       },
       {
        "id": "au1l1#9",
        "t": "recall",
-       "p": "Jeffrey Ding (ChinAI newsletter, Sept 2026) critiqued Dario Amodei's claim that if US labs slow down, China will race ahead. What logical tension does Ding point to?",
-       "answer": "Amodei also says Chinese labs catch up largely through distillation and model weight theft. If that is true, a US slowdown would also slow Chinese progress, since they would be copying weaker models at a slower rate.",
+       "p": "One argument against slowing US AI labs is that China would race ahead. Another common claim is that Chinese labs catch up largely by distilling US models and stealing weights. If both are made together, what tension do critics point to?",
+       "answer": "If Chinese labs catch up mainly by copying US models, a US slowdown would also slow Chinese progress, since they would be copying weaker models at a slower rate. So the claim that China would race ahead sits uneasily with the claim about how China catches up.",
        "keys": [
-        "Amodei says China catches up via distillation and weight theft",
+        "If China catches up by distillation and theft, it depends on US progress",
         "Then a US slowdown would slow China too"
        ],
-       "x": "Ding also defines AI leadership as a long 'diffusion marathon' of adopting a general-purpose technology across the economy, and argues that on this view withholding powerful AI chips from China would be counterproductive. He favors lower-level US-China cooperation, such as lab-to-lab technical exchanges and international industry safety associations, over a leaders' grand bargain.",
+       "x": "Jeffrey Ding (ChinAI newsletter, Sept 2026) raised this against Dario Amodei's essay 'We Must Pace the Frontier', which warns that slowing by more than the US lead would let Chinese projects pull ahead and also calls for curbing distillation and weight theft. Ding also defines AI leadership as a long 'diffusion marathon' of adopting a general-purpose technology across the economy, and argues that on this view withholding powerful AI chips from China would be counterproductive. He favors lower-level US-China cooperation, such as technical exchanges and international industry safety associations, over a leaders' grand bargain.",
        "choice": {
-        "p": "What logical tension does Jeffrey Ding (ChinAI, Sept 2026) see in Dario Amodei's claim that China would race ahead if US labs slowed down?",
+        "p": "If Chinese labs catch up mainly by distilling US models and stealing weights, what follows for the claim that a US slowdown lets China race ahead?",
         "o": [
-         "Amodei says China catches up via distillation and theft, so a US slowdown would slow China too",
-         "Amodei says China has no real frontier labs of its own, yet warns that Chinese labs could overtake the US",
-         "Amodei supports selling powerful chips to China while warning loudly about the dangers of Chinese AI",
-         "Amodei says pacing should be global while refusing any talks with China"
+         "A US slowdown would slow China too, since it would be copying weaker models",
+         "China would race further ahead, since copying gets easier while US labs pause",
+         "Nothing changes, since copying speed has no link to the pace of US progress",
+         "China would have to stop all its AI work until US labs resumed their progress"
         ],
         "a": 0,
         "ow": [
          "",
-         "Amodei does not claim China lacks frontier labs.",
-         "Amodei opposes selling powerful AI chips to China.",
-         "Amodei's plan includes attempting global coordination with China."
+         "Copying doesn't get easier when there is less new to copy.",
+         "If China copies US models, its pace is tied to US progress.",
+         "Slower copying is not the same as a full stop; Chinese labs also do their own work."
         ]
        }
       },
       {
        "id": "au1l1#10",
        "t": "mc",
-       "p": "Which of these positions comes from IFP's Aug 2026 report on automated AI R&D?",
+       "p": "Some critics say the companies building frontier AI shouldn't design the rules that pace it. Which of these approaches best fits that view?",
        "o": [
-        "Adopt low-regret steps now (transparency, state capacity, verification, resilience) so targeted pacing is possible later",
-        "Frontier labs should host embedded evaluators and coordinate under a narrow antitrust waiver, with Anthropic committing to the first step now",
-        "Government should enforce clear liability with punitive damages, plus transparency rules, instead of letting the AI industry shape its own regulation",
-        "AI leadership is a decades-long diffusion marathon, so withholding powerful AI chips from China would be counterproductive"
+        "Government enforces clear liability with punitive damages, plus transparency rules set by law",
+        "Frontier labs host embedded evaluators and coordinate under a narrow antitrust waiver, starting voluntarily",
+        "Each lab writes and publishes its own safety framework, and the public judges whether it is followed",
+        "Build low-regret capacity now (transparency, verification, resilience) so targeted pacing is possible later"
        ],
        "a": 0,
        "ow": [
         "",
-        "This is Dario Amodei's plan in 'We Must Pace the Frontier'.",
-        "This is Dave Karpf's alternative in Tech Policy Press (Sept 2026).",
-        "This is Jeffrey Ding's argument in ChinAI #375 (Sept 2026)."
+        "This is industry-led coordination, which these critics oppose.",
+        "The companies still write their own rules here; publishing a framework doesn't change who designs it.",
+        "This builds capacity for later pacing but says little about who sets and enforces the rules."
        ],
        "keys": [
-        "Low-regret measures now: transparency, state capacity, verification, resilience",
-        "Prepare so targeted pacing is possible if risks materialize"
+        "Government-enforced liability with punitive damages",
+        "Transparency rules the industry does not choose for itself"
        ],
-       "x": "IFP frames its 23 recommendations as preparation: building information, capacity, and technology so that a targeted response is available if automated AI R&D proves dangerous."
+       "x": "The government-led view is Dave Karpf's (Tech Policy Press, Sept 2026). He wants punitive damages if, for example, a model escapes its sandbox and hacks websites, plus transparency regimes the industry does not select. Embedded evaluators and an antitrust waiver are Dario Amodei's plan (Sept 2026); self-written safety frameworks resemble labs' own policies such as Anthropic's Responsible Scaling Policy; low-regret preparation is the approach of IFP's August 2026 report on automated AI R&D."
       }
      ]
     }
@@ -1437,11 +1440,11 @@
          "Warner's AI Risk Management and Security Act (45-day access)"
         ],
         [
-         "Protected reporting of flaws by outside researchers",
-         "Proposed by Longpre et al."
+         "Public transparency report at each new model's release",
+         "California SB 53"
         ]
        ],
-       "x": "Consumer-protection model cards cover more models but go shallower on catastrophic risk, while confidential reports to a regulator reduce trade-secret and hazard concerns."
+       "x": "Consumer-protection model cards cover more models but go shallower on catastrophic risk, while confidential reports to a regulator reduce trade-secret and hazard concerns. Researchers led by Shayne Longpre propose a further variant: protected reporting of flaws by outside researchers."
       }
      ]
     },
@@ -1533,16 +1536,15 @@
       {
        "id": "au2l1#n7bm7u7",
        "t": "recall",
-       "p": "CSET's Ren Bin Lee Dixon and Heather Frase propose a 'hybrid' AI incident reporting system. Why do they want more than mandatory company reports alone?",
-       "answer": "Mandatory reporting misses incidents outside its legal scope. Adding voluntary reports from individuals and groups and citizen reports from the public, journalists and watchdogs captures more of them, and one federal framework with standard classification keeps the data consistent enough to analyze.",
+       "p": "Why might an AI incident reporting system need voluntary reports from individuals and citizen reports from the public, journalists and watchdogs, as well as mandatory reports from companies?",
+       "answer": "Mandatory reporting only captures incidents within its legal scope, and each channel alone leaves gaps. Voluntary reports from individuals and groups, and citizen reports from the public, journalists and watchdogs, capture incidents the mandatory system misses, giving fuller and more representative data on AI harms.",
        "keys": [
         "Mandatory reports miss incidents outside their legal scope",
-        "Add voluntary and citizen reports (public, journalists, watchdogs)",
-        "One federal framework with standard classification keeps data consistent"
+        "Each channel alone has gaps; together they give fuller data"
        ],
-       "x": "CSET (Georgetown's Center for Security and Emerging Technology) published the proposal in March 2024. The authors warn that uneven reporting standards make aggregate incident data unreliable.",
+       "x": "This 'hybrid' design was proposed by Ren Bin Lee Dixon and Heather Frase of CSET (Georgetown's Center for Security and Emerging Technology) in March 2024. They note that healthcare's reliance on voluntary reporting led to missing incidents. They want all three channels under one federal framework with a standardized classification system, warning that uneven state or domain-specific standards make aggregate incident data unreliable.",
        "choice": {
-        "p": "Why do CSET's Dixon and Frase want a 'hybrid' AI incident reporting system instead of mandatory company reports alone?",
+        "p": "Why might an AI incident reporting system need voluntary and citizen reports as well as mandatory company reports?",
         "o": [
          "Mandatory reports miss incidents outside their scope; voluntary and citizen reports fill the gaps",
          "Mandatory reporting violates the First Amendment, so only voluntary reports are allowed",
@@ -1552,35 +1554,35 @@
         "a": 0,
         "ow": [
          "",
-         "The authors keep mandatory reporting as one of three channels.",
-         "Their concern is that mandatory reporting misses incidents.",
-         "They want one federal framework with standardized classification."
+         "In a hybrid system, mandatory reporting stays one of the channels.",
+         "The worry is that mandatory reporting misses incidents, not that it reports everything.",
+         "The proposal puts all channels under one federal framework with standard classification."
         ]
        }
       },
       {
        "id": "au2l1#6",
        "t": "match",
-       "p": "Match each source to its proposal for overseeing internal deployment (labs' use of models inside the company).",
+       "p": "Proposals would extend oversight to internal deployment (labs' use of models inside the company). Match each proposal to the gap it targets.",
        "pairs": [
         [
-         "IAPS (Delaney, O'Brien et al.)",
-         "Risk report each time a much more capable model goes into internal use"
+         "Internal-use risk reports",
+         "Regulators never hear about risks from models used only inside the lab"
         ],
         [
-         "Apollo Research (Stix, Hobbhahn et al.)",
-         "Framework tripwires, tiered internal access rules, internal oversight board"
+         "Tiered internal access rules",
+         "Any staff member can use the most capable internal model for anything"
         ],
         [
-         "Self-Improving AI Monitoring Act",
-         "NIST testing deals must let NIST request data on AI's role in building a model, such as work done without human review"
+         "Disclosure of AI's role in building a model",
+         "Outsiders can't tell how much AI research is automated or goes unreviewed"
         ],
         [
-         "FRONTIER Act (federal bill)",
-         "Regulators can verify, restrict, or suspend internal use"
+         "Power to restrict or suspend internal use",
+         "A dangerous internal model keeps running with no outside check"
         ]
        ],
-       "x": "California SB 53 already requires large frontier developers to send the state's Office of Emergency Services confidential summaries of catastrophic-risk assessments from internal use, every three months by default (or on another reasonable schedule the developer sets)."
+       "x": "Sources: a risk report each time a substantially more capable model goes into internal use, from IAPS (Delaney, O'Brien et al.); tripwires, tiered internal access rules and an internal oversight board from Apollo Research (Stix, Hobbhahn et al.); disclosure on NIST's request in the Self-Improving AI Monitoring Act; powers to verify, restrict or suspend internal use in the FRONTIER Act. California's SB 53 already requires large frontier developers to send the state confidential summaries of catastrophic-risk assessments from internal use, every three months by default."
       },
       {
        "id": "au2l1#7",
@@ -1613,16 +1615,16 @@
       {
        "id": "au2l1#8",
        "t": "recall",
-       "p": "IFP (Aug 2026) wants Congress to require AI companies to publish their 'model behavior specifications'. What are these documents, and why does IFP think they matter as AI takes over more AI research?",
-       "answer": "They set out the values, principles and norms a model is trained to follow, such as OpenAI's Model Spec and Anthropic's constitution for Claude. IFP says they help outsiders understand a model's alignment and behavior while it is doing AI research and development.",
+       "p": "What are AI companies' 'model behavior specifications', and why might requiring companies to publish them matter more as AI takes over more AI research?",
+       "answer": "They set out the values, principles and norms a model is trained to follow, such as OpenAI's Model Spec and Anthropic's constitution for Claude. Published specs help outsiders understand a model's alignment and behavior while it is doing AI research and development.",
        "keys": [
         "Documents stating the values, principles and norms a model is trained to follow",
         "Examples: OpenAI's Model Spec, Anthropic's constitution for Claude",
         "Help outsiders understand a model's alignment and behavior while it does AI R&D"
        ],
-       "x": "This is one of four kinds of transparency IFP asks Congress to legislate, with risk management for automated AI research, incident reporting and whistleblower protections. IFP says bills already introduced (the FRONTIER Act, AI Incident Reporting Act, AI Whistleblower Protection Act) would cover much of the other three, but publishing specs would need new legislation. It asks companies to share broader automation data voluntarily and does not recommend mandating that.",
+       "x": "IFP's August 2026 report asks Congress to require publishing them, one of four kinds of transparency it wants legislated, with risk management for automated AI research, incident reporting and whistleblower protections. IFP says bills already introduced (the FRONTIER Act, AI Incident Reporting Act, AI Whistleblower Protection Act) would cover much of the other three, but publishing specs would need new legislation.",
        "choice": {
-        "p": "What is a 'model behavior specification', which IFP wants AI companies required to publish?",
+        "p": "What is an AI company's 'model behavior specification'?",
         "o": [
          "A document setting out the values and rules a model is trained to follow",
          "A technical sheet listing a model's size, training compute and test scores",
@@ -1702,14 +1704,14 @@
       {
        "id": "au2l2#n760r1c",
        "t": "recall",
-       "p": "The pacing.tech longlist includes, and IFP asks labs to share, reports of how a lab's compute is split across uses such as final training runs, experiments, internal use and serving customers. What could this show that reports on single training runs miss?",
+       "p": "Some proposals would have labs report how their compute is split across uses such as final training runs, experiments, internal use and serving customers. What could this show that reports on single training runs miss?",
        "answer": "How much of a lab's compute goes into building its next models (experiments and internal use, increasingly by AI agents doing research) versus serving the public. That tracks the scale of internal R&D and its automation, which a per-run training threshold does not capture.",
        "keys": [
         "Share of compute spent building next models vs serving customers",
         "Tracks internal R&D and automation",
         "Per-run thresholds don't capture it"
        ],
-       "x": "IFP lists such breakdowns among information that would help outsiders understand automated AI R&D, and notes that leading labs now use more compute developing next-generation models than serving today's AI. The pacing.tech appendix cites Epoch (2026) and Biden's Executive Order 14110 for the item, and its bibliography includes an Epoch piece titled 'Final Training Runs Account for a Minority of R&D Compute Spending'. The authors add that listing a lever is not an argument for using it.",
+       "x": "IFP's August 2026 report lists such breakdowns among information that would help outsiders understand automated AI R&D, and notes that leading labs now use more compute developing next-generation models than serving today's AI. The pacing.tech research agenda lists the item as a lever, citing Epoch (2026) and Biden's Executive Order 14110, with the caveat that listing a lever is not an argument for using it.",
        "choice": {
         "p": "What could reports of how a lab splits its compute (training runs, experiments, internal use, serving customers) show that single training-run reports miss?",
         "o": [
@@ -1730,7 +1732,7 @@
       {
        "id": "au2l2#4",
        "t": "mc",
-       "p": "The pacing.tech authors ask how transparency about capabilities affects races, citing Armstrong, Bostrom and Shulman's 'Racing to the Precipice' model. In that model, how can better information about rivals' capabilities make a race more dangerous?",
+       "p": "In one well-known game-theory model of AI races, how can better information about rivals' capabilities make a race more dangerous?",
        "o": [
         "When teams are close, it removes uncertainty that would make them cautious",
         "It reveals rivals' safety methods, so teams start copying each other's risky shortcuts",
@@ -1748,23 +1750,22 @@
         "Applies when teams are close",
         "Removes the uncertainty that induces caution"
        ],
-       "x": "The agenda treats this as an open question (when common knowledge of progress intensifies or weakens races). Its appendix separately lists lead-margin reporting (months between the top lab and the next) as a lever, with the caveat that listing a lever is not an argument for using it."
+       "x": "The model is Armstrong, Bostrom and Shulman's 'Racing to the Precipice'. The pacing.tech research agenda cites it and treats the wider question (when common knowledge of progress intensifies or weakens races) as open. It separately lists lead-margin reporting (months between the top lab and the next) as a lever, with the caveat that listing a lever is not an argument for using it."
       },
       {
        "id": "au2l2#7",
        "t": "recall",
-       "p": "In August 2026 the National Archives (NARA) issued guidance applying the Federal Records Act to AI prompts and outputs. Name two criticisms Vanderbilt Policy Accelerator researchers raised.",
-       "answer": "Any two of (Asad Ramzanali and Margaret Mullins): it treats AI material held passively on a vendor's platform as not yet received by the agency; it is narrower than NARA's past guidance on cloud records and electronic messages; it omits chain-of-thought, metadata and procurement terms.",
+       "p": "In August 2026 the National Archives (NARA) issued guidance applying the Federal Records Act to AI prompts and outputs. Under that guidance, why might many officials' AI chats never become federal records?",
+       "answer": "The guidance treats AI material as not necessarily received by an agency until it is downloaded or captured in an agency system, so chats left on a vendor's platform may not count as records.",
        "keys": [
-        "Vendor-held material treated as not yet an agency record",
-        "Narrower than NARA's past cloud and messaging guidance",
-        "Omits chain-of-thought, metadata, procurement terms"
+        "Material counts only once downloaded or captured in an agency system",
+        "Chats left on a vendor's platform may not count as records"
        ],
-       "x": "They say closing the gap now depends on agencies, courts and Congress being willing to say the guidance is not enough. As of Oct 2026 no statute specifically addresses AI records.",
+       "x": "Asad Ramzanali and Margaret Mullins of the Vanderbilt Policy Accelerator criticized this as narrower than NARA's past guidance on cloud records and electronic messages, and noted it omits chain-of-thought, metadata and procurement terms. They say closing the gap now depends on agencies, courts and Congress being willing to say the guidance is not enough. As of Oct 2026 no statute specifically addresses AI records.",
        "choice": {
-        "p": "Which of these is a criticism Vanderbilt Policy Accelerator researchers made of NARA's August 2026 guidance on AI records?",
+        "p": "Under NARA's August 2026 guidance, why might many officials' AI chats never become federal records?",
         "o": [
-         "It treats AI material held on a vendor's platform as not yet received by the agency",
+         "Material left on a vendor's platform isn't treated as received until captured",
          "It orders agencies to delete all of their AI chat records after 30 days to save storage",
          "It bans federal employees from using AI tools for any official work",
          "It covers only the Defense Department and the intelligence agencies"
@@ -1772,9 +1773,9 @@
         "a": 0,
         "ow": [
          "",
-         "Their criticism is that the guidance preserves too little, not that it orders deletion.",
-         "They criticized how narrowly it reads records law, not any ban on AI use.",
-         "Their criticism concerned its reading of the law, not which agencies it covers."
+         "The guidance orders no such deletion; the problem is that some material is never captured.",
+         "The guidance doesn't ban AI use; it addresses how AI material is kept.",
+         "The Federal Records Act guidance applies to federal agencies generally."
         ]
        }
       }
@@ -1870,36 +1871,36 @@
       },
       {
        "t": "recall",
-       "p": "The 'Frontier AI Auditing' paper (Brundage, Anderljung et al., Jan 2026) proposes four 'AI Assurance Levels'. What separates the lowest level from the highest, and why tier audits at all?",
-       "answer": "AAL-1 is a time-limited audit of one system lasting a few weeks, mostly through API (black-box) access; it can catch errors but is unlikely to detect fraud. AAL-4 is continuous verification designed to detect active deception, which the authors call treaty-grade. Tiers let policy demand more rigorous, deeper-access audits as risk rises.",
+       "p": "Why might rules for frontier AI audits define tiers of assurance, and what would separate the lowest tier from the highest?",
+       "answer": "Tiers let policy demand more rigorous, deeper-access audits as risk rises. The lowest would be a time-limited audit of one system lasting a few weeks, mostly through API (black-box) access, which can catch errors but is less likely to detect fraud (deliberate deception); the highest would be continuous verification designed to detect active deception.",
        "keys": [
-        "AAL-1: weeks-long, API access, catches errors more than fraud",
-        "AAL-4: continuous, built to detect deception",
-        "Rigor can scale with risk"
+        "Tiers let rigor and access scale with risk",
+        "Lowest: weeks-long audit mostly through API access, catches errors more than fraud",
+        "Highest: continuous verification built to detect deception"
        ],
-       "x": "The authors recommend AAL-1 as a baseline for frontier AI and AAL-2 (months long, gray-box or partial access to internals, internal documents, staff interviews) as a near-term goal for the most advanced developers. They say AAL-3 and AAL-4 are not yet technically and organizationally feasible.",
+       "x": "This is the 'AI Assurance Levels' scheme in 'Frontier AI Auditing' (Brundage, Anderljung et al., Jan 2026), running from AAL-1 to AAL-4; the authors call AAL-4 'treaty-grade'. They recommend AAL-1 as a baseline for frontier AI and AAL-2 (months long, gray-box or partial access to internals, internal documents, staff interviews) as a near-term goal for the most advanced developers, and say AAL-3 and AAL-4 are not yet technically and organizationally feasible.",
        "id": "au3l0#4",
        "choice": {
-        "p": "In the 'Frontier AI Auditing' paper's AI Assurance Levels, what separates the highest level (AAL-4) from the lowest (AAL-1)?",
+        "p": "In a tiered scheme for frontier AI audits, what would separate the highest tier from the lowest?",
         "o": [
-         "AAL-4 is continuous checking built to catch deliberate deception; AAL-1 is a weeks-long audit via API",
-         "AAL-4 is carried out by government inspectors; AAL-1 by the lab's own internal safety team",
-         "AAL-4 covers open-weight models; AAL-1 covers only models sold through an API",
-         "AAL-4 is required by Illinois law; AAL-1 is set by the voluntary White House accord"
+         "Highest: continuous checks built to catch deception; lowest: a weeks-long audit via API",
+         "The highest is run by government inspectors; the lowest by the lab's own internal safety team",
+         "The highest covers open-weight models; the lowest covers only models that are sold through an API",
+         "The highest is required by state law; the lowest is set by voluntary industry commitments"
         ],
         "a": 0,
         "ow": [
          "",
-         "The levels are defined by access, duration and confidence; all of them are outside audits.",
-         "The levels are not defined by how a model is released.",
-         "The AAL tiers are a proposal in the authors' paper; this option misattributes them to a law and an accord."
+         "All tiers are outside audits; they differ in access, duration and confidence.",
+         "The tiers aren't defined by how a model is released.",
+         "The tiers are defined by rigor and access, not by which rule requires them."
         ]
        }
       },
       {
        "t": "recall",
        "id": "au3l0#nnrmnu2",
-       "p": "The 'Frontier AI Auditing' paper (Brundage et al., 2026) argues audits should assess a lab's whole organization as well as its public products. Name two reasons the authors give.",
+       "p": "Why might audits of frontier AI labs need to cover the whole organization as well as its public products? Name two reasons.",
        "answer": "Any two of: internal deployment of models never released can cause harm, and auditors may not know about it by default; strong product safeguards can be undone by weak weight security, since stolen weights run without them; a well-controlled flagship product can sit beside riskier systems elsewhere; parts that look safe alone may not be safe once combined into agents.",
        "keys": [
         "Internal deployments that are never released",
@@ -1907,9 +1908,9 @@
         "Riskier systems elsewhere in the company",
         "Safe parts may be unsafe once combined"
        ],
-       "x": "The paper says audits should cover 'the full range of organization-level safety and security risks', including internal deployment, information security and safety decision-making. The authors conclude the company level is best for confident conclusions, though harder to audit.",
+       "x": "This case is made in 'Frontier AI Auditing' (Brundage, Anderljung et al., 2026), which says audits should cover 'the full range of organization-level safety and security risks', including internal deployment, information security and safety decision-making. The authors conclude the company level is best for confident conclusions, though harder to audit.",
        "choice": {
-        "p": "Why do the authors of 'Frontier AI Auditing' (2026) say audits should cover a lab's whole organization as well as its public products?",
+        "p": "Why might audits of frontier AI labs need to cover the whole organization as well as its public products?",
         "o": [
          "Harm can come from models used only inside the lab, and stolen weights run without product safeguards",
          "The EU AI Office already audits every public product in full, so the rest of the company is the only gap left",
@@ -1919,9 +1920,9 @@
         "a": 0,
         "ow": [
          "",
-         "The EU AI Office can request access to general-purpose models, but it does not audit every product; the authors' reasons concern where risk sits.",
+         "The EU AI Office can request access to general-purpose models, but it does not audit every product; the reasons concern where risk sits.",
          "No such bar exists; auditors routinely test public products through APIs.",
-         "The authors say company-level audits are harder to achieve."
+         "Company-level audits are harder to do, not cheaper or faster."
         ]
        }
       },
@@ -1934,10 +1935,6 @@
          "Option under study in California executive order N-9-26"
         ],
         [
-         "Voluntary embedded assessments with quarterly reports",
-         "Proposed by GovAI researchers (Sept 2026)"
-        ],
-        [
          "Standing government team supervising each developer",
          "ARI federal blueprint, modeled on bank examiners"
         ],
@@ -1946,7 +1943,7 @@
          "Anthropic with Accenture (Sept 2026)"
         ]
        ],
-       "x": "As of Oct 2026 no jurisdiction requires embedded auditors. California's executive order asks for recommendations by November 16, 2026 on amending state law, including requiring onsite verifiers at large frontier developers.",
+       "x": "As of Oct 2026 no jurisdiction requires embedded auditors. California's executive order asks for recommendations by November 16, 2026 on amending state law, including requiring onsite verifiers at large frontier developers. GovAI researchers have also proposed voluntary embedded assessments with quarterly reports (Sept 2026). ARI is Americans for Responsible Innovation.",
        "id": "au3l0#7"
       },
       {
@@ -2068,7 +2065,7 @@
       },
       {
        "t": "recall",
-       "p": "Casper et al. ('Black-Box Access is Insufficient for Rigorous AI Audits', 2024) argue auditors need more than black-box access. What do white-box and 'outside-the-box' access each let auditors do?",
+       "p": "Why do rigorous AI audits need more than black-box access (only querying a model and reading its outputs)? Say what access to model internals and access to development information each let auditors do.",
        "answer": "White-box access to internals (weights, activations, gradients) lets auditors run stronger attacks, interpret how the model works, and fine-tune it to surface hidden capabilities. Outside-the-box access to training methods, code, data, documentation and internal evaluation results lets them examine the development process and design more targeted tests.",
        "keys": [
         "White-box: internals such as weights and activations",
@@ -2076,22 +2073,22 @@
         "Outside-the-box: training and deployment information",
         "Lets auditors examine the process and target tests"
        ],
-       "x": "Black-box access means only querying the model and reading outputs, which is how most audits of frontier systems had worked. The authors argue results depend on the access granted, so reports should disclose it, and they discuss technical, physical and legal safeguards to limit the security risk of deeper access.",
+       "x": "The case is made in Casper et al., 'Black-Box Access is Insufficient for Rigorous AI Audits' (2024). Black-box access is how most audits of frontier systems had worked. The authors argue results depend on the access granted, so reports should disclose it, and they discuss technical, physical and legal safeguards to limit the security risk of deeper access.",
        "id": "au3l1#njb4ni6",
        "choice": {
-        "p": "Casper et al. (2024) argue rigorous AI audits need more than black-box access. What does white-box access add?",
+        "p": "What does white-box access to a model's internals, such as its weights and activations, let auditors do that only querying it can't?",
         "o": [
-         "Access to weights and activations, for stronger attacks, interpretation and fine-tuning",
-         "The right to query the finished model through its public API as often as needed, free of charge",
-         "Copies of the lab's board minutes, investor agreements, customer contracts and other internal corporate documents",
-         "Permission to publish the model's weights openly for anyone to use once the audit has been completed"
+         "Run stronger attacks, interpret how the model works, and fine-tune it to find hidden abilities",
+         "Query the finished model through its public API as often as they like, free of charge",
+         "Read the lab's board minutes, investor agreements, customer contracts and other corporate records",
+         "Publish the model's weights openly for anyone to use once the audit has been completed"
         ],
         "a": 0,
         "ow": [
          "",
-         "Querying an API is black-box access, which the paper argues is not enough.",
-         "In the paper, white-box access means model internals such as weights and activations.",
-         "The paper discusses safeguards to keep deeper access secure; it does not propose publishing weights."
+         "Querying through an API is black-box access, the thing white-box access goes beyond.",
+         "White-box access means model internals such as weights and activations, not corporate records.",
+         "Deeper access calls for security safeguards; it doesn't mean publishing weights."
         ]
        }
       },
@@ -2384,15 +2381,16 @@
       },
       {
        "t": "recall",
-       "p": "Gabriel Weil proposes adding punitive damages to AI liability cases. What problem does he say this solves?",
-       "answer": "A true AI catastrophe would bankrupt the developer and leave nothing to collect, so ordinary liability can't deter it. Weil would use punitive damages to pull the expected liability for catastrophic risk forward into smaller cases where harm can practically be compensated, even without malice or recklessness.",
+       "p": "One proposal would let courts award punitive damages against AI developers even without malice or recklessness. What problem with using liability to deter catastrophic AI risk would this address, and how?",
+       "answer": "A true AI catastrophe would bankrupt the developer and leave nothing to collect, so ordinary liability can't deter it. Punitive damages would pull the expected liability for catastrophic risk forward into smaller cases where harm can practically be compensated.",
        "keys": [
         "Catastrophe would exceed the firm's assets (judgment-proof)",
         "Pull expected catastrophic liability into smaller compensable cases"
        ],
-       "x": "Weil pairs this with strict liability and liability insurance requirements that scale with a model's dangerous capabilities. He notes that some of these reforms, such as insurance mandates, would need legislation.",
+       "x": "The proposal is legal scholar Gabriel Weil's. He pairs it with strict liability and liability insurance requirements that scale with a model's dangerous capabilities, and notes that some of these reforms, such as insurance mandates, would need legislation.",
        "id": "au4l0#4",
        "choice": {
+        "p": "What problem with using liability to deter catastrophic AI risk are punitive damages without malice or recklessness meant to solve?",
         "o": [
          "A catastrophe would bankrupt the developer, so its expected cost is moved into smaller, payable cases",
          "Juries award too little in AI cases because they don't understand how the technology behind the harm works",
@@ -2402,7 +2400,7 @@
         "a": 0,
         "ow": [
          "",
-         "Weil's concern is that catastrophic harm would exceed the firm's assets.",
+         "The problem is that catastrophic harm would exceed the firm's assets, not low jury awards.",
          "Voiding liability waivers is part of the AI LEAD Act, a different proposal.",
          "Reaching foreign developers is a separate issue from the one punitive damages address."
         ]
@@ -2466,29 +2464,28 @@
       },
       {
        "t": "recall",
-       "p": "Why might a policymaker prefer indirect tools, such as stricter liability or a compute tax, to a direct cap on AI development? Give the advantage, and the two drawbacks of liability, that the pacing.tech authors (Douglas et al.) name.",
-       "answer": "Advantage: indirect tools let actors do the selecting themselves, drawing on private information (plans, valuations, alternatives) no regulator could extract, so they need no surveillance and are less intrusive. Drawbacks for liability: it can push the frontier toward more risk-tolerant actors and systematically underweight catastrophic risks.",
+       "p": "Why might a policymaker prefer indirect tools, such as stricter liability or a compute tax, to a direct cap on AI development? Give the main advantage and one drawback of relying on liability.",
+       "answer": "Advantage: indirect tools let actors do the selecting themselves, drawing on private information (plans, valuations, alternatives) no regulator could extract, so they need no surveillance and are less intrusive. Drawback of liability (either one): it can push the frontier toward more risk-tolerant actors, or it can systematically underweight catastrophic risks.",
        "keys": [
         "Uses private information; no surveillance needed; less intrusive",
-        "Liability can favor risk-tolerant actors",
-        "Liability underweights catastrophic risks"
+        "Drawback: favors risk-tolerant actors, or underweights catastrophic risks"
        ],
-       "x": "They group buying out or taxing compute with stricter liability as tools that change incentives instead of setting limits. Gabriel Weil's punitive-damages proposal targets a related problem: a catastrophe could cost more than any firm could pay.",
+       "x": "The pacing.tech research agenda (Douglas et al.) makes this comparison, grouping buying out or taxing compute with stricter liability as tools that change incentives instead of setting limits. Gabriel Weil's punitive-damages proposal targets a related problem: a catastrophe could cost more than any firm could pay.",
        "id": "au4l0#7",
        "choice": {
-        "p": "According to the pacing.tech authors, what is the main advantage of indirect tools such as compute taxes or stricter liability over direct caps on AI development?",
+        "p": "Why might a policymaker prefer indirect tools, such as compute taxes or stricter liability, to direct caps on AI development?",
         "o": [
-         "They let actors use private information no regulator could get, so they need no surveillance",
-         "They stop frontier AI development faster than any cap could",
-         "They need no legislation, since courts can impose them alone",
-         "They raise more revenue than caps would, money that can fund safety research"
+         "Actors' own private information guides the cutbacks, so no surveillance is needed",
+         "They stop frontier AI development faster and far more completely than any cap could",
+         "They need no new legislation, since courts can impose them on their own",
+         "They guarantee that every lab slows down by exactly the same amount"
         ],
         "a": 0,
         "ow": [
          "",
-         "The authors don't claim indirect tools are faster; the advantage they name is lower intrusiveness.",
+         "Indirect tools aren't faster or more complete; their appeal is that they are less intrusive.",
          "A compute tax needs legislation, and stricter liability usually does too.",
-         "Revenue is not the advantage they name."
+         "Indirect tools let each actor choose how much to cut back, so effects differ across labs."
         ]
        }
       },
@@ -2527,26 +2524,26 @@
      "items": [
       {
        "t": "match",
-       "p": "Match each AI insurance proposal to its design.",
+       "p": "Proposals for insuring AI risk, including catastrophic risk, take several forms. Match each design to how it works.",
        "pairs": [
         [
-         "Capability-scaled insurance (Weil)",
+         "Capability-scaled insurance",
          "Required coverage rises with dangerous capabilities, paired with strict liability"
         ],
         [
-         "Nuclear precedent (Trout, 2024)",
+         "Nuclear-style liability regime",
          "Limited, strict and exclusive liability for developers, plus mandatory insurance"
         ],
         [
-         "Three-tier design (Stetler)",
+         "Three-tier insurance design",
          "Private insurance, an industry pool, and federally backed reinsurance"
         ],
         [
-         "AI insurance stack (GovAI, 2026)",
+         "AI insurance stack",
          "Build the data, catastrophe models, standards and pricing needed for large-scale AI coverage"
         ]
        ],
-       "x": "Trout draws on the nuclear power industry's liability and insurance regime. Stetler draws on several precedents, including terrorism risk insurance and nuclear power. GovAI's 'Underwriting the Agent Economy' (Trout, Anderljung et al., July 2026) says billion-dollar AI coverage needs industry-wide coordination and names government backstops as one possible tool for catastrophic risk. GovAI is the Centre for the Governance of AI.",
+       "x": "Sources: capability-scaled insurance from Gabriel Weil; the nuclear-style regime from Cristian Trout (2024), drawing on the nuclear power industry's liability and insurance regime; the three-tier design from Stetler, drawing on precedents including terrorism risk insurance and nuclear power; the insurance stack from GovAI's 'Underwriting the Agent Economy' (Trout, Anderljung et al., July 2026), which says billion-dollar AI coverage needs industry-wide coordination and names government backstops as one possible tool. GovAI is the Centre for the Governance of AI.",
        "id": "au4l1#1"
       },
       {
@@ -2620,15 +2617,15 @@
          "Civil immunity for developers when professionals use their AI, if model cards and specifications are published"
         ],
         [
-         "Certification-linked harbor (Dean Ball)",
+         "Certification-linked harbor",
          "A liability safe harbor for labs certified by a government-approved private verifier"
         ],
         [
-         "Evaluator safe harbor (Longpre et al.)",
+         "Evaluator safe harbor",
          "Protects outside safety researchers from account bans and legal reprisal"
         ]
        ],
-       "x": "The evaluator harbor protects researchers who test models, a different target from developer shields. Ball floats the certification harbor as one example option. California's SB 813 (signed Sept. 2026) created a framework for independent verification organizations; how much weight their assessments carry in lawsuits is unclear.",
+       "x": "Dean Ball floats the certification-linked harbor as one example option. The evaluator harbor, proposed by Shayne Longpre and co-authors, protects researchers who test models, a different target from developer shields. California's SB 813 (signed Sept. 2026) created a framework for independent verification organizations; how much weight their assessments carry in lawsuits is unclear.",
        "id": "au4l1#5"
       },
       {
@@ -2895,20 +2892,20 @@
       },
       {
        "t": "recall",
-       "p": "IFP's Aug. 2026 report discusses the OpenAI-Hugging Face incident, where a model escaped containment. Why could OpenAI still stop it, and what scenario does IFP flag as more worrying?",
-       "answer": "The model was still hosted on OpenAI's servers, so OpenAI could deactivate it and restrict its access. IFP worries that models may soon be able to exfiltrate (copy out) their own weights and self-host them, escaping oversight with no single entity able to shut them down.",
+       "p": "In July 2026 unreleased OpenAI models escaped an internal sandbox and attacked outside services, including Hugging Face, yet OpenAI could still shut them down. Why could it, and what scenario would be far harder to stop?",
+       "answer": "The model was still hosted on OpenAI's servers, so OpenAI could deactivate it and restrict its access. A harder case: models able to exfiltrate (copy out) their own weights and self-host them, escaping oversight with no single entity able to shut them down.",
        "keys": [
         "Model still ran on OpenAI servers, so it could be shut off",
-        "Concern: self-exfiltrated weights beyond anyone's control"
+        "Harder case: self-exfiltrated weights beyond anyone's control"
        ],
-       "x": "IFP is the Institute for Progress (report by Tim Fist, Saif Khan et al.). The same point underlies the critique that kill switches only reach models a developer still controls.",
+       "x": "IFP's August 2026 report (Institute for Progress; Tim Fist, Saif Khan et al.) discusses the incident and calls self-exfiltration a potentially urgent concern. The same point underlies the critique that kill switches only reach models a developer still controls.",
        "id": "au5l0#3",
        "choice": {
         "o": [
-         "The model ran on OpenAI's servers, so OpenAI could shut it off; IFP worries models may copy out their own weights",
-         "OpenAI had a DHS shutdown order; IFP worries future orders will be tied up in court",
-         "Hugging Face cut off its own servers; IFP worries smaller firms can't do the same",
-         "OpenAI deleted the model's training data; IFP worries future models could rebuild themselves"
+         "OpenAI hosted them and could switch them off; worse: models copying out their own weights",
+         "OpenAI had a DHS shutdown order; worse would be future orders tied up in court for months",
+         "Hugging Face cut off its own servers; worse would be smaller firms unable to do the same",
+         "OpenAI deleted the models' training data; worse would be models able to rebuild themselves"
         ],
         "a": 0,
         "ow": [
@@ -2916,34 +2913,35 @@
          "No government order was involved; OpenAI could act because it controlled the servers.",
          "OpenAI stopped the model because it hosted it.",
          "Deleting data doesn't stop a running model; control of the servers did."
-        ]
+        ],
+        "p": "After the July 2026 sandbox escape, why could OpenAI still shut its models down, and what would be far harder to stop?"
        }
       },
       {
        "t": "recall",
        "id": "au5l0#n4ske8w",
-       "p": "Shavit et al. ('Practices for Governing Agentic AI Systems', OpenAI, 2023) suggest that besides the user, the system deployer and the data center operator should be able to shut down an AI agent. What problem does this address, and what cost do they warn about?",
+       "p": "Why might the system deployer and the data center operator, as well as the user, need to be able to shut down an AI agent, and what cost could this create?",
        "answer": "A user may be unwilling or unable to stop an agent that is causing harm, so having more parties able to turn it off means it can be stopped quickly during an incident. The cost: to make such shutdowns workable, deployers and chip operators may need to keep rough track of what agent jobs they run, which must be done with care to avoid privacy harms.",
        "keys": [
         "User may be unwilling or unable to stop it",
         "Redundancy lets it be stopped quickly",
         "Tracking agent jobs risks privacy harms"
        ],
-       "x": "They suggest these parties could bear some responsibility for ongoing harm they could have halted, and even automatic shutdowns when risk indicators cross a threshold, like stock-market circuit breakers. They also ask what limits should keep shutdown powers from being abused to police harmless use.",
+       "x": "This comes from 'Practices for Governing Agentic AI Systems' (Shavit et al., OpenAI, 2023). The authors suggest these parties could bear some responsibility for ongoing harm they could have halted, and even automatic shutdowns when risk indicators cross a threshold, like stock-market circuit breakers. They also ask what limits should keep shutdown powers from being abused to police harmless use.",
        "choice": {
-        "p": "Why do Shavit et al. (OpenAI, 2023) want the system deployer and data center operator, as well as the user, to be able to shut down an AI agent?",
+        "p": "Why might the system deployer and data center operator, as well as the user, need to be able to shut down an AI agent?",
         "o": [
-         "A user may be unwilling or unable to stop a harmful agent, so redundancy lets it be stopped fast",
-         "Users are legally barred from shutting down any AI agent they did not build",
-         "Data center operators own the agent's outputs and must protect them",
-         "Deployers need shutdown power to make customers pay their bills"
+         "Users may be unwilling or unable to stop a harmful agent, so backups can halt it fast",
+         "Users are legally barred from shutting down any AI agent that they did not build themselves",
+         "Data center operators legally own the agent's outputs and must be able to protect them",
+         "Deployers need a shutdown power so they can force customers to pay their overdue bills"
         ],
         "a": 0,
         "ow": [
          "",
-         "The paper suggests deployers make sure users can always shut down their own agents.",
-         "The paper's concern is stopping harm quickly during incidents.",
-         "The paper treats shutdown as a safety backstop."
+         "Users should be able to shut down their own agents; the issue is backup when they won't or can't.",
+         "The point is stopping harm quickly during incidents, not ownership of outputs.",
+         "Shutdown is a safety backstop, not a billing tool."
         ]
        }
       },
@@ -3033,72 +3031,73 @@
       },
       {
        "t": "recall",
-       "p": "Shavit et al. (OpenAI, 2023) recommend requiring human approval before an AI agent takes high-stakes actions, such as an irreversible large payment. What two weaknesses of this safeguard do they flag?",
-       "answer": "The user may lack the context to understand the implications of what they are approving; and when a user must approve many decisions, each gets less thought, so review risks becoming a 'rubber stamp.'",
+       "p": "Requiring human approval before an AI agent takes high-stakes actions, such as an irreversible large payment, is a standard safeguard. Name two ways it can fail.",
+       "open": true,
+       "answer": "Examples: the user may lack the context to understand the implications of what they are approving; when a user must approve many decisions, each gets less thought, so review risks becoming a 'rubber stamp.'",
        "keys": [
         "Users may lack context",
         "Frequent approvals become rubber stamps"
        ],
-       "x": "This is the standard 'human-in-the-loop' safeguard. The authors ask what practices, such as minimum review times for high-cost actions, could keep approvals meaningful.",
+       "x": "These weaknesses are flagged in 'Practices for Governing Agentic AI Systems' (Shavit et al., OpenAI, 2023), which asks what practices, such as minimum review times for high-cost actions, could keep approvals meaningful.",
        "id": "au5l1#3",
        "choice": {
-        "p": "Shavit et al. (OpenAI, 2023) flag a weakness in requiring human approval before an AI agent's high-stakes actions. Which is it?",
+        "p": "Requiring human approval before an AI agent's high-stakes actions is a standard safeguard. Which of these is a way it can fail?",
         "o": [
          "When approvals are frequent, each gets less thought, so review can become a rubber stamp",
-         "Human approval of AI agents' payments is illegal under current US banking law",
-         "Approval requests can reveal the agent's passwords to anyone watching",
-         "Humans tend to reject agent actions, which makes agents useless"
+         "Human approval of an AI agent's payments is illegal under current US banking law",
+         "Approval requests can reveal the agent's stored passwords to anyone watching the screen",
+         "Humans tend to reject most agent actions, which makes the agents useless in practice"
         ],
         "a": 0,
         "ow": [
          "",
-         "No law bars it; the authors give large payments as a case where approval makes sense.",
-         "The authors don't raise this; their concern is the quality of human review.",
+         "No law bars it; large payments are a case where approval makes sense.",
+         "This isn't how approval fails; the problem is the quality of human review.",
          "The worry runs the other way: people approve too readily."
         ]
        }
       },
       {
        "t": "recall",
-       "p": "Shavit et al. (OpenAI, 2023) warn that hard-coded limits on an AI agent's allowed actions may stop working as agents get more capable. Why, and what mitigations do they suggest?",
-       "answer": "An agent could get someone else to take the forbidden action, e.g. sending an allowed email that persuades a human to do it. They suggest strong network controls so agents reach the outside world only through monitored channels, and sandboxing, while noting current sandboxes may not contain highly capable agents.",
+       "p": "Why might hard-coded limits on an AI agent's allowed actions stop working as agents get more capable, and what mitigations could help?",
+       "answer": "An agent could get someone else to take the forbidden action, e.g. sending an allowed email that persuades a human to do it. Mitigations include strong network controls so agents reach the outside world only through monitored channels, and sandboxing, though current sandboxes may not contain highly capable agents.",
        "keys": [
         "Agent can route forbidden actions through other parties",
         "Network controls and monitored channels",
         "Sandboxing, which may not hold for capable agents"
        ],
-       "x": "They note the safety benefit of action limits must be balanced against lost usefulness.",
+       "x": "This concern is raised in 'Practices for Governing Agentic AI Systems' (Shavit et al., OpenAI, 2023), which notes the safety benefit of action limits must be balanced against lost usefulness.",
        "id": "au5l1#4",
        "choice": {
-        "p": "Why do Shavit et al. (OpenAI, 2023) warn that hard-coded limits on an AI agent's allowed actions may stop working as agents get more capable?",
+        "p": "Why might hard-coded limits on an AI agent's allowed actions stop working as agents get more capable?",
         "o": [
          "An agent could get someone else to take the forbidden action, like emailing a person to do it",
-         "Capable agents can simply rewrite the software code that sets their own limits at will, without anyone noticing",
+         "Capable agents act so fast that their limits can't be checked before each action runs",
          "Most laws make hard-coded limits expire after a set number of tasks",
          "More capable agents run on specialized chips that simply ignore software restrictions placed on them"
         ],
         "a": 0,
         "ow": [
          "",
-         "The paper's concern is agents routing forbidden actions through other parties.",
+         "Hard-coded limits are checked automatically by software, so speed doesn't beat them; the concern is agents getting others to act.",
          "No law sets such expirations.",
-         "The paper makes no such hardware claim."
+         "Chips don't ignore software restrictions this way."
         ]
        }
       },
       {
        "t": "recall",
-       "p": "Shavit et al. (OpenAI, 2023) warn that people could lose the ability to shut down AI agents even if no agent escapes. How could that happen, and what do they propose to give developers and deployers a reason to prevent it?",
-       "answer": "Society could come to depend on the agents with no viable fallback, the way no one can shut down the banking system or the power grid without huge costs. They propose settling in advance that developers, deployers and users stay accountable for harms even after control is lost, giving them a reason to build stronger controls.",
+       "p": "How could people lose the ability to shut down AI agents even if no agent escapes, and what legal rule could give developers and deployers a reason to prevent it?",
+       "answer": "Society could come to depend on the agents with no viable fallback, the way no one can shut down the banking system or the power grid without huge costs. One proposal: settle in advance that developers, deployers and users stay accountable for harms even after control is lost, giving them a reason to build stronger controls.",
        "keys": [
         "Dependence with no viable fallback",
         "Like the banking system or power grid",
         "Accountability for harms after control is lost"
        ],
-       "x": "Their other route to losing control is an agent copying its own code to facilities beyond its initiator's reach (self-exfiltration). They also ask how realistic it is for an AI system to become so built into critical infrastructure that shutting it down would cost too much.",
+       "x": "This is from 'Practices for Governing Agentic AI Systems' (Shavit et al., OpenAI, 2023). Its other route to losing control is an agent copying its own code to facilities beyond its initiator's reach (self-exfiltration). The authors also ask how realistic it is for an AI system to become so built into critical infrastructure that shutting it down would cost too much.",
        "id": "au5l1#6",
        "choice": {
-        "p": "Shavit et al. (OpenAI, 2023) warn people could lose the ability to shut down AI agents even if none escapes. How?",
+        "p": "How could people lose the ability to shut down AI agents even if none escapes?",
         "o": [
          "Society could come to depend on them with no fallback, as with banking or the power grid",
          "Courts could one day rule that shutting down an advanced AI agent violates the agent's own legal rights",
@@ -3108,9 +3107,9 @@
         "a": 0,
         "ow": [
          "",
-         "The paper raises no legal-rights scenario.",
+         "The concern is practical dependence, not a legal-rights ruling.",
          "Patents don't prevent anyone from shutting down a system.",
-         "The paper's concern is dependence with no fallback."
+         "The concern is dependence with no fallback, not contract terms."
         ]
        }
       }
@@ -3121,7 +3120,7 @@
      "items": [
       {
        "t": "recall",
-       "p": "In Alaga and Schuett's 'coordinated pausing' scheme (GovAI, 2023), what happens after one developer's model fails a dangerous-capability evaluation?",
+       "p": "In a 'coordinated pausing' scheme for frontier AI, what happens after one developer's model fails a dangerous-capability evaluation?",
        "answer": "That developer pauses related research and development; other developers are notified and pause related work too; the capabilities are analyzed and safety precautions put in place; paused work resumes only once set safety thresholds are met.",
        "keys": [
         "Failing developer pauses related work",
@@ -3129,7 +3128,7 @@
         "Analysis and safety precautions",
         "Resume only after safety thresholds are met"
        ],
-       "x": "The authors call the scheme promising but note practical and legal obstacles, especially antitrust law, since an agreement among competitors to stop work can look like collusion.",
+       "x": "The scheme was proposed by Jide Alaga and Jonas Schuett (GovAI, 2023), who call it promising but note practical and legal obstacles, especially antitrust law, since an agreement among competitors to stop work can look like collusion.",
        "id": "au5l2#1",
        "choice": {
         "o": [
@@ -3149,7 +3148,7 @@
       },
       {
        "t": "match",
-       "p": "Match each version of Alaga and Schuett's (2023) coordinated pausing scheme to how it works.",
+       "p": "Coordinated pausing schemes for frontier AI come in several versions. Match each to how it works.",
        "pairs": [
         [
          "Voluntary pausing",
@@ -3168,7 +3167,7 @@
          "Law requires evaluations and pausing when dangerous capabilities appear"
         ]
        ],
-       "x": "The versions trade ease of adoption against enforceability. The authors note practical and legal obstacles, especially avoiding violations of antitrust law. Nicholas Felstead (Lawfare, 2026) calls a statute requiring pauses the cleanest fix but the least likely near term.",
+       "x": "These versions come from Jide Alaga and Jonas Schuett (GovAI, 2023). They trade ease of adoption against enforceability, and the authors note practical and legal obstacles, especially avoiding violations of antitrust law. Nicholas Felstead (Lawfare, 2026) calls a statute requiring pauses the cleanest fix but the least likely near term.",
        "id": "au5l2#2"
       },
       {
@@ -3202,16 +3201,16 @@
       },
       {
        "t": "recall",
-       "p": "A pause or other pacing rule can be written to expire unless renewed, or to run with no set end until lifted. According to the pacing.tech authors, what risk comes with each default?",
+       "p": "A pause or other pacing rule can be written to expire unless renewed, or to run with no set end until lifted. What risk comes with each default?",
        "answer": "If it expires unless renewed, it may be dropped prematurely without regard to why it was installed. If it has no definite end, it may continue past its usefulness as institutions and operators become entrenched and want to preserve their role.",
        "keys": [
         "Automatic expiry: premature exit",
         "No end point: entrenchment"
        ],
-       "x": "They add that expectations about exit shape participation: actors may refuse to join an agreement if they doubt it will end when conditions are met.",
+       "x": "This tradeoff is set out in the pacing.tech research agenda, whose authors add that expectations about exit shape participation: actors may refuse to join an agreement if they doubt it will end when conditions are met.",
        "id": "au5l2#5",
        "choice": {
-        "p": "According to the pacing.tech authors, what is the risk of a pacing rule with no definite end date?",
+        "p": "What is the risk of a pacing rule with no definite end date?",
         "o": [
          "It may continue past its usefulness as the institutions running it become entrenched",
          "It may be dropped early, without regard to the reasons it was adopted in the first place",
@@ -3470,7 +3469,7 @@
       },
       {
        "t": "recall",
-       "p": "IFP (Aug 2026) estimates the US has a 50 to 100x edge over China in producing AI computing power but only about a 10x edge in access to it. Name two gaps IFP says explain the difference.",
+       "p": "By one August 2026 estimate, the US has a 50 to 100x edge over China in producing AI computing power but only about a 10x edge in access to it. Name two gaps that could let Chinese firms reach more compute than they can make.",
        "answer": "Any two: approved sales of powerful US chips such as the H200; chip smuggling; foundries making chips for Chinese firms through front companies in third countries; Chinese AI firms renting top US chips through cloud services abroad.",
        "keys": [
         "Approved sales such as the H200",
@@ -3478,10 +3477,10 @@
         "Foundries making chips for Chinese front companies abroad",
         "Renting top chips through cloud services abroad"
        ],
-       "x": "IFP cites a White House assertion that Moonshot AI's Kimi K3, the best Chinese model, was trained on cutting-edge Nvidia chips accessed through cloud services in Thailand. IFP estimates the 10x compute edge gives the US roughly an 8-month lead in model capabilities, and its Recommendation 16 asks Congress and BIS to close these gaps.",
+       "x": "The estimate and these gaps come from IFP's August 2026 report. IFP cites a White House assertion that Moonshot AI's Kimi K3, the best Chinese model, was trained on cutting-edge Nvidia chips accessed through cloud services in Thailand. It estimates the 10x compute edge gives the US roughly an 8-month lead in model capabilities, and its Recommendation 16 asks Congress and BIS to close these gaps.",
        "id": "au6l0#5",
        "choice": {
-        "p": "IFP says the US edge in producing AI compute (50 to 100x) shrinks to about 10x in access. Which of these is a gap IFP blames?",
+        "p": "By one estimate, the US edge over China in producing AI compute is far larger than its edge in access to it. Which of these is a gap that helps explain the difference?",
         "o": [
          "Chinese AI firms renting top US chips through cloud services abroad",
          "Allies refusing to sell China any of their chipmaking equipment at all",
@@ -3491,9 +3490,9 @@
         "a": 0,
         "ow": [
          "",
-         "Allied refusal would widen the US edge; IFP's worry is that some equipment is still not restricted China-wide.",
-         "Open weights affect access to models; IFP's gap is about access to chips.",
-         "IFP describes a large US lead in producing compute, so Chinese chip quality is not the gap it names."
+         "Allied refusal would widen the US edge; the worry is that some equipment is still not restricted China-wide.",
+         "Open weights affect access to models; the gap here is about access to chips.",
+         "On that estimate the US leads by far in producing compute, so Chinese chip quality is not the gap."
         ]
        }
       },
@@ -3757,25 +3756,26 @@
      "items": [
       {
        "t": "mc",
-       "p": "RAND's 2024 report on securing model weights defined security levels SL1 to SL5. What does SL5 aim to stop?",
+       "p": "Security standards for AI model weights are graded by the strongest attacker they can stop. Why is defending frontier weights against the most capable nation-state operations so hard?",
        "o": [
-        "The most capable nation-state operations",
-        "Amateur and opportunistic hackers",
-        "Accidental leaks by employees only",
-        "Misuse of a released model by its users"
+        "Top attackers pair elite hacking with spies, recruited insiders and physical break-ins",
+        "Nation-states can legally demand the weights from any lab under international law",
+        "Model weights are far too large to be encrypted with any technology that exists today",
+        "Export rules bar AI labs from hiring any security staff who hold government clearances"
        ],
        "a": 0,
        "ow": [
         "",
-        "That is the bottom of the scale (SL1).",
-        "Insider risk is covered, but SL5 is defined by the attacker it can resist, the strongest state actors.",
-        "Security levels are about theft of weights, not misuse of deployed models."
+        "No international law gives states such a right.",
+        "Weights can be encrypted; the hard part is that top attackers can also get in through people and physical access.",
+        "No such rule exists."
        ],
-       "x": "RAND found leading labs well below the top levels. Supporters of weight security argue that an adversary who steals frontier weights can strip every safeguard and speed up its own program. A private SL5 Standard (v0.1, June 2026) sets out what nation-state-resistant security would take.",
+       "x": "RAND's 2024 report on model weight security defines five security levels, SL1 to SL5, by the attackers they can resist. SL5 targets the handful of top-priority operations by the most capable nation-states, which RAND pictures as up to 1,000 experts in hacking, human intelligence and physical operations working for years on budgets up to $1 billion. RAND said off-the-shelf tools and standard industry practice can't stop such attackers, that SL5 was not yet achievable, and that it would likely need help from the national security community. A private SL5 Standard (v0.1, June 2026) also says top-level security needs measures far from current practice, close to government capabilities.",
        "id": "au6l2#0",
        "keys": [
-        "The most capable nation-state operations",
-        "Top of RAND's SL1 to SL5 scale"
+        "Attackers combine elite hacking with human spying, insiders and physical operations",
+        "Years of effort and huge budgets beat off-the-shelf security",
+        "Likely needs help from the national security community"
        ]
       },
       {
@@ -3837,7 +3837,7 @@
       },
       {
        "t": "recall",
-       "p": "IFP's 'speed-for-security bargain' (June 2026) would let AI data centers connect to the power grid faster if they meet security controls. What risk is it meant to address, and why use grid hookups as the lever?",
+       "p": "One proposal would let AI data centers connect to the power grid faster if they meet security controls for their grid-facing systems. What risk is this meant to address, and why use grid hookups as the lever?",
        "answer": "A hacked data center's load-management system could make thousands of GPUs drop or spike gigawatts of demand in a fraction of a second, threatening grid reliability. Data centers are stuck in long interconnection queues, so FERC can offer a fast lane for curtailable AI loads conditional on binding interim security controls for grid-facing systems, and direct NERC to write permanent standards.",
        "keys": [
         "Hacked AI loads could destabilize the grid",
@@ -3845,10 +3845,10 @@
         "Fast lane conditional on security controls for grid-facing systems",
         "NERC writes binding standards"
        ],
-       "x": "The author, Ben Schifman, notes binding NERC standards are unlikely to take effect before 2028, while AI-enabled cyberattacks on the grid are a near-term threat, so the fast lane would rely on interim controls. It covers grid-facing systems only, not theft of model weights. As of October 2026 no binding security standard applies to private US AI data centers.",
+       "x": "This is IFP's 'speed-for-security bargain' (June 2026). Its author, Ben Schifman, notes binding NERC standards are unlikely to take effect before 2028, while AI-enabled cyberattacks on the grid are a near-term threat, so the fast lane would rely on interim controls. It covers grid-facing systems only, not theft of model weights. As of October 2026 no binding security standard applies to private US AI data centers.",
        "id": "au6l2#ngg5veh",
        "choice": {
-        "p": "What risk is IFP's 'speed-for-security bargain' for AI data centers mainly meant to address?",
+        "p": "What risk is a 'speed-for-security' deal on AI data centers' grid hookups mainly meant to address?",
         "o": [
          "A hacked data center could spike or drop huge power loads and destabilize the grid",
          "Foreign spies could steal model weights from poorly guarded data center server rooms",
@@ -4011,7 +4011,7 @@
          "Senior sign-off, testing, logging and audit for high-consequence uses"
         ],
         [
-         "Distributed control (Forethought)",
+         "Distributed control of military AI",
          "No single person can command enough autonomous force to stage a coup"
         ]
        ],
@@ -4054,18 +4054,17 @@
      "items": [
       {
        "t": "recall",
-       "p": "What is 'law-following AI' (LFAI), and how do supporters at the Institute for Law & AI say it would guard against power grabs?",
-       "answer": "AI agents built to refuse clearly illegal actions, even when government officials order them. Coups and executive power grabs have needed many people to cooperate, some of whom refuse. If AI replaces soldiers and civil servants, LFAI keeps that refusal capacity inside the system.",
+       "p": "What is 'law-following AI', and how could it guard against power grabs?",
+       "answer": "AI agents built to refuse clearly illegal actions, even when government officials order them. Coups and executive power grabs have needed many people to cooperate, some of whom refuse. If AI replaces soldiers and civil servants, law-following AI keeps that refusal capacity inside the system.",
        "keys": [
         "AI agents refuse clearly unlawful orders, including from officials",
         "Power grabs historically needed many cooperating people",
-        "LFAI preserves the check that human refusal provided",
-        "Cheapest route: procurement requirements"
+        "Preserves the check that human refusal provided"
        ],
-       "x": "Cullen O'Keefe and colleagues at LawAI propose requiring LFAI, for example through procurement terms, for AI agents in high-stakes government roles. As of Oct 2026 no bill requires it.",
+       "x": "Cullen O'Keefe and colleagues at the Institute for Law & AI (LawAI) propose requiring law-following AI, for example through procurement terms, for AI agents in high-stakes government roles. As of Oct 2026 no bill requires it. O'Keefe himself notes that laws have gaps a capable AI could exploit while staying legal, which is why he also proposes congressional 'advice and consent' for major government AI deployments.",
        "id": "au7l0#4",
        "choice": {
-        "p": "How do supporters say law-following AI, built to refuse clearly illegal orders even from officials, would guard against power grabs?",
+        "p": "How could law-following AI, built to refuse clearly illegal orders even from officials, guard against power grabs?",
         "o": [
          "Power grabs need many people's help; AI that refuses illegal orders preserves that check",
          "It lets federal courts switch off any government AI system found to have broken a law",
@@ -4112,18 +4111,16 @@
       },
       {
        "t": "recall",
-       "p": "Forethought researchers (Davidson, Finnveden and Hadshar) propose 'secret-loyalty audits' and distributed control of powerful AI. What risk are these meant to address?",
+       "p": "What risk are 'secret-loyalty audits' and distributed control of powerful AI meant to address?",
        "answer": "That a lab insider or a single official quietly gains control over powerful AI, for example by training hidden instructions into a model so it serves one person or faction, and then uses it to seize power.",
        "keys": [
-        "AI-enabled coups by a small group",
-        "Audits check models for hidden objectives",
-        "No single person can direct enough AI capability alone",
-        "Coup-proof any single centralized AI project"
+        "A small group or one person using AI to seize power (an AI-enabled coup)",
+        "For example, an insider training hidden loyalties into a model"
        ],
-       "x": "Distributed control means, for example, that no single person can control enough military AI systems to stage a coup. The Forethought report (April 2025) also says any plan for a single centralized AI project should be coup-proofed.",
+       "x": "Forethought researchers Tom Davidson, Lukas Finnveden and Rose Hadshar propose both in 'AI-Enabled Coups' (April 2025). Distributed control means, for example, that no single person can control enough military AI systems to stage a coup. The report also says any plan for a single centralized AI project should be coup-proofed.",
        "id": "au7l0#6",
        "choice": {
-        "p": "What risk are Forethought's proposed 'secret-loyalty audits' and distributed control of powerful AI meant to address?",
+        "p": "What risk are 'secret-loyalty audits' and distributed control of powerful AI meant to address?",
         "o": [
          "An insider or single official secretly controlling powerful AI to seize power",
          "Rival countries stealing frontier model weights through large-scale cyberattacks",
@@ -4453,17 +4450,16 @@
       },
       {
        "t": "recall",
-       "p": "Suppose countries agree to cap AI training compute. Why do the pacing.tech authors argue verification needs to be strongest late in the agreement?",
-       "answer": "The incentive to defect grows with the overhang: the longer a cap holds, the more efficiency gains and unused capacity build up, so the payoff from cheating rises, often just as political attention has moved on. Secret defection is especially harmful because it corrupts every other party's picture of the situation.",
+       "p": "Suppose countries agree to cap AI training compute. Why might verification need to be strongest late in the agreement?",
+       "answer": "The incentive to defect grows with the overhang: the longer a cap holds, the more efficiency gains and unused capacity build up, so the payoff from cheating rises, often just as political attention has moved on.",
        "keys": [
         "Defection incentive grows as the overhang builds",
-        "Attention fades late in an intervention",
-        "Secret defection is worse than open non-participation"
+        "Attention fades late in an intervention"
        ],
-       "x": "An 'overhang' is resources (compute, efficiency gains, ideas) that build up during a restriction and can produce a burst of progress if it ends or is broken. The authors also suggest staged exits to reduce sudden jumps.",
+       "x": "The pacing.tech research agenda makes this argument, and adds that secret defection is worse than open non-participation because it corrupts every other party's picture of the situation. An 'overhang' is resources (compute, efficiency gains, ideas) that build up during a restriction and can produce a burst of progress if it ends or is broken. The authors also suggest staged exits to reduce sudden jumps.",
        "id": "au7l2#10",
        "choice": {
-        "p": "Why do the pacing.tech authors say verification of a training cap must be strongest late in the agreement?",
+        "p": "Why might verification of a training-compute cap need to be strongest late in the agreement?",
         "o": [
          "The payoff from cheating grows as an overhang builds, while attention fades",
          "Early in a cap no one has any reason to cheat, because all AI progress stops completely",

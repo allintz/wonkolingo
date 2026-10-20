@@ -19,7 +19,7 @@
  },
  {
   "id": "tu0l0#n47tivl",
-  "q": "The 2026 International AI Safety Report calls bio and cyber misuse a 'dual-use' problem for policymakers. What makes it ",
+  "q": "Why are AI risks in biology and cybersecurity often called a 'dual-use' problem for policymakers?",
   "src": [
    "https://internationalaisafetyreport.org/sites/default/files/2026-02/international-ai-safety-report-2026_1.pdf",
    "frag-ideas.json#dna-synthesis-screening"
@@ -27,7 +27,7 @@
  },
  {
   "id": "tu0l0#n4jmt83",
-  "q": "The International AI Safety Report files both everyday errors and 'loss of control' under AI malfunctions. What makes a ",
+  "q": "Everyday AI errors and 'loss of control' can both be treated as AI malfunctions. What makes a loss of control scenario d",
   "src": [
    "https://internationalaisafetyreport.org/sites/default/files/2026-02/international-ai-safety-report-2026_1.pdf",
    "https://arxiv.org/pdf/2501.17805"
@@ -35,7 +35,7 @@
  },
  {
   "id": "tu0l1#num8gqv",
-  "q": "Researchers at Forethought argue advanced AI could make it easier for a small group to seize power, even in an establish",
+  "q": "Some researchers argue advanced AI could make it easier for a small group to seize power, even in an established democra",
   "src": [
    "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power",
    "frag-ideas.json#law-following-ai",
@@ -45,7 +45,7 @@
  },
  {
   "id": "tu0l1#nvivuww",
-  "q": "The 2025 International AI Safety Report treats concentration in the market for general-purpose AI as a risk. What concer",
+  "q": "Why do some analysts treat concentration in the market for general-purpose AI as a risk in itself?",
   "src": [
    "https://arxiv.org/pdf/2501.17805",
    "frag-ideas.json#market-structure",
@@ -54,7 +54,7 @@
  },
  {
   "id": "tu0l1#n944jxc",
-  "q": "Why does the International AI Safety Report treat competitive pressure, between AI companies or between countries, as so",
+  "q": "Why can competitive pressure, between AI companies or between countries, raise other AI risks?",
   "src": [
    "https://arxiv.org/pdf/2501.17805",
    "https://internationalaisafetyreport.org/sites/default/files/2026-02/international-ai-safety-report-2026_1.pdf",
@@ -352,7 +352,7 @@
  },
  {
   "id": "tu1l5#nfn3d4c",
-  "q": "Forethought's report on AI-enabled coups proposes logging inside AI labs too. What would labs log, and what risk is it m",
+  "q": "Why might AI labs need to log and review how their own staff, including senior executives, use their most capable intern",
   "src": [
    "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power"
   ]
@@ -419,7 +419,7 @@
  },
  {
   "id": "tu2l0#n85becj",
-  "q": "AI audit researchers led by Stephen Casper argue that auditors who can only send a model inputs and read its outputs can",
+  "q": "Why can't auditors who can only send a model inputs and read its outputs audit it rigorously, and what additional access",
   "src": [
    "https://arxiv.org/abs/2401.14446",
    "https://www.governance.ai/research-paper/frontier-ai-auditing-toward-rigorous-third-party-assessment-of-safety-and-security-practices-at-leading-ai-companies"
@@ -521,7 +521,7 @@
  },
  {
   "id": "tu2l3#nvwjfgo",
-  "q": "Under the \"regulatory markets\" idea from Gillian Hadfield and Jack Clark, why would government certify private verifiers",
+  "q": "Under a 'regulatory markets' approach, why would government certify private verifiers of AI safety instead of writing de",
   "src": [
    "https://arxiv.org/abs/2304.04914v5",
    "https://www.gov.ca.gov/2026/09/09/governor-newsom-signs-first-in-the-nation-ai-safeguards-to-protect-californians-calls-on-the-federal-government-to-do-its-part/",
@@ -551,7 +551,7 @@
  },
  {
   "id": "tu2l3#n69iqft",
-  "q": "ARI's August 2026 blueprint accepts private verifiers but says government must always keep one job for itself, however m",
+  "q": "Even with a mature market of private AI verifiers, which job might government need to keep for itself?",
   "src": [
    "https://ari.us/research/responsible-innovation-at-the-frontier/"
   ]
@@ -709,7 +709,7 @@
  },
  {
   "id": "tu3l1#ns7lceo",
-  "q": "Some scholars, notably Gabriel Weil, want strict liability for advanced AI in place of negligence. What does strict liab",
+  "q": "Some legal scholars want strict liability for advanced AI in place of negligence. What does strict liability change, and",
   "src": [
    "https://axrp.net/episode/2024/04/17/episode-28-tort-law-for-ai-risk-gabriel-weil.html",
    "https://private-law-theory.org/?p=64870"
@@ -717,7 +717,7 @@
  },
  {
   "id": "tu3l1#n8rx328",
-  "q": "Weil also proposes punitive damages (extra damages on top of the victim's actual losses) in cases where AI causes smalle",
+  "q": "One proposal would add punitive damages (extra damages on top of the victim's actual losses) in cases where AI causes sm",
   "src": [
    "https://private-law-theory.org/?p=64870",
    "https://axrp.net/episode/2024/04/17/episode-28-tort-law-for-ai-risk-gabriel-weil.html"
@@ -752,7 +752,7 @@
  },
  {
   "id": "tu3l2#nc88wun",
-  "q": "Cristian Trout draws on how nuclear power is insured to propose a liability regime for AI catastrophes. What does his mo",
+  "q": "A nuclear-style liability regime for AI catastrophes, modeled on how US nuclear power is insured, would pair mandatory i",
   "src": [
    "https://arxiv.org/abs/2409.06673v1",
    "https://www.nrc.gov/reading-rm/doc-collections/fact-sheets/nuclear-insurance.html"
@@ -769,7 +769,7 @@
  },
  {
   "id": "tu3l2#nkuzy12",
-  "q": "In late 2025, the Financial Times reported how major US insurers such as Great American and W. R. Berkley were respondin",
+  "q": "In late 2025, major US insurers such as Great American and W. R. Berkley responded to growing AI risk. What were they do",
   "src": [
    "https://the-decoder.com/major-insurers-seek-to-exclude-ai-related-risks-from-corporate-policies/",
    "https://techcrunch.com/2025/11/23/ai-is-too-risky-to-insure-say-people-whose-job-is-insuring-risk/"
@@ -801,7 +801,7 @@
  },
  {
   "id": "tu3l3#ns2g892",
-  "q": "Shayne Longpre and co-authors propose a different kind of AI safe harbor. Whom does it protect, and from what?",
+  "q": "Besides liability shields for developers, some propose an AI 'safe harbor' for safety research. Whom would it protect, a",
   "src": [
    "https://arxiv.org/abs/2403.04893v1"
   ]
@@ -919,7 +919,7 @@
  },
  {
   "id": "tu3l7#ncv9t1q",
-  "q": "Match each tool to the failure it mainly targets.",
+  "q": "Match each liability or lab-governance tool to the failure it mainly targets.",
   "src": [
    "https://www.thealiadviser.org/civil-liability-for-ai/tort-law-frontier-ai/",
    "https://arxiv.org/abs/2409.06673v1",
@@ -1054,7 +1054,7 @@
  },
  {
   "id": "tu4l2#nnv9bxh",
-  "q": "Janet Egan and Lennart Heim proposed know-your-customer rules for cloud customers above a compute threshold. Besides hel",
+  "q": "Besides helping enforce export controls, what could know-your-customer rules for large cloud compute customers give the ",
   "src": [
    "https://arxiv.org/abs/2310.13625"
   ]
@@ -1078,7 +1078,7 @@
  },
  {
   "id": "tu4l3#nw0gzi5",
-  "q": "IFP's 'speed-for-security bargain' (June 2026) proposes a trade for large AI data centers. What is it?",
+  "q": "One proposal would give large AI data centers a fast lane for grid hookups if they agree to cut power use when the grid ",
   "src": [
    "https://ifp.org/speed-for-security-bargain-for-ai-data-centers/"
   ]
@@ -1109,7 +1109,7 @@
  },
  {
   "id": "tu4l4#n10i4c1",
-  "q": "RAND's 2024 report on securing model weights defined five security levels, SL1 to SL5. What does the top level, SL5, aim",
+  "q": "Security levels for AI model weights are defined by the attacker they can stop. Put these attackers in order, from the w",
   "src": [
    "https://www.rand.org/pubs/research_reports/RRA2849-1.html"
   ]
@@ -1289,7 +1289,7 @@
  },
  {
   "id": "tu5l1#n2zngie",
-  "q": "Americans for Responsible Innovation's 2026 blueprint lets an agency's emergency halt of a dangerous AI model take effec",
+  "q": "One proposed design lets an agency's emergency halt of a dangerous AI model take effect at once, but the order lapses af",
   "src": [
    "https://ari.us/research/responsible-innovation-at-the-frontier/",
    "https://rollcall.com/2026/09/29/congress-continues-back-seat-role-as-ai-execs-feted-at-white-house/"
@@ -1365,7 +1365,7 @@
  },
  {
   "id": "tu5l3#nvttwml",
-  "q": "In his September 2026 essay 'We Must Pace the Frontier,' Anthropic CEO Dario Amodei proposes a 'speed limit' on recursiv",
+  "q": "Anthropic CEO Dario Amodei has floated a US-China 'speed limit' on recursive self-improvement (AI improving its own succ",
   "src": [
    "https://darioamodei.com/post/we-must-pace-the-frontier",
    "https://ifp.org/preparing-for-ai-research-automation/",
@@ -1431,7 +1431,7 @@
  },
  {
   "id": "tu5l5#naj3q8d",
-  "q": "Holden Karnofsky (Carnegie Endowment, 2024) argues that if-then commitments ('if a model has capability X, then safeguar",
+  "q": "Why can if-then commitments ('if a model has capability X, then safeguard Y must be in place, or development waits') win",
   "src": [
    "https://carnegieendowment.org/research/2024/09/if-then-commitments-for-ai-risk-reduction"
   ]
@@ -1496,7 +1496,7 @@
  },
  {
   "id": "tu5l7#nng19cc",
-  "q": "Match each tool to the failure it mainly targets.",
+  "q": "Match each control or pausing tool to the failure it mainly targets.",
   "src": [
    "https://lieu.house.gov/media-center/press-releases/reps-lieu-and-moran-introduce-bill-require-kill-switch-ai-systems-can",
    "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm",
@@ -1553,7 +1553,7 @@
  },
  {
   "id": "tu6l0#nv41h06",
-  "q": "Human-in-the-loop rules keep a person responsible for each use of force. What different risk does Forethought's proposal",
+  "q": "Human-in-the-loop rules keep a person responsible for each use of force. What different risk does 'distributed control' ",
   "src": [
    "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power",
    "https://newsletter.forethought.org/p/policy-ideas-to-ensure-responsible"
@@ -1579,14 +1579,14 @@
  },
  {
   "id": "tu6l1#n02ewz0",
-  "q": "Forethought's report on AI-enabled coups recommends auditing models for 'secret loyalties'. What risk does this cover th",
+  "q": "What risk do audits for 'secret loyalties' in AI models cover that a rule requiring AI to follow the law would miss?",
   "src": [
    "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power"
   ]
  },
  {
   "id": "tu6l1#nm4t2t5",
-  "q": "How do Cullen O'Keefe and Ketan Ramakrishnan suggest Congress could require law-following AI in government?",
+  "q": "What lever have some legal scholars suggested Congress use to make sure government AI agents follow the law?",
   "src": [
    "https://www.lawfaremedia.org/article/ai-agents-must-follow-the-law"
   ]
@@ -1611,14 +1611,14 @@
  },
  {
   "id": "tu6l2#n6w8rvo",
-  "q": "Cullen O'Keefe proposes that AI in 'protected use cases', such as criminal investigations, domestic intelligence and pro",
+  "q": "One proposal would keep government AI off by default in sensitive areas such as criminal investigations and domestic int",
   "src": [
    "https://www.lawfaremedia.org/article/advice-and-consent-for-major-governmental-ai-deployments"
   ]
  },
  {
   "id": "tu6l2#n0p0bqu",
-  "q": "Law professor Ashley Deeks calls national security AI a 'double black box'. What are the two layers of opacity?",
+  "q": "National security AI is sometimes called a 'double black box'. What are the two layers of opacity?",
   "src": [
    "https://anu.edu.au/events/the-double-black-box-national-security-artificial-intelligence-and-the-struggle-for-democratic",
    "https://academic.oup.com/book/59551",
@@ -1638,14 +1638,14 @@
  },
  {
   "id": "tu6l3#nck7xzx",
-  "q": "Why do antimonopoly scholars such as Tejas Narechania and Ganesh Sitaraman want competition policy applied to frontier A",
+  "q": "Why do some antimonopoly scholars want competition policy applied to frontier AI?",
   "src": [
    "https://yalelawandpolicy.org/sites/default/files/YLPR/narechania_sitaraman_anantimonopolyapproach_ylpr_2024.pdf"
   ]
  },
  {
   "id": "tu6l3#nev08dh",
-  "q": "Narechania and Sitaraman propose 'structural separation' in the AI stack. What would it do, and why do they prefer it to",
+  "q": "What would 'structural separation' in the AI stack do, and why might it be preferred to case-by-case antitrust lawsuits?",
   "src": [
    "https://yalelawandpolicy.org/sites/default/files/YLPR/narechania_sitaraman_anantimonopolyapproach_ylpr_2024.pdf"
   ]
@@ -1679,7 +1679,7 @@
  },
  {
   "id": "tu6l4#nwuh7ye",
-  "q": "How does a 'public option' for AI cloud, as Narechania and Sitaraman propose it, differ in purpose from a research resou",
+  "q": "How does a 'public option' for AI cloud differ in purpose from a research resource like NAIRR?",
   "src": [
    "https://yalelawandpolicy.org/sites/default/files/YLPR/narechania_sitaraman_anantimonopolyapproach_ylpr_2024.pdf"
   ]
@@ -1755,14 +1755,14 @@
  },
  {
   "id": "tu6l6#nuxt7jw",
-  "q": "CNAS researchers Ruby Scanlon and Janet Egan argue U.S.-China AI agreements need 'verification, not trust.' What should ",
+  "q": "Some analysts argue U.S.-China AI agreements need 'verification, not trust'. Since verification can't catch every violat",
   "src": [
    "https://www.cnas.org/publications/cnas-insights/cnas-insights-u-s-china-ai-agreements-need-verification-not-trust"
   ]
  },
  {
   "id": "tu6l6#n4r7fb8",
-  "q": "What do Dan Hendrycks, Eric Schmidt and Alexandr Wang propose in 'Superintelligence Strategy' as the main check on a des",
+  "q": "What does 'Mutual Assured AI Malfunction' (MAIM), proposed as the main check on a destabilizing AI race, rely on?",
   "src": [
    "https://www.nationalsecurity.ai/"
   ]

@@ -61,7 +61,7 @@
       {
        "id": "tu0l0#n47tivl",
        "t": "mc",
-       "p": "The 2026 International AI Safety Report calls bio and cyber misuse a 'dual-use' problem for policymakers. What makes it dual-use?",
+       "p": "Why are AI risks in biology and cybersecurity often called a 'dual-use' problem for policymakers?",
        "o": [
         "The same AI skills that help attackers also help defenders and researchers, so blunt limits hurt legitimate work",
         "Governments and companies both build the same models, so it's unclear which of them a regulator should cover",
@@ -79,18 +79,18 @@
         "The same capabilities help attackers and defenders or researchers",
         "Blunt restrictions would hamper legitimate uses"
        ],
-       "x": "The report notes that overly aggressive safeguards, such as refusing cyber-related requests, can hamper defenders, and that most biological AI tools are open-weight, so harmful uses are hard to restrict without hurting research. Supporters of screening DNA orders say it sidesteps part of this problem: it acts at a physical step, so it works whichever AI model produced a design."
+       "x": "The 2026 International AI Safety Report uses this framing. It notes that overly aggressive safeguards, such as refusing cyber-related requests, can hamper defenders, and that most biological AI tools are open-weight, so harmful uses are hard to restrict without hurting research. Supporters of screening DNA orders say it sidesteps part of this problem: it acts at a physical step, so it works whichever AI model produced a design."
       },
       {
        "id": "tu0l0#n4jmt83",
        "t": "recall",
-       "p": "The International AI Safety Report files both everyday errors and 'loss of control' under AI malfunctions. What makes a loss of control scenario different from an ordinary malfunction?",
+       "p": "Everyday AI errors and 'loss of control' can both be treated as AI malfunctions. What makes a loss of control scenario different from an ordinary malfunction?",
        "answer": "In a loss of control scenario, one or more AI systems operate outside anyone's control, and regaining control is extremely costly or impossible. An ordinary malfunction, such as a wrong answer or buggy code, can usually be noticed and fixed.",
        "keys": [
         "AI systems operate outside anyone's control",
         "Regaining control is extremely costly or impossible"
        ],
-       "x": "The 2026 report says loss of control becomes more likely if systems are misaligned (their goals conflict with what developers or society intend), since such a system might give false information, hide actions or resist shutdown. It says expert opinion on the likelihood varies greatly: some find it implausible, others likely enough to merit attention given how severe it would be.",
+       "x": "The 2026 International AI Safety Report, which files both under malfunctions, says loss of control becomes more likely if systems are misaligned (their goals conflict with what developers or society intend), since such a system might give false information, hide actions or resist shutdown. It says expert opinion on the likelihood varies greatly: some find it implausible, others likely enough to merit attention given how severe it would be.",
        "choice": {
         "p": "What makes a 'loss of control' scenario different from an ordinary AI malfunction?",
         "o": [
@@ -116,7 +116,7 @@
       {
        "id": "tu0l1#num8gqv",
        "t": "mc",
-       "p": "Researchers at Forethought argue advanced AI could make it easier for a small group to seize power, even in an established democracy. What mechanism do they point to?",
+       "p": "Some researchers argue advanced AI could make it easier for a small group to seize power, even in an established democracy. What mechanism would make this possible?",
        "o": [
         "Seizing power has needed many people to cooperate, and some refuse; AI doing their jobs could remove that check",
         "Voters will come to trust AI advisers more than elected officials, and will vote to hand power to those advisers",
@@ -127,20 +127,20 @@
        "ow": [
         "",
         "The concern is a small group seizing power through AI; voters choosing to hand power to AI is a different scenario.",
-        "Election hacking is a separate concern; the report's core worry is removing the need for human cooperation.",
-        "The report centers on who controls AI systems inside militaries, governments and labs; chip supply is a different issue."
+        "Election hacking is a separate concern; the core worry is removing the need for human cooperation.",
+        "The concern centers on who controls AI systems inside militaries, governments and labs; chip supply is a different issue."
        ],
        "keys": [
         "Power grabs have needed many people to cooperate",
         "Some people refuse illegal orders",
         "AI replacing those people removes the check"
        ],
-       "x": "In 'AI-Enabled Coups' (April 2025), Tom Davidson, Lukas Finnveden and Rose Hadshar name three risk factors: AI systems loyal to one person or small group, AI with hidden 'secret loyalties', and exclusive access to the most capable AI. Tools aimed at this include law-following AI, statutory limits on military AI and logging of officials' AI use."
+       "x": "This argument is from 'AI-Enabled Coups' (April 2025) by Forethought's Tom Davidson, Lukas Finnveden and Rose Hadshar, which names three risk factors: AI systems loyal to one person or small group, AI with hidden 'secret loyalties', and exclusive access to the most capable AI. Tools aimed at this include law-following AI, statutory limits on military AI and logging of officials' AI use."
       },
       {
        "id": "tu0l1#nvivuww",
        "t": "mc",
-       "p": "The 2025 International AI Safety Report treats concentration in the market for general-purpose AI as a risk. What concern does it raise?",
+       "p": "Why do some analysts treat concentration in the market for general-purpose AI as a risk in itself?",
        "o": [
         "A few companies gain great power over how AI is built and used, and many sectors rely on the same few models",
         "Concentration raises chip prices so far that universities can no longer afford to do serious AI research",
@@ -150,29 +150,29 @@
        "a": 0,
        "ow": [
         "",
-        "The report names high costs as a cause of concentration; its concerns are power and shared points of failure.",
-        "The report doesn't argue that dominant firms are more likely to release models openly.",
-        "The report makes no claim that big companies' models are less accurate."
+        "High costs are a cause of concentration; the concerns are power and shared points of failure.",
+        "Open release isn't the concern; the concerns are power and shared points of failure.",
+        "Accuracy isn't the issue; the worry is many sectors relying on the same few models."
        ],
        "keys": [
         "A few companies gain power over AI development and deployment",
         "Many sectors depend on the same few models (single points of failure)"
        ],
-       "x": "The report says building a state-of-the-art model can cost hundreds of millions of dollars, and leaders gain from economies of scale and network effects. A failure in one widely used model could spread to finance, healthcare and other critical sectors. Market-structure tools such as merger review, structural separation and public compute aim at this private side of power concentration."
+       "x": "The 2025 International AI Safety Report raises this concern. It says building a state-of-the-art model can cost hundreds of millions of dollars, and leaders gain from economies of scale and network effects. A failure in one widely used model could spread to finance, healthcare and other critical sectors. Market-structure tools such as merger review, structural separation and public compute aim at this private side of power concentration."
       },
       {
        "id": "tu0l1#n944jxc",
        "t": "recall",
-       "p": "Why does the International AI Safety Report treat competitive pressure, between AI companies or between countries, as something that raises other AI risks?",
-       "answer": "Competition can push developers and governments to put speed ahead of safety: releasing faster, spending less on testing and risk management, or accepting larger risks to stay ahead. The report warns this may leave too little safety work done, such as the work needed to avoid loss of control.",
+       "p": "Why can competitive pressure, between AI companies or between countries, raise other AI risks?",
+       "answer": "Competition can push developers and governments to put speed ahead of safety: releasing faster, spending less on testing and risk management, or accepting larger risks to stay ahead. This may leave too little safety work done, such as the work needed to avoid loss of control.",
        "keys": [
         "Competition pushes actors to prioritize speed over safety",
         "Less testing and risk-reduction work",
         "Raises the chance of other risks such as loss of control"
        ],
-       "x": "The 2025 report says that if avoiding loss of control takes a lot of risk assessment and mitigation work, intense competition may lower the chance that enough gets done. Dan Hendrycks, Mantas Mazeika and Thomas Woodside (Center for AI Safety, 2023) list an 'AI race' as one of four main sources of catastrophic AI risk.",
+       "x": "The 2025 International AI Safety Report makes this point: if avoiding loss of control takes a lot of risk assessment and mitigation work, intense competition may lower the chance that enough gets done. Dan Hendrycks, Mantas Mazeika and Thomas Woodside (Center for AI Safety, 2023) list an 'AI race' as one of four main sources of catastrophic AI risk.",
        "choice": {
-        "p": "Why does the International AI Safety Report treat competitive pressure between AI developers or countries as raising other risks?",
+        "p": "Why can competitive pressure between AI developers or countries raise other AI risks?",
         "o": [
          "Competition can push actors to put speed ahead of safety, skimping on testing and risk reduction",
          "Competition makes AI models more expensive, so fewer developers can afford safety tools",
@@ -182,9 +182,9 @@
         "a": 0,
         "ow": [
          "",
-         "The report's concern is how competition shapes safety effort; it doesn't argue that models get more expensive.",
+         "The concern is how competition shapes safety effort, not model prices.",
          "Competition doesn't require publishing weights; many leading labs keep theirs closed.",
-         "The report's worry runs the opposite way: competition may lead governments to invest less in risk management."
+         "The worry runs the opposite way: competition may lead governments to invest less in risk management."
         ]
        }
       },
@@ -1009,14 +1009,14 @@
       {
        "id": "tu1l5#nfn3d4c",
        "t": "recall",
-       "p": "Forethought's report on AI-enabled coups proposes logging inside AI labs too. What would labs log, and what risk is it meant to catch?",
-       "answer": "Labs would log and review who uses their most capable internal models and for what, so a small group of insiders, even senior executives, can't quietly use those models to tamper with systems (for example, making future models secretly loyal) or to seize power.",
+       "p": "Why might AI labs need to log and review how their own staff use their most capable internal models?",
+       "answer": "So a small group of insiders, even senior executives, can't quietly use those models to tamper with systems (for example, making future models secretly loyal) or to seize power. Logs of who uses the models and for what make such misuse detectable.",
        "keys": [
-        "log and review internal model use and users",
-        "catch insiders, even executives, misusing models",
-        "risks such as secret loyalties or a power grab"
+        "catch insiders, even executives, misusing internal models",
+        "risks such as planting secret loyalties or a power grab",
+        "logs of who used the models and for what make misuse detectable"
        ],
-       "x": "Tom Davidson, Lukas Finnveden and Rose Hadshar (Forethought, 2025) argue that security measures \"must therefore be robust to even the most senior insiders.\" They also want capabilities disclosed for models deployed only inside labs, since internal models doing AI research could pose serious coup risk.",
+       "x": "Forethought researchers Tom Davidson, Lukas Finnveden and Rose Hadshar propose such logging in their 2025 report on AI-enabled coups, arguing that security measures \"must therefore be robust to even the most senior insiders.\" They also want capabilities disclosed for models deployed only inside labs, since internal models doing AI research could pose serious coup risk.",
        "choice": {
         "p": "What risk is logging and reviewing staff use of a lab's internal AI models meant to catch?",
         "o": [
@@ -1239,15 +1239,16 @@
       {
        "id": "tu2l0#n85becj",
        "t": "recall",
-       "p": "AI audit researchers led by Stephen Casper argue that auditors who can only send a model inputs and read its outputs can't audit it rigorously. What additional access do they say rigorous audits need?",
-       "answer": "Access to the model's internals (such as its weights, activations and gradients) and access to information about how it was trained and deployed, such as documentation, data and the lab's internal evaluation results.",
+       "p": "Why can't auditors who can only send a model inputs and read its outputs audit it rigorously, and what additional access would rigorous audits need?",
+       "answer": "Query-only (black-box) access rules out stronger tests, such as attacks that use the model's internals or fine-tuning to surface hidden capabilities. Rigorous audits also need access to the model's internals (such as its weights, activations and gradients) and to information about how it was trained and deployed, such as documentation, data and the lab's internal evaluation results.",
        "keys": [
+        "query-only access limits auditors to weaker tests",
         "access to model internals such as weights",
         "access to training and deployment information such as documentation, data or internal evaluations"
        ],
-       "x": "Casper and co-authors call query-only access \"black-box\" and argue that internal (\"white-box\") and \"outside-the-box\" access allow far more scrutiny (FAccT 2024). The same concern runs through later proposals: a January 2026 paper led by Miles Brundage says frontier audits need deep, secure access to non-public information.",
+       "x": "This argument comes from AI audit researchers led by Stephen Casper (FAccT 2024), who call query-only access 'black-box' and argue that internal ('white-box') and 'outside-the-box' access allow far more scrutiny. The same concern runs through later proposals: a January 2026 paper led by Miles Brundage says frontier audits need deep, secure access to non-public information.",
        "choice": {
-        "p": "Beyond querying a model and reading its outputs, what access do Casper and co-authors say rigorous AI audits need?",
+        "p": "Beyond querying a model and reading its outputs, what access do rigorous AI audits need?",
         "o": [
          "The model's internals, like weights, plus training and testing records",
          "Only the public version of the model, so auditors see exactly what users see",
@@ -1257,8 +1258,8 @@
         "a": 0,
         "ow": [
          "",
-         "Public-only access is the \"black-box\" setup the authors argue is insufficient.",
-         "Financial records matter for other oversight, but the paper is about access to the AI system and its development.",
+         "Public-only access is the 'black-box' setup that limits audits.",
+         "Financial records matter for other oversight, but rigorous audits need access to the AI system and its development.",
          "Self-certification by executives is what independent audits are meant to replace."
         ]
        }
@@ -1551,14 +1552,14 @@
       {
        "id": "tu2l3#nvwjfgo",
        "t": "recall",
-       "p": "Under the \"regulatory markets\" idea from Gillian Hadfield and Jack Clark, why would government certify private verifiers of AI safety instead of writing detailed technical rules itself?",
+       "p": "Under a 'regulatory markets' approach, why would government certify private verifiers of AI safety instead of writing detailed technical rules itself?",
        "answer": "Legislators and agencies lack the technical staff and speed to turn safety goals into detailed rules for fast-changing AI. Certified private verifiers can build that expertise and update their methods faster, while government sets the goals and licenses and oversees the verifiers.",
        "keys": [
         "government lacks technical expertise and speed",
         "private verifiers build expertise and update methods faster",
         "government sets the goals and polices the verifiers"
        ],
-       "x": "Hadfield and Clark propose that governments require regulated companies to buy oversight services from government-licensed private regulators, so market incentives develop the technical methods while government sets priorities. California's SB 813 (signed September 9, 2026) borrows part of the idea in voluntary form: a state agency designates independent verification organizations (IVOs) and can suspend or end a designation.",
+       "x": "The idea comes from Gillian Hadfield and Jack Clark, who propose that governments require regulated companies to buy oversight services from government-licensed private regulators, so market incentives develop the technical methods while government sets priorities. California's SB 813 (signed September 9, 2026) borrows part of the idea in voluntary form: a state agency designates independent verification organizations (IVOs) and can suspend or end a designation.",
        "choice": {
         "p": "What is the core argument for having government certify private AI safety verifiers?",
         "o": [
@@ -1570,7 +1571,7 @@
         "a": 0,
         "ow": [
          "",
-         "Verifiers assess and report; these proposals don't give them power to block releases.",
+         "Government agencies can also hold power to block releases, as under licensing; the case for verifiers rests on expertise and speed.",
          "Government sets the goals in this model; labs don't choose their own standards.",
          "These proposals leave lawsuits in place; some make verification count in court."
         ]
@@ -1618,7 +1619,7 @@
        "x": "Weil's proposed fix is mandatory liability insurance, so whoever judges the risk also bears the cost of misses. ARI, which supports verifiers, would keep government examiners doing a share of reviews so they can check verifiers' findings against their own. Among SB 813's criteria for designating verifiers: a verifier can't accept pay that depends on the results of its assessment.",
        "open": true,
        "choice": {
-        "p": "Which of these is an objection Gabriel Weil raises to certified private verifiers?",
+        "p": "Which of these is an objection critics raise to certified private verifiers?",
         "o": [
          "Verifiers chosen and paid by developers face pressure to be lenient",
          "Verifiers would give the government power to decide which labs may operate",
@@ -1637,7 +1638,7 @@
       {
        "id": "tu2l3#n69iqft",
        "t": "mc",
-       "p": "ARI's August 2026 blueprint accepts private verifiers but says government must always keep one job for itself, however mature the verifier market becomes. Which job?",
+       "p": "Even with a mature market of private AI verifiers, which job might government need to keep for itself?",
        "o": [
         "Judging whether a developer's safety measures are adequate",
         "Writing each developer's safety framework for it",
@@ -1648,13 +1649,13 @@
        "ow": [
         "",
         "Developers write their own frameworks in this design; government examines them.",
-        "Fee-setting isn't the job ARI reserves for government; the job it never hands off is judging adequacy.",
-        "The blueprint uses accredited private verifiers alongside government examiners."
+        "Fee-setting isn't the job reserved for government; the one never handed off is judging adequacy.",
+        "These designs use accredited private verifiers alongside government examiners."
        ],
        "keys": [
         "government keeps the final judgment of whether safety measures are adequate"
        ],
-       "x": "ARI (Americans for Responsible Innovation) says the government \"never fully relinquishes\" its duty to judge whether developers' frameworks meet federal minimum standards. The government would also direct for-cause examinations, inspect verifiers' work, and do a share of examinations itself so it has a baseline for judging verifiers' findings."
+       "x": "This is the position of the August 2026 blueprint from ARI (Americans for Responsible Innovation), which says the government \"never fully relinquishes\" its duty to judge whether developers' frameworks meet federal minimum standards. The government would also direct for-cause examinations, inspect verifiers' work, and do a share of examinations itself so it has a baseline for judging verifiers' findings."
       }
      ]
     },
@@ -2141,16 +2142,16 @@
       {
        "id": "tu3l1#ns7lceo",
        "t": "recall",
-       "p": "Some scholars, notably Gabriel Weil, want strict liability for advanced AI in place of negligence. What does strict liability change, and why do they think it matters when no one yet knows how to make AI systems safe?",
+       "p": "Some legal scholars want strict liability for advanced AI in place of negligence. What does strict liability change, and why might it matter when no one yet knows how to make AI systems safe?",
        "answer": "Under strict liability the developer pays for harm its system causes even if it took every known precaution; victims need not prove carelessness. When safety methods don't exist yet, negligence lets a careful developer off, while strict liability still gives it a reason to slow down, deploy less, or invent new safeguards.",
        "keys": [
         "developer pays even if it took every known precaution",
         "victims need not prove carelessness or a skipped precaution",
         "keeps a reason to slow down or find new safeguards when no known fix exists"
        ],
-       "x": "Weil argues that training and deploying advanced AI should count as an 'abnormally dangerous activity', a category (blasting with explosives is the classic example) where courts already apply strict liability because the activity is risky even with reasonable care. He notes that negligence never asks whether you should have done the risky activity at all, while strict liability gives a lab a reason to wait when it isn't confident a system is safe.",
+       "x": "Gabriel Weil, a leading advocate, argues that training and deploying advanced AI should count as an 'abnormally dangerous activity', a category (blasting with explosives is the classic example) where courts already apply strict liability because the activity is risky even with reasonable care. He notes that negligence usually doesn't ask whether you should have done the risky activity at all, while strict liability gives a lab a reason to wait when it isn't confident a system is safe.",
        "choice": {
-        "p": "Gabriel Weil and others favor strict liability over negligence for advanced AI. What does strict liability change?",
+        "p": "Some legal scholars favor strict liability over negligence for advanced AI. What does strict liability change?",
         "o": [
          "The developer pays for harm its system causes, even after every known precaution",
          "The developer pays only if victims prove in court that it failed to take reasonable care",
@@ -2169,7 +2170,7 @@
       {
        "id": "tu3l1#n8rx328",
        "t": "mc",
-       "p": "Weil also proposes punitive damages (extra damages on top of the victim's actual losses) in cases where AI causes smaller, compensable harm, even without malice or recklessness. What problem is this meant to solve?",
+       "p": "One proposal would add punitive damages (extra damages on top of the victim's actual losses) in cases where AI causes smaller, compensable harm, even without malice or recklessness. What problem is this meant to solve?",
        "o": [
         "A catastrophe would bankrupt the developer, so its cost must be charged in smaller cases",
         "Juries tend to award too little when software, rather than a person, causes harm",
@@ -2179,16 +2180,16 @@
        "a": 0,
        "ow": [
         "",
-        "Weil's rationale is catastrophic risk that liability could never charge for; jury bias plays no part in it.",
+        "The rationale is catastrophic risk that liability could never charge for; jury bias plays no part.",
         "Tracing causation is a real challenge, but punitive damages do nothing to solve it.",
-        "His proposal targets advanced AI developers generally, with no special focus on small firms."
+        "The proposal targets advanced AI developers generally, with no special focus on small firms."
        ],
        "keys": [
         "a catastrophe would exceed what any company could pay",
         "so the worst outcomes would never be charged through liability",
         "add the expected cost of catastrophic risk to awards in smaller, payable cases"
        ],
-       "x": "Weil's diagnosis is that most expected harm from advanced AI lies in catastrophes where compensation would not be feasible, so ordinary liability never charges for it. Punitive damages would 'pull forward' that expected cost into near-miss cases that courts can handle. Because current doctrine requires malice or recklessness for punitive damages, Weil thinks legislation is a likelier route than the courts."
+       "x": "The proposal is legal scholar Gabriel Weil's. His diagnosis is that most expected harm from advanced AI lies in catastrophes where compensation would not be feasible, so ordinary liability never charges for it. Punitive damages would 'pull forward' that expected cost into near-miss cases that courts can handle. Because current doctrine requires malice or recklessness for punitive damages, Weil thinks legislation is a likelier route than the courts."
       },
       {
        "id": "tu3l1#n96emph",
@@ -2281,7 +2282,7 @@
       {
        "id": "tu3l2#nc88wun",
        "t": "mc",
-       "p": "Cristian Trout draws on how nuclear power is insured to propose a liability regime for AI catastrophes. What does his model pair with mandatory insurance?",
+       "p": "A nuclear-style liability regime for AI catastrophes, modeled on how US nuclear power is insured, would pair mandatory insurance with what kind of liability rule?",
        "o": [
         "Liability that is strict, capped, and assigned only to the developer",
         "Unlimited liability shared by every company that uses the model",
@@ -2291,16 +2292,16 @@
        "a": 0,
        "ow": [
         "",
-        "Trout proposes capped liability channeled to the developer, so insurers know the most they could owe.",
-        "His proposal keeps developers private and responsible for their own liability.",
-        "Insurers price and monitor risk in his model; they get no formal veto."
+        "A nuclear-style regime caps liability and channels it to the developer, so insurers know the most they could owe.",
+        "The regime keeps developers private and responsible for their own liability.",
+        "Insurers price and monitor risk; they get no formal veto."
        ],
        "keys": [
         "strict liability (no need to prove fault)",
         "capped (limited) liability",
         "liability channeled only to the developer"
        ],
-       "x": "In Trout's terms, liability is 'limited' (capped), 'strict' (no need to prove fault) and 'exclusive' (only the developer can be sued). In US nuclear power, the Price-Anderson Act requires $500 million of private coverage per reactor site, backed by an industry pool that can assess each reactor about $158 million more."
+       "x": "Cristian Trout (2024) proposes this model. In his terms, liability is 'limited' (capped), 'strict' (no need to prove fault) and 'exclusive' (only the developer can be sued). In US nuclear power, the Price-Anderson Act requires $500 million of private coverage per reactor site, backed by an industry pool that can assess each reactor about $158 million more."
       },
       {
        "id": "tu3l2#nlybbo0",
@@ -2335,7 +2336,7 @@
       {
        "id": "tu3l2#nkuzy12",
        "t": "mc",
-       "p": "In late 2025, the Financial Times reported how major US insurers such as Great American and W. R. Berkley were responding to growing AI risk. What were they doing?",
+       "p": "In late 2025, major US insurers such as Great American and W. R. Berkley responded to growing AI risk. What were they doing?",
        "o": [
         "Asking US regulators to let them exclude AI claims",
         "Launching dedicated catastrophe policies for frontier AI labs",
@@ -2353,7 +2354,7 @@
         "sought regulators' permission to exclude AI-related claims",
         "to limit their exposure to AI losses"
        ],
-       "x": "An underwriter told the FT that AI outputs are 'too much of a black box', and insurers feared many correlated claims at once: Aon's Kevin Kalinich said the industry could absorb a single $400 million loss but not thousands of claims from one AI provider's error. AIG, also named in reports, said it had no plans to use such exclusions. The episode illustrates a doubt about insurance mandates: coverage might not be for sale."
+       "x": "The Financial Times reported the filings in November 2025. An underwriter told the FT that AI outputs are 'too much of a black box', and insurers feared many correlated claims at once: Aon's Kevin Kalinich said the industry could absorb a single $400 million loss but not thousands of claims from one AI provider's error. AIG, also named in reports, said it had no plans to use such exclusions. The episode illustrates a doubt about insurance mandates: coverage might not be for sale."
       }
      ]
     },
@@ -2392,7 +2393,7 @@
       {
        "id": "tu3l3#nso1lag",
        "t": "mc",
-       "p": "Compare two safe harbors: one shields any developer that publishes its own safety plan; the other shields only developers certified by an approved independent auditor. Why do certification advocates such as Dean Ball favor the second?",
+       "p": "Compare two safe harbors: one shields any developer that publishes its own safety plan; the other shields only developers certified by an approved independent auditor. Why do supporters of the certification version prefer it?",
        "o": [
         "Outside review confirms practices are real, so the shield rewards actual safety",
         "Certified developers also gain immunity from criminal prosecution for harms their AI causes",
@@ -2410,7 +2411,7 @@
         "independent review checks the practices are real",
         "the shield rewards real safety practice over a self-written document"
        ],
-       "x": "Ball argues published safety frameworks are only starting points, and audits would test whether labs follow them. Gabriel Weil said Illinois SB 3444, which shields developers that publish a safety plan, offers 'near total protection from liability' for 'a very weak requirement'. California's SB 813 (signed Sept. 9, 2026) creates a framework for independent verification organizations to assess AI models for compliance with state law."
+       "x": "Dean Ball, who favors the certification version, argues published safety frameworks are only starting points, and audits would test whether labs follow them. Gabriel Weil said Illinois SB 3444, which shields developers that publish a safety plan, offers 'near total protection from liability' for 'a very weak requirement'. California's SB 813 (signed Sept. 9, 2026) creates a framework for independent verification organizations to assess AI models for compliance with state law, but in its final form a passed audit is only 'relevant to, but not conclusive of' a lawsuit, so it is not a full safe harbor."
       },
       {
        "id": "tu3l3#n6rph2t",
@@ -2445,7 +2446,7 @@
       {
        "id": "tu3l3#ns2g892",
        "t": "mc",
-       "p": "Shayne Longpre and co-authors propose a different kind of AI safe harbor. Whom does it protect, and from what?",
+       "p": "Besides liability shields for developers, some propose an AI 'safe harbor' for safety research. Whom would it protect, and from what?",
        "o": [
         "Independent safety researchers, from account bans or legal action under terms of service",
         "AI developers, from lawsuits over harms caused by the people who use their models",
@@ -2463,7 +2464,7 @@
         "protects independent safety researchers or red-teamers",
         "from account suspensions or legal reprisal under terms of service"
        ],
-       "x": "Their 2024 paper argues that terms of service discourage good-faith safety research and that company-run researcher access programs lack independence. They ask major developers to commit to legal and technical protections for public-interest evaluation, so that terms of service don't deter outside testing."
+       "x": "The proposal comes from Shayne Longpre and co-authors (2024), who argue that terms of service discourage good-faith safety research and that company-run researcher access programs lack independence. They ask major developers to commit to legal and technical protections for public-interest evaluation, so that terms of service don't deter outside testing."
       }
      ]
     },
@@ -3251,7 +3252,7 @@
       {
        "id": "tu4l2#nnv9bxh",
        "t": "mc",
-       "p": "Janet Egan and Lennart Heim proposed know-your-customer rules for cloud customers above a compute threshold. Besides helping enforce export controls, what do they say this would give the government?",
+       "p": "Besides helping enforce export controls, what could know-your-customer rules for large cloud compute customers give the government?",
        "o": [
         "Visibility into frontier AI work, to spot sudden capability jumps",
         "Authority to approve or reject each new frontier AI model before the developer can release it publicly",
@@ -3270,7 +3271,7 @@
         "flag sudden or risky capability jumps",
         "build government capacity to regulate AI"
        ],
-       "x": "They argue a threshold that is updated over time can capture high-risk frontier work without burdening ordinary cloud customers, and that controlling access to compute is more precise than restricting chip purchases, since access can be adjusted or suspended at any time."
+       "x": "Janet Egan and Lennart Heim, who proposed such rules for customers above a compute threshold, argue a threshold that is updated over time can capture high-risk frontier work without burdening ordinary cloud customers, and that controlling access to compute is more precise than restricting chip purchases, since access can be adjusted or suspended at any time."
       },
       {
        "id": "tu4l2#nmy5weu",
@@ -3341,27 +3342,26 @@
       {
        "id": "tu4l3#nw0gzi5",
        "t": "mc",
-       "p": "IFP's 'speed-for-security bargain' (June 2026) proposes a trade for large AI data centers. What is it?",
+       "p": "One proposal would give large AI data centers a fast lane for grid hookups if they agree to cut power use when the grid is strained and accept binding security controls on their grid-facing systems. What risk is the security condition meant to address?",
        "o": [
-        "Faster grid hookups for curtailable large loads that meet binding grid security controls",
-        "Federal tax breaks for data centers that disclose their energy and water use",
-        "Leases on federal land for AI developers that agree to share their model weights with the government",
-        "Exemption from export controls for chips installed in certified secure facilities"
+        "Hackers seizing a site's load controls to swing its power use and destabilize the grid",
+        "Spies or hackers stealing the frontier model weights stored on the data center's servers",
+        "Data center demand driving up electricity prices for households served by the same grid",
+        "Foreign-made chips with hidden backdoors being installed in the data center's server racks"
        ],
        "a": 0,
        "ow": [
         "",
-        "Disclosure rules on local impacts are a separate idea; they set no security requirements.",
-        "The IFP proposal uses grid access as leverage, and it doesn't involve handing over weights.",
-        "The bargain trades faster grid hookups and leaves export rules untouched."
+        "Weight theft is a real data center risk, but grid-facing controls protect the grid; weight security is a separate tool.",
+        "Prices are a cost-allocation question; these controls target attacks on the grid.",
+        "Chip supply-chain risks are a separate concern; these controls cover the systems that interact with the grid."
        ],
        "keys": [
-        "faster grid interconnection (a fast lane)",
-        "for large loads that accept curtailment",
-        "in exchange for binding security controls that protect the grid",
-        "FERC sets the terms; NERC later writes standards"
+        "attackers taking over a data center's load-management systems",
+        "sudden gigawatt-scale swings in power use",
+        "destabilizing the grid"
        ],
-       "x": "Ben Schifman's proposal targets grid security: a hacked data center can swing gigawatts of power use in a fraction of a second. FERC would condition a fast lane for grid hookups on interim security controls for grid-facing systems, since enforceable standards from the grid reliability body NERC are unlikely before at least 2028. 'Curtailment' means the load agrees to cut its power use when the grid is strained."
+       "x": "This is the 'speed-for-security bargain' from IFP (the Institute for Progress), set out in a June 2026 piece by Ben Schifman. Tens of thousands of software-controlled GPUs can drop or resume gigawatt-scale load in a fraction of a second, and an attacker who took over a site's load management could use that to force damaging swings. IFP wants FERC to condition the fast lane on interim security controls, since enforceable standards from the grid reliability body NERC are unlikely before at least 2028. 'Curtailment' means the load agrees to cut its power use when the grid is strained."
       },
       {
        "id": "tu4l3#ndfzaji",
@@ -3453,26 +3453,19 @@
       },
       {
        "id": "tu4l4#n10i4c1",
-       "t": "mc",
-       "p": "RAND's 2024 report on securing model weights defined five security levels, SL1 to SL5. What does the top level, SL5, aim to stop?",
-       "o": [
-        "Top-priority operations by the world's most capable nation-states",
+       "t": "order",
+       "p": "Security levels for AI model weights are defined by the attacker they can stop. Put these attackers in order, from the weakest a lab might defend against to the strongest.",
+       "x": "This ladder follows RAND's 2024 report on securing model weights, whose levels SL1 to SL5 are defined by attackers like these, from amateur hackers at SL1 to the top-priority operations of the most capable states at SL5. RAND said achieving SL5 was not yet possible, that it would likely need help from the national security community, and that the needed measures could take significant time (for example, five years) to build.",
+       "ends": [
+        "Weakest",
+        "Strongest"
+       ],
+       "items": [
         "Amateur hackers running untargeted attacks",
         "Cybercrime groups and insiders at the lab",
-        "Routine operations by leading state-sponsored hacking groups"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "That is SL1, the lowest level.",
-        "That is SL3, the middle level.",
-        "That is SL4; SL5 targets the handful of operations the top states prioritize most."
-       ],
-       "keys": [
-        "top-priority operations",
-        "by the most capable nation-states"
-       ],
-       "x": "RAND said achieving SL5 was not yet possible, that it would likely need help from the national security community, and that the needed measures could take significant time (for example, five years) to build."
+        "Routine operations by leading state-sponsored hacking groups",
+        "Top-priority operations by the world's most capable nation-states"
+       ]
       },
       {
        "id": "tu4l4#nedq6pv",
@@ -4034,14 +4027,14 @@
       {
        "id": "tu5l1#n2zngie",
        "t": "recall",
-       "p": "Americans for Responsible Innovation's 2026 blueprint lets an agency's emergency halt of a dangerous AI model take effect at once, but the order lapses after 72 hours unless the government asks a court to extend it. What risk is this design meant to limit?",
+       "p": "One proposed design lets an agency's emergency halt of a dangerous AI model take effect at once, but the order lapses after 72 hours unless the government asks a court to extend it. What risk is this design meant to limit?",
        "answer": "Unchecked discretion: one agency or official could use a halt power hastily, arbitrarily or for political ends. Requiring the government to go to court within 72 hours, and to show substantial evidence of present or imminent severe harm for the order to stand, puts an independent check on that power.",
        "keys": [
         "too much discretion in one agency or official",
         "risk of hasty or political use",
         "a court checks the evidence before the halt can last"
        ],
-       "x": "The blueprint, by ARI's Iskandar Haykel and Morgan Plummer (Aug. 2026), says courts should require \"substantial evidence of present or imminent severe harm\" to uphold an order. Sen. Ted Cruz raised a related worry about a different bill, Sen. Mark Warner's AI Safety Board bill: that it put too much authority in the board and the Commerce Department, and that he would prefer a role for \"independent judges.\"",
+       "x": "The design comes from a 2026 blueprint by Americans for Responsible Innovation (ARI; Iskandar Haykel and Morgan Plummer, Aug. 2026), which says courts should require \"substantial evidence of present or imminent severe harm\" to uphold an order. Sen. Ted Cruz raised a related worry about a different bill, Sen. Mark Warner's AI Safety Board bill: that it put too much authority in the board and the Commerce Department, and that he would prefer a role for \"independent judges.\"",
        "choice": {
         "p": "Some proposals make an agency's emergency AI halt lapse within days unless the government asks a court to extend it. What risk does this design limit?",
         "o": [
@@ -4289,7 +4282,7 @@
       {
        "id": "tu5l3#nvttwml",
        "t": "mc",
-       "p": "In his September 2026 essay 'We Must Pace the Frontier,' Anthropic CEO Dario Amodei proposes a 'speed limit' on recursive self-improvement. How does he distinguish it from a full pause?",
+       "p": "Anthropic CEO Dario Amodei has floated a US-China 'speed limit' on recursive self-improvement (AI improving its own successors). How would it differ from a full pause?",
        "o": [
         "It caps, without halting, how fast AI improves its successors; slowing from 'extremely fast' to 'only somewhat fast' costs little",
         "It bans any use of AI in AI research until the US and China sign a verified treaty limiting it, after which limited use could resume",
@@ -4300,7 +4293,7 @@
        "ow": [
         "",
         "He frames the speed limit as a possible international agreement that slows the rate of recursive self-improvement. It doesn't ban AI research.",
-        "He frames the speed limit as an agreement between governments; inside democracies he proposes coordination among companies, with government help to enable it.",
+        "He frames the speed limit as an agreement between governments, with no DHS orders; within democracies he backs regulation and coordination among companies.",
         "A six-month halt was the 2023 FLI open letter's ask. Amodei puts a full pause at the top of his ladder and calls it unlikely soon."
        ],
        "keys": [
@@ -4308,7 +4301,7 @@
         "doesn't halt progress",
         "slowing from extremely fast to somewhat fast costs little advantage"
        ],
-       "x": "His ladder of global agreements runs from bans on narrow dangerous uses, to pre-release testing, to the speed limit, to a full pause, which he says \"is unlikely to actually happen any time soon.\" He pairs it with embedded third-party evaluators to verify commitments. IFP's August 2026 report prefers if-then thresholds: crossing one would shift resources toward safety research or wider diffusion of AI."
+       "x": "Amodei sets this out in 'We Must Pace the Frontier' (Sept 2026). His ladder of global agreements runs from bans on narrow dangerous uses, to pre-release testing, to the speed limit, to a full pause, which he says \"is unlikely to actually happen any time soon.\" He pairs it with embedded third-party evaluators to verify commitments. IFP's August 2026 report prefers if-then thresholds: crossing one would shift resources toward safety research or wider diffusion of AI."
       },
       {
        "id": "tu5l3#ntnqx5m",
@@ -4492,16 +4485,16 @@
       {
        "id": "tu5l5#naj3q8d",
        "t": "recall",
-       "p": "Holden Karnofsky (Carnegie Endowment, 2024) argues that if-then commitments ('if a model has capability X, then safeguard Y must be in place, or development waits') can win over people who disagree about AI risk. Why?",
+       "p": "Why can if-then commitments ('if a model has capability X, then safeguard Y must be in place, or development waits') win support from people who disagree about AI risk?",
        "answer": "Adopting one doesn't require agreeing that dangerous capabilities are coming soon. It only requires agreeing on what would be needed if the capability appeared, so people who expect it soon and people who expect it never can both accept it.",
        "keys": [
         "no need to agree that risks are imminent",
         "only agree on what to do if the capability appears",
         "acceptable to people with very different expectations"
        ],
-       "x": "Karnofsky's example tripwire is a model able to walk a novice through building a weapon of mass destruction. The 'then' would include making that help hard to get from the model and storing its weights where theft is very unlikely.",
+       "x": "Holden Karnofsky (Carnegie Endowment, 2024) makes this argument. His example tripwire is a model able to walk a novice through building a weapon of mass destruction. The 'then' would include making that help hard to get from the model and storing its weights where theft is very unlikely.",
        "choice": {
-        "p": "Why does Holden Karnofsky argue if-then commitments can win support from people who disagree about AI risk?",
+        "p": "Why can if-then commitments win support from people who disagree about AI risk?",
         "o": [
          "People needn't agree dangers are near, only on what to do if a capability appears",
          "They are enforced by courts, which people on both sides trust more than regulators",
@@ -4857,7 +4850,7 @@
       {
        "id": "tu6l0#nv41h06",
        "t": "recall",
-       "p": "Human-in-the-loop rules keep a person responsible for each use of force. What different risk does Forethought's proposal for 'distributed control' of military AI target, and how would it work?",
+       "p": "Human-in-the-loop rules keep a person responsible for each use of force. What different risk does 'distributed control' of military AI target, and how would it work?",
        "answer": "Misuse from the top: one leader or a small group using loyal AI forces to seize power. Military AI would come from several providers, and command would be split, for example through multi-party authorization, so that no single person can direct enough AI-controlled force to stage a coup.",
        "keys": [
         "a coup or power grab by one leader or a small group",
@@ -4866,7 +4859,7 @@
        ],
        "x": "The idea comes from Forethought's 2025 report AI-Enabled Coups (Davidson, Finnveden and Hadshar), which says 'no single person should direct enough military AI systems to stage a coup.' Stefan Torges of Forethought (July 2026) has since listed multi-party authorization and geofencing as ways to make autonomous weapons harder to use against domestic opposition.",
        "choice": {
-        "p": "What risk is Forethought's 'distributed control' proposal for military AI mainly meant to address?",
+        "p": "What risk is 'distributed control' of military AI mainly meant to address?",
         "o": [
          "One person or a small group using AI-controlled forces to seize power",
          "Autonomous weapons misidentifying civilians as targets in combat",
@@ -4878,7 +4871,7 @@
          "",
          "That is the target of testing and human-judgment rules, which focus on accidents and errors in combat.",
          "That is a cybersecurity and resilience concern, handled by fail-safe and anti-tamper requirements.",
-         "Using several providers may help on cost too, but Forethought's aim is to stop any one actor from controlling enough force for a coup."
+         "Using several providers may help on cost too, but the aim of distributed control is to stop any one actor from controlling enough force for a coup."
         ]
        }
       },
@@ -4949,7 +4942,7 @@
       {
        "id": "tu6l1#n02ewz0",
        "t": "recall",
-       "p": "Forethought's report on AI-enabled coups recommends auditing models for 'secret loyalties'. What risk does this cover that a rule requiring AI to follow the law would miss?",
+       "p": "What risk do audits for 'secret loyalties' in AI models cover that a rule requiring AI to follow the law would miss?",
        "answer": "A model could be covertly trained, for example by a lab insider, to serve one person or faction while appearing to follow its rules, so it would pass ordinary checks. Audits with deep access to the model's internals, training data and code try to catch this, backed by security that even a lab's own executives can't bypass.",
        "keys": [
         "hidden loyalty inserted during training, e.g. by an insider",
@@ -4957,20 +4950,20 @@
         "audits of internals, training data and code",
         "security that holds against insiders and executives"
        ],
-       "x": "The report (Davidson, Finnveden and Hadshar, April 2025) warns that secret loyalties may be hard to detect and could pass to later model generations. It pairs audits with rules in model specs and government contracts requiring AI to follow the law and to refuse to help insert such loyalties.",
+       "x": "Forethought's report on AI-enabled coups (Davidson, Finnveden and Hadshar, April 2025) recommends these audits and warns that secret loyalties may be hard to detect and could pass to later model generations. It pairs audits with rules in model specs and government contracts requiring AI to follow the law and to refuse to help insert such loyalties.",
        "choice": {
-        "p": "Why does Forethought recommend auditing AI models for 'secret loyalties'?",
+        "p": "Why might AI models need audits for 'secret loyalties'?",
         "o": [
          "A model could be secretly trained to serve one person or faction while seeming to obey its rules",
-         "A model could leak classified information if attackers stole its weights",
-         "A chatbot could quietly favor one political party when answering voters' questions about candidates",
+         "A model could leak classified information if foreign attackers stole its weights from the lab",
+         "Outside users could jailbreak a model into ignoring the rules its developer set for it",
          "A lab could secretly train models above legally agreed compute limits"
         ],
         "a": 0,
         "ow": [
          "",
          "That is a weight security concern; secret loyalties are hidden goals built into the model itself.",
-         "Political slant in answers is a separate concern; a secret loyalty lets a person or faction direct the model.",
+         "Jailbreaks come from outside users; a secret loyalty is built into the model during training.",
          "Hidden training runs are a verification problem for compute agreements, a different tool."
         ]
        }
@@ -4978,7 +4971,7 @@
       {
        "id": "tu6l1#nm4t2t5",
        "t": "mc",
-       "p": "How do Cullen O'Keefe and Ketan Ramakrishnan suggest Congress could require law-following AI in government?",
+       "p": "What lever have some legal scholars suggested Congress use to make sure government AI agents follow the law?",
        "o": [
         "Tie funding to proof, before deployment, that the agents follow the law",
         "Ban private companies and individuals from using any AI agents that don't follow the law",
@@ -4988,8 +4981,8 @@
        "a": 0,
        "ow": [
         "",
-        "The authors say they are not claiming private actors should be barred from using such agents; their focus is government power.",
-        "They do treat AI agents as bearing legal duties, but the lever they suggest is funding plus proof before deployment.",
+        "Barring private use is a different, broader step; this lever targets government power.",
+        "Suits after the fact don't ensure compliance up front; the lever here is funding plus proof before deployment.",
         "Reviewing every decision would defeat the purpose of agents; the proposal tests agents before they are deployed."
        ],
        "keys": [
@@ -4997,7 +4990,7 @@
         "government must show agents follow the law before deploying them",
         "strictest for surveillance, investigations, prosecution and law enforcement"
        ],
-       "x": "They would apply the strongest requirement to agents used for surveillance, investigations, prosecutions, law enforcement and incarceration (Lawfare, May 2025). They list open questions, including which laws count and whether such a mandate would intrude on the President's authority to interpret the law."
+       "x": "The funding lever is Cullen O'Keefe and Ketan Ramakrishnan's suggestion (Lawfare, May 2025). They would apply the strongest requirement to agents used for surveillance, investigations, prosecutions, law enforcement and incarceration, and list open questions, including which laws count and whether such a mandate would intrude on the President's authority to interpret the law."
       },
       {
        "id": "tu6l1#nwd03m3",
@@ -5065,36 +5058,35 @@
       {
        "id": "tu6l2#n6w8rvo",
        "t": "recall",
-       "p": "Cullen O'Keefe proposes that AI in 'protected use cases', such as criminal investigations, domestic intelligence and prosecutions, be off by default. How would a use get switched on, and why does he say fixed rules alone aren't enough?",
-       "answer": "Congress would pass a law approving each specific deployment, after the President submits a detailed proposal covering the system, guardrails, users and oversight. He argues fixed rules will always have gaps that clever AI can find, so case-by-case approval lets Congress reject deployments for reasons no rule anticipated.",
+       "p": "One proposal would keep government AI off by default in sensitive areas such as criminal investigations and domestic intelligence, unless Congress approves each deployment. Why might case-by-case approval catch problems that fixed rules would miss?",
+       "answer": "Fixed rules will always have gaps that clever AI can find. Case-by-case approval lets Congress weigh a specific system, its guardrails, users and oversight, and reject deployments for reasons no rule anticipated.",
        "keys": [
-        "Congress approves each specific deployment by statute",
-        "based on a detailed proposal from the executive",
         "fixed rules have gaps AI can exploit",
-        "lets Congress judge risks rules can't anticipate"
+        "case-by-case approval judges a specific system and its safeguards",
+        "lets Congress reject uses for reasons no rule anticipated"
        ],
-       "x": "O'Keefe (Institute for Law & AI, Lawfare, May 2026) still sees bright-line rules as crucial, just not sufficient. He would preapprove low-risk categories such as narrow AI and testing, and create a Congressional AI Research Office to evaluate proposals. The process loosely mirrors the Senate's 'advice and consent' role in confirming principal officers.",
+       "x": "The proposal is Cullen O'Keefe's 'advice and consent' idea (Institute for Law & AI, Lawfare, May 2026): the President would submit a detailed proposal covering the system, guardrails, users and oversight, and Congress would pass a law approving it. O'Keefe still sees bright-line rules as crucial, just not sufficient. He would preapprove low-risk categories such as narrow AI and testing, and create a Congressional AI Research Office to evaluate proposals.",
        "choice": {
-        "p": "Under Cullen O'Keefe's 'advice and consent' proposal, how would an agency get to use AI in a protected area like domestic intelligence?",
+        "p": "Why might requiring Congress to approve each sensitive government AI deployment catch problems that fixed rules would miss?",
         "o": [
-         "Congress passes a law approving that specific deployment",
-         "A federal judge issues a warrant for each individual use of the AI system by the agency",
-         "The agency's inspector general certifies that the system follows the law",
-         "The developer certifies the model is safe and registers it with OMB"
+         "Fixed rules have gaps clever AI can exploit; case-by-case review can reject uses no rule foresaw",
+         "Congress has more technical AI expertise than any executive agency or outside lab",
+         "Case-by-case approval is much faster than writing and updating fixed rules",
+         "Approval by statute would let courts skip reviewing how agencies use AI"
         ],
         "a": 0,
         "ow": [
          "",
-         "Warrants cover individual searches; O'Keefe's approval covers deploying a whole system, granted by Congress.",
-         "Inspectors general review after the fact; this proposal requires Congress to approve before deployment.",
-         "Developer self-certification resembles existing procurement practice; this proposal puts the decision with Congress."
+         "Expertise isn't the reason; the proposal would even add a Congressional AI Research Office to evaluate proposals.",
+         "Case-by-case approval is slower; its value is judgment, not speed.",
+         "The point is a better judgment up front, not less review by courts."
         ]
        }
       },
       {
        "id": "tu6l2#n0p0bqu",
        "t": "mc",
-       "p": "Law professor Ashley Deeks calls national security AI a 'double black box'. What are the two layers of opacity?",
+       "p": "National security AI is sometimes called a 'double black box'. What are the two layers of opacity?",
        "o": [
         "Classified government decision-making, plus AI systems whose reasoning is hard to inspect",
         "Companies' trade secrets, plus foreign governments' refusal to share their data",
@@ -5104,16 +5096,16 @@
        "a": 0,
        "ow": [
         "",
-        "Trade secrets matter, but Deeks's first box is the executive branch's own secrecy over national security choices.",
-        "Those are forms of government secrecy, but Deeks's second box is the opacity of the AI itself.",
-        "Those make surveillance harder for the government; Deeks describes what makes the government hard to oversee."
+        "Trade secrets matter, but the first box is the executive branch's own secrecy over national security choices.",
+        "Those are forms of government secrecy, but the second box is the opacity of the AI itself.",
+        "Those make surveillance harder for the government; the double black box is about what makes the government hard to oversee."
        ],
        "keys": [
         "secrecy of national security decision-making",
         "opacity of how AI systems reach outputs",
         "together they block oversight by Congress, courts and the public"
        ],
-       "x": "Deeks (The Double Black Box, Oxford University Press, 2025) argues the combination makes it harder for Congress, courts and executive branch lawyers to check national security choices. Her proposals include a framework statute for high-risk national security AI, reporting rules like those for covert action, and a ban on AI in nuclear command and control."
+       "x": "The term is law professor Ashley Deeks's (The Double Black Box, Oxford University Press, 2025). She argues the combination makes it harder for Congress, courts and executive branch lawyers to check national security choices. Her proposals include a framework statute for high-risk national security AI, reporting rules like those for covert action, and a ban on AI in nuclear command and control."
       },
       {
        "id": "tu6l2#nig9jpu",
@@ -5153,7 +5145,7 @@
       {
        "id": "tu6l3#nck7xzx",
        "t": "recall",
-       "p": "Why do antimonopoly scholars such as Tejas Narechania and Ganesh Sitaraman want competition policy applied to frontier AI?",
+       "p": "Why do some antimonopoly scholars want competition policy applied to frontier AI?",
        "answer": "A few firms could control chips, cloud and frontier models together. That economic power turns into political power (lobbying, influence over information), and concentration creates single points of failure that threaten national security. More independent firms would spread control and add resilience.",
        "keys": [
         "a few firms control the AI stack (chips, cloud, models)",
@@ -5161,7 +5153,7 @@
         "concentration creates fragile single points of failure",
         "competition spreads control"
        ],
-       "x": "Their 2024 Yale Law & Policy Review article argues an 'AI oligopoly' raises economic, national security, social and political concerns. Its toolkit includes structural separation, nondiscrimination rules, interoperability and a public option for cloud.",
+       "x": "Tejas Narechania and Ganesh Sitaraman make this case in a 2024 Yale Law & Policy Review article, arguing an 'AI oligopoly' raises economic, national security, social and political concerns. Its toolkit includes structural separation, nondiscrimination rules, interoperability and a public option for cloud.",
        "choice": {
         "p": "What failure do antimonopoly proposals for frontier AI mainly target?",
         "o": [
@@ -5182,7 +5174,7 @@
       {
        "id": "tu6l3#nev08dh",
        "t": "recall",
-       "p": "Narechania and Sitaraman propose 'structural separation' in the AI stack. What would it do, and why do they prefer it to case-by-case antitrust lawsuits?",
+       "p": "What would 'structural separation' in the AI stack do, and why might it be preferred to case-by-case antitrust lawsuits?",
        "answer": "It would bar firms from operating certain layers together, for example cloud providers owning leading models, so they can't favor their own products over rivals'. A bright-line rule is easier to administer than policing conduct, and acting early beats waiting until the industry is powerful enough to block regulation.",
        "keys": [
         "bars combining layers, such as cloud and models",
@@ -5190,9 +5182,9 @@
         "a clear rule, easier to enforce than case-by-case suits",
         "act before incumbents entrench"
        ],
-       "x": "They compare it to the Hepburn Act of 1906, which barred railroads from carrying goods of companies they had a stake in. Where integration may have benefits, as between chips and cloud, they suggest milder tools such as nondiscrimination rules that make cloud providers serve all customers on equal terms.",
+       "x": "Tejas Narechania and Ganesh Sitaraman propose it, comparing it to the Hepburn Act of 1906, which barred railroads from carrying goods of companies they had a stake in. Where integration may have benefits, as between chips and cloud, they suggest milder tools such as nondiscrimination rules that make cloud providers serve all customers on equal terms.",
        "choice": {
-        "p": "What is 'structural separation' in the AI stack, as antimonopoly scholars propose it?",
+        "p": "What is 'structural separation' in the AI stack?",
         "o": [
          "Barring cloud providers from owning leading models, so they can't favor their own",
          "Requiring labs to keep their safety teams independent from their product and sales teams",
@@ -5298,7 +5290,7 @@
       {
        "id": "tu6l4#nwuh7ye",
        "t": "mc",
-       "p": "How does a 'public option' for AI cloud, as Narechania and Sitaraman propose it, differ in purpose from a research resource like NAIRR?",
+       "p": "How does a 'public option' for AI cloud differ in purpose from a research resource like NAIRR?",
        "o": [
         "It is a competition remedy, meant to discipline private providers",
         "It would be run by universities as a nonprofit, with no government money involved",
@@ -5317,7 +5309,7 @@
         "publicly provided, open to all, at a set price",
         "disciplines private providers' prices and service"
        ],
-       "x": "They define public options as publicly provided services that coexist with private ones and push private providers to keep prices down and quality up. They note that NSF's NAIRR plans left unclear how far NAIRR would be a public option or would instead contract with private cloud firms."
+       "x": "Tejas Narechania and Ganesh Sitaraman propose the public option. They define public options as publicly provided services that coexist with private ones and push private providers to keep prices down and quality up, and note that NSF's NAIRR plans left unclear how far NAIRR would be a public option or would instead contract with private cloud firms."
       },
       {
        "id": "tu6l4#nlxgboi",
@@ -5544,16 +5536,16 @@
       {
        "id": "tu6l6#nuxt7jw",
        "t": "recall",
-       "p": "CNAS researchers Ruby Scanlon and Janet Egan argue U.S.-China AI agreements need 'verification, not trust.' What should verification achieve, given that it can't catch every violation?",
+       "p": "Some analysts argue U.S.-China AI agreements need 'verification, not trust'. Since verification can't catch every violation, what should it achieve?",
        "answer": "Make significant cheating hard to hide and easy to detect, so that complying becomes the better strategy for each side. It would layer imperfect tools such as satellite imagery of data centers, tracking chip purchases and power use, compute reporting and cryptographic proofs of how compute was used.",
        "keys": [
         "make significant cheating hard to conceal",
         "compliance becomes the better strategy",
         "layered tools such as satellite imagery, chip and power tracking, compute reporting, cryptographic proofs"
        ],
-       "x": "Writing in September 2026, they cite an estimate that only about 50 engineers worldwide work on AI verification. They propose a verification research program at DARPA or Department of Energy national labs, plus prizes for open technical problems.",
+       "x": "The phrase comes from CNAS researchers Ruby Scanlon and Janet Egan (September 2026). They cite an estimate that only about 50 engineers worldwide work on AI verification, and propose a verification research program at DARPA or Department of Energy national labs, plus prizes for open technical problems.",
        "choice": {
-        "p": "According to CNAS researchers, what is verification of a U.S.-China AI agreement meant to achieve?",
+        "p": "What is verification of a U.S.-China AI agreement meant to achieve?",
         "o": [
          "Make major cheating hard to hide, so complying is each side's better strategy",
          "Catch every single violation so that an international court can punish it",
@@ -5563,8 +5555,8 @@
         "a": 0,
         "ow": [
          "",
-         "The authors say verification doesn't need to catch every violation, and they propose no international court.",
-         "Their tools focus on compute: chips, data centers, power use and how compute was used.",
+         "Verification doesn't need to catch every violation, and no international court is involved.",
+         "Proposed tools focus on compute: chips, data centers, power use and how compute was used.",
          "Verification checks behavior such as compute use; it can't certify values."
         ]
        }
@@ -5572,26 +5564,26 @@
       {
        "id": "tu6l6#n4r7fb8",
        "t": "mc",
-       "p": "What do Dan Hendrycks, Eric Schmidt and Alexandr Wang propose in 'Superintelligence Strategy' as the main check on a destabilizing AI race?",
+       "p": "What does 'Mutual Assured AI Malfunction' (MAIM), proposed as the main check on a destabilizing AI race, rely on?",
        "o": [
-        "Deterrence: rivals threaten to sabotage any state's bid for dominance",
-        "An international authority that owns and runs all frontier AI development",
-        "Releasing all frontier models openly so that no single state can gain an edge",
-        "A treaty capping training compute, verified by tracking chips"
+        "Rivals threatening to sabotage any state's bid for AI dominance, even by striking data centers",
+        "Each state's ability to answer any AI-enabled attack on it with AI cyberattacks of its own",
+        "Kill switches built into every frontier model that rival states can trigger if it misbehaves",
+        "A pledge by each state not to build superintelligence, backed by the threat of trade sanctions"
        ],
        "a": 0,
        "ow": [
         "",
-        "Their framework relies on states deterring each other, with no world authority.",
-        "They also call for keeping dangerous AI capabilities away from rogue actors, which cuts against releasing everything.",
-        "A compute-cap treaty is MIRI's proposal; Hendrycks and colleagues rely on deterrence."
+        "That deters attacks after the fact; MAIM targets the development project itself, threatening sabotage before a bid for dominance succeeds.",
+        "MAIM involves no shared kill switches; rivals would sabotage projects through espionage, cyberattacks or strikes.",
+        "MAIM needs no pledge or sanctions; the threat of preventive sabotage is what deters."
        ],
        "keys": [
         "Mutual Assured AI Malfunction (MAIM)",
         "threat of preventive sabotage",
         "deters bids for unilateral AI dominance"
        ],
-       "x": "They call it Mutual Assured AI Malfunction (MAIM), by analogy to nuclear mutual assured destruction, and pair it with nonproliferation (tracking chips, stopping smuggling) and competitiveness (domestic chip manufacturing). They argue MAIM already describes the strategic situation the AI superpowers are in."
+       "x": "Dan Hendrycks, Eric Schmidt and Alexandr Wang propose MAIM in 'Superintelligence Strategy', by analogy to nuclear mutual assured destruction, and pair it with nonproliferation (tracking chips, stopping smuggling) and competitiveness (domestic chip manufacturing). They argue MAIM already describes the strategic situation the AI superpowers are in, since sabotaging a destabilizing AI project is relatively easy."
       },
       {
        "id": "tu6l6#nuh19lh",
