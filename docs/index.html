@@ -14649,6 +14649,7 @@ function askMode(it) {
 // Shows a short-answer card through its multiple-choice version.
 function asChoice(it) {
   if (it.t !== 'recall') return;
+  if (run && !it._choices) run.mcRecall = (run.mcRecall || 0) + 1;
   it._asMC = true; it.o = it.choice.o; it.a = it.choice.a; it.ow = it.choice.ow; it._mcp = it.choice.p;
 }
 function cardTag(it) {
@@ -14946,7 +14947,7 @@ function finish() {
   const acc = Math.round(firstTry / run.total * 100);
   groupPost(L, run.xp, acc);
   const nextL = LESSONS[run.idx + 1];
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc)}${remAskHTML()}<div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc)}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
   show('#result');
   $('#rHome').onclick = goHome; $('#rHome').focus();
 }
@@ -14960,7 +14961,7 @@ function finishSession() {
   const parts = [];
   if (run.reviewed) parts.push(`You remembered ${run.remembered} of ${run.reviewed} review${run.reviewed === 1 ? '' : 's'}`);
   if (run.newSeen) parts.push(`learned ${run.newSeen} new card${run.newSeen === 1 ? '' : 's'}`);
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${more ? more + ' more reviews are due.' : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${G ? `<p>Posted to ${esc(G.groupName)}.</p>` : ''}${remAskHTML()}<div class="rbtns"><button class="btn" id="rHome">Done</button>${more || canLearn ? `<button class="btn ghost" id="rMore">${more ? 'Keep reviewing' : 'Learn more'}</button>` : ''}</div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${more ? more + ' more reviews are due.' : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${G ? `<p>Posted to ${esc(G.groupName)}.</p>` : ''}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">Done</button>${more || canLearn ? `<button class="btn ghost" id="rMore">${more ? 'Keep reviewing' : 'Learn more'}</button>` : ''}</div>`;
   show('#result');
   $('#rHome').onclick = goHome; $('#rHome').focus();
   if ($('#rMore')) $('#rMore').onclick = () => startSession(more ? 'reviews' : true);
@@ -15115,6 +15116,19 @@ $('#remCard').addEventListener('click', e => {
 $('#remCard').addEventListener('change', e => {
   if (e.target.id === 'remDailyT' && e.target.value) setRem({ daily: e.target.value });
   if (e.target.id === 'remRiskT' && e.target.value) setRem({ risk: e.target.value });
+});
+// After a session where short-answer cards came up as multiple choice, mention the Short answers style (at most three times).
+function styleTipHTML() {
+  const pr = state.prefs || {};
+  if (answerStyle() !== 'mixed' || !run || !run.mcRecall || pr.styleTipOff || (pr.styleTipShown || 0) >= 3 || remAskHTML()) return '';
+  state.prefs = { ...pr, styleTipShown: (pr.styleTipShown || 0) + 1 }; save();
+  return `<div class="remask stylet"><p>Rather type your answers? <b>Short answers</b> asks every short-answer card that way, graded by AI.</p><div class="row"><button class="btn ghost sm" id="rStyleShort">Turn on Short answers</button><button class="linkbtn" id="rStyleNo">No thanks</button></div></div>`;
+}
+$('#resultIn').addEventListener('click', e => {
+  const on = e.target.closest('#rStyleShort'), no = e.target.closest('#rStyleNo'); if (!on && !no) return;
+  if (on) { setStyle('short'); toast('Short answers on. Change it any time in Me or on a course page.'); }
+  else { state.prefs = { ...(state.prefs || {}), styleTipOff: true }; state.prefsAt = Date.now(); save(); }
+  const box = $('#resultIn .stylet'); if (box) box.remove();
 });
 // Asked once, on the results screen after a first session, the way Duolingo does.
 function remAskHTML() { const r = remPrefs(); return Native && !r.on && !r.asked ? `<div class="remask"><p>Want a nudge to keep your streak going?</p><div class="row"><button class="btn ghost sm" id="rRemOn">Turn on reminders</button><button class="linkbtn" id="rRemNo">Not now</button></div></div>` : ''; }
@@ -15866,6 +15880,7 @@ function renderCourseView() {
   $('#courseHead').innerHTML = `<div class="chead"><button class="back" data-go="courses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg> Courses</button>
     <div class="ctop"><div><h1>${esc(C.name)}</h1><div class="cmeta">${cards} cards · ${C.units.length} unit${C.units.length === 1 ? '' : 's'} · ${p.done} of ${p.total} lessons</div></div><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="In your daily mix"></button></div>
     ${on ? `<div class="perday"><span>New cards a day</span>${[3, 5, 10, 20].map(n => `<button data-perday="${n}" aria-pressed="${perDay(k) === n}">${n}</button>`).join('')}</div>` : `<p class="note">Not in your daily mix. Switch it on to get its cards in Today, or tap any lesson to try it.</p>`}
+    ${styleRowHTML(k)}
     ${C.description ? `<p class="cmeta">${esc(C.description)}</p>` : ''}</div>`;
   const mine = C.group && G && C.authorId === G.player.id;
   $('#cinfo').hidden = !C.group;
@@ -15882,6 +15897,15 @@ function renderCourseView() {
   }).join('');
 }
 
+// Answer style on a course page, for courses with short-answer cards (the only cards it changes). It's one setting for all courses.
+const STYLE_OPTS = [['mixed', 'Mixed'], ['short', 'Short answers'], ['typed', 'Type everything']];
+const STYLE_BLURB = { mixed: 'New cards are multiple choice; once you know one, you recall it in your head.', short: 'Short-answer cards are always typed and graded by AI.', typed: 'Every card is typed and graded by AI.' };
+function styleRowHTML(k) {
+  if (!courseCards(k).some(c => c.item.t === 'recall')) return '';
+  const st = answerStyle();
+  return `<div class="perday"><span>Answer style</span>${STYLE_OPTS.map(([v, l]) => `<button data-cstyle="${v}" aria-pressed="${st === v}">${l}</button>`).join('')}</div><p class="cmeta">${STYLE_BLURB[st]} Applies to all courses; also in Me.</p>`;
+}
+function setStyle(v) { state.prefs = { ...(state.prefs || {}), style: v }; state.prefsAt = Date.now(); save(); }
 /* ---------- shared clicks: open a course, toggle the mix, new cards a day ---------- */
 document.addEventListener('click', e => {
   const g = e.target.closest('[data-go]'); if (g) { go(g.dataset.go); return; }
@@ -15889,6 +15913,7 @@ document.addEventListener('click', e => {
   const m = e.target.closest('[data-mix]');
   if (m) { const k = m.dataset.mix, on = !inMix(k); setMix(k, on); toast(on ? `${COURSES[k].name} is in your daily mix.` : `${COURSES[k].name} is out of your mix. Its progress is kept.`); renderHome(); return; }
   const pd = e.target.closest('[data-perday]'); if (pd) { setPerDay(state.course, +pd.dataset.perday); renderHome(); return; }
+  const cs = e.target.closest('[data-cstyle]'); if (cs) { setStyle(cs.dataset.cstyle); renderHome(); toast(cs.dataset.cstyle === 'short' ? 'Short answers on: short-answer cards are typed.' : 'Answer style changed.'); return; }
   if (e.target.closest('#cMake')) openAdd();
 });
 
