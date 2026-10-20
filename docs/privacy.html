@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WonkoLingo Privacy</title>
+<style>
+  :root { color-scheme: dark; --bg: #0e141b; --fg: #e6e1d6; --muted: #9aa4ae; --brass: #e8b75a; --line: #222c37; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  main { max-width: 680px; margin: 0 auto; padding: max(24px, env(safe-area-inset-top)) 16px 64px; }
+  h1 { color: var(--brass); font-size: 28px; margin: 8px 0 4px; }
+  h2 { font-size: 18px; margin: 28px 0 6px; }
+  p, li { color: var(--fg); }
+  .meta { color: var(--muted); font-size: 14px; }
+  a { color: var(--brass); }
+  ul { padding-left: 20px; }
+  li { margin: 4px 0; }
+</style>
+</head>
+<body>
+<main>
+  <p><a href="./">Back to WonkoLingo</a></p>
+  <h1>Privacy</h1>
+  <p class="meta">Last updated October 20, 2026.</p>
+  <p>WonkoLingo is a small learning app made by Alex Lintz for friends. It has no ads, no analytics or tracking tools, and it never sells or shares your data for marketing.</p>
+
+  <h2>What the app stores</h2>
+  <ul>
+    <li><b>An account.</b> A random ID and sign-in key, created automatically the first time you have progress to save. There is no email or password.</li>
+    <li><b>Your progress.</b> Which cards you've studied and when they're due, the days you practiced, your streak settings, XP, app settings and any terms you saved.</li>
+    <li><b>Group activity, if you join a group.</b> Your display name, the lessons you finish (with XP and accuracy), and any courses you upload. Members of your group can see these.</li>
+    <li><b>Passkeys, if you add one.</b> Only the public half of the key. Face ID, Touch ID and your device PIN never leave your device.</li>
+    <li><b>Blocks and reports.</b> Who you've blocked, and problem reports you send about a course.</li>
+    <li><b>Disputed grades.</b> When you tell the app a grade was wrong, the question, your answer, your note and both grades are kept so the grader and courses can be fixed.</li>
+    <li><b>Abuse limits.</b> A salted, shortened hash of your network address, counted per day or hour, to limit new accounts and sign-in code guesses. The address itself isn't stored.</li>
+  </ul>
+
+  <h2>AI features</h2>
+  <p>Typed answers you send for grading, hint and definition requests, disputes, and the text of courses, group names and display names you post are sent to Anthropic's Claude models to grade, explain or screen them. See <a href="https://www.anthropic.com/legal/privacy">Anthropic's privacy policy</a>.</p>
+
+  <h2>What stays on your phone</h2>
+  <p>Reminders are scheduled on your device, and the widget reads your streak from the app on your device. Neither sends anything to the server.</p>
+
+  <h2>Where it's kept</h2>
+  <p>On Cloudflare's servers (Workers and D1), reached only over encrypted connections.</p>
+
+  <h2>Deleting your data</h2>
+  <p>In the app, go to Me, then Account, then <b>Delete account</b>. That removes your account, progress, lesson results, courses you wrote, passkeys and sign-ins from the server, on every device. Signing out only clears the device you're on.</p>
+
+  <h2>Contact</h2>
+  <p>Use "Report a problem" on any card, or the TestFlight app's "Send Beta Feedback" button. Both reach the developer.</p>
+</main>
+</body>
+</html>

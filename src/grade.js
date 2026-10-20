@@ -184,3 +184,26 @@ export async function defineTerm(env, { term, context }) {
   const o = msg.parsed_output;
   return o.is_term && o.definition.trim() ? clip(o.definition.trim().replace(/[–—]/g, ','), 260) : '';
 }
+
+// Screens what players post for others to see (group courses, group names, display names) before it's saved.
+const ModerationSchema = z.object({ allowed: z.boolean(), reason: z.string() });
+const MOD_SYSTEM = `You screen content that players of a quiz app post for their friends to see: course text, group names and display names.
+Block only content that is clearly objectionable: slurs or hate against protected groups, sexual content, threats or harassment of a real person, graphic violence, or instructions for serious harm.
+Allow everything else, including strong political opinions from any side, debate about controversial policy, harmless jokes, and factual material about violence, weapons, drugs or extremism in a policy or historical context.
+If you block, give a short reason (under 120 characters) that tells the player what to change. No em dashes or en dashes.`;
+export async function moderate(env, text) {
+  if (!env.ANTHROPIC_API_KEY) return { allowed: true };
+  try {
+    const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+    const msg = await client.messages.parse({
+      model: 'claude-haiku-5-5',
+      max_tokens: 800,
+      output_config: { effort: 'low', format: zodOutputFormat(ModerationSchema) },
+      system: MOD_SYSTEM,
+      messages: [{ role: 'user', content: `<content>${clip(text, 60000)}</content>` }],
+    });
+    if (msg.stop_reason === 'refusal') return { allowed: false, reason: 'This can’t be posted.' };
+    if (!msg.parsed_output) return { allowed: true };
+    return { allowed: msg.parsed_output.allowed, reason: clip(msg.parsed_output.reason.replace(/[–—]/g, ','), 160) };
+  } catch (e) { return { allowed: true }; } // a screening outage shouldn't stop posting; reports and blocking still work
+}

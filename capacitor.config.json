@@ -1,0 +1,14 @@
+{
+  "appId": "com.alexlintz.wonkolingo",
+  "appName": "WonkoLingo",
+  "webDir": "docs",
+  "backgroundColor": "#0e141b",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#0e141b",
+    "scheme": "WonkoLingo"
+  },
+  "plugins": {
+    "LocalNotifications": { "iconColor": "#e3b65e" }
+  }
+}

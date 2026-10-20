@@ -119,3 +119,10 @@ CREATE TABLE IF NOT EXISTS rate_limits (
   n INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (key, day)
 );
+-- Players can block each other (App Store rule for user content): a blocked player's courses, scores and activity are hidden from the blocker.
+CREATE TABLE IF NOT EXISTS blocks (
+  player_id TEXT NOT NULL,
+  blocked_id TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  PRIMARY KEY (player_id, blocked_id)
+);

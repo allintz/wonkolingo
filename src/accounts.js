@@ -120,6 +120,28 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
     await env.DB.prepare('INSERT INTO link_codes (code, player_id, expires) VALUES (?, ?, ?)').bind(code, me.id, expires).run();
     return json({ code, expires });
   }
+  // Delete the account and everything tied to it (App Store rule): progress, lesson results, courses written, sign-ins.
+  if (m === 'POST' && path === '/api/account/delete') {
+    const id = me.id, mine = await env.DB.prepare('SELECT id FROM courses WHERE author_id = ?').bind(id).all();
+    const stmts = mine.results.map(c => env.DB.prepare('DELETE FROM reports WHERE course_id = ?').bind(c.id));
+    for (const sql of ['DELETE FROM courses WHERE author_id = ?', 'DELETE FROM reports WHERE player_id = ?', 'DELETE FROM completions WHERE player_id = ?',
+      'DELETE FROM player_state WHERE player_id = ?', 'DELETE FROM sessions WHERE player_id = ?', 'DELETE FROM passkeys WHERE player_id = ?',
+      'DELETE FROM link_codes WHERE player_id = ?', 'DELETE FROM webauthn_challenges WHERE player_id = ?', 'DELETE FROM grade_usage WHERE player_id = ?',
+      'DELETE FROM disputes WHERE who = ?']) stmts.push(env.DB.prepare(sql).bind(id));
+    stmts.push(env.DB.prepare('DELETE FROM blocks WHERE player_id = ? OR blocked_id = ?').bind(id, id), env.DB.prepare('DELETE FROM players WHERE id = ?').bind(id));
+    if (me.solo) stmts.push(env.DB.prepare('DELETE FROM groups WHERE code = ? AND solo = 1').bind(me.group_code));
+    await env.DB.batch(stmts);
+    return json({ ok: true });
+  }
+  if (m === 'POST' && (path === '/api/block' || path === '/api/unblock')) {
+    const other = String((await body(req)).playerId || '');
+    if (!other || other === me.id) return fail('Pick someone else to block.');
+    if (path === '/api/unblock') { await env.DB.prepare('DELETE FROM blocks WHERE player_id = ? AND blocked_id = ?').bind(me.id, other).run(); return json({ ok: true }); }
+    const p = await env.DB.prepare('SELECT id FROM players WHERE id = ?').bind(other).first();
+    if (!p) return fail('That player no longer exists.', 404);
+    await env.DB.prepare('INSERT OR IGNORE INTO blocks (player_id, blocked_id, created_at) VALUES (?, ?, ?)').bind(me.id, other, Date.now()).run();
+    return json({ ok: true });
+  }
   // Leave a group but keep the account and its progress.
   if (m === 'POST' && path === '/api/leave') {
     if (me.solo) return json({ ok: true });

@@ -4,7 +4,7 @@
 
 import { validateCourse, COURSE_LIMITS, computeStreak } from './course-format.js';
 import Anthropic from '@anthropic-ai/sdk';
-import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor, defineTerm } from './grade.js';
+import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor, defineTerm, moderate } from './grade.js';
 import { randomString, sha256, accountInfo, publicAccountApi, accountApi } from './accounts.js';
 
 const CORS = {
@@ -78,6 +78,8 @@ async function api(req, env, path) {
     const b = await body(req);
     const gname = cleanName(b.groupName, 40), pname = cleanName(b.name, 24);
     if (!gname || !pname) return fail('Group name and your name are both required.');
+    const gmod = await moderate(env, `Group name: ${gname}\nDisplay name: ${pname}`);
+    if (!gmod.allowed) return fail('That name can’t be used: ' + gmod.reason, 422);
     let code;
     for (let i = 0; i < 5; i++) {
       code = randomString(6, CODE_ALPHABET);
@@ -104,6 +106,8 @@ async function api(req, env, path) {
     if (!pname) return fail('Pick a display name.');
     const g = await env.DB.prepare('SELECT name FROM groups WHERE code = ? AND solo = 0').bind(code).first();
     if (!g) return fail('No group with that code.', 404);
+    const nmod = await moderate(env, `Display name: ${pname}`);
+    if (!nmod.allowed) return fail('That name can’t be used: ' + nmod.reason, 422);
     const me = await auth(req, env);
     const taken = await env.DB.prepare('SELECT 1 FROM players WHERE group_code = ? AND lower(name) = lower(?) AND id != ?').bind(code, pname, me ? me.id : '').first();
     if (taken) return fail('Someone in this group already uses that name. If it’s you, sign in to your account instead.', 409);
@@ -224,18 +228,21 @@ async function api(req, env, path) {
     const today = DAY_RE.test(url.searchParams.get('today') || '') ? url.searchParams.get('today') : new Date().toISOString().slice(0, 10);
     const ws = weekStart();
     const g = me.group_code;
-    const [players, totals, days, feed, states] = await env.DB.batch([
+    const [players, totals, days, feed, states, blocked] = await env.DB.batch([
       env.DB.prepare('SELECT id, name FROM players WHERE group_code = ?').bind(g),
       env.DB.prepare('SELECT player_id, SUM(xp) AS total, SUM(CASE WHEN created_at >= ? THEN xp ELSE 0 END) AS week, COUNT(*) AS lessons FROM completions WHERE group_code = ? GROUP BY player_id').bind(ws, g),
       env.DB.prepare('SELECT DISTINCT player_id, day FROM completions WHERE group_code = ? AND day >= ?').bind(g, shiftDay(today, -400)),
       env.DB.prepare('SELECT c.player_id, p.name, c.lesson_id, c.title, c.acc, c.xp, c.created_at FROM completions c JOIN players p ON p.id = c.player_id WHERE c.group_code = ? ORDER BY c.created_at DESC LIMIT 12').bind(g),
-      env.DB.prepare("SELECT s.player_id, json_extract(s.json, '$.activeDays') AS ad, json_extract(s.json, '$.settings') AS st FROM player_state s JOIN players p ON p.id = s.player_id WHERE p.group_code = ?").bind(g)
+      env.DB.prepare("SELECT s.player_id, json_extract(s.json, '$.activeDays') AS ad, json_extract(s.json, '$.settings') AS st FROM player_state s JOIN players p ON p.id = s.player_id WHERE p.group_code = ?").bind(g),
+      env.DB.prepare('SELECT b.blocked_id AS id, p.name FROM blocks b LEFT JOIN players p ON p.id = b.blocked_id WHERE b.player_id = ?').bind(me.id)
     ]);
+    // People this player blocked disappear from their board and feed.
+    const hide = new Set(blocked.results.map(b => b.id));
     const synced = new Map(states.results.map(r => { let ad = null, st = null; try { ad = JSON.parse(r.ad); } catch {} try { st = JSON.parse(r.st); } catch {} return [r.player_id, { ad, st }]; }));
     const tot = new Map(totals.results.map(r => [r.player_id, r]));
     const dayMap = new Map();
     for (const r of days.results) { if (!dayMap.has(r.player_id)) dayMap.set(r.player_id, []); dayMap.get(r.player_id).push(r.day); }
-    const rows = players.results.map(p => {
+    const rows = players.results.filter(p => !hide.has(p.id)).map(p => {
       const t = tot.get(p.id) || {};
       // Prefer the player's synced practice days and streak settings; fall back to days with posted results.
       const sy = synced.get(p.id) || {};
@@ -243,7 +250,7 @@ async function api(req, env, path) {
       const st = computeStreak(daysFor, sy.st, today);
       return { id: p.id, name: p.name, week: t.week || 0, total: t.total || 0, lessons: t.lessons || 0, streak: st.streak, atRisk: st.atRisk, freezes: st.freezes, offToday: st.offToday };
     });
-    return json({ code: g, groupName: me.group_name, me: me.id, weekStart: ws, players: rows, feed: feed.results.map(f => ({ id: f.player_id, name: f.name, lessonId: f.lesson_id, title: f.title, acc: f.acc, xp: f.xp, at: f.created_at })) });
+    return json({ code: g, groupName: me.group_name, me: me.id, weekStart: ws, players: rows, blocked: blocked.results.map(b => ({ id: b.id, name: b.name || 'Former player' })), feed: feed.results.filter(f => !hide.has(f.player_id)).map(f => ({ id: f.player_id, name: f.name, lessonId: f.lesson_id, title: f.title, acc: f.acc, xp: f.xp, at: f.created_at })) });
   }
 
   // ---- synced progress (review schedule, practice days, streak settings) ----
@@ -264,7 +271,7 @@ async function api(req, env, path) {
   if (m === 'GET' && path === '/api/courses') {
     const rows = await env.DB.prepare(`SELECT c.id, c.slug, c.title, c.json, c.version, c.author_id, p.name AS author, c.updated_at,
       (SELECT COUNT(*) FROM reports r WHERE r.course_id = c.id AND r.resolved = 0) AS open_reports
-      FROM courses c JOIN players p ON p.id = c.author_id WHERE c.group_code = ? ORDER BY c.created_at`).bind(me.group_code).all();
+      FROM courses c JOIN players p ON p.id = c.author_id WHERE c.group_code = ? AND c.author_id NOT IN (SELECT blocked_id FROM blocks WHERE player_id = ?) ORDER BY c.created_at`).bind(me.group_code, me.id).all();
     return json({ courses: rows.results.map(r => ({ slug: r.slug, title: r.title, version: r.version, authorId: r.author_id, author: r.author, updatedAt: r.updated_at, openReports: r.open_reports, course: JSON.parse(r.json) })) });
   }
 
@@ -274,6 +281,8 @@ async function api(req, env, path) {
     let raw; try { raw = JSON.parse(text).course; } catch { return fail('That isn’t valid JSON.'); }
     const v = validateCourse(raw);
     if (!v.ok) return json({ error: 'The course has problems.', errors: v.errors }, 422);
+    const cmod = await moderate(env, JSON.stringify(v.course));
+    if (!cmod.allowed) return fail('This course can’t be posted: ' + cmod.reason, 422);
     const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM courses WHERE group_code = ?').bind(me.group_code).first();
     const existing = await env.DB.prepare('SELECT id, author_id, version FROM courses WHERE group_code = ? AND slug = ?').bind(me.group_code, v.course.id).first();
     const body = JSON.stringify(v.course), now = Date.now();

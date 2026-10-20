@@ -143,6 +143,37 @@ r = await call('/api/passkey/login-options', { body: {} }); lo = r.d;
 r = await call('/api/passkey/login', { body: { challengeId: lo.challengeId, response: auth.get(lo.options) } }); ok(r.s === 200 && r.d.player.id === S.player.id, 'passkey sign-in again (counter advanced)', r.d);
 r = await call('/api/passkey/login-options', { body: {}, headers: { Origin: 'https://evil.example' } }); ok(r.s === 400, 'passkey login: unknown origin refused', r);
 
+// ---- blocking
+const course = (id, title) => ({ format: 'wonkolingo-course/1', id, title, description: 'd', units: [{ title: 'U1', lessons: [{ title: 'L1', items: [{ t: 'mc', p: 'Q1', o: ['a', 'b'], a: 0, x: 'because' }, { t: 'mc', p: 'Q2', o: ['c', 'd'], a: 1, x: 'why' }] }] }] });
+r = await call('/api/groups', { body: { groupName: 'Block Testers', name: 'Kim' } }); const K = r.d;
+r = await call('/api/join', { body: { code: K.code, name: 'Lee' } }); const L = r.d;
+r = await call('/api/courses', { token: L.token, body: { course: course('lee-course', 'Lee’s course') } }); ok(r.s === 200, 'member publishes a course', r);
+r = await call('/api/complete', { token: L.token, body: { lessonId: 'au0l0', title: 'Lee lesson', xp: 10, acc: 100, day: today } }); ok(r.s === 200, 'member posts a lesson', r);
+r = await call('/api/block', { token: K.token, body: { playerId: K.player.id } }); ok(r.s === 400, 'cannot block yourself', r);
+r = await call('/api/block', { token: K.token, body: { playerId: 'nosuchplayer' } }); ok(r.s === 404, 'block unknown player -> 404', r);
+r = await call('/api/block', { token: K.token, body: { playerId: L.player.id } }); ok(r.s === 200, 'block a group member', r);
+r = await call('/api/board', { token: K.token });
+ok(!r.d.players.some(p => p.id === L.player.id) && !r.d.feed.some(f => f.id === L.player.id) && r.d.blocked.length === 1 && r.d.blocked[0].name === 'Lee', 'blocked player hidden from board and feed, listed as blocked', r.d);
+r = await call('/api/courses', { token: K.token }); ok(r.d.courses.length === 0, 'blocked author’s courses hidden', r.d);
+r = await call('/api/board', { token: L.token }); ok(r.d.players.some(p => p.id === K.player.id), 'blocking is one-way: the blocked player still sees the board', r.d.players);
+r = await call('/api/unblock', { token: K.token, body: { playerId: L.player.id } }); ok(r.s === 200, 'unblock', r);
+r = await call('/api/courses', { token: K.token }); ok(r.d.courses.length === 1, 'unblocked author’s course is back', r.d);
+
+// ---- deleting an account
+r = await call('/api/link', { token: L.token, body: {} });
+r = await call('/api/link/claim', { body: { code: r.d.code } }); const L2 = r.d.token;
+r = await call('/api/state', { token: L.token, body: { state: { srs: { x: { reps: 1 } } } } });
+r = await call('/api/block', { token: L.token, body: { playerId: K.player.id } });
+r = await call('/api/account/delete', { body: {} }); ok(r.s === 401, 'delete needs sign-in', r);
+r = await call('/api/account/delete', { token: L.token, body: {} }); ok(r.s === 200, 'delete account', r);
+r = await call('/api/me', { token: L.token }); ok(r.s === 401, 'deleted account’s token stops working', r.s);
+r = await call('/api/me', { token: L2 }); ok(r.s === 401, 'deleted account’s other devices are signed out', r.s);
+r = await call('/api/board', { token: K.token }); ok(r.d.players.length === 1 && !r.d.feed.some(f => f.id === L.player.id), 'deleted player and their lessons are gone from the board', r.d);
+r = await call('/api/courses', { token: K.token }); ok(r.d.courses.length === 0, 'deleted player’s courses are gone', r.d);
+r = await call('/api/account', { body: {} }); const D = r.d;
+r = await call('/api/account/delete', { token: D.token, body: {} }); ok(r.s === 200, 'delete an account with no group', r);
+r = await call('/api/me', { token: D.token }); ok(r.s === 401, 'no-group account is gone', r.s);
+
 // ---- the old flow still works for a page that hasn't updated
 r = await call('/api/join', { body: { code, name: 'Legacy' } }); ok(r.s === 200 && r.d.token, 'signed-out join still creates a player', r);
 

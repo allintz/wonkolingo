@@ -23,6 +23,7 @@ SRC="$HOME/Documents/Obsidian Vault/05_Reference/WonkoLingo/wonkolingo.html"  # 
   echo "export { validateCourse, COURSE_FORMAT, COURSE_LIMITS, computeStreak, STREAK_RULES };"
 } > src/course-format.js
 cp course-guide.md docs/course-guide.md 2>/dev/null || true
+cp privacy.html docs/privacy.html
 # Mascot images live next to the page source in the vault; the page loads them from mascot/.
 mkdir -p docs/mascot && cp "$(dirname "$SRC")"/mascot/*.webp docs/mascot/
 mkdir -p docs/icons && cp "$(dirname "$SRC")"/icons/*.png docs/icons/

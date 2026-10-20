@@ -109,6 +109,8 @@ svg { display: block; }
 .lb { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .lb li { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 6px 8px; border-radius: 10px; font-weight: 800; font-size: 15px; }
 .lb li.me { background: var(--primary-soft); }
+.lb li.other { cursor: pointer; }
+.lb li.lbact { display: flex; flex-wrap: wrap; gap: 4px 12px; font-weight: 600; font-size: 13px; padding-top: 0; }
 .lb .rk { color: var(--muted); font-variant-numeric: tabular-nums; text-align: center; }
 .lb .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lb .fl { display: flex; align-items: center; gap: 2px; color: var(--brass); font-variant-numeric: tabular-nums; }
@@ -502,6 +504,12 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .chip.sv[data-s="offline"] { color: var(--bad); }
 @media (max-width: 420px) { .chip.sv .svt { display: none; } }
 .rec.acode { font: 800 26px/1.2 var(--f-label); letter-spacing: .14em; text-align: center; padding: 10px; }
+/* iPhone app: reminder settings and the after-session prompt */
+.remctl { display: inline-flex; gap: 10px; align-items: center; }
+.remctl input[type=time] { background: var(--surface-2); color: var(--fg); border: 1px solid var(--line-deep); border-radius: 8px; padding: 4px 6px; font: inherit; }
+.remctl input[type=time]:disabled { opacity: .45; }
+.remask { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; margin: 4px 0 8px; }
+.remask p { margin: 0; }
 </style>
 
 <header class="top">
@@ -546,6 +554,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
       <h1 class="vtitle">Me</h1>
       <section class="card" id="acctCard"></section>
       <section class="card" id="streakCard"></section>
+      <section class="card" id="remCard" hidden></section>
       <section class="card" id="installCard" hidden></section>
       <section class="card" id="styleCard"></section>
       <section class="card" id="progressCard">
@@ -555,7 +564,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
         <div class="kv"><span>Cards in your reviews</span><span id="pCards">0</span></div>
         <div class="kv"><span>Due tomorrow</span><span id="pTomorrow">0</span></div>
         <p>Keys: 1 to 4 picks an answer, Enter checks, Esc quits. On typed answers, Cmd+Enter (Ctrl+Enter) checks.</p>
-        <button class="linkbtn" id="resetBtn">Reset progress</button>
+        <div class="glinks"><button class="linkbtn" id="resetBtn">Reset progress</button><a class="linkbtn" id="privLink" href="privacy.html">Privacy</a></div>
       </section>
     </section>
   </main>
@@ -14288,7 +14297,7 @@ function defaultStreakSettings() { return { days: [true, true, true, true, true,
 const DEV = (() => { try { let d = localStorage.getItem('wl-device'); if (!d) { d = Math.random().toString(36).slice(2, 10); localStorage.setItem('wl-device', d); } return d; } catch (e) { return 'nodevice'; } })();
 const xpTotal = s => (s.xpBase || 0) + Object.values(s.xpBy || {}).reduce((a, b) => a + (+b || 0), 0);
 function addXP(n) { state.xpBy = state.xpBy || {}; state.xpBy[DEV] = (state.xpBy[DEV] || 0) + n; state.xp = xpTotal(state); }
-function save(noSync) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} if (!noSync && typeof scheduleSync === 'function') scheduleSync(); }
+function save(noSync) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} if (!noSync && typeof scheduleSync === 'function') scheduleSync(); nativeSoon(); }
 
 function unlocked(i) { return true; }
 
@@ -14349,7 +14358,7 @@ function renderHome() {
   if (VIEW === 'today') { renderToday(); renderMix(); renderGroupLine(); }
   if (VIEW === 'courses') renderCourses();
   if (VIEW === 'course') renderCourseView();
-  if (VIEW === 'me') { renderAcctCard(); renderStreakCard(); renderInstallCard(); renderStyleCard(); renderProgress(); }
+  if (VIEW === 'me') { renderAcctCard(); renderStreakCard(); renderRemCard(); renderInstallCard(); renderStyleCard(); renderProgress(); }
 }
 /* ---------- install as an app (home screen) ---------- */
 let installPrompt = null;
@@ -14359,7 +14368,7 @@ const isIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.p
 function renderInstallCard() {
   const el = $('#installCard');
   const onSite = /workers\.dev$|github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
-  if (isStandalone() || (!isIOS() && !installPrompt)) { el.hidden = true; return; }
+  if (NATIVE || isStandalone() || (!isIOS() && !installPrompt)) { el.hidden = true; return; }
   el.hidden = false;
   el.innerHTML = `<h3>Put WonkoLingo on your home screen</h3>` + (isIOS()
     ? `<p>${onSite ? 'In Safari, tap the Share button, then <b>Add to Home Screen</b>.' : `Open <a href="${SITE}" target="_blank" rel="noopener">${SITE.replace('https://', '')}</a> in Safari, tap Share, then <b>Add to Home Screen</b>.`} It opens full screen like an app, and works offline (answers are self-graded until you're back online).</p>${onSite ? '<p class="meta">The home-screen app starts signed out. Add a passkey in Account above first, then sign in with it there.</p>' : ''}`
@@ -14773,7 +14782,7 @@ function showTyped(it, score, feedback, conf, source, detail) {
   if (score === 0) { run.correct--; run.queue.push({ ...it, _retry: true, _hinted: false }); }
   updateBar();
   const ok = score >= 2;
-  $('#foot').className = 'lfoot ' + (ok ? 'good' : 'bad');
+  $('#foot').className = 'lfoot ' + (ok ? 'good' : 'bad'); buzz(ok ? 'good' : 'bad');
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
   const heads = ['Not quite.', 'Partly there.', 'Mostly right.', 'Exactly right.'];
   fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${pct !== null ? `<span class="gpct">${pct}%</span>` : ''}${heads[score]}</h4>${detail && detail.reply ? `<div class="second"><span>Second opinion from a stronger grader</span><p>${esc(detail.reply)}</p></div>` : ''}${source === 'ai' && feedback ? `<p class="aifb">${esc(feedback)}</p>` : ''}${source === 'ai' ? pointsHTML(detail) : ''}<div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${gl(typedAnswerOf(it), it._gs = new Set())}</p></div><p>${gl(it.x, it._gs)}</p>${it._hinted && score >= 2 ? '<p class="meta">You used a hint, so this one comes back a little sooner.</p>' : ''}${conf === 'cold' && score === 0 ? '<p class="whynot"><span>Confident miss</span>You were sure about this one, so it comes back tomorrow. These are the mistakes most worth fixing.</p>' : ''}${source === 'ai' ? `<p class="meta" id="gradeMeta">${detail && detail.reply ? 'Re-graded by a stronger AI.' : 'Graded by AI.'} ${detail && detail.reply ? '' : '<button class="linkbtn" id="dispute">I think the grader is wrong</button> '}<button class="linkbtn" id="regrade">Grade it myself</button></p>` : ''}${reportHTML(it)}`;
@@ -14838,7 +14847,7 @@ function grade(ok, ansHTML, heading, srsGrade) {
   if (ok) run.correct++;
   else { run.wrong.add(it.key); run.queue.push(it); }
   updateBar();
-  const foot = $('#foot'); foot.className = 'lfoot ' + (ok ? 'good' : 'bad');
+  const foot = $('#foot'); foot.className = 'lfoot ' + (ok ? 'good' : 'bad'); buzz(ok ? 'good' : 'bad');
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
   const head = heading || (it.predict ? (ok ? 'Good call.' : 'Here’s what happened.') : ok ? PRAISE[Math.floor(Math.random() * PRAISE.length)] : 'Not quite.');
   fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${esc(head)}</h4>${ansHTML || ''}<p>${gl(it.x)}</p>${it.ask ? `<p class="ask"><span>Try asking</span>${esc(it.ask)}</p>` : ''}${reportHTML(it)}`;
@@ -14868,7 +14877,7 @@ function finish() {
   const acc = Math.round(firstTry / run.total * 100);
   groupPost(L, run.xp, acc);
   const nextL = LESSONS[run.idx + 1];
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc)}<div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc)}${remAskHTML()}<div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
   show('#result');
   $('#rHome').onclick = goHome; $('#rHome').focus();
 }
@@ -14882,7 +14891,7 @@ function finishSession() {
   const parts = [];
   if (run.reviewed) parts.push(`You remembered ${run.remembered} of ${run.reviewed} review${run.reviewed === 1 ? '' : 's'}`);
   if (run.newSeen) parts.push(`learned ${run.newSeen} new card${run.newSeen === 1 ? '' : 's'}`);
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${more ? more + ' more reviews are due.' : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${G ? `<p>Posted to ${esc(G.groupName)}.</p>` : ''}<div class="rbtns"><button class="btn" id="rHome">Done</button>${more || canLearn ? `<button class="btn ghost" id="rMore">${more ? 'Keep reviewing' : 'Learn more'}</button>` : ''}</div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${more ? more + ' more reviews are due.' : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${G ? `<p>Posted to ${esc(G.groupName)}.</p>` : ''}${remAskHTML()}<div class="rbtns"><button class="btn" id="rHome">Done</button>${more || canLearn ? `<button class="btn ghost" id="rMore">${more ? 'Keep reviewing' : 'Learn more'}</button>` : ''}</div>`;
   show('#result');
   $('#rHome').onclick = goHome; $('#rHome').focus();
   if ($('#rMore')) $('#rMore').onclick = () => startSession(more ? 'reviews' : true);
@@ -14903,10 +14912,12 @@ document.addEventListener('keydown', e => {
 /* ---------- group play ---------- */
 const GKEY = 'hillspeak-group';
 const SITE = 'https://wonkolingo.alex-l-lintz.workers.dev';
-const API = /workers\.dev$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) ? '' : SITE;
+// Inside the iPhone app (Capacitor) the page is served from capacitor://localhost, so it always talks to the live site.
+const NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+const API = !NATIVE && /workers\.dev$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) ? '' : SITE;
 const FLAME = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.5 2c.6 3.4 4.9 5.6 4.9 10.6A5.4 5.4 0 0 1 12 18a5.4 5.4 0 0 1-5.4-5.4c0-2.4 1.2-4 2.4-5 0 2 .9 3.2 2 3.4-.3-3.3.5-6.4 1.5-9z"/></svg>';
 let G = (() => { try { return JSON.parse(localStorage.getItem(GKEY)); } catch (e) { return null; } })();
-let board = null, gTab = 'week', gMode = 'join', gErr = '', gBusy = false, gOffline = false, leaveArmed = false;
+let board = null, gTab = 'week', gMode = 'join', gErr = '', gBusy = false, gOffline = false, leaveArmed = false, gSel = null;
 const joinParam = (new URLSearchParams(location.search).get('join') || '').toUpperCase().slice(0, 6);
 if (joinParam && !G) gMode = 'join';
 function saveG() { try { G ? localStorage.setItem(GKEY, JSON.stringify(G)) : localStorage.removeItem(GKEY); } catch (e) {} }
@@ -14916,6 +14927,130 @@ let ACCT = (() => { try { return JSON.parse(localStorage.getItem(AKEY)); } catch
 if (!ACCT && G && G.token && G.player) ACCT = { token: G.token, player: G.player }; // before Oct 2026 the token lived with the group
 function saveA() { try { ACCT ? localStorage.setItem(AKEY, JSON.stringify(ACCT)) : localStorage.removeItem(AKEY); } catch (e) {} }
 saveA();
+
+/* ---------- iPhone app: reminders, widgets, haptics (only inside the Capacitor app) ---------- */
+// var, so save() can call nativeSoon() safely whenever it runs.
+var Native = null, nativeTimer = null, widgetSig = '', remSig = '', remPerm = '';
+if (NATIVE) {
+  const P = name => window.Capacitor.registerPlugin(name);
+  Native = { notes: P('LocalNotifications'), haptics: P('Haptics'), app: P('App'), wonko: P('WonkoNative') };
+  Native.app.addListener('appStateChange', s => { if (!s.isActive) return; remPerm = ''; if (!run) renderHome(); nativeSync(); });
+  Native.app.addListener('appUrlOpen', e => { if (!run && /today/.test(e.url || '')) go('today'); });
+  Native.notes.addListener('localNotificationActionPerformed', () => { if (!run) go('today'); });
+}
+function buzz(kind) {
+  if (!Native) return;
+  (kind === 'tap' ? Native.haptics.impact({ style: 'LIGHT' }) : Native.haptics.notification({ type: kind === 'bad' ? 'WARNING' : 'SUCCESS' })).catch(() => {});
+}
+function nativeSoon() { if (!Native) return; clearTimeout(nativeTimer); nativeTimer = setTimeout(nativeSync, 1200); }
+function nativeSync() { pushWidget(); scheduleReminders(); }
+// How the streak stands on each of the next n days if no more practice happens, by the same rules as the streak card.
+function dayPlan(n) {
+  const today = dstr(new Date());
+  return Array.from({ length: n }, (_, i) => {
+    const d = addDays(today, i), si = computeStreak(state.activeDays, state.settings, d);
+    return { d, streak: si.streak, off: si.offToday, paused: si.pausedNow, done: si.doneToday, freezes: si.freezes, atRisk: si.atRisk };
+  });
+}
+// The widget reads one entry per day, so it stays right for two weeks even if the app isn't opened.
+function pushWidget() {
+  const days = {};
+  dayPlan(15).forEach(p => days[p.d] = { s: p.streak, off: p.off, paused: p.paused, done: p.done, fz: p.freezes });
+  const sig = JSON.stringify(days);
+  if (sig === widgetSig) return;
+  widgetSig = sig;
+  Native.wonko.setWidgetData({ json: JSON.stringify({ v: 1, at: Date.now(), days }) }).catch(() => { widgetSig = ''; });
+}
+
+const REM_DEFAULTS = { on: false, asked: false, daily: '09:00', risk: '20:00', dailyOn: true, riskOn: true };
+const REM_DAILY = [
+  'A few cards are ready whenever you are.',
+  'The owl has questions. Policy questions.',
+  'Five minutes now, sharper all week.',
+  'Today’s cards are warmed up and waiting.',
+  'Hoot. That’s owl for “quick round?”',
+  'Two minutes of flashcards: cheaper than a think tank.',
+  'Your reviews have been rehearsing their best answers.',
+  'A tiny session counts. Fancy one?'
+];
+const REM_RISK = [
+  'Still time for today’s round. Two minutes does it.',
+  'The owl saved you a seat. One quick session keeps your streak going.',
+  'Quick round before bed? Your streak would love it.',
+  'Plenty of time left tonight for a short session.'
+];
+function remPrefs() { return { ...REM_DEFAULTS, ...((state.prefs || {}).rem || {}) }; }
+function setRem(patch) { state.prefs = { ...(state.prefs || {}), rem: { ...remPrefs(), ...patch } }; state.prefsAt = Date.now(); save(); scheduleReminders(); renderRemCard(); }
+async function remPermission(ask) {
+  if (!Native) return 'unavailable';
+  try { return (ask ? await Native.notes.requestPermissions() : await Native.notes.checkPermissions()).display; } catch (e) { return 'denied'; }
+}
+// Reminders are scheduled on the phone for the next two weeks and rebuilt whenever progress changes, so a day you've
+// practiced, an off day or a pause never gets one, and the streak nudge stops once a streak would have ended.
+async function scheduleReminders() {
+  if (!Native) return;
+  const r = remPrefs(), now = Date.now(), list = [], terms = Object.keys(state.myTerms || {});
+  const at = (d, hm) => { const [h, m] = String(hm).split(':').map(Number); const t = new Date(d + 'T00:00:00'); t.setHours(h || 0, m || 0, 0, 0); return t; };
+  const pick = (arr, d) => arr[[...d].reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 1000003, 7) % arr.length];
+  if (r.on) dayPlan(14).forEach((p, i) => {
+    if (p.off || p.done) return;
+    const risk = r.riskOn && p.atRisk ? at(p.d, r.risk) : null;
+    let daily = r.dailyOn ? at(p.d, r.daily) : null;
+    if (daily && risk && Math.abs(daily - risk) < 3600000) daily = null; // one nudge is enough when they'd come close together
+    if (daily && daily > now + 60000) {
+      const body = terms.length && i % 3 === 1 ? `Remember what “${pick(terms, p.d)}” means? Quick check.` : pick(REM_DAILY, p.d);
+      list.push({ id: 100 + i, title: 'WonkoLingo', body, schedule: { at: daily, allowWhileIdle: true }, extra: { go: 'today' } });
+    }
+    if (risk && risk > now + 60000) {
+      const body = i === 0 && p.streak > 1 ? `Your ${p.streak}-day streak would love a quick visit tonight.` : p.freezes ? 'A freeze would cover today, but a quick round saves it for later.' : pick(REM_RISK, p.d);
+      list.push({ id: 200 + i, title: 'Keep your streak going', body, schedule: { at: risk, allowWhileIdle: true }, extra: { go: 'today' } });
+    }
+  });
+  const sig = JSON.stringify(list.map(n => [n.id, +n.schedule.at, n.body]));
+  if (sig === remSig) return;
+  remSig = sig;
+  try {
+    const old = ((await Native.notes.getPending()).notifications || []).map(n => ({ id: n.id }));
+    if (old.length) await Native.notes.cancel({ notifications: old });
+    if (list.length) await Native.notes.schedule({ notifications: list });
+  } catch (e) { remSig = ''; }
+}
+async function enableReminders() {
+  remPerm = await remPermission(true);
+  if (remPerm === 'granted') { setRem({ on: true, asked: true }); toast('Reminders on.'); }
+  else { setRem({ asked: true }); toast('Notifications are off for WonkoLingo. You can turn them on in Settings.'); }
+}
+async function renderRemCard() {
+  const el = $('#remCard'); if (!el) return;
+  if (!Native) { el.hidden = true; return; }
+  if (!remPerm) remPerm = await remPermission(false);
+  const r = remPrefs();
+  el.hidden = false;
+  if (remPerm === 'denied') { el.innerHTML = `<h3>Reminders</h3><p>Notifications are turned off for WonkoLingo. Turn them on in Settings to get reminders.</p><div class="row"><button class="btn ghost sm" id="remSettings">Open Settings</button></div>`; return; }
+  if (!r.on || remPerm !== 'granted') { el.innerHTML = `<h3>Reminders</h3><p>A nudge to keep your streak going. Reminders skip days you’ve already practiced, off days and pauses.</p><div class="row"><button class="btn sm" id="remOn">Turn on reminders</button></div>`; return; }
+  const row = (k, tk, label) => `<div class="kv"><span>${label}</span><span class="remctl"><input type="time" id="${tk}" value="${esc(r[tk === 'remDailyT' ? 'daily' : 'risk'])}"${r[k] ? '' : ' disabled'}><button class="switch" data-rem="${k}" aria-pressed="${r[k]}" aria-label="${label}"></button></span></div>`;
+  el.innerHTML = `<div class="ghead"><h3>Reminders</h3><button class="linkbtn" id="remOff">Turn off</button></div>
+    ${row('dailyOn', 'remDailyT', 'Daily reminder')}${row('riskOn', 'remRiskT', 'Streak at risk')}
+    <p class="meta">Skipped on days you’ve already practiced, off days and pauses. The streak nudge only comes while you have a streak going.</p>`;
+}
+$('#remCard').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.id === 'remOn') enableReminders();
+  else if (t.id === 'remOff') setRem({ on: false });
+  else if (t.id === 'remSettings') Native.wonko.openSettings().catch(() => {});
+  else if (t.dataset.rem) setRem({ [t.dataset.rem]: !remPrefs()[t.dataset.rem] });
+});
+$('#remCard').addEventListener('change', e => {
+  if (e.target.id === 'remDailyT' && e.target.value) setRem({ daily: e.target.value });
+  if (e.target.id === 'remRiskT' && e.target.value) setRem({ risk: e.target.value });
+});
+// Asked once, on the results screen after a first session, the way Duolingo does.
+function remAskHTML() { const r = remPrefs(); return Native && !r.on && !r.asked ? `<div class="remask"><p>Want a nudge to keep your streak going?</p><div class="row"><button class="btn ghost sm" id="rRemOn">Turn on reminders</button><button class="linkbtn" id="rRemNo">Not now</button></div></div>` : ''; }
+$('#resultIn').addEventListener('click', async e => {
+  const on = e.target.closest('#rRemOn'), no = e.target.closest('#rRemNo'); if (!on && !no) return;
+  if (on) await enableReminders(); else setRem({ asked: true });
+  const box = $('#resultIn .remask'); if (box) box.remove();
+});
 
 async function apiCall(path, bodyObj, token) {
   const headers = { 'Content-Type': 'application/json' };
@@ -14938,8 +15073,8 @@ function ago(ms) {
 
 /* ---------- account: saved indicator, passkeys, sign-in codes ---------- */
 let syncState = 'saved', acctPending = null;
-let acctUI = { mode: '', busy: false, err: '', link: null, recShown: false, outArmed: false, merge: null };
-const PASSKEY_OK = !!(window.PublicKeyCredential && navigator.credentials) && (location.origin === SITE || location.hostname === 'localhost');
+let acctUI = { mode: '', busy: false, err: '', link: null, recShown: false, outArmed: false, delArmed: false, merge: null };
+const PASSKEY_OK = !NATIVE && !!(window.PublicKeyCredential && navigator.credentials) && (location.origin === SITE || location.hostname === 'localhost');
 const CLOUD = '<path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.9 11a3.75 3.75 0 0 1-.4 7.5z"/>';
 function hasProgress() { return Object.keys(state.srs || {}).length > 0 || xpTotal(state) > 0 || Object.keys(state.myTerms || {}).length > 0; }
 // The first time there's progress worth keeping, this device gets its own account.
@@ -15038,13 +15173,14 @@ function completeSignIn(d, keepLocal) {
   toast('Signed in' + (G ? ', in ' + G.groupName : '') + '.');
   if (!run) renderHome();
 }
-function signOut() {
+function signOut(msg) {
   ACCT = null; G = null; board = null; saveA(); saveG();
   try { localStorage.removeItem(CKEY); } catch (e) {}
   state = blankState(); save(true); setSync('saved');
-  Object.assign(acctUI, { mode: '', merge: null, link: null, recShown: false, outArmed: false, err: '' });
+  Object.assign(acctUI, { mode: '', merge: null, link: null, recShown: false, outArmed: false, delArmed: false, err: '' });
+  try { if (Native) Native.notes.getPending().then(p => p.notifications.length && Native.notes.cancel({ notifications: p.notifications.map(n => ({ id: n.id })) })); } catch (e) {}
   installCourses([]);
-  toast('Signed out. This device is cleared.');
+  toast(msg || 'Signed out. This device is cleared.');
 }
 
 function renderAcctCard() {
@@ -15069,8 +15205,9 @@ function renderAcctCard() {
       ? `<p>On your other device, open WonkoLingo, go to Me, choose “I already have an account” and enter:</p><code class="rec acode">${esc(a.link.code.slice(0, 4) + '-' + a.link.code.slice(4))}</code><p class="meta">Works once, for 10 minutes. <button class="linkbtn" id="aLink"${dis}>Get a new code</button></p>`
       : `<div class="row"><button class="btn ghost sm" id="aLink"${dis}>Sign in on another device</button></div>`;
     if (a.recShown) h += `<p>Keep this somewhere safe. It signs in to your account on any device, and anyone who has it can use your account.</p><code class="rec">${esc(ACCT.token)}</code>`;
-    h += `<div class="glinks"><button class="linkbtn" id="aRec">${a.recShown ? 'Hide recovery code' : 'Recovery code'}</button>${pk && PASSKEY_OK ? `<button class="linkbtn" id="aPk"${dis}>Add another passkey</button>` : ''}<button class="linkbtn" id="aSwitch">Use a different account</button><button class="linkbtn" id="aOut">${a.outArmed ? 'Click again to sign out' : 'Sign out'}</button></div>`;
+    h += `<div class="glinks"><button class="linkbtn" id="aRec">${a.recShown ? 'Hide recovery code' : 'Recovery code'}</button>${pk && PASSKEY_OK ? `<button class="linkbtn" id="aPk"${dis}>Add another passkey</button>` : ''}<button class="linkbtn" id="aSwitch">Use a different account</button><button class="linkbtn" id="aOut">${a.outArmed ? 'Click again to sign out' : 'Sign out'}</button><button class="linkbtn" id="aDel"${dis}>${a.delArmed ? 'Click again to delete' : 'Delete account'}</button></div>`;
     if (a.outArmed) h += `<p class="gerr">Signing out clears this device. ${pk ? 'Sign back in with your passkey or recovery code.' : 'Without a passkey, you’ll need your recovery code to get back in.'}</p>`;
+    if (a.delArmed) h += `<p class="gerr">Deleting removes your account, progress, lesson results and any courses you wrote, on every device. It can’t be undone.</p>`;
   } else h += `<div class="row"><button class="btn ghost sm" id="aSwitch">I already have an account</button></div>`;
   if (a.err) h += `<p class="gerr">${a.err}</p>`;
   el.innerHTML = h;
@@ -15086,6 +15223,13 @@ $('#acctCard').addEventListener('click', async e => {
   if (t.id === 'aOut') {
     if (!a.outArmed) { a.outArmed = true; renderAcctCard(); setTimeout(() => { a.outArmed = false; if (VIEW === 'me' && !run) renderAcctCard(); }, 5000); return; }
     signOut(); return;
+  }
+  if (t.id === 'aDel') {
+    if (!a.delArmed) { a.delArmed = true; a.outArmed = false; renderAcctCard(); setTimeout(() => { a.delArmed = false; if (VIEW === 'me' && !run) renderAcctCard(); }, 6000); return; }
+    a.busy = true; renderAcctCard();
+    try { await apiCall('/api/account/delete', {}); a.busy = false; signOut('Account deleted. Everything it held is gone from the server.'); }
+    catch (err) { a.busy = false; a.delArmed = false; a.err = acctErr(err); renderAcctCard(); }
+    return;
   }
   if (t.dataset.merge) { completeSignIn(a.merge, t.dataset.merge === '1'); return; }
   const step = async fn => { a.busy = true; renderAcctCard(); try { await fn(); } catch (err) { a.err = acctErr(err); } a.busy = false; renderAcctCard(); };
@@ -15143,9 +15287,11 @@ function renderGroup() {
     h += `<ol class="lb">${rows.map((r, i) => {
       const fl = r.streak === 0 ? 'zero' : r.atRisk ? 'risk' : '';
       const tip = r.streak === 0 ? 'No current streak' : r.atRisk ? `${r.streak}-day streak, needs practice today` + (r.freezes ? ` (${r.freezes} freeze${r.freezes === 1 ? '' : 's'} saved)` : '') : `${r.streak}-day streak` + (r.offToday ? ', off today' : '');
-      return `<li class="${r.id === board.me ? 'me' : ''}"><span class="rk">${i + 1}</span><span class="nm">${esc(r.name)}</span><span class="fl ${fl}" title="${esc(tip)}">${FLAME}${r.streak}</span><span class="pts">${r[key]} XP</span></li>`;
+      const act = gSel === r.id && r.id !== board.me ? `<li class="lbact"><button class="linkbtn" data-block="${esc(r.id)}" data-name="${esc(r.name)}">Block ${esc(r.name)}</button><span class="meta">You won’t see their courses, scores or activity.</span></li>` : '';
+      return `<li class="${r.id === board.me ? 'me' : 'other'}" data-pid="${esc(r.id)}"><span class="rk">${i + 1}</span><span class="nm">${esc(r.name)}</span><span class="fl ${fl}" title="${esc(tip)}">${FLAME}${r.streak}</span><span class="pts">${r[key]} XP</span></li>${act}`;
     }).join('')}</ol>`;
-    if (gTab === 'week') h += `<p class="meta">Weekly XP resets Monday 00:00 UTC.</p>`;
+    if (gTab === 'week') h += `<p class="meta">Weekly XP resets Monday 00:00 UTC. Tap someone to block them.</p>`;
+    if ((board.blocked || []).length) h += `<p class="meta">Blocked: ${board.blocked.map(b => `${esc(b.name)} <button class="linkbtn" data-unblock="${esc(b.id)}">Unblock</button>`).join(' · ')}</p>`;
     if (board.feed.length) h += `<h4 class="gsub">Recent</h4><ul class="feed">${board.feed.slice(0, 8).map(f => `<li><b>${esc(f.name)}</b> finished ${esc(f.title)} · ${f.acc}% · ${ago(f.at)}${f.id !== board.me && !String(f.lessonId).startsWith('review-') ? `<button class="beat" data-beat="${esc(f.lessonId)}" data-who="${esc(f.name)}" data-acc="${f.acc}">Beat it</button>` : ''}</li>`).join('')}</ul>`;
     else h += `<p>No lessons finished yet. Be the first.</p>`;
   } else if (!gOffline) h += `<p>Loading…</p>`;
@@ -15180,7 +15326,10 @@ function renderGroupKeep() {
 }
 
 $('#group').addEventListener('click', e => {
+  const row = e.target.closest('li[data-pid]');
+  if (row && !e.target.closest('button')) { const id = row.dataset.pid; if (board && id !== board.me) { gSel = gSel === id ? null : id; renderGroup(); } return; }
   const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.block || t.dataset.unblock) { setBlock(t.dataset.block || t.dataset.unblock, !!t.dataset.block, t.dataset.name); return; }
   if (t.dataset.gmode) { gMode = t.dataset.gmode; gErr = ''; renderGroupKeep(); return; }
   if (t.dataset.gtab) { gTab = t.dataset.gtab; renderGroup(); return; }
   if (t.id === 'gGo') { groupSubmit(); return; }
@@ -15208,6 +15357,13 @@ $('#group').addEventListener('click', e => {
 });
 $('#group').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); if (!gBusy) groupSubmit(); } });
 
+async function setBlock(id, on, name) {
+  try {
+    await apiCall(on ? '/api/block' : '/api/unblock', { playerId: id });
+    gSel = null; toast(on ? `Blocked ${name || 'them'}. Their courses and activity are hidden.` : 'Unblocked.');
+    await refreshBoard(); loadCourses();
+  } catch (e) { toast(e instanceof TypeError ? 'Can’t reach the server right now.' : e.message); }
+}
 function groupPost(L, xp, acc) {
   if (!G) return;
   apiCall('/api/complete', { lessonId: L.id, title: L.title, xp, acc, day: dstr(new Date()) }).then(refreshBoard, () => { gOffline = true; renderGroup(); });
@@ -15339,6 +15495,7 @@ $('#cinfo').addEventListener('click', async e => {
   const C = COURSES[state.course];
   if (t.id === 'ciUpdate') openAdd();
   if (t.id === 'ciReports') openReports(C);
+  if (t.id === 'ciBlock') { if (t.dataset.armed !== '1') { t.dataset.armed = '1'; t.textContent = 'Click again to hide their courses and activity'; return; } state.course = null; save(); go('courses'); setBlock(C.authorId, true, C.author); }
   if (t.id === 'ciDelete') {
     if (t.dataset.armed !== '1') { t.dataset.armed = '1'; t.textContent = 'Click again to remove it for everyone'; setTimeout(() => { if (t.isConnected) { t.dataset.armed = ''; t.textContent = 'Remove course'; } }, 4000); return; }
     try { await apiCall('/api/courses/' + C.slug + '/delete', {}); toast('Course removed.'); if (state.mix && state.mix[state.course]) { delete state.mix[state.course]; state.mixAt = Date.now(); } state.course = null; save(); await loadCourses(); }
@@ -15535,7 +15692,7 @@ function renderCourseView() {
     ${C.description ? `<p class="cmeta">${esc(C.description)}</p>` : ''}</div>`;
   const mine = C.group && G && C.authorId === G.player.id;
   $('#cinfo').hidden = !C.group;
-  $('#cinfo').innerHTML = C.group ? `<span>${esc(C.meta)}</span>${mine ? `<button class="linkbtn" id="ciReports">${C.openReports} open report${C.openReports === 1 ? '' : 's'}</button><button class="linkbtn" id="ciUpdate">Upload new version</button><button class="linkbtn" id="ciDelete">Remove course</button>` : ''}` : '';
+  $('#cinfo').innerHTML = C.group ? `<span>${esc(C.meta)}</span>${mine ? `<button class="linkbtn" id="ciReports">${C.openReports} open report${C.openReports === 1 ? '' : 's'}</button><button class="linkbtn" id="ciUpdate">Upload new version</button><button class="linkbtn" id="ciDelete">Remove course</button>` : `<button class="linkbtn" id="ciBlock">Block ${esc(C.author)}</button>`}` : '';
   $('#caveat').innerHTML = `<h3>How sure are these answers?</h3>${C.caveat.map(t => `<p>${esc(t)}</p>`).join('')}<div class="meta">${esc(C.meta)}</div>`;
   const next = LESSONS.findIndex(l => !state.done[l.id]);
   const curUnit = next >= 0 ? LESSONS[next].unit : -1;
@@ -15687,10 +15844,12 @@ function scheduleSync() {
 }
 document.addEventListener('visibilitychange', () => { if (document.hidden) { if (ACCT) syncNow(); } else refreshAccount(); });
 
+if (API) $('#privLink').href = SITE + '/privacy.html';
 refreshAccount();
 refreshBoard();
 loadCourses();
 syncNow();
+if (Native) nativeSync();
 </script>
 <script>if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});</script>
 </body></html>
