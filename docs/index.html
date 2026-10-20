@@ -2872,7 +2872,7 @@ const FRONTIER_UNITS = [
  }
 ];
 
-/* Built-in AI Policy Tools pilot. Source of truth: courses/ai-policy-tools.json in this folder; regenerate this block from it after edits. */
+/* Built-in AI Policy Toolkit (formerly AI Policy Tools). Source of truth: courses/ai-policy-tools.json in this folder; regenerate this block from it after edits. */
 const TOOLS_UNITS = [
  {
   "title": "Start here",
@@ -14258,10 +14258,10 @@ const COURSES = Object.assign(Object.create(null), {
   proc: { name: 'Procedure', units: PROC_UNITS, pre: 'p',
     caveat: ['These simplify standard House and Senate procedure as described in CRS reports and the chambers’ rules. Precedents and each Congress’s rules package change details over time, and there are exceptions to almost everything here.', 'News examples are paraphrased from 2023 to 2025 coverage, not real headlines.'],
     meta: 'Draft · 2026-10-16 · Not reviewed by a procedure expert' },
-  policy: { name: 'AI Policy Options', units: POLICY_UNITS, pre: 'a', description: 'Specific laws, bills, proposals and frameworks in the 2026 debate over AI risk policy, and who argues what. Pairs with AI Policy Tools, which covers the tools themselves.',
-    caveat: ['Drawn from the AI Risk Legislation Tracker, the pacing.tech agenda (Douglas, Dillon, Moore, Leech and Avin) and IFP\u2019s report on automated AI R&D, with facts current as of October 2026. Frameworks, claims about what a policy would do, and objections are the views of the people who hold them, not settled fact.', 'Revised on October 19, 2026 to cut duplicates and report trivia, then re-checked by a second AI, which corrected many attributions. On October 20, general explanations of how each tool works moved to AI Policy Tools, so this course focuses on specific laws, bills, actors and frameworks. Many questions have more than one right answer, and the grader accepts any specific, correct one. No person has reviewed it.'],
+  policy: { name: 'AI Policy Landscape', units: POLICY_UNITS, pre: 'a', description: 'Specific laws, bills, proposals and frameworks in the 2026 debate over AI risk policy, and who argues what. Pairs with AI Policy Toolkit, which covers how the tools themselves work.',
+    caveat: ['Drawn from the AI Risk Legislation Tracker, the pacing.tech agenda (Douglas, Dillon, Moore, Leech and Avin) and IFP\u2019s report on automated AI R&D, with facts current as of October 2026. Frameworks, claims about what a policy would do, and objections are the views of the people who hold them, not settled fact.', 'Revised on October 19, 2026 to cut duplicates and report trivia, then re-checked by a second AI, which corrected many attributions. On October 20, general explanations of how each tool works moved to AI Policy Toolkit, so this course focuses on specific laws, bills, actors and frameworks. Many questions have more than one right answer, and the grader accepts any specific, correct one. No person has reviewed it.'],
     meta: 'Draft \u00b7 revised 2026-10-20 \u00b7 Fact-checked by AI, not by a person' },
-  tools: { name: 'AI Policy Tools', units: TOOLS_UNITS, pre: 't', description: 'The main policy tools for reducing catastrophic AI risk: what each is for, what makes it distinctive, and the main objections. 40 tools in 6 families, plus risk-to-tool scenarios.',
+  tools: { name: 'AI Policy Toolkit', units: TOOLS_UNITS, pre: 't', description: 'The main policy tools for reducing catastrophic AI risk: what each is for, what makes it distinctive, and the main objections. 40 tools in 6 families, plus risk-to-tool scenarios.',
     caveat: ['Covers 40 policy tools from a researched catalog of proposals for reducing catastrophic AI risk, from enacted laws to ideas that exist only in papers, with facts current as of October 2026. Arguments for and against a tool are the views of the people who hold them, not settled fact.', 'Many questions have more than one right answer, and the grader accepts any specific, correct one. Each card was drafted by one AI and then fact-checked against primary sources by a second; many corrections were made. No person has reviewed it, and laws and bills change quickly.'],
     meta: 'Draft \u00b7 2026-10-19 \u00b7 Fact-checked by AI, not by a person' },
   frontier: { name: 'FRONTIER Act', units: FRONTIER_UNITS, pre: 'f',
