@@ -1,7 +1,7 @@
 {
  "format": "wonkolingo-course/1",
  "id": "ai-policy-tools",
- "title": "AI Policy Tools",
+ "title": "AI Policy Toolkit",
  "description": "The main policy tools for reducing catastrophic AI risk: what each is for, what makes it distinctive, and the main objections.",
  "caveat": "Covers 40 tools from a researched catalog, current as of October 2026. Arguments for and against are the views of the people who hold them. Drafted and independently fact-checked by AI; no person has reviewed it.",
  "units": [

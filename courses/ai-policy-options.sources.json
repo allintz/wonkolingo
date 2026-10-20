@@ -1,14 +1,14 @@
 [
  {
   "id": "au0l0#0",
-  "q": "The Institute for Progress (IFP), in its Aug 2026 report on automated AI R&D, names three specific risks that faster aut",
+  "q": "Why does IFP (Institute for Progress, Aug 2026) think faster automation of AI research raises the risk of losing control",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au0l0#1",
-  "q": "IFP says automated AI R&D could create risk through two broad pathways (drawing on earlier research). What are they?",
+  "q": "IFP, drawing on earlier research, says automated AI R&D could raise risk in two ways. One speeds up the timeline, so ris",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
@@ -29,14 +29,14 @@
  },
  {
   "id": "au0l0#4",
-  "q": "IFP proposes five criteria that near-term policies on automated AI R&D risk should meet. Name two.",
+  "q": "IFP's near-term recommendations on automated AI R&D are meant to be 'low-regret'. What makes a policy low-regret, and wh",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
   "id": "au0l0#6",
-  "q": "If 'pacing' of automated AI R&D turns out to be needed, IFP proposes it should consist of two parts. What are they?",
+  "q": "If pacing of automated AI R&D proves necessary, how would the version IFP proposes differ from a pause on AI research?",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
@@ -85,7 +85,7 @@
  },
  {
   "id": "au0l1#5",
-  "q": "The pacing.tech authors describe a three-way tradeoff for any given control surface. What are the three elements?",
+  "q": "A classifier meant to flag bioweapons research blocks a biology student's innocent question, yet misses a dangerous inqu",
   "src": [
    "https://pacing.tech/"
   ]
@@ -120,14 +120,14 @@
  },
  {
   "id": "au0l2#0",
-  "q": "The pacing.tech authors give four general arguments against pacing AI more. Name two.",
+  "q": "The pacing.tech authors set out an argument that slowing AI down too early could backfire, even for people who think the",
   "src": [
    "https://pacing.tech/"
   ]
  },
  {
   "id": "au0l2#1",
-  "q": "The pacing.tech authors give three general arguments for pacing AI more. Name two.",
+  "q": "The pacing.tech authors argue that being able to slow AI work quickly is valuable even when no one yet knows how to fix ",
   "src": [
    "https://pacing.tech/"
   ]
@@ -255,7 +255,7 @@
  },
  {
   "id": "au1l1#4",
-  "q": "Dario Amodei's essay 'We Must Pace the Frontier' (Sept 2026) proposes a three-step plan. Name the three steps.",
+  "q": "Dario Amodei's plan in 'We Must Pace the Frontier' (Sept 2026) starts with embedded third-party evaluators inside each f",
   "src": [
    "https://darioamodei.com/post/we-must-pace-the-frontier"
   ]
@@ -435,7 +435,7 @@
  },
  {
   "id": "au2l1#8",
-  "q": "In its Aug 2026 report on automated AI research, IFP (Institute for Progress) asks Congress to legislate four kinds of t",
+  "q": "IFP (Aug 2026) wants Congress to require AI companies to publish their 'model behavior specifications'. What are these d",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
