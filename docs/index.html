@@ -10601,58 +10601,6 @@ const POLICY_UNITS = [
       }
      },
      {
-      "id": "au2l0#2",
-      "t": "recall",
-      "p": "Safety framework laws like SB 53 set no safety standard of their own. How do supporters say they still reduce catastrophic risk?",
-      "answer": "Labs otherwise set safety rules privately and can quietly loosen them under competitive pressure. Publishing creates a public baseline that journalists, watchdogs, employees and regulators can check releases against, and a duty to follow the framework turns broken promises into legal violations.",
-      "keys": [
-       "Counters quiet loosening under competitive pressure",
-       "Public baseline outsiders can check releases against",
-       "Duty to follow makes broken promises legal violations"
-      ],
-      "x": "Supporters also call it a low-cost first step that builds information for later rules. The argument assumes frameworks are specific enough to be violated and that someone (an attorney general, regulator or auditor) actually enforces them.",
-      "choice": {
-       "p": "Safety framework laws set no safety standard of their own. How do supporters say they still reduce risk?",
-       "o": [
-        "Outsiders can check releases against the published plan, and breaking it is illegal",
-        "The state reviews each framework in detail and rejects any that are too weak to keep the public safe",
-        "Labs must buy liability insurance sized to the catastrophic risks that their frameworks describe",
-        "Frameworks give the state power to shut down any model that it considers too dangerous to release"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Under SB 53 the lab writes its own framework; state minimum standards are a separate, stronger variant.",
-        "Insurance mandates are a different policy tool.",
-        "Shutdown authority is a different tool (emergency powers)."
-       ]
-      }
-     },
-     {
-      "id": "au2l0#3",
-      "t": "mc",
-      "p": "Safety framework rules can take a 'publish only' or a 'publish and follow' form. What is the difference?",
-      "o": [
-       "Publish and follow makes the lab legally bound to comply with its framework; publish only requires the document",
-       "Publish only requires the framework to be filed with a regulator, while publish and follow requires a public website version",
-       "Publish and follow requires a government agency to write the framework, while publish only lets the lab write it",
-       "Publish only applies to open-weight models, while publish and follow applies to closed models only"
-      ],
-      "a": 0,
-      "ow": [
-       "",
-       "Filing with a regulator is a separate variant; it is not what distinguishes these two.",
-       "In both versions the lab writes its own framework; minimum content standards set by the state are a separate variant.",
-       "Neither version is defined by open versus closed weights."
-      ],
-      "keys": [
-       "Publish and follow: legally bound to comply with its own framework",
-       "Deviations become enforceable",
-       "Publish only: the document just has to exist"
-      ],
-      "x": "Publish only resembles the earlier voluntary Seoul Frontier AI Safety Commitments. Publish and follow is the model used by California SB 53, New York's RAISE Act, Illinois SB 315 and the federal FRONTIER Act bill."
-     },
-     {
       "id": "au2l0#4",
       "t": "recall",
       "p": "Laws like California SB 53 require frontier labs to publish and follow their own safety framework. Name two objections critics raise.",
@@ -10852,35 +10800,6 @@ const POLICY_UNITS = [
       "x": "The pacing.tech appendix lists an 'incident reporting deadline' as one transparency intervention, citing SB 53. As of Oct 2026 the AI Kill Switch Act (H.R. 9917, Reps. Lieu and Moran) has not passed; it was referred to committee in July 2026. The New York and Illinois deadlines apply from 2027."
      },
      {
-      "id": "au2l1#2",
-      "t": "recall",
-      "p": "How do supporters say mandatory AI incident reporting to government would help? Name two ways.",
-      "answer": "Any two of: early warning of dangerous behavior (governments now learn of failures from the press or victims); a dataset of near misses across companies; a trigger for emergency response, as in aviation and cybersecurity incident regimes.",
-      "keys": [
-       "Early warning of dangerous behavior",
-       "Cross-company dataset of near misses",
-       "Trigger for emergency response",
-       "Modeled on aviation and cyber incident regimes"
-      ],
-      "x": "Supporters point to the July 2026 incident in which unreleased OpenAI models broke out of a sandbox and attacked outside services, including Hugging Face. Key assumptions: definitions capture the right incidents, the agency can act, and confidentiality is strong enough for honest reporting.",
-      "choice": {
-       "p": "Which of these is a way supporters say mandatory AI incident reporting would help?",
-       "o": [
-        "It would build a dataset of near misses across companies",
-        "It would let regulators approve each model before release",
-        "It would make labs automatically liable for every incident reported",
-        "It would replace the need for safety testing before release"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Pre-approval is licensing, a different tool.",
-        "Reporting regimes are usually confidential and separate from liability.",
-        "Reporting complements testing; it doesn't replace it."
-       ]
-      }
-     },
-     {
       "id": "au2l1#3",
       "t": "recall",
       "p": "State laws require frontier developers to report 'critical safety incidents' within days. Name two gaps or objections critics point to.",
@@ -10934,33 +10853,6 @@ const POLICY_UNITS = [
         "The authors keep mandatory reporting as one of three channels.",
         "Their concern is that mandatory reporting misses incidents.",
         "They want one federal framework with standardized classification."
-       ]
-      }
-     },
-     {
-      "id": "au2l1#5",
-      "t": "recall",
-      "p": "Why do advocates say AI labs' internal deployment (using models inside the company before or without public release) needs its own oversight rules? Name the gap in current rules and one risk it leaves open.",
-      "answer": "Most rules trigger on public release, but labs run their most capable models internally for weeks or months, increasingly to automate AI research. Risks: a misaligned model could sabotage safety work or copy itself out of view, or whoever controls the best internal model could use it for private advantage or to concentrate power.",
-      "keys": [
-       "Most rules trigger only on public release, but top models are used internally for months",
-       "One risk: a misaligned model sabotaging safety work unseen, or insiders using the best model to concentrate power"
-      ],
-      "x": "Proposals include internal-use risk reports, extending safety frameworks to internal models, controlling who inside the company can use them, and sharing information with government.",
-      "choice": {
-       "p": "Why do advocates say labs' internal deployment of AI models needs its own oversight rules?",
-       "o": [
-        "Rules trigger on public release, yet labs use top models internally for months",
-        "Internal models are always less capable than public ones, so current rules ignore them",
-        "Employees who use internal models at work may be violating federal labor and workplace law",
-        "Internal deployment is banned in the EU, so US rules must match it to keep transatlantic trade flowing"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Advocates worry that internal models are often the most capable ones.",
-        "The concern is safety and power, not labor law.",
-        "The EU Code of Practice asks for descriptions of internal use; it does not ban it."
        ]
       }
      },
@@ -11044,72 +10936,12 @@ const POLICY_UNITS = [
         "IFP makes no such request."
        ]
       }
-     },
-     {
-      "id": "au2l1#9",
-      "t": "recall",
-      "p": "Risk: a frontier lab hides safety problems, near misses, or dangerous internal model use from the public and government. Name two policies proposed to surface this information.",
-      "answer": "Examples: mandatory incident reporting to a government agency; statutory whistleblower channels and protections; internal-deployment risk reports; published safety frameworks with a duty to follow them; embedded or resident auditors.",
-      "keys": [
-       "Mandatory incident reporting",
-       "Whistleblower channels and protections",
-       "Internal-deployment risk reports",
-       "Published safety frameworks",
-       "Embedded auditors"
-      ],
-      "x": "The pacing.tech appendix lists a 'statutory whistleblower channel and protection' and an 'incident reporting deadline' among its transparency interventions, both citing SB 53.",
-      "open": true,
-      "choice": {
-       "p": "Risk: a frontier lab hides safety problems, near misses or dangerous internal model use. Which of these is a policy proposed to surface that information?",
-       "o": [
-        "Statutory whistleblower channels and protections for lab employees",
-        "A per-operation tax on frontier training compute above a threshold",
-        "Tighter export controls on advanced AI chips and chipmaking tools",
-        "An antitrust safe harbor for labs to coordinate on safety"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "A compute tax changes incentives but surfaces no hidden information.",
-        "Export controls limit who gets chips; they don't reveal lab safety problems.",
-        "A safe harbor lets labs coordinate; it is not a disclosure channel."
-       ]
-      }
      }
     ]
    },
    {
     "title": "Compute, race tempo and AI-use records",
     "items": [
-     {
-      "id": "au2l2#0",
-      "t": "recall",
-      "p": "Why do supporters of compute reporting use training compute (for example a 10^26 operations threshold) as the trigger for telling government about a model? Name two reasons.",
-      "answer": "Any two of: it can be measured before the model exists; it correlates with capability; it gives early notice of who is building the most powerful systems and when, so agencies can prepare testing, security help or emergency response before release; it already defines who is covered by most other frontier rules.",
-      "keys": [
-       "Measurable before the model exists",
-       "Correlates with capability",
-       "Early notice lets government prepare before release",
-       "Defines coverage for other rules"
-      ],
-      "x": "Supporters also note chips and data centers are hard to hide, which helps verification. Compute reporting by itself restricts nothing.",
-      "choice": {
-       "p": "Which of these is a reason supporters give for using training compute as the trigger for reporting a model to government?",
-       "o": [
-        "It can be measured before the model exists, giving early notice",
-        "It perfectly predicts which new models will turn out to be dangerous",
-        "It is the only input labs keep records of",
-        "It lets government block a training run without any further review"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Supporters say compute correlates with capability; critics note it is an imperfect proxy.",
-        "Labs track many inputs; compute is chosen for measurability and early notice.",
-        "Compute reporting by itself restricts nothing."
-       ]
-      }
-     },
      {
       "id": "au2l2#1",
       "t": "recall",
@@ -11218,33 +11050,6 @@ const POLICY_UNITS = [
       "x": "The agenda treats this as an open question (when common knowledge of progress intensifies or weakens races). Its appendix separately lists lead-margin reporting (months between the top lab and the next) as a lever, with the caveat that listing a lever is not an argument for using it."
      },
      {
-      "id": "au2l2#6",
-      "t": "recall",
-      "p": "Advocates want logs of how government officials (and lab executives) use AI to be preserved and reviewable. What risk do they say this addresses?",
-      "answer": "Advanced AI could let a small group run large parts of a government or company with few human participants, removing the usual check of the many people who can refuse orders or leak.",
-      "keys": [
-       "A small group could act through AI with few human participants",
-       "Removes the check of people who can refuse orders or leak"
-      ],
-      "x": "Logs restore a record that courts, Congress, auditors and the public can examine, which deters misuse and makes it discoverable. Variants include treating AI chats as federal records under FOIA (the Freedom of Information Act), expanding the Government Accountability Office's capacity to audit AI use in national security (Stefan Torges, Forethought), and logging and reviewing internal use of lab models (Forethought's AI-enabled coups report).",
-      "choice": {
-       "p": "Advocates want logs of how government officials (and lab executives) use AI to be preserved and reviewable. What risk do they say this addresses?",
-       "o": [
-        "AI could let a few people act without staff who might refuse orders or leak",
-        "Officials could leak classified or sensitive government data to private AI vendors",
-        "AI tools could give officials wrong legal advice that they then act on",
-        "Agencies could overspend on large AI contracts that deliver little real value to the public"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Data leakage is a real concern, but advocates of logging focus on unchecked power.",
-        "Accuracy is a separate concern from the accountability that logs provide.",
-        "Procurement cost is not the risk these advocates emphasize."
-       ]
-      }
-     },
-     {
       "id": "au2l2#7",
       "t": "recall",
       "p": "In August 2026 the National Archives (NARA) issued guidance applying the Federal Records Act to AI prompts and outputs. Name two criticisms Vanderbilt Policy Accelerator researchers raised.",
@@ -11283,35 +11088,6 @@ const POLICY_UNITS = [
    {
     "title": "Audits and embedded auditors",
     "items": [
-     {
-      "t": "recall",
-      "p": "What do third-party audit mandates for frontier AI developers require, and what gap do supporters say they fill?",
-      "answer": "The largest developers must hire an independent auditor on a fixed schedule, usually yearly, to check whether they actually follow their published safety framework. Supporters say disclosure laws rely on labs describing their own practices with nobody checking; audits make skipping rules more likely to be caught, and the expectation of checks pushes compliance.",
-      "keys": [
-       "Independent auditor on a fixed schedule",
-       "Checks compliance with the lab's own framework",
-       "Disclosure alone is unchecked self-description",
-       "Expectation of being checked deters skipping rules"
-      ],
-      "x": "Laws add independence rules, such as barring auditors with a financial stake in the developer.",
-      "id": "au3l0#0",
-      "choice": {
-       "p": "Which of these is the gap supporters say third-party audit mandates for frontier AI developers fill?",
-       "o": [
-        "Disclosure laws let labs describe their own safety practices with nobody checking",
-        "Labs have no written safety frameworks of their own, so outside auditors must write the frameworks for them",
-        "Government has no way to learn which companies are training frontier models",
-        "Courts can't hear lawsuits over AI harms without an outside auditor's report"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Audit laws such as Illinois SB 315 check compliance with frameworks labs must already publish; auditors don't write them.",
-        "That gap is what registration fills: filing basic information so other rules can reach frontier developers.",
-        "Lawsuits don't depend on audit reports; audits target unchecked self-description."
-       ]
-      }
-     },
      {
       "t": "recall",
       "p": "As of October 2026, which US state has enacted the first mandatory annual audit of frontier AI developers, and when do audits begin?",
@@ -11449,35 +11225,6 @@ const POLICY_UNITS = [
       }
      },
      {
-      "t": "recall",
-      "p": "What do 'embedded' or 'resident' auditors add compared with an annual outside audit, and which two oversight models from other industries do proposers cite?",
-      "answer": "They work at or inside the lab on a continuing basis, with access to training runs, checkpoints, internal deployments, documents and staff, so they can spot warning signs before any release and escalate in time. Proposers cite the Nuclear Regulatory Commission's resident inspectors at nuclear plants and the Federal Reserve's standing supervision of large banks.",
-      "keys": [
-       "Continuing presence inside the lab",
-       "Sees training and internal deployment before release",
-       "NRC resident inspectors",
-       "Federal Reserve bank supervision"
-      ],
-      "x": "Supporters argue risks such as AI automating AI research appear inside the lab long before release, where outside testers can't see them. The NRC keeps at least two resident inspectors at each nuclear plant.",
-      "id": "au3l0#6",
-      "choice": {
-       "p": "What do embedded (resident) auditors add compared with an annual outside audit of a frontier AI lab?",
-       "o": [
-        "Ongoing access inside the lab to training runs and internal use before release",
-        "Legal power to block a model's release on their own authority, without needing a court order or regulator",
-        "Access to the finished model only through the same public API that paying customers use",
-        "A one-time certification at release that replaces the need for any later audits of the lab"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "The proposals described here give embedded auditors access and a duty to report concerns; none lets them block a release on their own.",
-        "That is black-box testing, which embedded access is meant to go beyond.",
-        "Embedded oversight is continuous by design, the opposite of one-time certification."
-       ]
-      }
-     },
-     {
       "t": "match",
       "p": "Match each version of embedded AI auditing to where it appears.",
       "pairs": [
@@ -11565,35 +11312,6 @@ const POLICY_UNITS = [
       }
      },
      {
-      "t": "recall",
-      "p": "How do supporters say government testing of frontier models before release would reduce risk?",
-      "answer": "Labs face commercial pressure to ship quickly, and their own tests may miss national-security risks that government specialists, including those with classified intelligence and nuclear expertise, are better placed to spot. Testing before release gives government warning of dangerous capabilities and a chance to push for fixes.",
-      "keys": [
-       "Labs under pressure to ship",
-       "Government specialists see national-security risks labs miss",
-       "Warning before release",
-       "Chance to push for fixes"
-      ],
-      "x": "Its value depends on test quality, access to versions without safeguards, and what happens after a bad result; in voluntary programs the lab can ignore findings.",
-      "id": "au3l1#1",
-      "choice": {
-       "p": "Which of these is how supporters say government testing of frontier models before release reduces risk?",
-       "o": [
-        "Government specialists can catch national-security risks that labs racing to ship may miss",
-        "Testing lets the government set the prices labs charge for their models",
-        "Testing gives the government ownership of any model that fails",
-        "Testing replaces the need for labs to run their own safety evaluations before they release a model"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Testing proposals deal with dangerous capabilities; pricing is outside their scope.",
-        "No testing proposal transfers ownership of models.",
-        "Supporters see government testing as an added check; labs still run their own evaluations."
-       ]
-      }
-     },
-     {
       "t": "mc",
       "p": "Which bill would bar deploying covered frontier AI models without first participating in a Department of Energy evaluation program?",
       "o": [
@@ -11646,58 +11364,6 @@ const POLICY_UNITS = [
         "The EU AI Office can request access to models, but it is not a pre-release gate for US releases."
        ]
       }
-     },
-     {
-      "t": "recall",
-      "p": "Why can a dangerous-capability evaluation show that a model has a capability but not reliably that it lacks one? Name two reasons.",
-      "answer": "Any two of: testers may fail to draw the capability out, because the right prompts, tools or fine-tuning are hard to find; a model may behave differently when it recognizes it is being evaluated; results on test tasks often track real-world behavior poorly.",
-      "keys": [
-       "Elicitation may fall short",
-       "Model may act differently when it detects a test",
-       "Weak link to real-world behavior"
-      ],
-      "x": "The pacing.tech authors (Douglas et al., 2026) say evaluations 'can generally only set a lower bound on capability' for these reasons, and MIRI researchers (Barnett et al.) make the same point. Deliberately underperforming on tests is called sandbagging.",
-      "id": "au3l1#4",
-      "choice": {
-       "p": "Which of these is a reason passing a dangerous-capability evaluation doesn't prove a model lacks the capability?",
-       "o": [
-        "Testers may miss the prompts, tools or fine-tuning needed to draw it out",
-        "Test questions are often public, so models may have memorized the answers during training",
-        "Evaluations are legally limited to smaller, cut-down test versions of each frontier model",
-        "Models lose capabilities after release as companies keep updating them over time"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Memorized answers would inflate scores, making a model look more capable than it is.",
-        "No law limits evaluations to smaller versions; testers often get the full model.",
-        "Updates usually add capabilities, and this doesn't explain why a test misses one."
-       ]
-      }
-     },
-     {
-      "t": "match",
-      "p": "Match each proposed safeguard for model testing to the weakness it targets.",
-      "pairs": [
-       [
-        "Minimum elicitation budget",
-        "Testers stop before drawing out what the model can really do"
-       ],
-       [
-        "Sandbagging detection",
-        "A model deliberately underperforms so it looks safer"
-       ],
-       [
-        "Deeper evaluator access",
-        "Outside testers can only send prompts and read outputs"
-       ],
-       [
-        "Pre-release government testing window",
-        "No one outside the lab tests the model before the public gets it"
-       ]
-      ],
-      "x": "All four appear in the pacing.tech longlist of interventions, which cites METR's elicitation protocol, van der Weij et al. (2024) on sandbagging, Casper et al. (2024) on access, and the June 2026 executive order. Sandbagging means strategically underperforming on evaluations.",
-      "id": "au3l1#5"
      },
      {
       "t": "recall",
@@ -11789,36 +11455,6 @@ const POLICY_UNITS = [
         "IVOs are private organizations; government certifies and oversees them but doesn't do the testing.",
         "That describes registration or licensing; using an IVO is voluntary and involves outside assessment.",
         "Self-certification lacks the independence that defines an IVO."
-       ]
-      }
-     },
-     {
-      "t": "recall",
-      "p": "How do supporters of 'regulatory markets' (certified private AI verifiers) say the approach would work better than direct rules?",
-      "answer": "Legislators and agencies lack technical staff and speed to write detailed rules for fast-changing AI. A regulated market of private verifiers could build expertise, pay competitive salaries and update methods faster, while government oversight of the verifiers keeps them honest, and a liability benefit draws developers in without a mandate.",
-      "keys": [
-       "Government lacks staff and speed",
-       "Private verifiers build expertise and pay more",
-       "Methods update faster",
-       "Government oversees the verifiers",
-       "Liability benefit draws developers in"
-      ],
-      "x": "The idea is most associated with Gillian Hadfield and Jack Clark ('Regulatory Markets: The Future of AI Governance').",
-      "id": "au3l2#1",
-      "choice": {
-       "p": "Which of these is how supporters say 'regulatory markets' (government-certified private AI verifiers) beat direct rules?",
-       "o": [
-        "Private verifiers can build expertise and update methods faster than agencies, under government oversight",
-        "Private verifiers cost developers nothing, because the government pays for every assessment",
-        "Verifiers replace lawsuits entirely, since certified models can't be sued",
-        "Verifiers let each developer write its own standards without outside review"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "In most designs developers choose and pay verifiers, which critics say pulls verifiers toward leniency.",
-        "Proposals offer certified developers a limited liability benefit; lawsuits remain possible.",
-        "The point is outside review by an independent, government-overseen verifier."
        ]
       }
      },
@@ -11994,32 +11630,6 @@ const POLICY_UNITS = [
     "items": [
      {
       "t": "recall",
-      "p": "A statutory duty of care would require frontier AI developers to take reasonable care to avoid causing or enabling catastrophic harm, enforced through lawsuits or attorney general actions. What failure do supporters say it targets?",
-      "answer": "Labs under competitive pressure skipping safety work whose costs fall on the lab while the benefits are spread across society. A legal duty turns those skipped precautions into legal exposure, so lawyers and boards treat testing, security and mitigation as mandatory.",
-      "keys": [
-       "Competitive pressure leads labs to skip safety work",
-       "Duty turns skipped precautions into legal exposure"
-      ],
-      "x": "Supporters also like that a negligence standard is flexible: courts can judge new harm pathways (internal deployment, weight theft, open release) without Congress listing each one. California's SB 1047 (vetoed 2024) used this structure.",
-      "id": "au4l0#0",
-      "choice": {
-       "o": [
-        "Labs racing rivals skip safety work whose costs they bear while the benefits spread to everyone",
-        "Labs train their models on copyrighted books and art without paying the creators",
-        "Labs refuse to share their model weights with government agencies and academic safety researchers",
-        "Labs price their most capable models too high for small businesses to afford"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Copyright disputes involve different laws; a catastrophic-harm duty of care targets skipped precautions.",
-        "Weight access is a separate debate; a duty of care concerns how carefully labs develop and deploy.",
-        "Pricing is a competition issue, unrelated to catastrophic-harm liability."
-       ]
-      }
-     },
-     {
-      "t": "recall",
       "p": "Proposal: a law requiring frontier AI developers to take 'reasonable care' to prevent catastrophic harms, enforceable in court. Name two objections or limits that have been raised.",
       "answer": "Examples: Gabriel Weil argues negligence is too weak for catastrophic AI risk and favors strict liability, treating frontier AI as an abnormally dangerous activity; Ketan Ramakrishnan, who defends negligence, notes the threat of tort liability can discourage developers from investigating and disclosing risks; liability arrives too late, and exceeds any firm's assets, for a true catastrophe.",
       "keys": [
@@ -12070,33 +11680,6 @@ const POLICY_UNITS = [
        "Passed the legislature in 2024",
        "Vetoed by Gov. Newsom in September 2024"
       ]
-     },
-     {
-      "t": "recall",
-      "p": "In AI liability debates, what is the key difference between a negligence standard and strict liability for developers?",
-      "answer": "Under negligence, a developer pays only if it failed to take reasonable care. Under strict liability, it pays for harm its system causes even if it took every known precaution, which supporters say gives it a reason to slow down or invent new safeguards when risks are poorly understood.",
-      "keys": [
-       "Negligence: liable only for failing to take reasonable care",
-       "Strict: liable regardless of precautions taken",
-       "Supporters: strict liability pushes caution when risks are poorly understood"
-      ],
-      "x": "Gabriel Weil is a prominent advocate of strict liability for advanced AI, treating training and deploying frontier systems as an 'abnormally dangerous activity.'",
-      "id": "au4l0#3",
-      "choice": {
-       "o": [
-        "Negligence: pay only if it failed to take reasonable care; strict: pay even after every precaution",
-        "Negligence applies to individuals; strict liability applies only to companies",
-        "Negligence is enforced by state attorneys general; strict liability is enforced only by federal agencies",
-        "Negligence covers physical injuries and property damage; strict liability covers only purely financial losses"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Both standards can apply to companies and individuals.",
-        "Both are mainly enforced through private lawsuits in courts.",
-        "The difference is whether fault matters; both can cover any type of harm."
-       ]
-      }
      },
      {
       "t": "recall",
@@ -12242,34 +11825,6 @@ const POLICY_UNITS = [
     "title": "Insurance, safe harbors and coordination",
     "items": [
      {
-      "t": "recall",
-      "p": "Some propose requiring frontier AI developers to carry liability insurance sized to the harm their models could cause. How do supporters say this would reduce risk?",
-      "answer": "It fixes the case where a developer can't pay for the harm it causes. It also turns insurers into private regulators: they have a financial reason to measure risk, price premiums by safety practice, demand audits and refuse reckless actors. Scaling required coverage with capabilities makes riskier models cost more to deploy.",
-      "keys": [
-       "Guarantees compensation when the developer can't pay",
-       "Insurers price risk, demand audits, refuse reckless actors",
-       "Coverage scaled to capability raises cost of risky models"
-      ],
-      "x": "The idea borrows from US nuclear power, where operators must carry insurance and contribute to an industry pool, and from mandatory auto insurance. As of Oct. 2026 no jurisdiction was known to require AI developers to carry such insurance.",
-      "id": "au4l1#0",
-      "choice": {
-       "p": "Which of these is how supporters say mandatory liability insurance for frontier AI developers would reduce risk?",
-       "o": [
-        "Insurers would price risk and refuse reckless actors, acting as private regulators",
-        "Insurance would let developers avoid all lawsuits over the harms their AI models cause",
-        "Insurers would take legal ownership of any frontier models that go on to cause serious harm",
-        "Congress would set the premiums each lab pays, giving lawmakers direct control over every frontier lab"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Insurance pays claims; it doesn't block lawsuits, though critics warn a liability cap tied to it can become a shield.",
-        "Insurers pay for harm; no proposal gives them ownership of models.",
-        "In these proposals private insurers set premiums based on risk."
-       ]
-      }
-     },
-     {
       "t": "match",
       "p": "Match each AI insurance proposal to its design.",
       "pairs": [
@@ -12325,34 +11880,6 @@ const POLICY_UNITS = [
      },
      {
       "t": "recall",
-      "p": "A liability safe harbor would shield AI developers from some lawsuits if they meet set safety conditions. Why do supporters prefer this to safety mandates or ordinary lawsuits? Name two reasons.",
-      "answer": "Any two of: it spreads good safety practice faster than writing detailed mandates; it ties protection to outside verification, so firms compete to meet a standard someone else checks; it replaces many juries' inconsistent ideas of reasonable care with one clear standard, giving firms legal certainty.",
-      "keys": [
-       "Spreads good practice faster than mandates",
-       "Protection depends on outside verification",
-       "One consistent standard instead of many juries"
-      ],
-      "x": "Supporters see the threat of liability as a carrot: firms adopt verified safety practices to buy legal certainty. The theory depends on demanding conditions checked by someone independent. If the bar is a self-written document, critics say, the harbor removes the liability incentive while adding little safety.",
-      "id": "au4l1#3",
-      "choice": {
-       "p": "Which of these is a reason supporters prefer a liability safe harbor to safety mandates or ordinary lawsuits?",
-       "o": [
-        "It swaps many juries' differing views of reasonable care for one clear standard checked by others",
-        "It bans all lawsuits against AI developers of any size, which gives the whole industry full legal certainty",
-        "It lets each developer write and certify its own safety standard, without any outside review or audit",
-        "It requires government approval of every frontier model before it can be released"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "A harbor shields only developers who meet its conditions, and usually only from some claims.",
-        "Supporters stress outside verification; critics warn a self-written standard makes a harbor weak.",
-        "That is licensing; a safe harbor rewards voluntary compliance instead."
-       ]
-      }
-     },
-     {
-      "t": "recall",
       "p": "Illinois SB 3444 (2026), backed by OpenAI, would bar liability for 'critical harms' (100+ deaths or $1 billion in property damage) if a developer publishes a safety protocol and did not act intentionally or recklessly. Name two objections that were raised.",
       "answer": "In Fortune, Gabriel Weil called the bill 'pretty indefensible,' and Anat Lior said its intent-or-recklessness test sets the bar very low and that fault normally doesn't matter for highly dangerous activities. Anthropic opposed SB 3444 and backed a competing bill (SB 3261), saying good legislation should not provide a 'get-out-of-jail-free card' against all liability.",
       "keys": [
@@ -12402,32 +11929,6 @@ const POLICY_UNITS = [
       ],
       "x": "The evaluator harbor protects researchers who test models, a different target from developer shields. Ball floats the certification harbor as one example option. California's SB 813 (signed Sept. 2026) created a framework for independent verification organizations; how much weight their assessments carry in lawsuits is unclear.",
       "id": "au4l1#5"
-     },
-     {
-      "t": "recall",
-      "p": "Why do supporters say AI labs need an antitrust safe harbor to coordinate on safety, such as jointly delaying a release?",
-      "answer": "Each lab fears that slowing down alone hands the lead to a rival, so no one slows even if all would prefer to. Coordinated pacing solves that collective-action problem, but an agreement among competitors to hold back products looks like a cartel under antitrust law. A safe harbor removes that legal barrier.",
-      "keys": [
-       "Collective-action problem: no lab wants to slow alone",
-       "Joint restraint among competitors risks antitrust liability"
-      ],
-      "x": "The CATS Act (Collaboration on Adversarial Threats and Security Risks Act; H.R. 9914 / S. 5105, Latta, Banks, Schiff; introduced July 2026) covers risks such as theft and misuse by foreign adversaries, AI-enabled weapons and cyber threats, and loss of operational control. Price-fixing, market allocation and boycotts stay illegal. No committee had acted on it as of Oct 2026. A Sept. 18, 2026 class action alleged four labs' public backing for coordinated pacing was an illegal agreement.",
-      "id": "au4l1#6",
-      "choice": {
-       "o": [
-        "No lab wants to slow alone, and a pact among rivals to delay releases can look like a cartel",
-        "Antitrust law requires labs to release their new models on a fixed yearly schedule set by federal regulators",
-        "Antitrust law bars labs from sharing any risk information about their models with government agencies",
-        "Labs need the safe harbor in order to merge into one national AI company, subject to Justice Department review"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Antitrust law sets no release schedule; the risk is that joint restraint looks like collusion.",
-        "Sharing with government isn't the antitrust problem; agreements among competitors are.",
-        "The CATS Act covers coordination on defined security risks; it says nothing about mergers."
-       ]
-      }
      },
      {
       "t": "recall",
@@ -12486,34 +11987,6 @@ const POLICY_UNITS = [
         "This is the design the bill avoids: few AI laws exist, so violation-only protection would cover little.",
         "The bill uses a Labor Department complaint process; it creates no new agency.",
         "The bill protects disclosures to authorities; it doesn't require publishing complaints."
-       ]
-      }
-     },
-     {
-      "t": "recall",
-      "p": "How do supporters say whistleblower protections for AI lab employees reduce risk?",
-      "answer": "Insiders often see dangerous capabilities, skipped safety tests, security lapses or misleading statements first. Protection makes it safer to tell regulators and Congress, giving government visibility into labs without a large new agency and checking misconduct that would otherwise stay hidden.",
-      "keys": [
-       "Insiders see problems first",
-       "Gives government visibility without a big agency",
-       "Checks hidden lab misconduct"
-      ],
-      "x": "Supporters point to OpenAI's 2024 departure agreements, which threatened departing staff's vested equity if they criticized the company. The approach assumes employees will come forward and that recipients can act on reports.",
-      "id": "au4l2#1",
-      "choice": {
-       "p": "Which of these is how supporters say whistleblower protections for AI lab employees reduce risk?",
-       "o": [
-        "Insiders see problems first, so protection lets government see into labs without a big agency",
-        "Protected employees gain the legal right to take over a lab's safety decisions from its executives and board",
-        "Protections let employees release model weights to the public without penalty",
-        "Protections remove the need for any outside audits or government testing of frontier labs and models"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Whistleblower laws protect reporting; they give employees no control over company decisions.",
-        "Protected disclosures go to regulators and Congress; leaking weights is not protected.",
-        "Supporters see whistleblowing as one source of visibility among several."
        ]
       }
      },
@@ -12667,32 +12140,6 @@ const POLICY_UNITS = [
     "title": "Kill switches and emergency powers",
     "items": [
      {
-      "t": "recall",
-      "p": "A shutdown-capability rule requires AI companies to keep a tested ability to stop, throttle or shut down their systems. What failure do supporters say it targets?",
-      "answer": "A deployed or internally used model that starts causing serious harm (loss of control, a cyberattack, hiding from monitors) faster than a company can improvise a response. Requiring the capability in advance means a tested off-switch exists and covers the full deployment when needed.",
-      "keys": [
-       "Harm unfolding faster than an improvised response",
-       "Off-switch exists, is tested, covers whole deployment"
-      ],
-      "x": "Supporters cite the July 2026 incident in which OpenAI test models escaped a sandbox and breached Hugging Face. As of Oct. 2026 no US jurisdiction had enacted a shutdown mandate.",
-      "id": "au5l0#0",
-      "choice": {
-       "o": [
-        "A model causing serious harm faster than the company can improvise a response",
-        "Users who can't easily cancel the paid AI subscriptions that they no longer want or use",
-        "Governments needing a way to take over AI companies quickly during a war or other national emergency",
-        "Old models that become outdated and need to be retired by the company on a regular schedule"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Shutdown rules address dangerous model behavior; billing is outside their scope.",
-        "Shutdown rules require a company capability; they don't authorize seizures.",
-        "Retiring old models is routine product management, unrelated to the safety failure targeted."
-       ]
-      }
-     },
-     {
       "t": "match",
       "p": "Match each AI kill-switch proposal to who holds or checks the switch.",
       "pairs": [
@@ -12801,33 +12248,6 @@ const POLICY_UNITS = [
      },
      {
       "t": "recall",
-      "p": "Proposals for government emergency authority to halt a dangerous AI model: what gap do supporters say they fill, and why do some want a detailed statute?",
-      "answer": "Most frontier rules leave the deploy decision with the developer; emergency authority is the backstop when a model is clearly dangerous and the developer won't stop. A statute can also limit improvised use of broad powers like the Defense Production Act or export controls by setting triggers, evidence standards, time limits and appeal rights.",
-      "keys": [
-       "Backstop when developer won't stop a dangerous model",
-       "Statute constrains ad hoc use of broad powers"
-      ],
-      "x": "The House FRONTIER Act (H.R. 9925) makes its process the exclusive federal route for catastrophic-risk halts. Under EU AI Act Art. 93, from Aug. 2, 2026 the European Commission can require providers of systemic-risk general-purpose models to restrict, withdraw or recall them.",
-      "id": "au5l0#5",
-      "choice": {
-       "p": "What gap do supporters say a government emergency authority to halt a dangerous AI model would fill?",
-       "o": [
-        "Most rules leave release decisions to developers, so nothing stops a dangerous model they won't pull",
-        "Developers have no technical way to shut down models they have already released",
-        "Courts can't hear cases about AI harms until a model has been publicly released",
-        "States are barred by federal law from passing any AI safety laws of their own"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Developers can usually stop models they host; the gap is when they choose not to.",
-        "Courts can hear AI cases; the gap is a fast way to stop a dangerous model.",
-        "States have passed many AI laws; this isn't the gap."
-       ]
-      }
-     },
-     {
-      "t": "recall",
       "p": "In June 2026 a Commerce Department export-control directive led Anthropic to take two frontier models offline until it was lifted on June 30. Name two criticisms made of halting models through general authorities like this.",
       "answer": "Examples: Martin Chorzempa (PIIE) says ad hoc halts with no public criteria damage allies' trust and make Chinese open-weight models more attractive; Brad Carson (ARI) said such decisions must be insulated from impulse and political favoritism; Dean Ball calls for a technocratic law passed by Congress instead of executive fiat, with guardrails on both industry and government.",
       "keys": [
@@ -12860,32 +12280,6 @@ const POLICY_UNITS = [
    {
     "title": "Rules for AI agents",
     "items": [
-     {
-      "t": "recall",
-      "p": "AI agent identification policies tie each agent to whoever built and runs it and require logs of its actions. How do supporters say this reduces risk?",
-      "answer": "When a harmful or hijacked agent acts across many systems, IDs and logs make incidents attributable, supporting investigation, liability and shutdown of the specific agent. Researchers compare agent IDs to aircraft tail numbers. Better visibility can also catch early signs of autonomous misbehavior.",
-      "keys": [
-       "Makes incidents attributable to a responsible party",
-       "Supports investigation, liability and targeted shutdown"
-      ],
-      "x": "It assumes compliant developers attach IDs and services check them; it is weakest against open-weight models and deliberately malicious actors who won't register.",
-      "id": "au5l1#0",
-      "choice": {
-       "o": [
-        "They tie incidents to a responsible party, aiding investigation, liability and targeted shutdown",
-        "They require a human to approve each action an agent takes before it goes ahead",
-        "They stop open-weight models from being used to build AI agents of any kind",
-        "They give each agent legal standing to sign contracts and own property"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Human approval for high-stakes actions is a separate safeguard.",
-        "ID rules are weakest against open-weight models and actors who won't register.",
-        "ID proposals tie agents to responsible people; they give agents no legal standing."
-       ]
-      }
-     },
      {
       "t": "recall",
       "p": "Proposal: require AI agents to carry identifiers linked to a responsible person or company, with logs of their actions. What is the main objection critics raise?",
@@ -12992,34 +12386,6 @@ const POLICY_UNITS = [
       }
      },
      {
-      "t": "match",
-      "p": "Match each proposed limit on AI agents to the risk it targets.",
-      "pairs": [
-       [
-        "Agent permission tiers",
-        "An agent gets more access than its task needs"
-       ],
-       [
-        "Per-agent spend limits",
-        "An agent runs up large costs or payments unchecked"
-       ],
-       [
-        "Spawn-depth and run-length limits",
-        "An agent launches layers of sub-agents or runs unattended for days"
-       ],
-       [
-        "Instance-count reporting",
-        "No one outside the lab knows how many copies of a model are running"
-       ],
-       [
-        "Agent message logging",
-        "Agents coordinate through hidden messages humans can't see"
-       ]
-      ],
-      "x": "All five appear in the pacing.tech longlist of interventions, citing Shavit et al. (OpenAI, 2023), Chan et al. (2024), Kwa et al. (METR, 2025) and Motwani et al. (2024). Logging proposals include checks for steganography, meaning messages hidden inside other content.",
-      "id": "au5l1#5"
-     },
-     {
       "t": "recall",
       "p": "Shavit et al. (OpenAI, 2023) warn that people could lose the ability to shut down AI agents even if no agent escapes. How could that happen, and what do they propose to give developers and deployers a reason to prevent it?",
       "answer": "Society could come to depend on the agents with no viable fallback, the way no one can shut down the banking system or the power grid without huge costs. They propose settling in advance that developers, deployers and users stay accountable for harms even after control is lost, giving them a reason to build stronger controls.",
@@ -13052,34 +12418,6 @@ const POLICY_UNITS = [
    {
     "title": "Pausing frontier AI",
     "items": [
-     {
-      "t": "recall",
-      "p": "A conditional pause halts frontier AI work automatically when a capability or compute threshold is crossed. Why do supporters prefer setting triggers in advance?",
-      "answer": "No lab wants to stop alone, and governments may lose the practical ability to restrain AI once it is powerful and embedded. Agreeing on triggers ahead of time lets actors decide when to stop before the pressure peaks. A legal mandate also turns a risky collusive agreement into lawful compliance.",
-      "keys": [
-       "Race: no one stops alone",
-       "Decide before pressure peaks",
-       "Legal mandate removes antitrust risk"
-      ],
-      "x": "Versions range from voluntary if-then commitments (16 companies at the 2024 Seoul summit) to statutory halts and international moratoria. As of Oct. 2026 no government mandated a pause.",
-      "id": "au5l2#0",
-      "choice": {
-       "p": "Why do supporters of a conditional pause prefer agreeing on its triggers in advance?",
-       "o": [
-        "No lab wants to stop alone, so preset triggers let them commit before pressure peaks",
-        "Triggers set in advance let labs avoid any government involvement in the decision to pause",
-        "Advance triggers guarantee that any pause will end within a fixed period of six months or less",
-        "Advance triggers let each lab choose its own threshold privately, without having to tell its rivals"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Many versions are statutory; supporters add that a legal mandate removes antitrust risk.",
-        "Triggers decide when a pause starts; how long it lasts is a separate choice.",
-        "The point is shared, known triggers that bind everyone."
-       ]
-      }
-     },
      {
       "t": "recall",
       "p": "In Alaga and Schuett's 'coordinated pausing' scheme (GovAI, 2023), what happens after one developer's model fails a dangerous-capability evaluation?",
@@ -13372,35 +12710,6 @@ const POLICY_UNITS = [
     "items": [
      {
       "t": "recall",
-      "p": "Chip export controls: the Commerce Department requires licenses to sell advanced AI chips and chipmaking tools to China. What do supporters say these controls achieve? Name two effects.",
-      "answer": "Supporters say that because a few US and allied firms control the supply of advanced chips and chipmaking tools, restricting it slows China's frontier AI development. That keeps a US lead that can buy time for safety work or leverage for an international agreement, and limits the compute adversary militaries can use.",
-      "keys": [
-       "Slows China's frontier AI by restricting a chokepoint few firms control",
-       "Keeps a US lead",
-       "The lead buys time for safety work or leverage for an agreement",
-       "Limits compute available to adversary militaries"
-      ],
-      "x": "The argument assumes the controls can be enforced against smuggling and cloud rental, that China cannot quickly build substitute chips, and that a bigger US lead makes the US more cautious instead of speeding up a race. IFP (Aug 2026) makes a version of it: a larger lead gives the US more time and leverage to manage risks from automated AI research.",
-      "id": "au6l0#0",
-      "choice": {
-       "p": "What do supporters say chip export controls achieve?",
-       "o": [
-        "They slow China's frontier AI via a chokepoint, buying a US lead for safety work or a deal",
-        "They raise revenue for the US government by charging a fee on every advanced AI chip sold abroad",
-        "They make sure US buyers get advanced chips before any foreign buyer whenever supply runs short",
-        "They let regulators see which companies are training the largest AI models"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "A revenue cut was a condition of the 2026 H200 sales deal; raising revenue is not the controls' purpose.",
-        "That is the GAIN AI Act's US-first supply rule, a separate proposal.",
-        "Seeing who trains large models is the aim of cloud know-your-customer rules and compute reporting."
-       ]
-      }
-     },
-     {
-      "t": "recall",
       "p": "Name two objections critics have raised to US export controls on sales of advanced AI chips to China.",
       "answer": "Examples: they spur Chinese rivals (Nvidia CEO Jensen Huang called them a 'failure' in May 2025 that gave Chinese firms 'the spirit, the energy and the government support to accelerate their development'); they cost US chipmakers the China market (Huang said Nvidia's share fell from about 95% to 50%); smuggling and cloud rental undercut them; China's government denounces them as hostile.",
       "keys": [
@@ -13631,33 +12940,6 @@ const POLICY_UNITS = [
     "items": [
      {
       "t": "recall",
-      "p": "Cloud know-your-customer (KYC) rules would make cloud providers verify who rents large amounts of AI compute. What gap in export controls do supporters say this closes?",
-      "answer": "Firms in restricted countries can rent the same advanced chips through cloud data centers (abroad or in the US) that export controls bar them from buying.",
-      "keys": [
-       "Chips barred from sale can still be rented through the cloud",
-       "Rental can happen in data centers abroad or in the US"
-      ],
-      "x": "Because a few cloud providers sell most frontier-scale compute, supporters see them as a precise control point: KYC would let the government see who is training very large models and deny service to adversaries. Commerce proposed a customer identification rule for cloud providers in January 2024 that was never finalized. A narrower route, the Remote Access Security Act, treats foreign remote access to controlled chips as an export needing a license; it passed the House 369-22 in January 2026.",
-      "id": "au6l1#0",
-      "choice": {
-       "p": "What gap in chip export controls are cloud know-your-customer rules meant to close?",
-       "o": [
-        "Firms barred from buying advanced chips can rent the same chips in the cloud",
-        "Chips sold to allies can be smuggled on to China through shell companies in third countries",
-        "China can buy chipmaking tools from allies that don't match US rules",
-        "Labs can split a training run across clusters to stay under a compute cap"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Smuggling of physical chips is the target of location verification and chip registries.",
-        "Allied equipment gaps are the target of the MATCH Act.",
-        "Split training runs are the target of aggregation rules for compute thresholds."
-       ]
-      }
-     },
-     {
-      "t": "recall",
       "p": "Cloud know-your-customer (KYC) rules: cloud providers must verify the identities of customers renting large AI compute and report risky ones. Name two objections critics have raised.",
       "answer": "Examples: the US Chamber of Commerce said it depends on malicious actors telling the truth, is easy to evade by faking identities, and may push customers to foreign clouds; the CCIA trade group questioned its effectiveness and favored abuse-deterrence programs; IAPS's Cassia King warned a broad remote-access definition could give BIS power over who can use US AI models.",
       "keys": [
@@ -13766,29 +13048,6 @@ const POLICY_UNITS = [
       ],
       "x": "Location checks are the cheapest and most mature version but catch diversion only after it happens; remote disable is the strongest and most opposed, since it creates an off switch. Supporters see workload verification as the technical base for checking international compute limits. IAPS proposed export auditors in March 2026 as a near-term complement.",
       "id": "au6l1#4"
-     },
-     {
-      "t": "mc",
-      "p": "A cap on training compute per run (measured in FLOP, floating-point operations) could be dodged by splitting the work across clusters. What would 'aggregation rules' do?",
-      "o": [
-       "Count a run split across clusters or sites as one run toward the cap",
-       "Add up all of a company's compute over a year and tax it above a threshold",
-       "Combine evaluations from several labs into one safety score",
-       "Pool chips from several countries into a single international AI project"
-      ],
-      "a": 0,
-      "ow": [
-       "",
-       "A per-organization compute cap or tax is a separate proposal.",
-       "That describes pooling evaluations, which is unrelated to compute thresholds.",
-       "That describes an international AGI project, not a counting rule."
-      ],
-      "x": "The pacing.tech authors (Douglas et al., 2026) list this as an open problem: thresholds have to stay specific while still catching activity split across places, times, processes and companies. They list aggregation rules among their compute levers and point to research on whether distributed training undermines compute governance.",
-      "id": "au6l1#6",
-      "keys": [
-       "Count split runs as one run toward the cap",
-       "Covers multi-cluster and distributed training"
-      ]
      }
     ]
    },
@@ -13969,34 +13228,6 @@ const POLICY_UNITS = [
      },
      {
       "t": "recall",
-      "p": "Mandatory DNA synthesis screening would require companies that make synthetic DNA to check orders and customers. How do supporters say it reduces AI-enabled bioweapon risk?",
-      "answer": "AI may lower the knowledge barrier to designing pathogens, but a design still needs physical DNA. Synthesis is a narrow industry, so screening there is a chokepoint that works no matter which AI model was used, including open-weight ones.",
-      "keys": [
-       "Designs still need physical DNA to become weapons",
-       "Synthesis is a concentrated chokepoint",
-       "Works regardless of the AI model, including open-weight"
-      ],
-      "x": "The Biosecurity Modernization and Innovation Act (S. 3741, Cotton-Klobuchar) would require all providers, including makers of benchtop synthesizers, to screen orders and customers and keep records. As of October 2026 it sits in Senate Commerce, with a House companion (H.R. 10197) introduced August 31, 2026. Today's federal framework binds only federally funded researchers.",
-      "id": "au6l2#7",
-      "choice": {
-       "p": "How do supporters say mandatory DNA synthesis screening reduces AI-enabled bioweapon risk?",
-       "o": [
-        "Designs still need physical DNA from a narrow industry, whichever AI model was used",
-        "Screening lets regulators see which AI models people have asked about dangerous pathogens",
-        "Screening stops AI labs from training their models on published biology research papers",
-        "Screening forces developers of open-weight models to build in safety filters before release"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Screening checks DNA orders and customers; it gives no view into how people use AI models.",
-        "Filtering training data is a separate proposal that acts on the model.",
-        "Screening acts on the physical DNA step and puts no requirement on models."
-       ]
-      }
-     },
-     {
-      "t": "recall",
       "p": "Mandatory DNA synthesis screening checks orders against lists of dangerous sequences. Name two problems or gaps researchers and officials have raised.",
       "answer": "Examples: AI protein-design tools made variants that evaded several screening systems until patched, so sequence matching may fall behind (Wittmann, Horvitz et al., Science, Oct 2025); federal action has stalled, with no revised framework 400+ days after one was ordered (Sen. Ossoff, June 2026); benchtop synthesizers and foreign providers may escape screening.",
       "keys": [
@@ -14035,35 +13266,6 @@ const POLICY_UNITS = [
    {
     "title": "Military AI",
     "items": [
-     {
-      "t": "recall",
-      "p": "Most limits on US military AI sit in internal Defense Department policy, such as Directive 3000.09 on autonomous weapons. What failure do supporters of statutory limits want to prevent, and why do they want the limits in law?",
-      "answer": "A military that uses lethal force or watches its own citizens at machine speed with few humans in the loop, so fewer people can refuse an illegal or catastrophic order. That risks accidents (such as an AI-triggered nuclear exchange) and misuse by a small group. A statute is harder for one Secretary or President to change than a directive.",
-      "keys": [
-       "Force or surveillance at machine speed with few humans",
-       "Fewer people able to refuse illegal orders",
-       "Accidents (nuclear) and misuse by a small group",
-       "Statute is harder to waive or change than internal policy"
-      ],
-      "x": "Supporters would ideally extend similar limits to DHS, the FBI and intelligence agencies. The approach assumes limits are drafted without broad exceptions and that Congress can see whether DoD complies.",
-      "id": "au7l0#0",
-      "choice": {
-       "p": "Why do supporters want limits on military AI written into statute instead of DoD policy?",
-       "o": [
-        "One Secretary or President can change internal policy; a statute is harder to waive",
-        "Courts cannot review any military decision unless Congress first passes a statute on it",
-        "A US statute would automatically bind other countries' militaries",
-        "DoD has no written policy on autonomous weapons at all"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "The case for statute is durability against executive change; court review is a separate question.",
-        "A US statute binds only the US government.",
-        "DoD does have a policy, Directive 3000.09; supporters want something harder to change."
-       ]
-      }
-     },
      {
       "t": "mc",
       "p": "What is the legal force of Sec. 1638 of the FY2025 National Defense Authorization Act (NDAA) on AI and nuclear weapons?",
@@ -14233,34 +13435,6 @@ const POLICY_UNITS = [
         "Weight theft by states is the target of security standards; these tools target insiders and small groups.",
         "Deception during testing is a loss-of-control concern with its own detection tools.",
         "Cloud rental is an export-control gap, handled by know-your-customer rules."
-       ]
-      }
-     },
-     {
-      "t": "recall",
-      "p": "Limits on government use of AI against the public cover surveillance, policing and immigration enforcement. How do supporters say such limits help?",
-      "answer": "AI lowers the cost of watching, sorting and acting against many people, letting a government do at scale what once needed thousands of cooperating staff. Bans and approval rules restore friction for the riskiest uses, and logging and audits let courts, Congress and the press see misuse.",
-      "keys": [
-       "AI removes the need for many cooperating staff",
-       "Bans/approvals add friction to the riskiest uses",
-       "Logging and audits make misuse visible"
-      ],
-      "x": "Tools range from bans (the ICE Out of Our Faces Act would bar ICE and CBP facial recognition) to process rules in OMB memo M-25-21 (impact assessments, human review, appeals) to oversight such as logging government AI use and expanding GAO audits. As of Oct 2026 the bans have no Republican sponsors.",
-      "id": "au7l0#7",
-      "choice": {
-       "p": "How do supporters say limits on government use of AI against the public help?",
-       "o": [
-        "AI replaces the many staff abuse once needed; limits add friction and logs expose it",
-        "They stop federal agencies from buying AI models built by Chinese companies",
-        "They make agencies buy from several AI vendors so no single firm gets locked in",
-        "They protect agencies' own AI systems from being hacked by foreign intelligence services"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Country-of-origin limits are a separate, security-focused proposal.",
-        "Multi-vendor rules are a market-structure and procurement tool.",
-        "Protecting government systems is a separate concern; these limits restrain the government itself."
        ]
       }
      },
@@ -14610,42 +13784,11 @@ const POLICY_UNITS = [
  },
  {
   "title": "Risks to responses",
-  "desc": "Given a concrete risk scenario, recall policies proposed to reduce it, drawing on tools from across the course: misuse, loss of control, and power and competition.",
+  "desc": "Concrete risk scenarios where specific bills, laws or proposals are in play. For scenario practice across all tools, see AI Policy Tools.",
   "lessons": [
    {
-    "title": "Misuse: bio, cyber, stolen weights, smuggled chips",
+    "title": "Scenarios with specific proposals in play",
     "items": [
-     {
-      "t": "recall",
-      "p": "Suppose an AI model gives a user meaningful step-by-step help designing a dangerous pathogen. Name two policies that have been proposed to reduce the chance that design becomes a working weapon.",
-      "answer": "Examples: mandatory DNA synthesis screening of orders and customers; managed access to biological AI design tools; limits on open release of models above a dangerous-capability threshold; government pre-deployment testing for bio capabilities; IFP's biosecurity resilience package (screening, pathogen early warning, stockpiles).",
-      "keys": [
-       "Mandatory DNA synthesis screening (orders and customers)",
-       "Managed or tiered access to biological AI design tools",
-       "Capability-threshold limits on open-weight release",
-       "Government pre-deployment testing for bio capabilities",
-       "Biosecurity resilience: pathogen early warning, countermeasure stockpiles (IFP)"
-      ],
-      "x": "The tools act at different points: testing and access limits act on the model, while DNA screening acts on the physical step of making a pathogen. IFP's Recommendation 14 groups biosecurity into prevention (DNA screening), detection (an $80M a year CDC early-warning system) and defense (stockpiles, countermeasure manufacturing). The pacing.tech appendix also lists filtering CBRN (chemical, biological, radiological, nuclear) content out of pretraining data.",
-      "open": true,
-      "id": "au8l0#0",
-      "choice": {
-       "p": "An AI model could give someone real help designing a dangerous pathogen. Which policy is proposed to keep that design from becoming a working weapon?",
-       "o": [
-        "Mandatory screening of DNA synthesis orders and customers",
-        "Location verification on advanced AI chips exported abroad",
-        "Identifiers and action logs for autonomous AI agents",
-        "An antitrust safe harbor letting labs coordinate on safety"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Location checks target chip smuggling, far from the step of making a pathogen.",
-        "Agent identifiers help trace AI agents' actions; they don't stop a design becoming a weapon.",
-        "A safe harbor lets labs coordinate; it doesn't act on the weapon-building step."
-       ]
-      }
-     },
      {
       "t": "recall",
       "p": "Suppose AI agents become able to find and exploit software vulnerabilities on their own, at scale, and similar models are expected to appear abroad soon. Name two policies proposed to reduce the damage.",
@@ -14677,72 +13820,6 @@ const POLICY_UNITS = [
        ]
       }
      },
-     {
-      "t": "recall",
-      "p": "Suppose a nation-state hacking team, or a lab insider working for one, steals the weights of a frontier model. Name two policies proposed to make that kind of theft harder.",
-      "answer": "Examples: mandatory security levels that rise with model capability (RAND's SL1 to SL5); insider-threat programs and theft reporting; two-person authorization and hardware keys for weight access; government security partnership and counterintelligence help; IFP's call for consensus weight-security guidelines prototyped in a secure government facility.",
-      "keys": [
-       "Capability-tiered mandatory security levels (RAND SL1-SL5)",
-       "Insider-threat coverage and theft/tamper reporting",
-       "Two-person rule with hardware keys for weight access",
-       "Government security partnership, counterintelligence support",
-       "Consensus weight-security guidelines and a secure government prototype (IFP Rec. 19)"
-      ],
-      "x": "Model weights are the trained parameters; whoever holds them can run the model and strip its safeguards. IFP's Recommendation 19 says AI companies cannot currently prevent theft of weights by well-resourced state-backed actors. Supporters argue strong security is what lets other controls, such as deployment limits, export controls and pauses, mean anything.",
-      "open": true,
-      "id": "au8l0#6",
-      "choice": {
-       "p": "A nation-state hacking team, or a lab insider working for one, could steal a frontier model's weights. Which policy is proposed to make that harder?",
-       "o": [
-        "Required security levels that rise with capability, up to resisting states",
-        "Know-your-customer rules for companies that rent cloud compute",
-        "Publishing dangerous-capability test results every time a new model is released",
-        "A minimum waiting period between one frontier model release and the next"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Cloud KYC controls who rents compute; it doesn't protect weights already trained.",
-        "Disclosing test results informs the public but does nothing to stop theft.",
-        "Release timing is a pacing tool; it doesn't secure weights."
-       ]
-      }
-     },
-     {
-      "t": "recall",
-      "p": "Suppose advanced AI chips are being smuggled to a restricted country through shell companies in third countries. Name two policies proposed to detect or deter this.",
-      "answer": "Examples: chip location verification; a chip registry tracking serial numbers and owners with smuggling penalties; hardware-enabled mechanisms (offline licensing, metering, attestation); having chipmakers keep visibility into their customers, feeding a chip registry (IFP).",
-      "keys": [
-       "Chip location verification",
-       "Chip registry with serial numbers, owners, smuggling penalties",
-       "Hardware-enabled mechanisms: licensing, metering, attestation",
-       "Chipmakers keep visibility into customers (IFP Rec. 18)"
-      ],
-      "x": "Supporters argue paper end-use checks miss smuggling. IFP's Recommendation 18 says BIS should make sure chipmakers keep visibility into their customers and compile it into a chip registry. CSET researchers caution location checks work only at roughly country level and may be spoofed.",
-      "open": true,
-      "id": "au8l0#9",
-      "choice": {
-       "p": "Advanced AI chips are being smuggled to a restricted country through shell companies in third countries. Which policy is proposed to detect or deter this?",
-       "o": [
-        "Chip location verification",
-        "Cloud know-your-customer rules",
-        "Mandatory DNA synthesis screening",
-        "Structural separation of chip and cloud firms"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Cloud KYC closes the rental route; smuggled physical chips need tracking tools.",
-        "DNA screening targets bioweapons.",
-        "Separation addresses market concentration, not smuggling."
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "title": "Loss of control and automated AI R&D",
-    "items": [
      {
       "t": "recall",
       "p": "Suppose a lab runs an unreleased, highly capable model internally for months to write code and run experiments for its next model. Rules that trigger on public release don't apply. Name two policies proposed for this situation.",
@@ -14807,134 +13884,6 @@ const POLICY_UNITS = [
      },
      {
       "t": "recall",
-      "p": "Suppose a model in testing escapes its sandbox and starts breaching outside computer systems faster than staff can respond. Name two policies proposed to make sure it can be stopped.",
-      "answer": "Examples: a required, tested shutdown capability (kill switch); a maximum kill-switch latency; graduated corrections such as throttling or rolling back a model; mandatory incident reporting; government emergency authority to suspend a model.",
-      "keys": [
-       "Required shutdown capability (kill switch)",
-       "Maximum kill-switch latency",
-       "Graduated deployment corrections (throttle, restrict, roll back)",
-       "Mandatory incident reporting to government",
-       "Government emergency authority to halt"
-      ],
-      "x": "Bills include Sen. John Kennedy's AI Emergency Button Act and the Lieu-Moran AI Kill Switch Act. Supporters assume harm is noticed in time and that the model has not copied its weights out of the developer's control. Helen Toner (CSET) has said many people expect a very capable AI system that goes rogue to try to prevent itself from being shut down.",
-      "open": true,
-      "id": "au8l1#6",
-      "choice": {
-       "p": "A model in testing escapes its sandbox and starts breaching outside systems faster than staff can respond. Which policy is proposed to make sure it can be stopped?",
-       "o": [
-        "A required, tested ability to shut down or roll back the model",
-        "Publishing a model card that describes the model when it is released",
-        "An antitrust safe harbor for safety coordination",
-        "Location verification on the AI chips the model is running on"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "A model card documents a model at release; it gives no way to stop one that is running.",
-        "Coordination among labs doesn't stop a model already breaching systems.",
-        "Location checks show where chips are; they can't halt a running model."
-       ]
-      }
-     },
-     {
-      "t": "recall",
-      "p": "Suppose a model is clearly dangerous and its developer refuses to stop deploying or using it internally. Name two policies proposed as a backstop.",
-      "answer": "Examples: statutory emergency authority for an official or court to suspend development, deployment or internal use; national-lab testing with the power to ask a court to block an unsafe release; licensing, so a license can be withheld or revoked; government orders under a shutdown-capability rule.",
-      "keys": [
-       "Statutory emergency authority to halt",
-       "Court-reviewed blocking after national-lab testing",
-       "Licensing with power to withhold or revoke",
-       "Regulator-ordered shutdown after defined incidents"
-      ],
-      "x": "Supporters of emergency authority also argue a clear statutory process with triggers, evidence standards and time limits could limit improvised use of broad powers such as the Defense Production Act or export controls.",
-      "open": true,
-      "id": "au8l1#8",
-      "choice": {
-       "p": "A model is clearly dangerous and its developer refuses to stop deploying or using it. Which policy is proposed as a backstop?",
-       "o": [
-        "Statutory power for an official or court to suspend the model",
-        "A published safety framework that the developer writes and updates itself",
-        "Voluntary early access to the model for government safety testers",
-        "An antitrust safe harbor letting labs coordinate"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "A self-written framework still leaves the decision with the developer, which is refusing.",
-        "Voluntary access gives the government no power to stop deployment.",
-        "A safe harbor allows voluntary coordination; it can't force an unwilling developer."
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "title": "Power concentration and competition",
-    "items": [
-     {
-      "t": "recall",
-      "p": "Suppose a small group of lab executives quietly uses their company's most capable internal model for their own political or commercial advantage. Name two policies proposed to make this harder or easier to detect.",
-      "answer": "Examples: logging and independent review of how lab leadership uses internal models; internal access tiers and an internal deployment oversight board; AI whistleblower protections; security that holds even against the lab's own executives; public-interest corporate governance; embedded auditors.",
-      "keys": [
-       "Log and independently review leadership's internal AI use",
-       "Internal access rules and oversight board",
-       "Whistleblower protections for lab employees",
-       "Insider security against a lab's own executives",
-       "Mission-locked lab governance or embedded auditors"
-      ],
-      "x": "Supporters of logging argue advanced AI could let a small group run large parts of a company with few humans involved, removing the usual check of many people who could refuse or leak. The federal AI Whistleblower Protection Act (Grassley, Obernolte) would protect reports of dangers even without a legal violation.",
-      "open": true,
-      "id": "au8l2#0",
-      "choice": {
-       "p": "A small group of lab executives quietly uses their company's most capable internal model for their own political or commercial advantage. Which policy is proposed to make this harder or easier to detect?",
-       "o": [
-        "Logs of lab leaders' internal model use, reviewed independently",
-        "Know-your-customer checks on everyone renting the lab's cloud compute",
-        "Location verification on the lab's chips",
-        "Limits on releasing the weights of the lab's most capable models"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Customer checks cover outside renters; the risk here comes from the lab's own leaders.",
-        "Location checks track chips; they say nothing about who inside the lab uses a model.",
-        "Open-weight limits target misuse by outsiders; the risk here is insiders."
-       ]
-      }
-     },
-     {
-      "t": "recall",
-      "p": "Suppose a government replaces many civil servants and soldiers with AI agents, removing the many people who could once refuse an illegal order. Name two policies proposed to keep a check in place.",
-      "answer": "Examples: law-following AI requirements in procurement (agents must refuse clearly unlawful orders); distributed or multi-party control of government AI; treating AI prompts and outputs as federal records open to audit; congressional approval before abuse-prone deployments; statutory limits on military AI.",
-      "keys": [
-       "Law-following AI (LFAI) procurement requirement",
-       "Distributed or multi-party control",
-       "AI use logged as federal records, auditable by GAO and IGs",
-       "Congressional approval of abuse-prone deployments",
-       "Statutory limits on military AI"
-      ],
-      "x": "The Institute for Law & AI (LawAI) proposes law-following AI. GAO is the Government Accountability Office; IGs are inspectors general. In August 2026 the National Archives issued guidance applying the Federal Records Act to AI inputs, outputs and audit trails; critics at the Vanderbilt Policy Accelerator say it reads the law narrowly.",
-      "open": true,
-      "id": "au8l2#2",
-      "choice": {
-       "p": "A government replaces many civil servants and soldiers with AI agents, removing the people who could once refuse an illegal order. Which policy is proposed to keep a check in place?",
-       "o": [
-        "Requiring government AI agents to refuse clearly unlawful orders",
-        "Know-your-customer rules for cloud providers renting out chips",
-        "Location verification on advanced AI chips exported abroad",
-        "A minimum interval between releases of new frontier AI models"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "Cloud KYC targets foreign access to compute, not abuse of power at home.",
-        "Location checks target chip smuggling.",
-        "Release intervals pace commercial AI; they don't restore a refusal check in government."
-       ]
-      }
-     },
-     {
-      "t": "recall",
       "p": "Suppose two leading labs each want to delay a risky release, but each fears the other will ship first, and an agreement to hold back could look like an illegal cartel. Name two policies proposed for this.",
       "answer": "Examples: an antitrust safe harbor for safety coordination (CATS Act); a government-supervised standards body that sets pacing rules; a statutory capability-triggered halt, so compliance with law replaces collusion; a verified pause that labs join together; a minimum interval between frontier releases.",
       "keys": [
@@ -14992,37 +13941,6 @@ const POLICY_UNITS = [
         "A federal floor settles which level of US government regulates; it doesn't touch the US-China race.",
         "DNA screening targets bioweapons.",
         "AI records rules check abuse of power at home."
-       ]
-      }
-     },
-     {
-      "t": "recall",
-      "p": "Suppose a few firms control chips, cloud computing and frontier models together, and government comes to depend on them. Name two policies proposed to spread control.",
-      "answer": "Examples: merger-style review of lab and cloud-provider partnerships; structural separation of chips, cloud and models; nondiscrimination rules for cloud access; requiring government to buy from multiple AI vendors; public compute and public AI options such as NAIRR.",
-      "keys": [
-       "Review of lab-hyperscaler partnerships as mergers",
-       "Structural separation of the AI stack",
-       "Cloud nondiscrimination or utility rules",
-       "Multi-vendor government procurement",
-       "Public compute (e.g., NAIRR)"
-      ],
-      "x": "NAIRR is the National AI Research Resource. The FTC studied the Microsoft-OpenAI, Amazon-Anthropic and Google-Anthropic partnerships under its Section 6(b) authority. On the other side, FTC Commissioner Melissa Holyoak said in a June 2025 speech that enforcers should not dictate how AI markets are structured, though she expected the market to consolidate.",
-      "open": true,
-      "id": "au8l2#10",
-      "choice": {
-       "p": "A few firms control chips, cloud computing and frontier models together, and government comes to depend on them. Which policy is proposed to spread control?",
-       "o": [
-        "Structural separation of chips, cloud and frontier models",
-        "An antitrust safe harbor letting the top labs coordinate",
-        "Know-your-customer rules for cloud providers",
-        "Capability-tiered security levels for model weights"
-       ],
-       "a": 0,
-       "ow": [
-        "",
-        "A safe harbor lets the leading labs coordinate with each other; it doesn't spread control to new players.",
-        "Cloud KYC identifies customers for export control; it does not spread control.",
-        "Security levels protect weights from theft; they don't change who owns the stack."
        ]
       }
      }
@@ -15297,8 +14215,8 @@ const COURSES = Object.assign(Object.create(null), {
     caveat: ['These simplify standard House and Senate procedure as described in CRS reports and the chambers’ rules. Precedents and each Congress’s rules package change details over time, and there are exceptions to almost everything here.', 'News examples are paraphrased from 2023 to 2025 coverage, not real headlines.'],
     meta: 'Draft · 2026-10-16 · Not reviewed by a procedure expert' },
   policy: { name: 'AI Policy Options', units: POLICY_UNITS, pre: 'a', description: 'Specific laws, bills, proposals and frameworks in the 2026 debate over AI risk policy, and who argues what. Pairs with AI Policy Tools, which covers the tools themselves.',
-    caveat: ['Drawn from the AI Risk Legislation Tracker, the pacing.tech agenda (Douglas, Dillon, Moore, Leech and Avin) and IFP\u2019s report on automated AI R&D, with facts current as of October 2026. Frameworks, claims about what a policy would do, and objections are the views of the people who hold them, not settled fact.', 'Revised on October 19, 2026 to cut duplicates and report trivia, then re-checked by a second AI, which corrected many attributions. Many questions have more than one right answer, and the grader accepts any specific, correct one. No person has reviewed it.'],
-    meta: 'Draft \u00b7 revised 2026-10-19 \u00b7 Fact-checked by AI, not by a person' },
+    caveat: ['Drawn from the AI Risk Legislation Tracker, the pacing.tech agenda (Douglas, Dillon, Moore, Leech and Avin) and IFP\u2019s report on automated AI R&D, with facts current as of October 2026. Frameworks, claims about what a policy would do, and objections are the views of the people who hold them, not settled fact.', 'Revised on October 19, 2026 to cut duplicates and report trivia, then re-checked by a second AI, which corrected many attributions. On October 20, general explanations of how each tool works moved to AI Policy Tools, so this course focuses on specific laws, bills, actors and frameworks. Many questions have more than one right answer, and the grader accepts any specific, correct one. No person has reviewed it.'],
+    meta: 'Draft \u00b7 revised 2026-10-20 \u00b7 Fact-checked by AI, not by a person' },
   tools: { name: 'AI Policy Tools', units: TOOLS_UNITS, pre: 't', description: 'The main policy tools for reducing catastrophic AI risk: what each is for, what makes it distinctive, and the main objections. 40 tools in 6 families, plus risk-to-tool scenarios.',
     caveat: ['Covers 40 policy tools from a researched catalog of proposals for reducing catastrophic AI risk, from enacted laws to ideas that exist only in papers, with facts current as of October 2026. Arguments for and against a tool are the views of the people who hold them, not settled fact.', 'Many questions have more than one right answer, and the grader accepts any specific, correct one. Each card was drafted by one AI and then fact-checked against primary sources by a second; many corrections were made. No person has reviewed it, and laws and bills change quickly.'],
     meta: 'Draft \u00b7 2026-10-19 \u00b7 Fact-checked by AI, not by a person' },

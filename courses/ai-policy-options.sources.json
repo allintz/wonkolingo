@@ -331,20 +331,6 @@
   ]
  },
  {
-  "id": "au2l0#2",
-  "q": "Safety framework laws like SB 53 set no safety standard of their own. How do supporters say they still reduce catastroph",
-  "src": [
-   "frag-ideas.json#safety-frameworks"
-  ]
- },
- {
-  "id": "au2l0#3",
-  "q": "Safety framework rules can take a 'publish only' or a 'publish and follow' form. What is the difference?",
-  "src": [
-   "frag-ideas.json#safety-frameworks"
-  ]
- },
- {
   "id": "au2l0#4",
   "q": "Laws like California SB 53 require frontier labs to publish and follow their own safety framework. Name two objections c",
   "src": [
@@ -411,14 +397,6 @@
   ]
  },
  {
-  "id": "au2l1#2",
-  "q": "How do supporters say mandatory AI incident reporting to government would help? Name two ways.",
-  "src": [
-   "frag-ideas.json#incident-reporting",
-   "https://ifp.org/preparing-for-ai-research-automation/"
-  ]
- },
- {
   "id": "au2l1#3",
   "q": "State laws require frontier developers to report 'critical safety incidents' within days. Name two gaps or objections cr",
   "src": [
@@ -434,14 +412,6 @@
   "src": [
    "frag-ideas.json#incident-reporting",
    "https://cset.georgetown.edu/publication/an-argument-for-hybrid-ai-incident-reporting/"
-  ]
- },
- {
-  "id": "au2l1#5",
-  "q": "Why do advocates say AI labs' internal deployment (using models inside the company before or without public release) nee",
-  "src": [
-   "frag-ideas.json#internal-deployment",
-   "https://arxiv.org/abs/2504.12170"
   ]
  },
  {
@@ -468,22 +438,6 @@
   "q": "In its Aug 2026 report on automated AI research, IFP (Institute for Progress) asks Congress to legislate four kinds of t",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
-  ]
- },
- {
-  "id": "au2l1#9",
-  "q": "Risk: a frontier lab hides safety problems, near misses, or dangerous internal model use from the public and government.",
-  "src": [
-   "frag-ideas.json#incident-reporting",
-   "frag-ideas.json#internal-deployment",
-   "https://pacing.tech/appendices"
-  ]
- },
- {
-  "id": "au2l2#0",
-  "q": "Why do supporters of compute reporting use training compute (for example a 10^26 operations threshold) as the trigger fo",
-  "src": [
-   "frag-ideas.json#compute-reporting"
   ]
  },
  {
@@ -522,27 +476,11 @@
   ]
  },
  {
-  "id": "au2l2#6",
-  "q": "Advocates want logs of how government officials (and lab executives) use AI to be preserved and reviewable. What risk do",
-  "src": [
-   "frag-ideas.json#ai-use-transparency",
-   "https://www.forethought.org/research/policy-ideas-to-ensure-responsible-government-deployment-of-ai",
-   "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power"
-  ]
- },
- {
   "id": "au2l2#7",
   "q": "In August 2026 the National Archives (NARA) issued guidance applying the Federal Records Act to AI prompts and outputs. ",
   "src": [
    "frag-ideas.json#ai-use-transparency",
    "https://www.justsecurity.org/157670/federal-employees-ai-prompts-records-narrow-circumstances/"
-  ]
- },
- {
-  "id": "au3l0#0",
-  "q": "What do third-party audit mandates for frontier AI developers require, and what gap do supporters say they fill?",
-  "src": [
-   "frag-ideas.json#third-party-audits"
   ]
  },
  {
@@ -591,14 +529,6 @@
   ]
  },
  {
-  "id": "au3l0#6",
-  "q": "What do 'embedded' or 'resident' auditors add compared with an annual outside audit, and which two oversight models from",
-  "src": [
-   "frag-ideas.json#embedded-auditors",
-   "https://www.nrc.gov/reading-rm/doc-collections/fact-sheets/resident-inspectors-bg.html"
-  ]
- },
- {
   "id": "au3l0#7",
   "q": "Match each version of embedded AI auditing to where it appears.",
   "src": [
@@ -625,13 +555,6 @@
   ]
  },
  {
-  "id": "au3l1#1",
-  "q": "How do supporters say government testing of frontier models before release would reduce risk?",
-  "src": [
-   "frag-ideas.json#pre-deployment-testing"
-  ]
- },
- {
   "id": "au3l1#2",
   "q": "Which bill would bar deploying covered frontier AI models without first participating in a Department of Energy evaluati",
   "src": [
@@ -649,22 +572,6 @@
    "https://arxiv.org/abs/2412.08653",
    "https://techpolicy.press/trump-abandons-fda-for-ai-proposal",
    "https://www.whitehouse.gov/presidential-actions/2026/06/promoting-advanced-artificial-intelligence-innovation-and-security/"
-  ]
- },
- {
-  "id": "au3l1#4",
-  "q": "Why can a dangerous-capability evaluation show that a model has a capability but not reliably that it lacks one? Name tw",
-  "src": [
-   "https://pacing.tech/",
-   "frag-ideas.json#pre-deployment-testing",
-   "https://arxiv.org/abs/2412.08653"
-  ]
- },
- {
-  "id": "au3l1#5",
-  "q": "Match each proposed safeguard for model testing to the weakness it targets.",
-  "src": [
-   "https://pacing.tech/appendices"
   ]
  },
  {
@@ -691,14 +598,6 @@
    "https://www.gov.ca.gov/2026/09/09/governor-newsom-signs-first-in-the-nation-ai-safeguards-to-protect-californians-calls-on-the-federal-government-to-do-its-part/",
    "https://thenextweb.com/news/california-sb-813-independent-verification-organisations-metr-400000-tokens-openai-paid-eu-ai-act-scientific-panel-article-68",
    "https://www.omm.com/insights/alerts-publications/california-expands-its-ai-rulebook-governor-newsom-signs-over-two-dozen-laws-governing-ai-oversight-and-use/"
-  ]
- },
- {
-  "id": "au3l2#1",
-  "q": "How do supporters of 'regulatory markets' (certified private AI verifiers) say the approach would work better than direc",
-  "src": [
-   "frag-ideas.json#independent-verifiers",
-   "https://arxiv.org/abs/2304.04914v5"
   ]
  },
  {
@@ -756,13 +655,6 @@
   ]
  },
  {
-  "id": "au4l0#0",
-  "q": "A statutory duty of care would require frontier AI developers to take reasonable care to avoid causing or enabling catas",
-  "src": [
-   "frag-ideas.json#duty-of-care"
-  ]
- },
- {
   "id": "au4l0#1",
   "q": "Proposal: a law requiring frontier AI developers to take 'reasonable care' to prevent catastrophic harms, enforceable in",
   "src": [
@@ -778,14 +670,6 @@
    "frag-ideas.json#duty-of-care",
    "https://www.westhawaiitoday.com/?p=273685",
    "https://www.gov.ca.gov/2026/09/09/governor-newsom-signs-first-in-the-nation-ai-safeguards-to-protect-californians-calls-on-the-federal-government-to-do-its-part/"
-  ]
- },
- {
-  "id": "au4l0#3",
-  "q": "In AI liability debates, what is the key difference between a negligence standard and strict liability for developers?",
-  "src": [
-   "frag-ideas.json#product-liability",
-   "https://papers.ssrn.com/abstract=4694006"
   ]
  },
  {
@@ -837,13 +721,6 @@
   ]
  },
  {
-  "id": "au4l1#0",
-  "q": "Some propose requiring frontier AI developers to carry liability insurance sized to the harm their models could cause. H",
-  "src": [
-   "frag-ideas.json#insurance-mandates"
-  ]
- },
- {
   "id": "au4l1#1",
   "q": "Match each AI insurance proposal to its design.",
   "src": [
@@ -861,13 +738,6 @@
    "frag-ideas.json#insurance-mandates",
    "https://the-decoder.com/major-insurers-seek-to-exclude-ai-related-risks-from-corporate-policies/",
    "https://arxiv.org/abs/2409.06673v1"
-  ]
- },
- {
-  "id": "au4l1#3",
-  "q": "A liability safe harbor would shield AI developers from some lawsuits if they meet set safety conditions. Why do support",
-  "src": [
-   "frag-ideas.json#liability-safe-harbors"
   ]
  },
  {
@@ -889,17 +759,6 @@
   ]
  },
  {
-  "id": "au4l1#6",
-  "q": "Why do supporters say AI labs need an antitrust safe harbor to coordinate on safety, such as jointly delaying a release?",
-  "src": [
-   "frag-ideas.json#safety-coordination-antitrust",
-   "https://www.banks.senate.gov/?p=11705",
-   "https://www.americanactionforum.org/insight/pacing-the-ai-frontier-an-allegedly-illegal-agreement/",
-   "https://govinfo.gov/app/details/BILLS-119hr9914ih",
-   "https://www.congress.gov/bill/119th-congress/house-bill/9914"
-  ]
- },
- {
   "id": "au4l1#7",
   "q": "Proposal: an antitrust exemption letting frontier AI labs share risk information and jointly agree to slow or delay rele",
   "src": [
@@ -918,15 +777,6 @@
    "https://www.fisherphillips.com/en/news-insights/congress-considers-ai-whistleblower-law.html",
    "https://constantinecannon.com/whistleblower/bi-partisan-group-led-by-chuck-grassley-introduces-ai-whistleblower-protection-act",
    "https://policysoup.com/bills/hr3460-119"
-  ]
- },
- {
-  "id": "au4l2#1",
-  "q": "How do supporters say whistleblower protections for AI lab employees reduce risk?",
-  "src": [
-   "frag-ideas.json#whistleblower-protections",
-   "https://law-ai.org/protecting-ai-whistleblowers/",
-   "https://www.lawfaremedia.org/article/lawfare-daily--a-right-to-warn--protecting-ai-whistleblowers-with-charlie-bullock"
   ]
  },
  {
@@ -977,15 +827,6 @@
   ]
  },
  {
-  "id": "au5l0#0",
-  "q": "A shutdown-capability rule requires AI companies to keep a tested ability to stop, throttle or shut down their systems. ",
-  "src": [
-   "frag-ideas.json#shutdown-capability",
-   "https://decrypt.co/374332/what-is-ai-kill-switch-openai-hack-hugging-face?amp=1",
-   "https://ifp.org/preparing-for-ai-research-automation/"
-  ]
- },
- {
   "id": "au5l0#1",
   "q": "Match each AI kill-switch proposal to who holds or checks the switch.",
   "src": [
@@ -1021,15 +862,6 @@
   ]
  },
  {
-  "id": "au5l0#5",
-  "q": "Proposals for government emergency authority to halt a dangerous AI model: what gap do supporters say they fill, and why",
-  "src": [
-   "frag-ideas.json#emergency-powers",
-   "https://artificialintelligenceact.eu/article/93/",
-   "https://www.govinfo.gov/app/details/BILLS-119hr9925ih"
-  ]
- },
- {
   "id": "au5l0#6",
   "q": "In June 2026 a Commerce Department export-control directive led Anthropic to take two frontier models offline until it w",
   "src": [
@@ -1038,13 +870,6 @@
    "https://www.nextgov.com/artificial-intelligence/2026/06/anthropic-suspends-top-ai-models-after-us-export-control-order/414173/",
    "https://www.hyperdimensional.co/p/leviathan-waking",
    "https://www.hstoday.us/subject-matter-areas/cybersecurity/commerce-lifts-export-restrictions-on-anthropic-ai-models/"
-  ]
- },
- {
-  "id": "au5l1#0",
-  "q": "AI agent identification policies tie each agent to whoever built and runs it and require logs of its actions. How do sup",
-  "src": [
-   "frag-ideas.json#agent-identification"
   ]
  },
  {
@@ -1082,26 +907,10 @@
   ]
  },
  {
-  "id": "au5l1#5",
-  "q": "Match each proposed limit on AI agents to the risk it targets.",
-  "src": [
-   "https://pacing.tech/appendices",
-   "https://cdn.openai.com/papers/practices-for-governing-agentic-ai-systems.pdf"
-  ]
- },
- {
   "id": "au5l1#6",
   "q": "Shavit et al. (OpenAI, 2023) warn that people could lose the ability to shut down AI agents even if no agent escapes. Ho",
   "src": [
    "https://cdn.openai.com/papers/practices-for-governing-agentic-ai-systems.pdf"
-  ]
- },
- {
-  "id": "au5l2#0",
-  "q": "A conditional pause halts frontier AI work automatically when a capability or compute threshold is crossed. Why do suppo",
-  "src": [
-   "frag-ideas.json#conditional-pause",
-   "https://www.gov.uk/government/publications/frontier-ai-safety-commitments-ai-seoul-summit-2024/frontier-ai-safety-commitments-ai-seoul-summit-2024"
   ]
  },
  {
@@ -1197,14 +1006,6 @@
   ]
  },
  {
-  "id": "au6l0#0",
-  "q": "Chip export controls: the Commerce Department requires licenses to sell advanced AI chips and chipmaking tools to China.",
-  "src": [
-   "frag-ideas.json#export-controls",
-   "https://ifp.org/preparing-for-ai-research-automation/"
-  ]
- },
- {
   "id": "au6l0#1",
   "q": "Name two objections critics have raised to US export controls on sales of advanced AI chips to China.",
   "src": [
@@ -1278,13 +1079,6 @@
   ]
  },
  {
-  "id": "au6l1#0",
-  "q": "Cloud know-your-customer (KYC) rules would make cloud providers verify who rents large amounts of AI compute. What gap i",
-  "src": [
-   "frag-ideas.json#cloud-kyc"
-  ]
- },
- {
   "id": "au6l1#1",
   "q": "Cloud know-your-customer (KYC) rules: cloud providers must verify the identities of customers renting large AI compute a",
   "src": [
@@ -1319,14 +1113,6 @@
   "q": "Match each version of on-chip governance to its description.",
   "src": [
    "frag-ideas.json#hardware-mechanisms"
-  ]
- },
- {
-  "id": "au6l1#6",
-  "q": "A cap on training compute per run (measured in FLOP, floating-point operations) could be dodged by splitting the work ac",
-  "src": [
-   "https://pacing.tech/appendices",
-   "https://pacing.tech/"
   ]
  },
  {
@@ -1378,26 +1164,10 @@
   ]
  },
  {
-  "id": "au6l2#7",
-  "q": "Mandatory DNA synthesis screening would require companies that make synthetic DNA to check orders and customers. How do ",
-  "src": [
-   "frag-ideas.json#dna-synthesis-screening",
-   "https://ifp.org/preparing-for-ai-research-automation/",
-   "https://www.congress.gov/119/bills/s3741/BILLS-119s3741is.htm"
-  ]
- },
- {
   "id": "au6l2#8",
   "q": "Mandatory DNA synthesis screening checks orders against lists of dangerous sequences. Name two problems or gaps research",
   "src": [
    "frag-ideas.json#dna-synthesis-screening"
-  ]
- },
- {
-  "id": "au7l0#0",
-  "q": "Most limits on US military AI sit in internal Defense Department policy, such as Directive 3000.09 on autonomous weapons",
-  "src": [
-   "frag-ideas.json#military-ai-limits"
   ]
  },
  {
@@ -1450,14 +1220,6 @@
    "frag-ideas.json#law-following-ai",
    "frag-ideas.json#military-ai-limits",
    "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power"
-  ]
- },
- {
-  "id": "au7l0#7",
-  "q": "Limits on government use of AI against the public cover surveillance, policing and immigration enforcement. How do suppo",
-  "src": [
-   "frag-ideas.json#gov-ai-use-limits",
-   "https://www.congress.gov/bill/119th-congress/senate-bill/3779"
   ]
  },
  {
@@ -1563,17 +1325,6 @@
   ]
  },
  {
-  "id": "au8l0#0",
-  "q": "Suppose an AI model gives a user meaningful step-by-step help designing a dangerous pathogen. Name two policies that hav",
-  "src": [
-   "frag-ideas.json#dna-synthesis-screening",
-   "frag-ideas.json#open-weights-policy",
-   "frag-ideas.json#pre-deployment-testing",
-   "https://ifp.org/preparing-for-ai-research-automation/",
-   "https://pacing.tech/appendices"
-  ]
- },
- {
   "id": "au8l0#2",
   "q": "Suppose AI agents become able to find and exploit software vulnerabilities on their own, at scale, and similar models ar",
   "src": [
@@ -1581,24 +1332,6 @@
    "frag-ideas.json#pre-deployment-testing",
    "frag-ideas.json#agent-identification",
    "frag-ideas.json#shutdown-capability"
-  ]
- },
- {
-  "id": "au8l0#6",
-  "q": "Suppose a nation-state hacking team, or a lab insider working for one, steals the weights of a frontier model. Name two ",
-  "src": [
-   "frag-ideas.json#model-weight-security",
-   "https://pacing.tech/appendices",
-   "https://ifp.org/preparing-for-ai-research-automation/"
-  ]
- },
- {
-  "id": "au8l0#9",
-  "q": "Suppose advanced AI chips are being smuggled to a restricted country through shell companies in third countries. Name tw",
-  "src": [
-   "frag-ideas.json#hardware-mechanisms",
-   "https://pacing.tech/appendices",
-   "https://ifp.org/preparing-for-ai-research-automation/"
   ]
  },
  {
@@ -1616,48 +1349,6 @@
   "src": [
    "frag-ideas.json#agent-identification",
    "https://pacing.tech/appendices"
-  ]
- },
- {
-  "id": "au8l1#6",
-  "q": "Suppose a model in testing escapes its sandbox and starts breaching outside computer systems faster than staff can respo",
-  "src": [
-   "frag-ideas.json#shutdown-capability",
-   "https://pacing.tech/appendices",
-   "frag-ideas.json#incident-reporting",
-   "frag-ideas.json#emergency-powers",
-   "https://cset.georgetown.edu/article/creating-a-kill-switch-to-shut-down-a-rogue-a-i-is-harder-than-it-sounds-2/"
-  ]
- },
- {
-  "id": "au8l1#8",
-  "q": "Suppose a model is clearly dangerous and its developer refuses to stop deploying or using it internally. Name two polici",
-  "src": [
-   "frag-ideas.json#emergency-powers",
-   "frag-ideas.json#pre-deployment-testing",
-   "frag-ideas.json#licensing",
-   "frag-ideas.json#shutdown-capability"
-  ]
- },
- {
-  "id": "au8l2#0",
-  "q": "Suppose a small group of lab executives quietly uses their company's most capable internal model for their own political",
-  "src": [
-   "frag-ideas.json#ai-use-transparency",
-   "frag-ideas.json#internal-deployment",
-   "frag-ideas.json#whistleblower-protections",
-   "frag-ideas.json#law-following-ai",
-   "frag-ideas.json#lab-corporate-governance"
-  ]
- },
- {
-  "id": "au8l2#2",
-  "q": "Suppose a government replaces many civil servants and soldiers with AI agents, removing the many people who could once r",
-  "src": [
-   "frag-ideas.json#law-following-ai",
-   "frag-ideas.json#ai-use-transparency",
-   "frag-ideas.json#gov-ai-use-limits",
-   "frag-ideas.json#military-ai-limits"
   ]
  },
  {
@@ -1679,15 +1370,6 @@
    "https://pacing.tech/appendices",
    "https://www.aljazeera.com/amp/news/2026/9/26/china-us-to-open-ai-communication-channel-after-summit-white-house-says",
    "https://www.omanobserver.om/ampArticle/1196798"
-  ]
- },
- {
-  "id": "au8l2#10",
-  "q": "Suppose a few firms control chips, cloud computing and frontier models together, and government comes to depend on them.",
-  "src": [
-   "frag-ideas.json#market-structure",
-   "frag-ideas.json#public-compute",
-   "https://www.ftc.gov/system/files/ftc_gov/pdf/holyoak-antitrust-ai.pdf"
   ]
  }
 ]
