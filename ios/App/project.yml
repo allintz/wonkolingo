@@ -13,8 +13,8 @@ settings:
     MARKETING_VERSION: "1.0"
     CURRENT_PROJECT_VERSION: "1"
     CODE_SIGN_STYLE: Automatic
-    # Your Apple developer Team ID goes here once enrollment is done (Xcode > Settings > Accounts shows it).
-    DEVELOPMENT_TEAM: ""
+    # Alex's Apple developer team (individual).
+    DEVELOPMENT_TEAM: 29B8GL5NYV
     TARGETED_DEVICE_FAMILY: "1"
 packages:
   CapApp-SPM:
@@ -37,6 +37,9 @@ targets:
       properties:
         com.apple.security.application-groups:
           - group.com.alexlintz.wonkolingo
+        # Passkeys for the live site (served from /.well-known/apple-app-site-association by the Worker).
+        com.apple.developer.associated-domains:
+          - webcredentials:wonkolingo.alex-l-lintz.workers.dev
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.alexlintz.wonkolingo

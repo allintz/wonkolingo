@@ -13,6 +13,7 @@ const CORS = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization'
 };
 const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+const APPLE_APP_SITE_ASSOCIATION = { webcredentials: { apps: ['29B8GL5NYV.com.alexlintz.wonkolingo'] } };
 const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', ...CORS } });
@@ -337,6 +338,10 @@ export default {
       if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
       try { return await api(req, env, url.pathname); }
       catch (e) { return fail('Server error.', 500); }
+    }
+    // Lets the iPhone app use this site's passkeys (Apple's associated domains, webcredentials).
+    if (url.pathname === '/.well-known/apple-app-site-association') {
+      return new Response(JSON.stringify(APPLE_APP_SITE_ASSOCIATION), { headers: { 'Content-Type': 'application/json' } });
     }
     return env.ASSETS.fetch(req);
   }

@@ -15077,7 +15077,8 @@ function ago(ms) {
 /* ---------- account: saved indicator, passkeys, sign-in codes ---------- */
 let syncState = 'saved', acctPending = null;
 let acctUI = { mode: '', busy: false, err: '', link: null, recShown: false, outArmed: false, delArmed: false, merge: null };
-const PASSKEY_OK = !NATIVE && !!(window.PublicKeyCredential && navigator.credentials) && (location.origin === SITE || location.hostname === 'localhost');
+// In the iPhone app, passkeys go through the native plugin (the page's origin isn't the site's).
+const PASSKEY_OK = NATIVE || (!!(window.PublicKeyCredential && navigator.credentials) && (location.origin === SITE || location.hostname === 'localhost'));
 const CLOUD = '<path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.9 11a3.75 3.75 0 0 1-.4 7.5z"/>';
 function hasProgress() { return Object.keys(state.srs || {}).length > 0 || xpTotal(state) > 0 || Object.keys(state.myTerms || {}).length > 0; }
 // The first time there's progress worth keeping, this device gets its own account.
@@ -15135,12 +15136,14 @@ const b64u = {
   dec: s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4)), c => c.charCodeAt(0))
 };
 async function passkeyCreate(o) {
+  if (NATIVE) return (await Native.wonko.passkeyCreate({ options: o })).credential;
   const c = await navigator.credentials.create({ publicKey: { ...o, challenge: b64u.dec(o.challenge), user: { ...o.user, id: b64u.dec(o.user.id) }, excludeCredentials: (o.excludeCredentials || []).map(x => ({ ...x, id: b64u.dec(x.id) })) } });
   const r = c.response;
   return { id: c.id, rawId: b64u.enc(c.rawId), type: c.type, clientExtensionResults: c.getClientExtensionResults(), authenticatorAttachment: c.authenticatorAttachment || undefined,
     response: { clientDataJSON: b64u.enc(r.clientDataJSON), attestationObject: b64u.enc(r.attestationObject), transports: r.getTransports ? r.getTransports() : [] } };
 }
 async function passkeyGet(o) {
+  if (NATIVE) return (await Native.wonko.passkeyGet({ options: o })).credential;
   const c = await navigator.credentials.get({ publicKey: { ...o, challenge: b64u.dec(o.challenge), allowCredentials: (o.allowCredentials || []).map(x => ({ ...x, id: b64u.dec(x.id) })) } });
   const r = c.response;
   return { id: c.id, rawId: b64u.enc(c.rawId), type: c.type, clientExtensionResults: c.getClientExtensionResults(), authenticatorAttachment: c.authenticatorAttachment || undefined,
@@ -15154,7 +15157,7 @@ async function addPasskey() {
   ACCT.passkeys = r.passkeys; saveA(); toast('Passkey added.');
 }
 function acctErr(e) {
-  if (e && e.name === 'NotAllowedError') return 'The passkey request was cancelled or timed out.';
+  if (e && (e.name === 'NotAllowedError' || e.code === 'canceled')) return 'The passkey request was cancelled or timed out.';
   if (e && e.name === 'InvalidStateError') return 'This device already has a passkey for your account.';
   return netMsg(e);
 }

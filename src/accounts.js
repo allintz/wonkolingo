@@ -45,8 +45,20 @@ async function takeRate(env, key, max, period) {
 const ipKey = async (req, prefix) => prefix + ':' + (await sha256('wl-acct:' + (req.headers.get('CF-Connecting-IP') || 'unknown'))).slice(0, 16);
 const passkeySite = req => {
   const origin = req.headers.get('Origin') || '';
+  // The iPhone app (pages served from capacitor://localhost) uses the live site's passkeys through Apple's associated
+  // domains, and iOS signs those with the site's own https origin.
+  if (origin === 'capacitor://localhost') return { origin: PASSKEY_ORIGINS[0], rpID: new URL(PASSKEY_ORIGINS[0]).hostname, app: true };
   return PASSKEY_ORIGINS.includes(origin) ? { origin, rpID: new URL(origin).hostname } : null;
 };
+// The origins a passkey response may carry. For the iPhone app, iOS is expected to use the site's https origin; an
+// origin naming this app is accepted too, and anything else is logged so a mismatch shows up in `wrangler tail`.
+function expectedOrigins(site, resp) {
+  if (!site.app) return site.origin;
+  let o = '';
+  try { o = JSON.parse(new TextDecoder().decode(fromB64url(String(resp.response.clientDataJSON)))).origin || ''; } catch (e) {}
+  if (o && o !== site.origin) console.log('passkey from app with origin', o);
+  return o.includes('com.alexlintz.wonkolingo') ? [site.origin, o] : site.origin;
+}
 // What the client needs to know about a signed-in player.
 export async function accountInfo(env, p) {
   const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM passkeys WHERE player_id = ?').bind(p.id).first();
@@ -99,7 +111,7 @@ export async function publicAccountApi(req, env, path, { json, fail, body }) {
     if (!cred) return fail('This passkey isn’t linked to a WonkoLingo account. It may have been made for a different account or removed.', 404);
     let v;
     try {
-      v = await verifyAuthenticationResponse({ response: resp, expectedChallenge: ch.challenge, expectedOrigin: site.origin, expectedRPID: site.rpID, requireUserVerification: false,
+      v = await verifyAuthenticationResponse({ response: resp, expectedChallenge: ch.challenge, expectedOrigin: expectedOrigins(site, resp), expectedRPID: site.rpID, requireUserVerification: false,
         credential: { id: cred.id, publicKey: fromB64url(cred.public_key), counter: cred.counter, transports: JSON.parse(cred.transports || '[]') } });
     } catch (e) { return fail('The passkey couldn’t be verified.', 400); }
     if (!v.verified) return fail('The passkey couldn’t be verified.', 400);
@@ -170,7 +182,7 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
     if (!ch || ch.kind !== 'register' || ch.player_id !== me.id || ch.expires < Date.now()) return fail('The passkey request expired. Try again.', 400);
     await env.DB.prepare('DELETE FROM webauthn_challenges WHERE id = ?').bind(String(b.challengeId)).run();
     let v;
-    try { v = await verifyRegistrationResponse({ response: b.response, expectedChallenge: ch.challenge, expectedOrigin: site.origin, expectedRPID: site.rpID, requireUserVerification: false }); }
+    try { v = await verifyRegistrationResponse({ response: b.response, expectedChallenge: ch.challenge, expectedOrigin: expectedOrigins(site, b.response), expectedRPID: site.rpID, requireUserVerification: false }); }
     catch (e) { return fail('The passkey couldn’t be saved.', 400); }
     if (!v.verified) return fail('The passkey couldn’t be saved.', 400);
     const c = v.registrationInfo.credential;

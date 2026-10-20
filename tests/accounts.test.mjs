@@ -30,25 +30,25 @@ function cbor(v) {
   if (v instanceof Map) return Buffer.concat([head(5, v.size), ...[...v].flatMap(([k, x]) => [cbor(k), cbor(x)])]);
   throw new Error('cbor: unsupported');
 }
-function makeAuthenticator() {
+function makeAuthenticator(origin = ORIGIN, rpId = RP_ID) {
   const { privateKey, publicKey } = generateKeyPairSync('ec', { namedCurve: 'P-256' });
   const jwk = publicKey.export({ format: 'jwk' });
   const credId = randomBytes(16);
   const cose = cbor(new Map([[1, 2], [3, -7], [-1, 1], [-2, Buffer.from(jwk.x, 'base64url')], [-3, Buffer.from(jwk.y, 'base64url')]]));
   let counter = 0;
-  const clientData = (type, challenge) => Buffer.from(JSON.stringify({ type, challenge, origin: ORIGIN, crossOrigin: false }));
+  const clientData = (type, challenge) => Buffer.from(JSON.stringify({ type, challenge, origin, crossOrigin: false }));
   return {
     credId,
     create(opts) {
       const cd = clientData('webauthn.create', opts.challenge);
-      const authData = Buffer.concat([sha(RP_ID), Buffer.from([0x45]), Buffer.alloc(4), Buffer.alloc(16), Buffer.from([0, credId.length]), credId, cose]);
+      const authData = Buffer.concat([sha(rpId), Buffer.from([0x45]), Buffer.alloc(4), Buffer.alloc(16), Buffer.from([0, credId.length]), credId, cose]);
       const att = cbor(new Map([['fmt', 'none'], ['attStmt', new Map()], ['authData', authData]]));
       return { id: b64u(credId), rawId: b64u(credId), type: 'public-key', clientExtensionResults: {}, response: { clientDataJSON: b64u(cd), attestationObject: b64u(att), transports: ['internal'] } };
     },
     get(opts, { key = privateKey, id = credId } = {}) {
       const cd = clientData('webauthn.get', opts.challenge);
       const cnt = Buffer.alloc(4); cnt.writeUInt32BE(++counter);
-      const authData = Buffer.concat([sha(RP_ID), Buffer.from([0x05]), cnt]);
+      const authData = Buffer.concat([sha(rpId), Buffer.from([0x05]), cnt]);
       const sig = sign('sha256', Buffer.concat([authData, sha(cd)]), key);
       return { id: b64u(id), rawId: b64u(id), type: 'public-key', clientExtensionResults: {}, response: { clientDataJSON: b64u(cd), authenticatorData: b64u(authData), signature: b64u(sig), userHandle: undefined } };
     }
@@ -173,6 +173,17 @@ r = await call('/api/courses', { token: K.token }); ok(r.d.courses.length === 0,
 r = await call('/api/account', { body: {} }); const D = r.d;
 r = await call('/api/account/delete', { token: D.token, body: {} }); ok(r.s === 200, 'delete an account with no group', r);
 r = await call('/api/me', { token: D.token }); ok(r.s === 401, 'no-group account is gone', r.s);
+
+// ---- passkeys from the iPhone app: requests come from capacitor://localhost, iOS signs with the live site's origin
+const LIVE = 'https://wonkolingo.alex-l-lintz.workers.dev', appHdr = { Origin: 'capacitor://localhost' };
+const appAuth = makeAuthenticator(LIVE, new URL(LIVE).hostname);
+r = await call('/api/account', { body: {} }); const N = r.d;
+r = await call('/api/passkey/register-options', { token: N.token, body: {}, headers: appHdr }); ok(r.s === 200 && r.d.options.rp.id === 'wonkolingo.alex-l-lintz.workers.dev', 'app: register options use the live site as passkey site', r.d);
+r = await call('/api/passkey/register', { token: N.token, body: { challengeId: r.d.challengeId, response: appAuth.create(r.d.options) }, headers: appHdr }); ok(r.s === 200 && r.d.passkeys === 1, 'app: passkey registered', r);
+r = await call('/api/passkey/login-options', { body: {}, headers: appHdr }); const alo = r.d;
+r = await call('/api/passkey/login', { body: { challengeId: alo.challengeId, response: appAuth.get(alo.options) }, headers: appHdr }); ok(r.s === 200 && r.d.player.id === N.player.id, 'app: passkey sign-in', r.d);
+r = await call('/api/passkey/login-options', { body: {}, headers: appHdr }); const alo2 = r.d;
+r = await call('/api/passkey/login', { body: { challengeId: alo2.challengeId, response: makeAuthenticator(ORIGIN, RP_ID).get(alo2.options) }, headers: appHdr }); ok(r.s === 404 || r.s === 400, 'app: a passkey for another site is refused', r);
 
 // ---- the old flow still works for a page that hasn't updated
 r = await call('/api/join', { body: { code, name: 'Legacy' } }); ok(r.s === 200 && r.d.token, 'signed-out join still creates a player', r);
