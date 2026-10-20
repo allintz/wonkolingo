@@ -187,6 +187,12 @@ r = await call('/api/passkey/login', { body: { challengeId: alo.challengeId, res
 r = await call('/api/passkey/login-options', { body: {}, headers: appHdr }); const alo2 = r.d;
 r = await call('/api/passkey/login', { body: { challengeId: alo2.challengeId, response: makeAuthenticator(ORIGIN, RP_ID).get(alo2.options) }, headers: appHdr }); ok(r.s === 404 || r.s === 400, 'app: a passkey for another site is refused', r);
 
+// ---- removing a question records feedback
+r = await call('/api/feedback/remove', { token: S.token, body: { course: 'lingo', card: 'u0l0#0', question: 'Q', reason: 'trivia' } }); ok(r.s === 200, 'removal feedback recorded', r);
+r = await call('/api/feedback/remove', { token: S.token, body: { course: 'lingo', card: 'u0l0#0', question: 'Q', reason: 'restored' } }); ok(r.s === 200, 'restore recorded', r);
+r = await call('/api/feedback/remove', { token: S.token, body: { course: 'lingo', card: 'u0l0#0', reason: 'hate it' } }); ok(r.s === 400, 'unknown reason refused', r);
+r = await call('/api/feedback/remove', { token: S.token, body: { reason: 'trivia' } }); ok(r.s === 400, 'missing card refused', r);
+
 // ---- the old flow still works for a page that hasn't updated
 r = await call('/api/join', { body: { code, name: 'Legacy' } }); ok(r.s === 200 && r.d.token, 'signed-out join still creates a player', r);
 

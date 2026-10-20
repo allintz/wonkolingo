@@ -126,3 +126,14 @@ CREATE TABLE IF NOT EXISTS blocks (
   created_at INTEGER NOT NULL,
   PRIMARY KEY (player_id, blocked_id)
 );
+-- Questions players remove from their own reviews, with the reason they picked: feedback for fixing courses (scripts/removals.sh).
+CREATE TABLE IF NOT EXISTS card_feedback (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  who TEXT NOT NULL,
+  course TEXT NOT NULL,
+  card TEXT NOT NULL,
+  question TEXT NOT NULL,
+  reason TEXT NOT NULL,
+  created_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_card_feedback_card ON card_feedback(card, created_at);

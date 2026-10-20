@@ -510,6 +510,15 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .remctl input[type=time]:disabled { opacity: .45; }
 .remask { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; margin: 4px 0 8px; }
 .remask p { margin: 0; }
+/* Remove this question */
+.rmbox { display: grid; gap: 8px; margin-top: 4px; }
+.rmbox p { margin: 0; }
+.rmwhy { display: flex; flex-wrap: wrap; gap: 8px; }
+.chipbtn { background: var(--surface); border: 1px solid var(--line-deep); border-radius: 99px; padding: 6px 12px; font: 700 13px/1.2 var(--f-ui); color: var(--fg); }
+.chipbtn:hover { border-color: var(--brass); }
+.rmlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.rmlist li { display: grid; gap: 4px; padding: 12px 14px; background: var(--surface); border-radius: 12px; }
+.rmlist li p { margin: 0; }
 /* Sign-up screen */
 .gate { z-index: 30; }
 .gate-in .gate-fld { width: 100%; max-width: 340px; text-align: left; }
@@ -572,7 +581,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
         <div class="kv"><span>Cards in your reviews</span><span id="pCards">0</span></div>
         <div class="kv"><span>Due tomorrow</span><span id="pTomorrow">0</span></div>
         <p>Keys: 1 to 4 picks an answer, Enter checks, Esc quits. On typed answers, Cmd+Enter (Ctrl+Enter) checks.</p>
-        <div class="glinks"><button class="linkbtn" id="resetBtn">Reset progress</button><a class="linkbtn" id="privLink" href="privacy.html">Privacy</a></div>
+        <div class="glinks"><button class="linkbtn" id="rmList" hidden>Removed questions</button><button class="linkbtn" id="resetBtn">Reset progress</button><a class="linkbtn" id="privLink" href="privacy.html">Privacy</a></div>
       </section>
     </section>
   </main>
@@ -618,6 +627,11 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 <section class="overlay sheet" id="repv" hidden>
   <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Problem reports</h2></div>
   <div class="stage"><div class="stage-in" id="repBody"></div></div>
+</section>
+
+<section class="overlay sheet" id="rmSheet" hidden>
+  <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Removed questions</h2></div>
+  <div class="stage"><div class="stage-in" id="rmBody"></div></div>
 </section>
 
 <div class="toast" id="toast" hidden></div>
@@ -14354,7 +14368,7 @@ function refreshDone() {
   state.done = state.done || {};
   Object.keys(COURSES).forEach(k => { const C = COURSES[k]; C.units.forEach((u, ui) => u.lessons.forEach((l, li) => {
     const lid = C.pre + 'u' + ui + 'l' + li, ids = l.items.map((it, j) => cardId(lid, j, it));
-    if (ids.length && ids.every(id => state.srs[id])) state.done[lid] = true; else delete state.done[lid];
+    if (ids.length && ids.every(id => state.srs[id] || isRemoved(id))) state.done[lid] = true; else delete state.done[lid];
   })); });
 }
 function renderHome() {
@@ -14394,8 +14408,8 @@ function renderStyleCard() {
   const st = answerStyle();
   $('#styleCard').innerHTML = `<h3>Daily sessions</h3>
     <p class="meta">Answer style</p>
-    <div class="seg"><button data-style="mixed" class="${st === 'mixed' ? 'on' : ''}">Mixed</button><button data-style="typed" class="${st === 'typed' ? 'on' : ''}">Always type</button></div>
-    <p>${st === 'mixed' ? 'New cards are multiple choice. Once you know a card, you recall it in your head, reveal the answer and rate yourself. One card you know well each session is typed and checked by AI.' : 'Every multiple-choice and short-answer card asks you to type your answer, and AI grades it. Slower, but the most practice.'}</p>
+    <div class="seg"><button data-style="mixed" class="${st === 'mixed' ? 'on' : ''}">Mixed</button><button data-style="short" class="${st === 'short' ? 'on' : ''}">Short answers</button><button data-style="typed" class="${st === 'typed' ? 'on' : ''}">Type everything</button></div>
+    <p>${st === 'mixed' ? 'New cards are multiple choice. Once you know a card, you recall it in your head, reveal the answer and rate yourself. One card you know well each session is typed and checked by AI.' : st === 'short' ? 'Short-answer cards always ask you to type your answer, and AI grades it. Multiple-choice cards stay multiple choice. More thinking per card than Mixed.' : 'Every multiple-choice and short-answer card asks you to type your answer, and AI grades it. Slower, but the most practice.'}</p>
     <p class="meta">Cards per session</p>
     <div class="seg">${[[8, '8'], [12, '12'], [20, '20'], [0, 'No limit']].map(([n, t]) => `<button data-size="${n}" class="${sessionSize() === n ? 'on' : ''}">${t}</button>`).join('')}</div>
     <p>Reviews come first, then new cards. Anything left over waits for “Keep going” or tomorrow.</p>`;
@@ -14404,7 +14418,22 @@ $('#styleCard').addEventListener('click', e => {
   const b = e.target.closest('[data-style], [data-size]'); if (!b) return;
   state.prefs = { ...(state.prefs || {}), ...(b.dataset.style ? { style: b.dataset.style } : { sessionSize: +b.dataset.size }) }; state.prefsAt = Date.now(); save(); renderStyleCard();
 });
+function renderRemoved() {
+  const idx = cardIndex(), ids = Object.keys(state.removed || {}).filter(isRemoved).sort((x, y) => state.removed[y].at - state.removed[x].at);
+  const label = Object.fromEntries(RM_REASONS);
+  $('#rmBody').innerHTML = ids.length ? `<p>These won’t come up in your reviews or lessons. Restore one to get it back.</p><ul class="rmlist">${ids.map(id => {
+    const c = idx.get(id), r = state.removed[id];
+    return `<li><div><b>${c ? esc(COURSES[c.course].name) : 'A course that’s no longer here'}</b><span class="meta"> · ${esc(label[r.reason] || 'Removed')}</span></div><p>${c ? esc(c.item.q || c.item.p || '') : ''}</p><button class="linkbtn" data-restore="${esc(id)}">Restore</button></li>`;
+  }).join('')}</ul>` : '<p>No removed questions.</p>';
+}
+$('#rmList').addEventListener('click', () => { renderRemoved(); openSheet('#rmSheet'); });
+$('#rmBody').addEventListener('click', e => {
+  const t = e.target.closest('[data-restore]'); if (!t) return;
+  restoreCard(t.dataset.restore); renderRemoved(); renderHome(); toast('Back in your reviews.');
+});
 function renderProgress() {
+  const nRm = Object.keys(state.removed || {}).filter(isRemoved).length;
+  $('#rmList').hidden = !nRm; $('#rmList').textContent = `Removed questions (${nRm})`;
   let done = 0, total = 0;
   Object.keys(COURSES).forEach(k => { const p = courseProgress(k); done += p.done; total += p.total; });
   $('#pDone').textContent = done + ' / ' + total;
@@ -14426,7 +14455,7 @@ $('#path').addEventListener('click', e => {
 
 function renderPotd() {
   if (!COURSES[state.course]) { $('#potd').hidden = true; return; }
-  const pool = LESSONS.flatMap(l => l.items).filter(it => it.t === 'mc' && (state.course === 'lingo' ? it.q : true));
+  const pool = LESSONS.flatMap(l => l.items.filter((it, k) => !isRemoved(cardId(l.id, k, it)))).filter(it => it.t === 'mc' && (state.course === 'lingo' ? it.q : true));
   const day = Math.floor(new Date(dstr(new Date()) + 'T12:00:00').getTime() / 864e5);
   // A course with no multiple-choice cards has no question of the day; throwing here would stop the rest of startup.
   if (!pool.length) { $('#potd').hidden = true; return; }
@@ -14441,7 +14470,7 @@ function renderPotd() {
 let resetArmed = false;
 $('#resetBtn').onclick = () => {
   if (!resetArmed) { resetArmed = true; $('#resetBtn').textContent = 'Click again to erase all progress'; setTimeout(() => { resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; }, 4000); return; }
-  state = { done: {}, xp: 0, xpBase: 0, xpBy: {}, resetAt: Date.now(), streak: 0, last: null, jumped: [], course: state.course, srs: {}, hints: {}, activeDays: [], settings: state.settings, settingsAt: Date.now(), mix: state.mix, mixAt: state.mixAt }; save(); resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; renderHome(); toast('Progress reset.');
+  state = { done: {}, xp: 0, xpBase: 0, xpBy: {}, resetAt: Date.now(), removed: state.removed, streak: 0, last: null, jumped: [], course: state.course, srs: {}, hints: {}, activeDays: [], settings: state.settings, settingsAt: Date.now(), mix: state.mix, mixAt: state.mixAt }; save(); resetArmed = false; $('#resetBtn').textContent = 'Reset progress'; renderHome(); toast('Progress reset.');
 };
 
 /* ---------- spaced repetition: FSRS-4.5 with its published default weights ---------- */
@@ -14480,6 +14509,8 @@ function courseCards(key) {
   C.units.forEach((u, ui) => u.lessons.forEach((l, li) => { const lid = C.pre + 'u' + ui + 'l' + li; l.items.forEach((it, k) => out.push({ id: cardId(lid, k, it), course: key, lessonId: lid, item: it })); }));
   return out;
 }
+// Questions the player removed from their own reviews (state.removed[id] = { at, reason } or { at, off: true } once restored).
+const isRemoved = id => { const r = (state.removed || {})[id]; return !!(r && !r.off); };
 function cardIndex() { const m = new Map(); Object.keys(COURSES).forEach(k => courseCards(k).forEach(c => m.set(c.id, c))); return m; }
 // Which course a card id belongs to, from its lesson-id prefix. Works before group courses have loaded.
 function courseKeyForCard(id) {
@@ -14497,16 +14528,16 @@ function setPerDay(k, n) { state.mix = state.mix || {}; state.mix[k] = { on: inM
 // Reviews come only from courses in the daily mix; courses switched off keep their schedule and pick up again when switched back on.
 function dueCards(today) {
   const idx = cardIndex();
-  return Object.entries(state.srs).filter(([id, c]) => c.due <= today && idx.has(id) && inMix(idx.get(id).course))
+  return Object.entries(state.srs).filter(([id, c]) => c.due <= today && idx.has(id) && !isRemoved(id) && inMix(idx.get(id).course))
     .map(([id, c]) => ({ ...idx.get(id), r: retrievability(Math.max(0, dayDiff(c.last, today)), c.s) }))
     .sort((a, b) => a.r - b.r);
 }
-const newCardsAvailable = (k = state.course) => courseCards(k).filter(c => !state.srs[c.id]);
+const newCardsAvailable = (k = state.course) => courseCards(k).filter(c => !state.srs[c.id] && !isRemoved(c.id));
 // Each course in the mix adds up to its own number of new cards a day.
 const newAllowanceToday = (today, k) => Math.max(0, perDay(k) - (state.newDay === today ? ((state.newCounts || {})[k] || 0) : 0));
 function markLessonDone(lessonId, course) {
   const cards = courseCards(course).filter(c => c.lessonId === lessonId);
-  if (cards.length && cards.every(c => state.srs[c.id])) state.done[lessonId] = true;
+  if (cards.length && cards.every(c => state.srs[c.id] || isRemoved(c.id))) state.done[lessonId] = true;
 }
 // Consecutive passes on a card. Older saves lack it, so estimate from reviews and lapses.
 const okOf = c => !c ? 0 : c.ok !== undefined ? c.ok : c.lapses ? 1 : (c.reps || 0);
@@ -14539,8 +14570,9 @@ function show(id) {
 function newRun(extra) { return { graded: new Set(), xp: 0, reviewed: 0, remembered: 0, newSeen: 0, correct: 0, wrong: new Set(), cur: null, sel: null, phase: 'answer', ...extra }; }
 function startLesson(i, challenge) {
   const L = LESSONS[i];
-  run = newRun({ mode: 'lesson', challenge: challenge || null, idx: i, total: L.items.length,
-    queue: L.items.map((it, k) => ({ ...it, key: k, _card: cardId(L.id, k, it), _course: state.course, _lesson: L.id })) });
+  const queue = L.items.map((it, k) => ({ ...it, key: k, _card: cardId(L.id, k, it), _course: state.course, _lesson: L.id })).filter(q => !isRemoved(q._card));
+  if (!queue.length) { toast('You removed every question in this lesson. Restore them in Me.'); return; }
+  run = newRun({ mode: 'lesson', challenge: challenge || null, idx: i, total: queue.length, queue });
   show('#lesson');
   nextItem();
 }
@@ -14562,7 +14594,7 @@ function startSession(extra) {
   run = newRun({ mode: 'session', total: cards.length,
     queue: cards.map((c, k) => ({ ...c.item, key: k, _card: c.id, _course: c.course, _lesson: c.lessonId, _new: !state.srs[c.id] })) });
   // Mixed style: one card you know well comes back as a typed, AI-checked answer, to keep self-ratings honest.
-  if (answerStyle() === 'mixed') {
+  if (answerStyle() !== 'typed') {
     const pool = run.queue.filter(q => !q._new && (q.t === 'recall' || q.t === 'mc') && okOf(state.srs[q._card]) >= 3);
     if (pool.length) pool[Math.floor(Math.random() * pool.length)]._spot = true;
   }
@@ -14606,7 +14638,10 @@ const sessionSize = () => { const n = state.prefs && state.prefs.sessionSize; re
 const hasChoice = it => it.t === 'mc' || !!(it.t === 'recall' && it.choice && Array.isArray(it.choice.o) && it.choice.o.length >= 2);
 function askMode(it) {
   if (it.t === 'match' || it.t === 'order') return 'native';
-  if (it._choices || it._retry) return hasChoice(it) ? 'choice' : (it.t === 'recall' ? 'reveal' : 'choice');
+  if (it._choices) return hasChoice(it) ? 'choice' : (it.t === 'recall' ? 'reveal' : 'choice');
+  // "Short answers": short-answer cards are typed every time, retries too; multiple-choice cards work as in Mixed.
+  if (answerStyle() === 'short' && it.t === 'recall') return 'typed';
+  if (it._retry) return hasChoice(it) ? 'choice' : (it.t === 'recall' ? 'reveal' : 'choice');
   if (answerStyle() === 'typed') return 'typed';
   if (it._spot) return 'typed';
   const ok = okOf(state.srs[it._card]);
@@ -14709,7 +14744,31 @@ function check() {
   }
 }
 
-function reportHTML(it) { return (COURSES[it._course] || {}).group && G ? '<div class="repbox"><button class="linkbtn" id="repBtn">Report a problem</button></div>' : ''; }
+function reportHTML(it) { return ((COURSES[it._course] || {}).group && G ? '<div class="repbox"><button class="linkbtn" id="repBtn">Report a problem</button></div>' : '') + removeHTML(it); }
+// "Remove this question": takes it out of the player's own reviews, and the reason goes to the server as course feedback.
+const RM_REASONS = [['trivia', 'Just trivia'], ['wrong', 'Wrong or misleading'], ['unclear', 'Confusing'], ['known', 'I know this already'], ['other', 'Other']];
+function removeHTML(it) { return it._card ? '<div class="rmbox"><button class="linkbtn" id="rmBtn">Remove this question</button></div>' : ''; }
+function removeCard(it, reason) {
+  state.removed = state.removed || {};
+  state.removed[it._card] = { at: Date.now(), reason };
+  for (let i = run.queue.length - 1; i >= 0; i--) if (run.queue[i]._card === it._card) run.queue.splice(i, 1);
+  save();
+  const question = (it.q ? it.q + ' ' : '') + (it.p || '');
+  apiCall('/api/feedback/remove', { course: it._course, card: it._card, question, reason }).catch(() => {});
+  // Group courses: tell the author when someone found a question wrong or confusing.
+  const C = COURSES[it._course];
+  if (C && C.group && G && (reason === 'wrong' || reason === 'unclear'))
+    apiCall('/api/courses/' + C.slug + '/reports', { lessonId: it._lesson, itemText: question.slice(0, 300), note: 'A player removed this question: ' + (reason === 'wrong' ? 'wrong or misleading' : 'confusing') + '.' }).catch(() => {});
+}
+function restoreCard(id) {
+  state.removed = state.removed || {};
+  const was = state.removed[id];
+  state.removed[id] = { at: Date.now(), off: true };
+  save();
+  const c = cardIndex().get(id);
+  apiCall('/api/feedback/remove', { course: (c && c.course) || courseKeyForCard(id) || 'unknown', card: id, question: c ? (c.item.q ? c.item.q + ' ' : '') + (c.item.p || '') : '', reason: 'restored' }).catch(() => {});
+  return was;
+}
 function newsHTML(it) { return it.news ? `<div class="news"><span class="news-k">In the news</span><p class="news-h">${esc(it.news.h)}</p><span class="news-d">${esc(it.news.d)} · paraphrased</span></div>` : ''; }
 
 /* ---------- typed answers: confidence first, then an AI grade (or a self-grade fallback) ---------- */
@@ -15636,6 +15695,10 @@ $('#repBody').addEventListener('click', async e => {
 $('#fb').addEventListener('click', async e => {
   const t = e.target.closest('button'); if (!t || !run) return;
   const C = COURSES[state.course];
+  if (t.id === 'rmBtn') { t.parentElement.innerHTML = `<p class="meta">Why remove it? Your answer helps fix the course.</p><div class="rmwhy">${RM_REASONS.map(([k, l]) => `<button class="chipbtn" data-rm="${k}">${l}</button>`).join('')}</div><button class="linkbtn" id="rmCancel">Keep it</button>`; return; }
+  if (t.id === 'rmCancel') { t.parentElement.outerHTML = removeHTML(run.cur); return; }
+  if (t.dataset.rm) { removeCard(run.cur, t.dataset.rm); t.closest('.rmbox').innerHTML = `<p class="meta">Removed. It won’t come back in your reviews. <button class="linkbtn" id="rmUndo">Undo</button></p>`; return; }
+  if (t.id === 'rmUndo') { restoreCard(run.cur._card); t.closest('.rmbox').outerHTML = removeHTML(run.cur); toast('Back in your reviews.'); return; }
   if (t.id === 'repBtn') { t.parentElement.innerHTML = '<textarea id="repNote" rows="2" maxlength="500" placeholder="What’s wrong? Include a source if you have one."></textarea><div class="row"><button class="btn ghost sm" id="repSend">Send report</button></div>'; $('#repNote').focus(); }
   if (t.id === 'repSend') {
     const note = $('#repNote').value.trim(); if (!note) return;
@@ -15655,9 +15718,9 @@ function courseProgress(key) {
 }
 function welcomeHTML() {
   return `<section class="welcome"><img class="mascot m-welcome" src="mascot/wave.webp" alt="WonkoLingo owl waving"><p class="kicker">Welcome to WonkoLingo</p><h2>Learn anything with your friends</h2>
-    <p>Pick any topic. Your AI assistant turns it into a bite-size course in a few minutes. Then you and your friends play each other’s courses and compete on streaks and points.</p>
+    <p>Start with a ready-made course on AI policy, Congress or how staffers talk. When you want something else, your AI assistant can turn any topic into a course in a few minutes, and you and your friends can play each other’s.</p>
     <ol class="steps"><li><span><b>Start a group</b> and invite friends, or just use it yourself.</span></li><li><span><b>Make a course</b> by pasting our prompt into Claude or another AI assistant.</span></li><li><span><b>Play and compete</b> on your group’s weekly leaderboard.</span></li></ol>
-    <div class="row"><button class="btn" id="wCreate">Create your first course</button><button class="btn ghost" id="wBrowse">Browse courses</button></div>${ACCT ? '' : '<p class="meta">Used WonkoLingo on another device? <button class="linkbtn" data-go="me" data-signin="1">Sign in</button></p>'}</section>`;
+    <div class="row"><button class="btn" id="wBrowse">Pick a course</button><button class="btn ghost" id="wCreate">Make your own</button></div>${ACCT ? '' : '<p class="meta">Used WonkoLingo on another device? <button class="linkbtn" data-go="me" data-signin="1">Sign in</button></p>'}</section>`;
 }
 function selectCourse(key) {
   state.course = key; save(); buildLessons(); renderHome(); renderPotd(); window.scrollTo(0, 0);
@@ -15898,7 +15961,7 @@ $('#streakBody').addEventListener('click', e => {
 
 /* ---------- sync progress to the server ---------- */
 let syncTimer = null, syncBusy = false, syncAgain = false;
-function syncPayload() { const { srs, done, jumped, activeDays, xp, xpBase, xpBy, resetAt, prefs, prefsAt, myTerms, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt } = state; return { v: 1, srs, done, jumped, activeDays, xp, xpBase, xpBy, resetAt, prefs, prefsAt, myTerms, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt }; }
+function syncPayload() { const { srs, done, jumped, activeDays, xp, xpBase, xpBy, resetAt, prefs, prefsAt, myTerms, removed, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt } = state; return { v: 1, srs, done, jumped, activeDays, xp, xpBase, xpBy, resetAt, prefs, prefsAt, myTerms, removed, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt }; }
 // Merges another device's progress into this one: the most-reviewed copy of each card wins, practice days are combined.
 function mergeStates(a, b) {
   // A reset on either device wipes the other copy's progress from before that reset.
@@ -15926,6 +15989,9 @@ function mergeStates(a, b) {
   if ((b.mixAt || 0) > (a.mixAt || 0) && b.mix) { out.mix = b.mix; out.mixAt = b.mixAt; }
   if ((b.prefsAt || 0) > (a.prefsAt || 0) && b.prefs) { out.prefs = b.prefs; out.prefsAt = b.prefsAt; }
   out.myTerms = { ...(b.myTerms || {}), ...(a.myTerms || {}) };
+  // Removed questions: the newest change to each card wins, so a restore on one device sticks on the other.
+  out.removed = { ...(b.removed || {}) };
+  Object.entries(a.removed || {}).forEach(([id, r]) => { if (!out.removed[id] || (r.at || 0) >= (out.removed[id].at || 0)) out.removed[id] = r; });
   out.hints = { ...(b.hints || {}), ...(a.hints || {}) };
   out.accepted = { ...(b.accepted || {}), ...(a.accepted || {}) };
   return out;

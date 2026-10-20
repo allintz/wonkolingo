@@ -36,7 +36,7 @@ export async function newSession(env, playerId, label) {
   await env.DB.prepare('INSERT INTO sessions (player_id, key_hash, label, created_at) VALUES (?, ?, ?, ?)').bind(playerId, await sha256(secret), String(label || '').slice(0, 40), Date.now()).run();
   return playerId + '.' + secret;
 }
-async function takeRate(env, key, max, period) {
+export async function takeRate(env, key, max, period) {
   const bucket = period === 'hour' ? new Date().toISOString().slice(0, 13) : new Date().toISOString().slice(0, 10);
   const r = await env.DB.prepare('SELECT n FROM rate_limits WHERE key = ? AND day = ?').bind(key, bucket).first();
   if (r && r.n >= max) return false;
@@ -142,7 +142,7 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
     for (const sql of ['DELETE FROM courses WHERE author_id = ?', 'DELETE FROM reports WHERE player_id = ?', 'DELETE FROM completions WHERE player_id = ?',
       'DELETE FROM player_state WHERE player_id = ?', 'DELETE FROM sessions WHERE player_id = ?', 'DELETE FROM passkeys WHERE player_id = ?',
       'DELETE FROM link_codes WHERE player_id = ?', 'DELETE FROM webauthn_challenges WHERE player_id = ?', 'DELETE FROM grade_usage WHERE player_id = ?',
-      'DELETE FROM disputes WHERE who = ?']) stmts.push(env.DB.prepare(sql).bind(id));
+      'DELETE FROM disputes WHERE who = ?', 'DELETE FROM card_feedback WHERE who = ?']) stmts.push(env.DB.prepare(sql).bind(id));
     stmts.push(env.DB.prepare('DELETE FROM blocks WHERE player_id = ? OR blocked_id = ?').bind(id, id), env.DB.prepare('DELETE FROM players WHERE id = ?').bind(id));
     if (me.solo) stmts.push(env.DB.prepare('DELETE FROM groups WHERE code = ? AND solo = 1').bind(me.group_code));
     await env.DB.batch(stmts);

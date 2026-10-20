@@ -5,7 +5,8 @@
 import { validateCourse, COURSE_LIMITS, computeStreak } from './course-format.js';
 import Anthropic from '@anthropic-ai/sdk';
 import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor, defineTerm, moderate } from './grade.js';
-import { randomString, sha256, accountInfo, publicAccountApi, accountApi } from './accounts.js';
+import { randomString, sha256, accountInfo, publicAccountApi, accountApi, takeRate } from './accounts.js';
+const REMOVE_REASONS = ['trivia', 'wrong', 'unclear', 'known', 'other', 'restored'];
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -121,6 +122,16 @@ async function api(req, env, path) {
 
   const acct = await publicAccountApi(req, env, path, { json, fail, body, cleanName });
   if (acct) return acct;
+
+  // A player removed a question from their reviews (or put it back). Kept as course feedback; see scripts/removals.sh.
+  if (m === 'POST' && path === '/api/feedback/remove') {
+    const who = await graderId(req, env), b = await body(req);
+    const reason = String(b.reason || ''), card = String(b.card || '').slice(0, 120), course = String(b.course || '').slice(0, 60);
+    if (!REMOVE_REASONS.includes(reason) || !card || !course) return fail('Bad feedback.');
+    if (!await takeRate(env, 'rm:' + who, 300, 'day')) return fail('That’s a lot of removals today.', 429);
+    await env.DB.prepare('INSERT INTO card_feedback (who, course, card, question, reason, created_at) VALUES (?, ?, ?, ?, ?, ?)').bind(who, course, card, cleanName(b.question, 400), reason, Date.now()).run();
+    return json({ ok: true });
+  }
 
   // Grading and hints work without a group: visitors are counted by a hash of their IP for the daily cap.
   if (m === 'POST' && (path === '/api/grade' || path === '/api/hint' || path === '/api/dispute' || path === '/api/define')) {
