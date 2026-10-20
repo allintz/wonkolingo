@@ -59,6 +59,8 @@ function makeAuthenticator(origin = ORIGIN, rpId = RP_ID) {
 let r = await call('/api/account', { body: {} });
 ok(r.s === 200 && r.d.token && r.d.player.name === 'Player' && r.d.group === null, 'new account without a group', r);
 const S = r.d;
+r = await call('/api/account', { body: { name: '  Dana <b>Q</b>  ' } }); ok(r.s === 200 && r.d.player.name === 'Dana bQ/b', 'new account with a display name (cleaned)', r.d);
+r = await call('/api/me', { token: r.d.token }); ok(r.d.player.name === 'Dana bQ/b', 'me returns the sign-up name', r.d);
 r = await call('/api/me', { token: S.token }); ok(r.s === 200 && r.d.group === null && r.d.code === null && r.d.passkeys === 0 && r.d.player.id === S.player.id, 'me: no group', r.d);
 r = await call('/api/state', { token: S.token, body: { state: { srs: { 'au0l0#0': { reps: 1 } }, activeDays: [today] } } }); ok(r.s === 200, 'solo player saves progress', r);
 r = await call('/api/state', { token: S.token }); ok(r.d.state && r.d.state.srs['au0l0#0'], 'solo player loads progress', r.d);

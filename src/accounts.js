@@ -4,6 +4,7 @@ import {
   generateRegistrationOptions, verifyRegistrationResponse,
   generateAuthenticationOptions, verifyAuthenticationResponse,
 } from '@simplewebauthn/server';
+import { moderate } from './grade.js';
 
 const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 const ID_ALPHABET = 'abcdefghijkmnpqrstuvwxyz23456789';
@@ -69,15 +70,17 @@ async function playerById(env, id) {
 }
 
 // Routes that work without a signed-in player. Returns a Response, or null if the path isn't ours.
-export async function publicAccountApi(req, env, path, { json, fail, body }) {
+export async function publicAccountApi(req, env, path, { json, fail, body, cleanName }) {
   const m = req.method;
-  // A new account with no group. Created by the app the first time a player has progress worth saving.
+  // A new account with no group, made on the sign-up screen with the player's display name.
   if (m === 'POST' && path === '/api/account') {
+    const name = cleanName((await body(req)).name, 24) || 'Player';
+    if (name !== 'Player') { const mod = await moderate(env, `Display name: ${name}`); if (!mod.allowed) return fail('That name can’t be used: ' + mod.reason, 422); }
     if (!await takeRate(env, await ipKey(req, 'acct'), ACCOUNT_LIMITS.newAccountsPerIpPerDay, 'day')) return fail('Too many new accounts from this network today. Try again tomorrow.', 429);
     const code = await createHomeGroup(env);
     const id = randomString(10, ID_ALPHABET), secret = randomString(24, SECRET_ALPHABET);
-    await env.DB.prepare('INSERT INTO players (id, group_code, name, key_hash, created_at) VALUES (?, ?, ?, ?, ?)').bind(id, code, 'Player', await sha256(secret), Date.now()).run();
-    return json({ token: id + '.' + secret, player: { id, name: 'Player' }, group: null, passkeys: 0 });
+    await env.DB.prepare('INSERT INTO players (id, group_code, name, key_hash, created_at) VALUES (?, ?, ?, ?, ?)').bind(id, code, name, await sha256(secret), Date.now()).run();
+    return json({ token: id + '.' + secret, player: { id, name }, group: null, passkeys: 0 });
   }
   // Sign in with a code shown on a device that is already signed in.
   if (m === 'POST' && path === '/api/link/claim') {
@@ -167,7 +170,7 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
     if (existing.results.length >= ACCOUNT_LIMITS.passkeysPerPlayer) return fail('This account already has the most passkeys allowed.', 403);
     const opts = await generateRegistrationOptions({
       rpName: 'WonkoLingo', rpID: site.rpID, userID: new TextEncoder().encode(me.id),
-      userName: (me.solo ? 'WonkoLingo player' : me.name) + ' (' + me.id.slice(0, 4) + ')', userDisplayName: me.name,
+      userName: (me.name && me.name !== 'Player' ? me.name : 'WonkoLingo player') + ' (' + me.id.slice(0, 4) + ')', userDisplayName: me.name,
       attestationType: 'none', authenticatorSelection: { residentKey: 'required', userVerification: 'preferred' },
       excludeCredentials: existing.results.map(c => ({ id: c.id, transports: JSON.parse(c.transports || '[]') })),
     });

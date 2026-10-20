@@ -510,6 +510,14 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .remctl input[type=time]:disabled { opacity: .45; }
 .remask { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; margin: 4px 0 8px; }
 .remask p { margin: 0; }
+/* Sign-up screen */
+.gate { z-index: 30; }
+.gate-in .gate-fld { width: 100%; max-width: 340px; text-align: left; }
+.gate-in .gate-fld input { font-size: 18px; padding: 10px 12px; }
+.gate-in .glinks { justify-content: center; }
+.gate-in .okbox { text-align: left; }
+.gate-in .linkbtn { justify-self: center; }
+.gate-in .gerr { color: var(--bad); font-weight: 700; }
 </style>
 
 <header class="top">
@@ -586,6 +594,10 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 
 <section class="overlay result" id="result" hidden>
   <div class="result-in" id="resultIn"></div>
+</section>
+
+<section class="overlay result gate" id="gate" hidden>
+  <div class="result-in gate-in" id="gateIn"></div>
 </section>
 
 <section class="overlay sheet" id="addc" hidden>
@@ -14557,7 +14569,7 @@ function startSession(extra) {
   show('#lesson');
   nextItem();
 }
-function goHome() { if (window.glHide) glHide(); run = null; show(null); if (pendingCourses) { const p = pendingCourses; pendingCourses = null; installCourses(p); } renderHome(); window.scrollTo(0, 0); }
+function goHome() { if (window.glHide) glHide(); run = null; show(null); if (needGate()) showGate('signin'); if (pendingCourses) { const p = pendingCourses; pendingCourses = null; installCourses(p); } renderHome(); window.scrollTo(0, 0); }
 // Quitting mid-lesson keeps the XP and practice day for cards already answered, since their reviews were already rescheduled.
 function quitRun() { if (run && run.graded.size && !run.banked && $('#result').hidden) { run.banked = true; addXP(run.xp); bumpStreak(); save(); } goHome(); }
 $('#quitBtn').onclick = quitRun;
@@ -15081,12 +15093,13 @@ let acctUI = { mode: '', busy: false, err: '', link: null, recShown: false, outA
 const PASSKEY_OK = NATIVE || (!!(window.PublicKeyCredential && navigator.credentials) && (location.origin === SITE || location.hostname === 'localhost'));
 const CLOUD = '<path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.9 11a3.75 3.75 0 0 1-.4 7.5z"/>';
 function hasProgress() { return Object.keys(state.srs || {}).length > 0 || xpTotal(state) > 0 || Object.keys(state.myTerms || {}).length > 0; }
-// The first time there's progress worth keeping, this device gets its own account.
-function ensureAccount() {
+// Makes this device's account (from the sign-up screen). Progress already on the device goes into it.
+function ensureAccount(name) {
   if (ACCT) return Promise.resolve(ACCT);
-  if (!acctPending) acctPending = apiCall('/api/account', {}).then(d => {
+  if (!acctPending) acctPending = apiCall('/api/account', { name }).then(d => {
     ACCT = { token: d.token, player: d.player, passkeys: 0 }; saveA();
     state.owner = d.player.id; save(true);
+    renderGroup(); // a fresh form, so the display name defaults to this account's
     if (VIEW === 'me' && !run) renderAcctCard();
     return ACCT;
   }).finally(() => { acctPending = null; });
@@ -15107,12 +15120,13 @@ async function refreshAccount() {
     if (VIEW === 'me' && !run) renderAcctCard();
   } catch (e) { if (e.status === 401) { acctLost(); if (!run) renderHome(); } }
 }
-// The server no longer accepts this device's sign-in. Keep the progress here; it saves to a new account on the next change.
+// The server no longer accepts this device's sign-in. Keep the progress here and ask the player to sign in again.
 function acctLost() {
   if (!ACCT) return;
   ACCT = null; G = null; board = null; saveA(); saveG(); delete state.owner; save(true);
-  acctUI.err = 'This device’s sign-in stopped working. Sign in with a passkey, a code or your recovery code to get your account back.' + (hasProgress() ? ' Progress on this device is kept.' : '');
+  gateUI.err = 'This device’s sign-in stopped working. Sign in with a passkey, a code or your recovery code to get your account back.' + (hasProgress() ? ' Progress on this device is kept.' : '');
   installCourses([]);
+  if (!run) showGate('signin');
 }
 function setSync(s) { syncState = s; renderSaved(); const st = document.getElementById('acctStatus'); if (st) st.textContent = acctStatusText(); }
 function renderSaved() {
@@ -15124,7 +15138,7 @@ function renderSaved() {
   el.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${CLOUD}${s === 'saved' ? '<path d="m9.5 13.5 2 2 3.5-4"/>' : s === 'offline' ? '<path d="M4 4l16 16"/>' : ''}</svg><span class="svt">${label}</span>`;
 }
 function acctStatusText() {
-  if (!ACCT && !hasProgress()) return 'Your progress saves to an account automatically once you answer your first cards. No email or password needed.';
+  if (!ACCT) return 'You’re not signed in, so progress is kept on this device only.';
   if (syncState === 'offline') return 'Can’t reach the server right now. Your progress is kept on this device and saves to your account when you’re back online.';
   if (syncState === 'saving' || !ACCT) return 'Saving your progress…';
   return 'Your progress is saved to your account.';
@@ -15185,9 +15199,102 @@ function signOut(msg) {
   state = blankState(); save(true); setSync('saved');
   Object.assign(acctUI, { mode: '', merge: null, link: null, recShown: false, outArmed: false, delArmed: false, err: '' });
   try { if (Native) Native.notes.getPending().then(p => p.notifications.length && Native.notes.cancel({ notifications: p.notifications.map(n => ({ id: n.id })) })); } catch (e) {}
-  installCourses([]);
+  installCourses([]); renderGroup();
   toast(msg || 'Signed out. This device is cleared.');
+  showGate();
 }
+
+/* ---------- sign-up screen: every device makes an account or signs in before using the app ---------- */
+let gateUI = { step: 'welcome', busy: false, err: '' };
+// Set only when the server can't be reached to make an account, so the app stays usable offline; asked again next launch.
+let gateOffline = false;
+function needGate() { return !ACCT && !gateOffline; }
+function showGate(step) {
+  gateUI.step = step || 'welcome'; gateUI.busy = false;
+  $('#gate').hidden = false; document.body.classList.add('in-lesson'); renderGate();
+}
+function hideGate() {
+  $('#gate').hidden = true; gateUI.err = ''; gateUI.step = 'welcome';
+  if ($('#lesson').hidden && $('#result').hidden) document.body.classList.remove('in-lesson');
+  renderHome();
+}
+function renderGate() {
+  const g = gateUI, el = $('#gateIn'), dis = g.busy ? ' disabled' : '';
+  const keep = {}; ['gtName', 'gtCode', 'gtRec'].forEach(id => { const x = document.getElementById(id); if (x) keep[id] = x.value; });
+  const owl = m => `<img class="mascot m-result" src="mascot/${m}.webp" alt="">`;
+  let h = '';
+  if (g.step === 'welcome') {
+    h = `${owl('wave')}<h2>Welcome to WonkoLingo</h2><p>Learn policy a few minutes a day, with friends. Make an account so your progress is saved and follows you to any device. No email or password.</p>
+      ${joinParam ? '<p class="meta">You’ve been invited to a group. Make an account or sign in, then you can join it.</p>' : ''}
+      <div class="rbtns"><button class="btn" id="gtNew"${dis}>Create an account</button><button class="btn ghost" id="gtHave"${dis}>I already have an account</button></div>`;
+  } else if (g.step === 'name') {
+    h = `${owl('think')}<h2>What should we call you?</h2><p>Friends in your groups see this name. A nickname is fine.</p>
+      <label class="fld gate-fld"><span>Display name</span><input id="gtName" maxlength="24" autocomplete="nickname" autocapitalize="words" spellcheck="false"></label>
+      <div class="rbtns"><button class="btn" id="gtMake"${dis}>Continue</button><button class="btn ghost" id="gtBack"${dis}>Back</button></div>`;
+  } else if (g.step === 'passkey') {
+    h = `${owl('cheer')}<h2>Save a passkey</h2><p>Then you can sign in on your other devices with Face ID, Touch ID or your device PIN. There’s nothing to remember.</p>
+      <div class="rbtns"><button class="btn" id="gtPk"${dis}>Save a passkey</button></div>`;
+  } else if (g.step === 'merge') {
+    const n = Object.keys(state.srs || {}).length;
+    h = `${owl('think')}<h2>Keep this device’s progress?</h2><div class="okbox"><p>This device has progress (${n} card${n === 1 ? '' : 's'} in your reviews) that isn’t in the account you signed in to. Add it to that account?</p></div>
+      <div class="rbtns"><button class="btn" data-merge="1"${dis}>Add it</button><button class="btn ghost" data-merge="0"${dis}>Leave it out</button></div>`;
+  } else {
+    const rec = g.step === 'recovery';
+    h = `${owl('read')}<h2>Sign in</h2>${PASSKEY_OK && !rec ? `<div class="rbtns"><button class="btn" id="gtPkIn"${dis}>Sign in with a passkey</button></div><p class="meta">Or enter a code from a device where you’re signed in (Me, then Account, then “Sign in on another device”).</p>` : rec ? '' : '<p>Enter a code from a device where you’re signed in (Me, then Account, then “Sign in on another device”).</p>'}
+      ${rec ? `<label class="fld gate-fld"><span>Recovery code</span><input id="gtRec" autocomplete="off" autocapitalize="off" spellcheck="false"></label><div class="rbtns"><button class="btn ghost" id="gtRecGo"${dis}>Sign in</button></div>`
+        : `<label class="fld gate-fld"><span>Sign-in code</span><input id="gtCode" maxlength="9" placeholder="ABCD-EFGH" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false"></label><div class="rbtns"><button class="btn ghost" id="gtCodeGo"${dis}>Sign in with code</button></div>`}
+      <div class="glinks"><button class="linkbtn" id="gtRecMode">${rec ? 'Use a sign-in code instead' : 'Use a recovery code instead'}</button><button class="linkbtn" id="gtBack">Back</button></div>`;
+  }
+  if (g.err) h += `<p class="gerr">${g.err}</p>`;
+  if (g.err && g.step === 'passkey') h += `<button class="linkbtn" id="gtLater">Do this later in Me</button>`;
+  if (g.offerOffline) h += `<button class="linkbtn" id="gtOffline">Continue offline for now</button>`;
+  el.innerHTML = h;
+  Object.entries(keep).forEach(([id, v]) => { const x = document.getElementById(id); if (x) x.value = v; });
+  const f = el.querySelector('input'); if (f && !g.busy && !('ontouchstart' in window)) f.focus();
+}
+function gateSignedIn(d) { beginSignIn(d); if (acctUI.merge) gateUI.step = 'merge'; else hideGate(); }
+$('#gate').addEventListener('click', async e => {
+  const t = e.target.closest('button'); if (!t || gateUI.busy) return;
+  const g = gateUI; g.err = ''; g.offerOffline = false;
+  const step = async fn => {
+    g.busy = true; renderGate();
+    try { await fn(); } catch (err) { g.err = acctErr(err); g.offerOffline = err instanceof TypeError && !ACCT; }
+    g.busy = false; if (!$('#gate').hidden) renderGate();
+  };
+  if (t.id === 'gtNew') { g.step = 'name'; renderGate(); return; }
+  if (t.id === 'gtHave') { g.step = 'signin'; renderGate(); return; }
+  if (t.id === 'gtBack') { g.step = 'welcome'; renderGate(); return; }
+  if (t.id === 'gtRecMode') { g.step = g.step === 'recovery' ? 'signin' : 'recovery'; renderGate(); return; }
+  if (t.id === 'gtLater' || t.id === 'gtOffline') { if (t.id === 'gtOffline') gateOffline = true; hideGate(); return; }
+  if (t.dataset.merge) { completeSignIn(acctUI.merge, t.dataset.merge === '1'); hideGate(); return; }
+  if (t.id === 'gtMake') step(async () => {
+    const name = ($('#gtName').value || '').trim();
+    if (!name) throw new Error('Pick a name to show friends.');
+    await ensureAccount(name); syncNow(); toast('Account created.');
+    if (PASSKEY_OK) g.step = 'passkey'; else hideGate();
+  });
+  if (t.id === 'gtPk') step(async () => { await addPasskey(); hideGate(); });
+  if (t.id === 'gtPkIn') step(async () => {
+    const o = await apiCall('/api/passkey/login-options', {});
+    const resp = await passkeyGet(o.options);
+    gateSignedIn(await apiCall('/api/passkey/login', { challengeId: o.challengeId, response: resp }));
+  });
+  if (t.id === 'gtCodeGo') step(async () => {
+    const code = ($('#gtCode').value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (code.length !== 8) throw new Error('The code has 8 letters and numbers, like ABCD-EFGH.');
+    gateSignedIn(await apiCall('/api/link/claim', { code }));
+  });
+  if (t.id === 'gtRecGo') step(async () => {
+    const tok = ($('#gtRec').value || '').trim();
+    if (!/^[a-z0-9]+\.[A-Za-z0-9]+$/.test(tok)) throw new Error('That doesn’t look like a recovery code.');
+    const d = await apiCall('/api/me', null, tok).catch(err => { throw err.status === 401 ? new Error('That recovery code doesn’t match an account.') : err; });
+    gateSignedIn({ ...d, token: tok });
+  });
+});
+$('#gate').addEventListener('keydown', e => {
+  if (e.key !== 'Enter' || !e.target.matches('input') || gateUI.busy) return;
+  e.preventDefault(); const b = $('#gtMake') || $('#gtCodeGo') || $('#gtRecGo'); if (b) b.click();
+});
 
 function renderAcctCard() {
   const el = $('#acctCard'); if (!el) return;
@@ -15214,7 +15321,7 @@ function renderAcctCard() {
     h += `<div class="glinks"><button class="linkbtn" id="aRec">${a.recShown ? 'Hide recovery code' : 'Recovery code'}</button>${pk && PASSKEY_OK ? `<button class="linkbtn" id="aPk"${dis}>Add another passkey</button>` : ''}<button class="linkbtn" id="aSwitch">Use a different account</button><button class="linkbtn" id="aOut">${a.outArmed ? 'Click again to sign out' : 'Sign out'}</button><button class="linkbtn" id="aDel"${dis}>${a.delArmed ? 'Click again to delete' : 'Delete account'}</button></div>`;
     if (a.outArmed) h += `<p class="gerr">Signing out clears this device. ${pk ? 'Sign back in with your passkey or recovery code.' : 'Without a passkey, you’ll need your recovery code to get back in.'}</p>`;
     if (a.delArmed) h += `<p class="gerr">Deleting removes your account, progress, lesson results and any courses you wrote, on every device. It can’t be undone.</p>`;
-  } else h += `<div class="row"><button class="btn ghost sm" id="aSwitch">I already have an account</button></div>`;
+  } else h += `<div class="row"><button class="btn sm" id="aGate">Create an account or sign in</button></div>`;
   if (a.err) h += `<p class="gerr">${a.err}</p>`;
   el.innerHTML = h;
   Object.entries(keep).forEach(([id, v]) => { const x = document.getElementById(id); if (x) x.value = v; });
@@ -15222,6 +15329,7 @@ function renderAcctCard() {
 $('#acctCard').addEventListener('click', async e => {
   const t = e.target.closest('button'); if (!t || acctUI.busy) return;
   const a = acctUI; a.err = '';
+  if (t.id === 'aGate') { showGate(); return; }
   if (t.id === 'aSwitch') { a.mode = 'code'; a.outArmed = false; renderAcctCard(); const x = $('#aCodeIn'); if (x) x.focus(); return; }
   if (t.id === 'aCancel') { a.mode = ''; renderAcctCard(); return; }
   if (t.id === 'aMode') { a.mode = a.mode === 'recovery' ? 'code' : 'recovery'; renderAcctCard(); return; }
@@ -15281,7 +15389,7 @@ function renderGroup() {
     else if (gMode === 'start') form = `<label class="fld"><span>Group name</span><input id="gGroup" maxlength="40"></label><label class="fld"><span>Your display name</span><input id="gName" maxlength="24" autocomplete="nickname"></label><button class="btn sm" id="gGo">Start group</button>`;
     else form = `<label class="fld"><span>Group name</span><input id="gGroup" maxlength="40"></label><label class="fld"><span>Your display name</span><input id="gName" maxlength="24" autocomplete="nickname"></label><button class="btn sm" id="gGo">Start group</button>`;
     el.innerHTML = `<h3>Play with friends</h3><p>Join a group to see each other’s streaks and compete on weekly XP. Your display name and finished lessons are visible to the group.</p><div class="seg">${modes.map(([k, t]) => `<button data-gmode="${k}" class="${k === gMode ? 'on' : ''}">${t}</button>`).join('')}</div>${form}${gErr ? `<p class="gerr">${gErr}</p>` : ''}<p class="meta">In a group on another device? <button class="linkbtn" data-go="me" data-signin="1">Sign in to your account</button> and your group comes with you.</p>`;
-    $('#gGo').disabled = gBusy;
+    $('#gGo').disabled = gBusy; defaultGroupName();
     return;
   }
   let h = `<div class="ghead"><h3>${esc(G.groupName)}</h3><button class="linkbtn" id="gInvite">Copy invite link</button></div><div class="meta">Code ${esc(G.code)} · You’re ${esc(G.player.name)}</div>`;
@@ -15330,6 +15438,8 @@ function renderGroupKeep() {
   renderGroup();
   Object.entries(vals).forEach(([id, v]) => { const x = document.getElementById(id); if (x) x.value = v; });
 }
+// The group forms start with the name chosen at sign-up.
+function defaultGroupName() { const x = document.getElementById('gName'); if (x && !x.value && ACCT && ACCT.player.name !== 'Player') x.value = ACCT.player.name; }
 
 $('#group').addEventListener('click', e => {
   const row = e.target.closest('li[data-pid]');
@@ -15821,11 +15931,10 @@ function mergeStates(a, b) {
   return out;
 }
 async function syncNow() {
-  if (!ACCT && !hasProgress()) { renderSaved(); return; }
+  if (!ACCT) { renderSaved(); return; }
   if (syncBusy) { syncAgain = true; return; }
   syncBusy = true; clearTimeout(syncTimer); setSync('saving');
   try {
-    if (!ACCT) await ensureAccount();
     const r = await apiCall('/api/state');
     // Progress on this device belongs to whoever last synced it. Signing in as someone else (a recovery code, or a
     // second player on a shared device) loads their progress instead of merging the previous player's into it.
@@ -15844,13 +15953,14 @@ async function syncNow() {
   finally { syncBusy = false; if (syncAgain) { syncAgain = false; scheduleSync(); } }
 }
 function scheduleSync() {
-  if (!ACCT && !hasProgress()) return;
+  if (!ACCT) return;
   clearTimeout(syncTimer); if (syncState !== 'offline') setSync('saving');
   syncTimer = setTimeout(syncNow, 3000);
 }
 document.addEventListener('visibilitychange', () => { if (document.hidden) { if (ACCT) syncNow(); } else refreshAccount(); });
 
 if (API) $('#privLink').href = SITE + '/privacy.html';
+if (needGate()) showGate();
 refreshAccount();
 refreshBoard();
 loadCourses();

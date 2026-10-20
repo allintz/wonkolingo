@@ -119,7 +119,7 @@ async function api(req, env, path) {
     return json({ code, groupName: g.name, player: { id: p.id, name: pname }, token: p.token });
   }
 
-  const acct = await publicAccountApi(req, env, path, { json, fail, body });
+  const acct = await publicAccountApi(req, env, path, { json, fail, body, cleanName });
   if (acct) return acct;
 
   // Grading and hints work without a group: visitors are counted by a hash of their IP for the daily cap.
