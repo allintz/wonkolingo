@@ -575,6 +575,19 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .remctl input[type=time]:disabled { opacity: .45; }
 .remask { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; margin: 4px 0 8px; }
 .remask p { margin: 0; }
+/* Tester mode: ratings under each answer and a note on the result screen */
+.tbox { display: grid; gap: 10px; margin: 6px 0 4px; padding: 12px 14px; border: 1px dashed var(--line-deep); border-radius: 12px; text-align: left; }
+.tbox .tk { margin: 0; font: 700 12px/1 var(--f-label); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.trow { display: grid; gap: 4px; }
+.trow .tl { font-weight: 700; font-size: 14px; }
+.tscale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-width: 320px; }
+.tbtn { min-height: 40px; border: 2px solid var(--line-deep); background: transparent; color: var(--fg); border-radius: 10px; font: 800 15px/1 var(--f-ui); }
+.tbtn:hover { border-color: var(--brass); }
+.tbtn[aria-pressed="true"] { background: var(--brass-soft); border-color: var(--brass); }
+.tends { display: flex; justify-content: space-between; max-width: 320px; font-size: 12px; color: var(--muted); }
+.tbox textarea { width: 100%; }
+.tnote label { font-weight: 700; font-size: 14px; }
+.tcom p { margin: 0; }
 /* Remove this question */
 .rmbox { display: grid; gap: 8px; margin-top: 4px; }
 .rmbox p { margin: 0; }
@@ -753,8 +766,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-21-068bb4e';
-  window.WL_BUILT_AT = +'1792607129000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-21-e64b6a2';
+  window.WL_BUILT_AT = +'1792607895000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -15159,6 +15172,8 @@ function renderStyleCard() {
   const st = answerStyle();
   $('#styleCard').innerHTML = `<h3>Sessions</h3>
     <div class="sndrow"><span>Sounds</span><button class="switch" id="soundSw" aria-pressed="${soundOn()}" aria-label="Sounds"></button></div>
+    <div class="sndrow"><span>Tester mode</span><button class="switch" id="testerSw" aria-pressed="${testerOn()}" aria-label="Tester mode"></button></div>
+    ${testerOn() ? '<p class="meta">After each answer, rate how useful the question is and whether it’s pitched at the right level. Ratings go to the course makers.</p>' : ''}
     <button class="linkbtn acct-more" id="advBtn" aria-expanded="${advOpen}">${advOpen ? 'Hide advanced' : 'Advanced'}</button>
     <div id="advBody"${advOpen ? '' : ' hidden'}>
     <p class="meta">Default answer style</p>
@@ -15171,6 +15186,7 @@ function renderStyleCard() {
 }
 $('#styleCard').addEventListener('click', e => {
   if (e.target.closest('#advBtn')) { advOpen = !advOpen; renderStyleCard(); return; }
+  if (e.target.closest('#testerSw')) { state.prefs = { ...(state.prefs || {}), tester: !testerOn() }; state.prefsAt = Date.now(); save(); renderStyleCard(); return; }
   if (e.target.closest('#soundSw')) { const on = !soundOn(); state.prefs = { ...(state.prefs || {}), sound: on }; state.prefsAt = Date.now(); save(); renderStyleCard(); if (on) sfx('good'); return; }
   const b = e.target.closest('[data-style], [data-size]'); if (!b) return;
   state.prefs = { ...(state.prefs || {}), ...(b.dataset.style ? { style: b.dataset.style } : { sessionSize: +b.dataset.size }) }; state.prefsAt = Date.now(); save(); renderStyleCard();
@@ -15478,6 +15494,7 @@ function nextItem() {
   if (mode === 'choice') asChoice(it);
   if (mode === 'typed') renderTyped(it); else if (mode === 'reveal') renderReveal(it); else if (it.t === 'mc' || it._asMC) renderMC(it); else if (it.t === 'match') renderMatch(it); else renderOrder(it);
   if (run.mode === 'session' && !$('#stage .cardtag')) $('#stage').insertAdjacentHTML('afterbegin', cardTag(it)); // order cards add their own
+  if (it._card) $('#stage').insertAdjacentHTML('beforeend', testerHTML(it));
   if (it._card) $('#stage').insertAdjacentHTML('beforeend', '<div class="rmbox rmpre"><button class="linkbtn" id="rmPre">Remove this question</button></div>');
   $('#stageWrap').scrollTop = 0;
   // Each new card moves focus to its question, so screen readers read it out and Tab starts from the top of the card.
@@ -15658,7 +15675,28 @@ function sourcesHTML(id) {
   if (urls.length === 1) return `<p class="srcs"><a href="${esc(urls[0])}" target="_blank" rel="noopener" title="${esc(hostOf(urls[0]))}" aria-label="Source: ${esc(hostOf(urls[0]))}">Source</a></p>`;
   return `<p class="srcs">Sources ${urls.map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener" title="${esc(hostOf(u))}" aria-label="Source ${i + 1}: ${esc(hostOf(u))}">${i + 1}</a>`).join(' ')}</p>`;
 }
-function reportHTML(it) { return sourcesHTML(it._card) + ((COURSES[it._course] || {}).group && G ? '<div class="repbox"><button class="linkbtn" id="repBtn">Report a problem</button></div>' : '') + removeHTML(it); }
+function reportHTML(it) { return sourcesHTML(it._card) + ((COURSES[it._course] || {}).group && G ? '<div class="repbox"><button class="linkbtn" id="repBtn">Report a problem</button></div>' : '') + ($('#stage .tbox') ? '' : testerHTML(it)) + removeHTML(it); }
+// Tester mode (Me, then Sessions): two 1 to 5 ratings and an optional comment on each card, shown from the start, plus a note at the end of a
+// session. Each tap is sent on its own (the server keeps the latest per card), so skipping is fine. Review: admin.html, scripts/ratings.sh.
+function testerOn() { return !!(state.prefs && state.prefs.tester); }
+const T_LEVELS = ['Too basic', 'Basic', 'About right', 'Hard', 'Too hard'];
+function testerHTML(it) {
+  if (!testerOn() || !it._card) return '';
+  const r = (run && run.ratings && run.ratings[it._card]) || {};
+  const row = (k, label, ends, names) => `<div class="trow"><span class="tl">${label}</span><div class="tscale" role="group" aria-label="${label}">${[1, 2, 3, 4, 5].map(n => `<button class="tbtn" data-t${k}="${n}" aria-pressed="${r[k] === n}"${names ? ` title="${names[n - 1]}"` : ''}>${n}</button>`).join('')}</div><span class="tends"><span>${ends[0]}</span><span>${ends[1]}</span></span></div>`;
+  return `<div class="tbox"><p class="tk">Tester</p>${row('useful', 'Useful to know?', ['Not useful', 'Very useful'])}${row('level', 'Level for you', ['Too basic', 'Too hard'], T_LEVELS)}
+    <div class="tcom">${r.comment ? '<p class="meta">Comment sent. Thanks.</p>' : '<button class="linkbtn" id="tcBtn">Add a comment</button>'}</div></div>`;
+}
+function sendRating(it, field, value) {
+  run.ratings = run.ratings || {};
+  run.ratings[it._card] = { ...(run.ratings[it._card] || {}), [field]: value };
+  const question = (it.q ? it.q + ' ' : '') + (it.p || '');
+  return apiCall('/api/rating', { course: it._course, card: it._card, question, [field]: value });
+}
+function testerNoteHTML() {
+  if (!testerOn() || !run || !run.graded.size) return '';
+  return `<div class="tbox tnote" data-cards="${esc([...run.graded].join(','))}"><p class="tk">Tester</p><label for="tnoteIn">Anything missing or off about this set? (optional)</label><textarea id="tnoteIn" rows="3" maxlength="2000"></textarea><div class="row"><button class="btn sm ghost" id="tnoteSend">Send note</button></div></div>`;
+}
 // "Remove this question": takes it out of the player's own reviews, and the reason goes to the server as course feedback.
 const RM_REASONS = [['trivia', 'Just trivia'], ['wrong', 'Wrong or misleading'], ['unclear', 'Confusing'], ['known', 'I know this already'], ['other', 'Other']];
 function removeHTML(it) { return it._card ? '<div class="rmbox"><button class="linkbtn" id="rmBtn">Remove this question</button></div>' : ''; }
@@ -15873,7 +15911,7 @@ function finish() {
   const acc = Math.round(firstTry / run.total * 100);
   const posting = !run.wasDone && state.course !== 'terms' ? groupPost(L, run.xp, acc) : null;
   const nextL = LESSONS[run.idx + 1];
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc, posting)}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT || gateOffline ? 'Continue' : 'Save my progress'}</button></div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc, posting)}${remAskHTML()}${styleTipHTML()}${testerNoteHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT || gateOffline ? 'Continue' : 'Save my progress'}</button></div>`;
   show('#result');
   $('#rHome').onclick = () => goHome(); $('#rHome').focus();
   postLine(posting);
@@ -15890,7 +15928,7 @@ function finishSession() {
   const parts = [];
   if (run.reviewed) parts.push(`You remembered ${run.remembered} of ${run.reviewed} review${run.reviewed === 1 ? '' : 's'}`);
   if (run.newSeen) parts.push(`learned ${run.newSeen} new card${run.newSeen === 1 ? '' : 's'}`);
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${left ? `${left} card${left === 1 ? '' : 's'} left today.` : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${posting && G ? `<p class="meta" id="postLine">Posting to ${esc(G.groupName)}…</p>` : ''}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT || gateOffline ? 'Done' : 'Save my progress'}</button>${(left || canLearn) && (ACCT || gateOffline) ? `<button class="btn ghost" id="rMore">${left ? `Next ${nextN}` : 'Learn more'}</button>` : ''}</div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${left ? `${left} card${left === 1 ? '' : 's'} left today.` : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${posting && G ? `<p class="meta" id="postLine">Posting to ${esc(G.groupName)}…</p>` : ''}${remAskHTML()}${styleTipHTML()}${testerNoteHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT || gateOffline ? 'Done' : 'Save my progress'}</button>${(left || canLearn) && (ACCT || gateOffline) ? `<button class="btn ghost" id="rMore">${left ? `Next ${nextN}` : 'Learn more'}</button>` : ''}</div>`;
   show('#result');
   $('#rHome').onclick = () => goHome(); $('#rHome').focus();
   if ($('#rMore')) $('#rMore').onclick = () => startSession(left ? false : true);
@@ -16979,7 +17017,9 @@ $('#repBody').addEventListener('click', async e => {
 
 // Removing a question before answering it: it leaves the round without a grade, and the next card comes up.
 $('#stage').addEventListener('click', e => {
-  const t = e.target.closest('button'); if (!t || !run || run.phase !== 'answer') return;
+  const t = e.target.closest('button'); if (!t || !run) return;
+  if (t.closest('.tbox')) { testerClick(t); return; }
+  if (run.phase !== 'answer') return;
   if (t.id === 'rmPre') { t.parentElement.innerHTML = `<p class="meta">Why remove it? Your answer helps fix the course.</p><div class="rmwhy">${RM_REASONS.map(([k, l]) => `<button class="chipbtn" data-rmpre="${k}">${l}</button>`).join('')}</div><button class="linkbtn" id="rmPreKeep">Keep it</button>`; return; }
   if (t.id === 'rmPreKeep') { t.parentElement.innerHTML = '<button class="linkbtn" id="rmPre">Remove this question</button>'; return; }
   if (t.dataset.rmpre) {
@@ -17004,6 +17044,32 @@ $('#fb').addEventListener('click', async e => {
     try { await apiCall('/api/courses/' + RC.slug + '/reports', { lessonId: it._lesson, itemText: it.q || it.p || '', note }); t.closest('.repbox').innerHTML = '<p>Thanks. The author will see it.</p>'; }
     catch (err) { toast(err.message); }
   }
+  testerClick(t);
+});
+// Tester mode box (on the card, or under the answer): a tap selects and sends; the comment opens a small box.
+function testerClick(t) {
+  if (t.dataset.tuseful || t.dataset.tlevel) {
+    const field = t.dataset.tuseful ? 'useful' : 'level', v = +(t.dataset.tuseful || t.dataset.tlevel);
+    t.parentElement.querySelectorAll('.tbtn').forEach(b => b.setAttribute('aria-pressed', b === t));
+    sendRating(run.cur, field, v).catch(err => toast(netMsg(err)));
+    return true;
+  }
+  if (t.id === 'tcBtn') { t.parentElement.innerHTML = '<textarea id="tcNote" rows="2" maxlength="1000" placeholder="What would make this question better?"></textarea><div class="row"><button class="btn ghost sm" id="tcSend">Send comment</button></div>'; $('#tcNote').focus(); return true; }
+  if (t.id === 'tcSend') {
+    const comment = $('#tcNote').value.trim(); if (!comment) return true;
+    t.disabled = true;
+    sendRating(run.cur, 'comment', comment).then(() => { t.closest('.tcom').innerHTML = '<p class="meta">Comment sent. Thanks.</p>'; }, err => { t.disabled = false; toast(netMsg(err)); });
+    return true;
+  }
+  return false;
+}
+$('#resultIn').addEventListener('click', async e => {
+  const t = e.target.closest('#tnoteSend'); if (!t) return;
+  const comment = $('#tnoteIn').value.trim(); if (!comment) return;
+  const cards = t.closest('.tnote').dataset.cards.split(',').filter(Boolean), courses = [...new Set(cards.map(id => courseKeyForCard(id)).filter(Boolean))];
+  t.disabled = true;
+  try { await apiCall('/api/rating/session', { comment, cards, courses }); t.closest('.tnote').innerHTML = '<p class="meta">Note sent. Thanks.</p>'; }
+  catch (err) { t.disabled = false; toast(netMsg(err)); }
 });
 
 /* ---------- course picker and welcome ---------- */

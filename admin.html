@@ -31,6 +31,7 @@ button { font: inherit; cursor: pointer; }
 .empty { color: var(--muted); }
 .msg { background: var(--surface); border-radius: 14px; padding: 18px; }
 a { color: var(--brass); }
+.rt { width: 100%; border-collapse: collapse; font-size: 14px; } .rt th, .rt td { text-align: left; padding: 4px 8px 4px 0; border-top: 1px solid #ddd; vertical-align: top; }
 </style>
 </head><body><main>
 <h1>Review</h1>
@@ -69,15 +70,31 @@ const SECTIONS = [
   ['reports', 'report', 'Reports on friends’ courses', 'Problems players flagged on group-made courses. The course author sees these too.', d => `
     <div class="top"><div><b>${esc(d.title)}</b><div class="meta">version ${d.version} · ${when(d.at)}</div></div><button class="done" data-k="report" data-id="${d.id}">Done</button></div>
     <div class="lab">Card</div><p>${esc(d.item)}</p><div class="lab">Report</div><p>${esc(d.note)}</p>`],
-  ['ratings', 'rating', 'Tester ratings', 'Cards rated in tester mode, furthest from the target first (useful 5 of 5, level 3 of 5 = about right). A ranking, so nothing to mark done.', d => `
-    <div class="top"><div><b>${esc(d.question)}</b><div class="meta">${esc(d.course)} · ${esc(d.card)} · ${d.n} tester${d.n === 1 ? '' : 's'} · last ${when(d.at)}</div></div></div>
-    <p>Useful <b>${avg(d.useful)}</b>/5 (${d.nUseful}) · Level <b>${avg(d.level)}</b>/5 (${d.nLevel})${d.basic ? ` · <span class="down">${d.basic} said too basic</span>` : ''}${d.hard ? ` · ${d.hard} said too hard` : ''}</p>
-    ${d.comments ? `<div class="lab">Comments</div>${String(d.comments).split(' || ').map(c => `<p>${esc(c)}</p>`).join('')}` : ''}`],
+  ['ratings', 'rating', 'Tester ratings', 'Cards rated in tester mode, furthest from the target first (useful 5 of 5, level 3 of 5 = about right). Each tester’s own scores are listed; “changed since” means the card’s wording is different now from when that tester rated it. A ranking, so nothing to mark done.', d => `
+    <div class="top"><div><b>${esc(currentText(d) || d.question)}</b><div class="meta">${esc(d.course)} · ${esc(d.card)} · ${d.n} tester${d.n === 1 ? '' : 's'} · last ${when(d.at)}</div></div></div>
+    <p>Average: useful <b>${avg(d.useful)}</b>/5 (${d.nUseful}) · level <b>${avg(d.level)}</b>/5 (${d.nLevel})</p>
+    <table class="rt"><tr><th>Tester</th><th>Useful</th><th>Level</th><th>Comment</th><th>When</th></tr>${d.rows.map(r => { const ch = changedSince(d, r); return `<tr><td>${esc(r.name)}</td><td>${r.useful ?? '–'}</td><td>${r.level == null ? '–' : `${r.level} <span class="meta">${LEVELS[r.level - 1]}</span>`}</td><td>${esc(r.comment || '')}</td><td>${when(r.at)}${ch === true ? `<div class="down" title="${esc('Rated as: ' + r.question)}">changed since</div>` : ''}</td></tr>`; }).join('')}</table>`],
   ['sessions', 'session', 'Tester notes on sessions', 'End-of-session notes from testers: what was missing or off about the set.', d => `
-    <div class="top"><div><b>${esc(d.comment)}</b><div class="meta">${esc(d.courses)} · ${when(d.at)}</div></div><button class="done" data-k="session" data-id="${d.id}">Done</button></div>
+    <div class="top"><div><b>${esc(d.comment)}</b><div class="meta">${esc(d.name)} · ${esc(d.courses)} · ${when(d.at)}</div></div><button class="done" data-k="session" data-id="${d.id}">Done</button></div>
     <p class="meta">Cards: ${esc(d.cards)}</p>`]
 ];
 function avg(n) { return n == null ? '?' : (Math.round(n * 10) / 10).toFixed(1); }
+const LEVELS = ['too basic', 'basic', 'about right', 'hard', 'too hard'];
+// Current card text from the built-in courses (content.json), cleaned the way the server cleans a rating's question, to spot
+// cards reworded since a tester rated them. Group courses and key-term cards aren't in there.
+let CARD_TEXT = new Map();
+const norm = t => Array.from(String(t || '').normalize('NFKC').replace(/[\p{Cc}\p{Cf}<>]/gu, '').replace(/\s+/g, ' ').trim()).slice(0, 400).join('').trim();
+async function loadCardText() {
+  try {
+    const c = await (await fetch('content.json')).json();
+    for (const [k, C] of Object.entries(c.courses || {})) for (const u of C.units || []) for (const l of u.lessons || []) for (const it of l.items || [])
+      if (it.id) CARD_TEXT.set(k + '|' + it.id, norm((it.q ? it.q + ' ' : '') + (it.p || '')));
+  } catch (e) {}
+}
+function currentText(d) { return CARD_TEXT.get(d.course + '|' + d.card); }
+// Cards not in content.json (key terms, group courses): compare with the newest rating's wording instead, so a reworded card shows
+// up once anyone rates the new version.
+function changedSince(d, r) { const now = currentText(d) ?? norm(d.rows[0].question); return now !== norm(r.question); }
 // Everything open, as plain text to paste into a Claude session that's fixing cards.
 function asText() {
   return SECTIONS.map(([key, , title]) => `## ${title}\n` + (data[key].length ? data[key].map(d => '- ' + JSON.stringify(d)).join('\n') : '(none)')).join('\n\n');
@@ -94,7 +111,7 @@ function render() {
 }
 async function load() {
   if (!token) { $('#out').innerHTML = `<div class="msg"><p>Sign in to WonkoLingo on this site first, then come back.</p><p><a href="./">Open WonkoLingo</a></p></div>`; return; }
-  try { data = await call('/api/admin/summary'); render(); }
+  try { [data] = await Promise.all([call('/api/admin/summary'), loadCardText()]); render(); }
   catch (e) { $('#out').innerHTML = `<div class="msg"><p>${e.status === 403 ? 'This account can’t open the review page.' : 'Couldn’t load: ' + esc(e.message)}</p></div>`; }
 }
 document.addEventListener('click', async e => {

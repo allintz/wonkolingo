@@ -396,6 +396,34 @@ tests.me = async () => {
   await c.close(); await c2.close();
 };
 
+// Tester mode: the switch in Me, ratings and a comment under an answer, and the end-of-session note, each accepted by the server.
+tests.tester = async () => {
+  const c = await ctx(); const p = await page(c);
+  await signUp(p); await addToMix(p, 'policy');
+  await ev(p, `go('me')`);
+  ok(await visible(p, '#testerSw[aria-pressed="false"]'), 'Me shows Tester mode, off by default');
+  await p.click('#testerSw'); ok(await ev(p, 'testerOn()') && await visible(p, '#testerSw[aria-pressed="true"]'), 'the switch turns tester mode on');
+  await ev(p, `state.prefs.sessionSize = 5; save(); go('today')`); await clickGo(p, '#todayGo');
+  ok(await visible(p, '#stage .tbox [data-tuseful="5"]') && await visible(p, '#stage .tbox [data-tlevel="3"]'), 'ratings show on the card before answering');
+  const sent = path => p.waitForResponse(r => r.url().endsWith(path) && r.request().method() === 'POST', { timeout: 8000 }).then(r => r.status()).catch(() => 0);
+  let st = sent('/api/rating'); await p.click('.tbox [data-tuseful="4"]');
+  ok(await st === 200 && await visible(p, '.tbox [data-tuseful="4"][aria-pressed="true"]') && await ev(p, `run.phase`) === 'answer', 'a usefulness tap before answering is saved and leaves the card unanswered');
+  await answerOne(p); if (await ev(p, 'run.phase') === 'selfgrade') await answerOne(p);
+  ok(await ev(p, `[...document.querySelectorAll('.tbox')].filter(b => b.offsetParent).length`) === 1, 'after answering there is exactly one ratings box');
+  st = sent('/api/rating'); await p.click('.tbox [data-tlevel="1"]'); ok(await st === 200, 'a level tap after answering is saved');
+  await p.click('#tcBtn'); await p.fill('#tcNote', 'Test comment ' + rnd());
+  st = sent('/api/rating'); await p.click('#tcSend'); ok(await st === 200 && /Comment sent/.test(await p.locator('.tcom').innerText()), 'a comment is sent');
+  let n = 0; while (n++ < 30 && await ev(p, `!!run && $('#result').hidden`) && await answerOne(p)) {}
+  await p.waitForTimeout(400);
+  if (await visible(p, '#tnoteIn')) {
+    await p.fill('#tnoteIn', 'Session note ' + rnd());
+    st = sent('/api/rating/session'); await p.click('#tnoteSend');
+    ok(await st === 200 && /Note sent/.test(await p.locator('#resultIn .tnote').innerText()), 'the end-of-session note is sent');
+  } else ok(false, 'the result screen offers a tester note');
+  ok(p.errors.length === 0, 'tester mode: no page errors', p.errors);
+  await c.close();
+};
+
 // ---------- 9. Regression checks for the 10/21 client review
 tests.fixes = async () => {
   { // Sign-up can always get in: a 429 or a 500 from the server offers "Continue offline".
