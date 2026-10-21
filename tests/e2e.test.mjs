@@ -607,8 +607,10 @@ tests.extras = async () => {
     ok(!await visible(p, '#ktSheet') && await ev(p, '!!run'), 'a session starts with no key terms list first');
     ok(await ev(p, `run.queue.concat(run.cur).some(q => /#key-/.test(q._card))`), 'key term cards are among the first new cards');
     await ev(p, `quitRun(true); go('course', 'policy')`);
-    ok(/Key terms/.test(await p.locator('.keyblock').innerText()), 'course page shows a Key terms lesson above the units');
+    ok(/0 · Key terms/.test(await p.locator('.keyblock').innerText()), 'course page shows Key terms as unit 0 above the units');
     ok(await ev(p, `LESSONS[0].id === 'akey' && LESSONS[0].items.length > 10`), 'Key terms is the first lesson');
+    ok(!await visible(p, '[data-keyterms]') && !await visible(p, '[data-perday]') && await visible(p, '.switch[data-mix="policy"]'), 'course settings are hidden except the daily mix switch');
+    await p.click('[data-cadv]'); ok(await visible(p, '[data-keyterms]') && await visible(p, '[data-perday="5"][aria-pressed="true"]'), 'Advanced options shows key terms and new cards a day (5 by default)');
     await p.click('[data-keyterms]'); ok(await visible(p, '#ktSheet'), 'course page opens the skip list');
     const n = await p.locator('#ktSheet [data-kt]').count();
     await p.locator('#ktSheet [data-kt]').nth(0).click(); await p.locator('#ktSheet [data-kt]').nth(1).click();
@@ -617,9 +619,25 @@ tests.extras = async () => {
     const r = await ev(p, `({ known: state.keyTerms.policy.known.length, cards: keyTermCards('policy').length, lesson: LESSONS[0].items.length })`);
     ok(r.known === 2 && r.cards === n - 2 && r.lesson === n - 2, 'known terms are skipped in the lesson and sessions', { n, ...r });
     ok(/2 of \d+ skipped/.test(await p.locator('[data-keyterms]').innerText()), 'course page shows how many terms were skipped');
-    await p.click('.keyblock .lrow'); ok(await ev(p, `run && run.mode === 'lesson' && /#key-/.test(run.cur._card)`), 'the Key terms lesson starts from the course page');
+    await ev(p, `delete state.keyTerms; buildLessons(); renderHome()`);
+    await p.click('.keyblock .uhead'); ok(await visible(p, '#ktSheet') && !await ev(p, '!!run'), 'opening Key terms before answering the list shows the list first');
+    await p.locator('#ktSheet [data-kt]').nth(0).click(); await p.locator('#ktSheet [data-kt]').nth(1).click(); await p.click('#ktDone');
+    ok(await ev(p, `run && run.mode === 'lesson' && run.total === ${n - 2}`), 'after the list, the lesson starts without the known terms', await ev(p, 'run && run.total'));
+    await ev(p, `quitRun(true); go('course', 'policy')`);
+    await p.click('.keyblock .uhead'); ok(await ev(p, `run && run.mode === 'lesson' && /#key-/.test(run.cur._card)`), 'the Key terms lesson starts from the course page');
     ok(await ev(p, `(() => { const i = GLOSSARY.findIndex(g => g.term === 'preemption'); GL_SKIP = [i]; const a = gl('What does preemption mean?'); GL_SKIP = []; return !a.includes('class="gl"') && gl('preemption').includes('class="gl"'); })()`), 'a term card does not underline its own term');
     await ev(p, `quitRun(true); setMix('policy', false)`);
+  }
+  { // Remove this question before answering: the card leaves the round ungraded and the next one comes up.
+    await ev(p, `if (run) quitRun(true); setMix('policy', true); go('today')`);
+    await p.click(await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
+    const before = await ev(p, `({ id: run.cur._card, total: run.total })`);
+    ok(await visible(p, '#rmPre'), 'an unanswered card shows Remove this question');
+    await p.click('#rmPre'); await p.click('[data-rmpre="trivia"]');
+    const after = await ev(p, `({ id: run && run.cur && run.cur._card, total: run && run.total })`);
+    ok(await ev(p, `!!state.removed[${JSON.stringify(before.id)}] && !state.srs[${JSON.stringify(before.id)}]`), 'removing before answering marks it removed without a grade');
+    ok(before.total === 1 ? !after.id : (after.id !== before.id && after.total === before.total - 1), 'the next card comes up and the round is one shorter', { before, after });
+    await ev(p, `restoreCard(${JSON.stringify(before.id)}); if (run) quitRun(true); setMix('policy', false)`);
   }
   { // Sessions card in Me: Sounds switch, the rest under Advanced.
     await ev(p, `go('me')`);
@@ -630,21 +648,22 @@ tests.extras = async () => {
     ok(await ev(p, `sessionSize() === 5 || state.prefs.sessionSize !== undefined`), 'default round size is 5');
     ok(await ev(p, `(() => { sfx('good'); sfx('bad'); sfx('done'); return true; })()`) && p.errors.length === 0, 'sounds play without errors', p.errors);
     await ev(p, `go('course', 'policy')`);
-    ok(!await visible(p, '[data-cstyle]') && await visible(p, '[data-cadv]'), 'course page hides answer style behind a link');
+    await ev(p, `cAdv.policy = false; renderHome()`);
+    ok(!await visible(p, '[data-cstyle]') && await visible(p, '[data-cadv]'), 'course page hides answer style under Advanced options');
     await p.click('[data-cadv]'); ok(await visible(p, '[data-cstyle="short"]'), 'the link opens the course answer style');
   }
   { // Course content updates (the iPhone app path): newer content replaces built-in cards; older content is ignored.
-    const r = await ev(p, `(() => { const C = COURSES.side, old = C.units[0].lessons[0].items[0].p, at = contentAt;
+    const r = await ev(p, `(() => { const C = COURSES.frontier, old = C.units[0].lessons[0].items[0].p, at = contentAt;
       const units = JSON.parse(JSON.stringify(C.units)); units[0].lessons[0].items[0].p = 'CHANGED?';
-      const okNew = applyContent({ builtAt: at + 1000, courses: { side: { ...C, units } }, glossary: GLOSSARY.slice(), sources: {} });
-      const changed = COURSES.side.units[0].lessons[0].items[0].p === 'CHANGED?';
+      const okNew = applyContent({ builtAt: at + 1000, courses: { frontier: { ...C, units } }, glossary: GLOSSARY.slice(), sources: {} });
+      const changed = COURSES.frontier.units[0].lessons[0].items[0].p === 'CHANGED?';
       const okOld = applyContent({ builtAt: at, courses: {} });
-      const bad = applyContent({ builtAt: at + 5000, courses: { side: { name: 'x', pre: 's', units: 'nope' } } });
-      const kept = COURSES.side.units[0].lessons[0].items[0].p === 'CHANGED?';
-      COURSES.side.units[0].lessons[0].items[0].p = old; return { okNew, changed, okOld, kept, glre: !!GL_RE }; })()`);
+      const bad = applyContent({ builtAt: at + 5000, courses: { frontier: { name: 'x', pre: 'f', units: 'nope' } } });
+      const kept = COURSES.frontier.units[0].lessons[0].items[0].p === 'CHANGED?';
+      COURSES.frontier.units[0].lessons[0].items[0].p = old; return { okNew, changed, okOld, kept, glre: !!GL_RE }; })()`);
     ok(r.okNew && r.changed && !r.okOld && r.kept && r.glre, 'applyContent takes newer content, skips older and malformed courses', r);
     const cj = await (await fetch(BASE + '/content.json')).json();
-    ok(cj.builtAt > 0 && Object.keys(cj.courses).length >= 6 && cj.glossary.length > 50 && cj.courses.policy.units.length > 0, 'content.json is served with every built-in course', Object.keys(cj.courses));
+    ok(cj.builtAt > 0 && Object.keys(cj.courses).length >= 5 && cj.glossary.length > 50 && cj.courses.policy.units.length > 0, 'content.json is served with every built-in course', Object.keys(cj.courses));
   }
   { // Order cards: drag a placed step to another spot (step 5 to spot 2), and drag from the pool into a spot.
     await ev(p, `if (run) quitRun(true); go('course', 'proc'); buildLessons(); startLesson(0)`);
@@ -795,7 +814,7 @@ tests.google = async () => {
 tests.regressions = async () => {
   const c = await ctx(), p = await page(c);
   // A trial closed on its result screen asks to save on the next launch instead of opening the app with no account.
-  await p.goto(BASE + '/'); await p.click('[data-try="side"]');
+  await p.goto(BASE + '/'); await p.click('[data-try="proc"]');
   let n = 0; while (n++ < 20 && await answerOne(p)) {}
   ok(await visible(p, '#result'), 'trial finished');
   await p.reload();
@@ -805,10 +824,10 @@ tests.regressions = async () => {
     const o = mergeStates(b, a); return { lingo: !!o.mix.lingo && o.mix.lingo.on, proc: !!o.mix.proc && o.mix.proc.on, policy: !!o.mix.policy && o.mix.policy.on }; })()`);
   ok(m.lingo && m.proc && !m.policy, 'merged mix keeps both sides\' courses, and off stays off', m);
   // Bad downloaded content is ignored rather than breaking the app.
-  const r = await ev(p, `(() => { const before = JSON.stringify(COURSES.side.units).length, at = contentAt;
-    const a = applyContent({ builtAt: at + 10, courses: { side: { name: 'X', pre: 's', units: [{ title: 'u', lessons: [{ title: 'l' }] }] }, neu: { name: 'New', pre: 'n', units: [{ title: 'u', lessons: [{ title: 'l', items: [{ t: 'mc', p: 'Q?', o: ['a', 'b'], a: 0 }] }] }] } }, glossary: [{ term: 'x' }] });
-    const kept = JSON.stringify(COURSES.side.units).length === before, neu = !!COURSES.neu && Array.isArray(COURSES.neu.caveat), gl = GLOSSARY.length > 50;
-    delete COURSES.neu; go('course', 'side'); go('today'); return { kept, neu, gl }; })()`);
+  const r = await ev(p, `(() => { const before = JSON.stringify(COURSES.frontier.units).length, at = contentAt;
+    const a = applyContent({ builtAt: at + 10, courses: { frontier: { name: 'X', pre: 'f', units: [{ title: 'u', lessons: [{ title: 'l' }] }] }, neu: { name: 'New', pre: 'n', units: [{ title: 'u', lessons: [{ title: 'l', items: [{ t: 'mc', p: 'Q?', o: ['a', 'b'], a: 0 }] }] }] } }, glossary: [{ term: 'x' }] });
+    const kept = JSON.stringify(COURSES.frontier.units).length === before, neu = !!COURSES.neu && Array.isArray(COURSES.neu.caveat), gl = GLOSSARY.length > 50;
+    delete COURSES.neu; go('course', 'frontier'); go('today'); return { kept, neu, gl }; })()`);
   ok(r.kept && r.neu && r.gl, 'malformed courses and glossary are skipped; a new course gets a caveat', r);
   // A key term marked known after it was learned keeps its review schedule.
   const k = await ev(p, `(() => { const id = 'au0l0#key-' + termSlug('alignment'); state.srs[id] = { s: 2, d: 5, last: dstr(new Date()), due: dstr(new Date()), reps: 1, lapses: 0, ok: 1, at: Date.now() };

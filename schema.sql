@@ -195,3 +195,28 @@ CREATE TABLE IF NOT EXISTS sign_in_ids (
   PRIMARY KEY (provider, sub)
 );
 CREATE INDEX IF NOT EXISTS sign_in_ids_player ON sign_in_ids (player_id);
+
+-- Tester mode (2026-10-21): per-card ratings from players who turned it on in Me. useful 1-5 (target 5),
+-- level 1-5 (1 too basic, 3 about right, 5 too hard), optional comment. One row per player per card; the latest tap wins.
+CREATE TABLE IF NOT EXISTS card_ratings (
+  who TEXT NOT NULL,
+  course TEXT NOT NULL,
+  card TEXT NOT NULL,
+  question TEXT NOT NULL,
+  useful INTEGER,
+  level INTEGER,
+  comment TEXT,
+  updated_at INTEGER NOT NULL,
+  PRIMARY KEY (who, card)
+);
+CREATE INDEX IF NOT EXISTS idx_card_ratings_card ON card_ratings(course, card);
+-- Tester mode: the end-of-session "anything missing or off about this set?" note, with the session's courses and cards.
+CREATE TABLE IF NOT EXISTS session_feedback (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  who TEXT NOT NULL,
+  courses TEXT NOT NULL,
+  cards TEXT NOT NULL,
+  comment TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  done INTEGER NOT NULL DEFAULT 0
+);

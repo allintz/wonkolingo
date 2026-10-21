@@ -240,7 +240,8 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
     for (const sql of ['DELETE FROM courses WHERE author_id = ?', 'DELETE FROM reports WHERE player_id = ?', 'DELETE FROM completions WHERE player_id = ?',
       'DELETE FROM player_state WHERE player_id = ?', 'DELETE FROM sessions WHERE player_id = ?', 'DELETE FROM passkeys WHERE player_id = ?',
       'DELETE FROM link_codes WHERE player_id = ?', 'DELETE FROM webauthn_challenges WHERE player_id = ?', 'DELETE FROM grade_usage WHERE player_id = ?',
-      'DELETE FROM disputes WHERE who = ?', 'DELETE FROM card_feedback WHERE who = ?', 'DELETE FROM passwords WHERE player_id = ?']) stmts.push(env.DB.prepare(sql).bind(id));
+      'DELETE FROM disputes WHERE who = ?', 'DELETE FROM card_feedback WHERE who = ?', 'DELETE FROM passwords WHERE player_id = ?',
+      'DELETE FROM card_ratings WHERE who = ?', 'DELETE FROM session_feedback WHERE who = ?']) stmts.push(env.DB.prepare(sql).bind(id));
     stmts.push(env.DB.prepare('DELETE FROM blocks WHERE player_id = ? OR blocked_id = ?').bind(id, id), env.DB.prepare('DELETE FROM grade_usage WHERE player_id = ?').bind('dispute:' + id),
       env.DB.prepare('DELETE FROM rate_limits WHERE key = ?').bind('rm:' + id), env.DB.prepare('DELETE FROM emails WHERE player_id = ?').bind(id), env.DB.prepare('DELETE FROM email_codes WHERE player_id = ?').bind(id), env.DB.prepare('DELETE FROM sign_in_ids WHERE player_id = ?').bind(id),
       env.DB.prepare('DELETE FROM players WHERE id = ?').bind(id));

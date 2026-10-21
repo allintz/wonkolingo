@@ -182,6 +182,33 @@ async function api(req, env, path) {
     return json({ ok: true });
   }
 
+  // Tester mode: a rating tap or comment on one card. Each field is optional; fields left out keep their earlier value.
+  if (m === 'POST' && path === '/api/rating') {
+    const who = await graderId(req, env), b = await body(req);
+    const card = cleanText(b.card, 120), course = cleanText(b.course, 60);
+    const scale = v => v == null ? null : Number.isInteger(v) && v >= 1 && v <= 5 ? v : NaN;
+    const useful = scale(b.useful), level = scale(b.level), comment = b.comment == null ? null : cleanText(b.comment, 1000).trim();
+    if (!card || !course || Number.isNaN(useful) || Number.isNaN(level) || (useful == null && level == null && comment == null)) return fail('Bad rating.');
+    if (!await takeRate(env, 'rate:' + who, 600, 'day')) return fail('That’s a lot of ratings today.', 429);
+    await env.DB.prepare(`INSERT INTO card_ratings (who, course, card, question, useful, level, comment, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT (who, card) DO UPDATE SET course = excluded.course, question = excluded.question, useful = COALESCE(excluded.useful, useful),
+        level = COALESCE(excluded.level, level), comment = COALESCE(excluded.comment, comment), updated_at = excluded.updated_at`)
+      .bind(who, course, card, cleanName(b.question, 400), useful, level, comment, Date.now()).run();
+    return json({ ok: true });
+  }
+
+  // Tester mode: the end-of-session note about the set as a whole.
+  if (m === 'POST' && path === '/api/rating/session') {
+    const who = await graderId(req, env), b = await body(req);
+    const comment = cleanText(b.comment, 2000).trim();
+    const list = (v, n, max) => (Array.isArray(v) ? v : []).slice(0, n).map(s => cleanText(s, max)).filter(Boolean).join(',');
+    if (!comment) return fail('Nothing to send.');
+    if (!await takeRate(env, 'rates:' + who, 50, 'day')) return fail('That’s a lot of notes today.', 429);
+    await env.DB.prepare('INSERT INTO session_feedback (who, courses, cards, comment, created_at) VALUES (?, ?, ?, ?, ?)')
+      .bind(who, list(b.courses, 10, 60), list(b.cards, 60, 120), comment, Date.now()).run();
+    return json({ ok: true });
+  }
+
   // Grading and hints work without a group: visitors are counted by a hash of their IP for the daily cap.
   if (m === 'POST' && (path === '/api/grade' || path === '/api/hint' || path === '/api/dispute' || path === '/api/define')) {
     const who = await graderId(req, env);

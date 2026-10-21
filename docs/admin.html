@@ -68,8 +68,16 @@ const SECTIONS = [
     ${d.stack ? `<pre>${esc(d.stack)}</pre>` : ''}<p class="meta">${esc(d.ua)}</p>`],
   ['reports', 'report', 'Reports on friends’ courses', 'Problems players flagged on group-made courses. The course author sees these too.', d => `
     <div class="top"><div><b>${esc(d.title)}</b><div class="meta">version ${d.version} · ${when(d.at)}</div></div><button class="done" data-k="report" data-id="${d.id}">Done</button></div>
-    <div class="lab">Card</div><p>${esc(d.item)}</p><div class="lab">Report</div><p>${esc(d.note)}</p>`]
+    <div class="lab">Card</div><p>${esc(d.item)}</p><div class="lab">Report</div><p>${esc(d.note)}</p>`],
+  ['ratings', 'rating', 'Tester ratings', 'Cards rated in tester mode, furthest from the target first (useful 5 of 5, level 3 of 5 = about right). A ranking, so nothing to mark done.', d => `
+    <div class="top"><div><b>${esc(d.question)}</b><div class="meta">${esc(d.course)} · ${esc(d.card)} · ${d.n} tester${d.n === 1 ? '' : 's'} · last ${when(d.at)}</div></div></div>
+    <p>Useful <b>${avg(d.useful)}</b>/5 (${d.nUseful}) · Level <b>${avg(d.level)}</b>/5 (${d.nLevel})${d.basic ? ` · <span class="down">${d.basic} said too basic</span>` : ''}${d.hard ? ` · ${d.hard} said too hard` : ''}</p>
+    ${d.comments ? `<div class="lab">Comments</div>${String(d.comments).split(' || ').map(c => `<p>${esc(c)}</p>`).join('')}` : ''}`],
+  ['sessions', 'session', 'Tester notes on sessions', 'End-of-session notes from testers: what was missing or off about the set.', d => `
+    <div class="top"><div><b>${esc(d.comment)}</b><div class="meta">${esc(d.courses)} · ${when(d.at)}</div></div><button class="done" data-k="session" data-id="${d.id}">Done</button></div>
+    <p class="meta">Cards: ${esc(d.cards)}</p>`]
 ];
+function avg(n) { return n == null ? '?' : (Math.round(n * 10) / 10).toFixed(1); }
 // Everything open, as plain text to paste into a Claude session that's fixing cards.
 function asText() {
   return SECTIONS.map(([key, , title]) => `## ${title}\n` + (data[key].length ? data[key].map(d => '- ' + JSON.stringify(d)).join('\n') : '(none)')).join('\n\n');

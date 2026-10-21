@@ -530,6 +530,7 @@ svg { display: block; }
 .uhead .ut { flex: 1; display: grid; gap: 6px; }
 .uhead b { font-size: 16px; font-weight: 700; }
 .uhead .uc { font-size: 13px; color: var(--muted); }
+.uhead .uc.kstart { color: var(--brass); font-weight: 700; }
 .uhead svg { width: 18px; height: 18px; color: var(--muted); transition: transform .15s; }
 .ublock.open .uhead > svg { transform: rotate(180deg); }
 .ublock.done .uhead b::before { content: "✓ "; color: var(--good); }
@@ -578,6 +579,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .rmbox { display: grid; gap: 8px; margin-top: 4px; }
 .rmbox p { margin: 0; }
 .rmwhy { display: flex; flex-wrap: wrap; gap: 8px; }
+.rmpre { margin-top: 20px; }
 .chipbtn { background: var(--surface); border: 1px solid var(--line-deep); border-radius: 99px; padding: 6px 12px; font: 700 13px/1.2 var(--f-ui); color: var(--fg); }
 .chipbtn:hover { border-color: var(--brass); }
 .rmlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
@@ -751,8 +753,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-21-14edb2f';
-  window.WL_BUILT_AT = +'1792605476000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-21-068bb4e';
+  window.WL_BUILT_AT = +'1792607129000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -14878,10 +14880,11 @@ const COURSES = Object.assign(Object.create(null), {
     meta: 'Draft \u00b7 2026-10-19 \u00b7 Fact-checked by AI, not by a person' },
   frontier: { name: 'FRONTIER Act', units: FRONTIER_UNITS, pre: 'f', created: '2026-10-16', updated: '2026-10-21',
     caveat: ['Based on the introduced text of H.R. 9925 (July 23, 2026). Status, cosponsors and reactions checked October 19, 2026. Simplified: check the bill text before relying on details, and expect changes if the bill moves in committee.', 'Each question was checked against the bill text by a second AI, and its corrections were applied. No person has reviewed it.'],
-    meta: 'Draft · 2026-10-16, attributions rechecked 2026-10-19 · Fact-checked by AI, not by a person' },
+    meta: 'Draft · 2026-10-16, attributions rechecked 2026-10-19 · Fact-checked by AI, not by a person' }
+  /* Policy Side Effects (key side, prefix s) hidden 2026-10-21 at Alex's request. SIDE_UNITS stays embedded; to restore, re-add:
   side: { name: 'Policy Side Effects', units: SIDE_UNITS, pre: 's', created: '2026-10-21', updated: '2026-10-21', description: 'Real laws that backfired, got routed around, or landed on the wrong people. Each card describes a policy; you guess what happened.',
     caveat: ['Ten cases drawn from published research, current as of October 2026. Several findings are disputed, and the cards say so.', 'Drafted and independently fact-checked by AI; no person has reviewed it.'],
-    meta: 'Draft · 2026-10-21 · Fact-checked by AI, not by a person' }
+    meta: 'Draft · 2026-10-21 · Fact-checked by AI, not by a person' } */
 });
 
 /* ---------- course content updates for the iPhone app ----------
@@ -15088,7 +15091,7 @@ function openKeyTerms(k, then) {
 function renderKeyTerms() {
   const C = COURSES[ktCourse], terms = keyTermList(ktCourse), n = terms.filter(t => !ktKnown.has(t)).length;
   $('#ktTitle').textContent = 'Key terms: ' + C.name;
-  $('#ktBody').innerHTML = `<p>These are the course’s first lesson. Tap <b>Know it</b> for terms you could already explain to a colleague, and they’re skipped. Leave anything you only half know.</p>
+  $('#ktBody').innerHTML = `<p>These are the course’s first lesson. Before you start, tap <b>Know it</b> for terms you could already explain to a colleague, and they’re skipped. Leave anything you only half know.</p>
     <ul class="ktlist">${terms.map(t => `<li><span>${esc(t)}</span><button class="ktk" data-kt="${esc(t)}" aria-pressed="${ktKnown.has(t)}">Know it</button></li>`).join('')}</ul>
     <div class="row"><button class="btn" id="ktDone">Done</button>${n ? '<button class="linkbtn" id="ktAll">I know all of these</button>' : ''}</div>`;
 }
@@ -15339,6 +15342,11 @@ function show(id) {
 function newRun(extra) { return { graded: new Set(), xp: 0, reviewed: 0, remembered: 0, newSeen: 0, correct: 0, wrong: new Set(), cur: null, sel: null, phase: 'answer', ...extra }; }
 function startLesson(i, challenge) {
   const L = LESSONS[i];
+  // The key terms lesson asks first which terms the player already knows, so those are skipped.
+  if (L.id === COURSES[state.course].pre + 'key' && !keyTermsAnswered(state.course)) {
+    openKeyTerms(state.course, () => { const j = LESSONS.findIndex(x => x.id === L.id); if (j >= 0 && LESSONS[j].items.length) startLesson(j, challenge); else renderHome(); });
+    return;
+  }
   const queue = L.items.map((it, k) => ({ ...it, key: k, _card: cardId(L.id, k, it), _course: state.course, _lesson: L.id })).filter(q => !isRemoved(q._card));
   if (!queue.length) { toast('You removed every question in this lesson. Restore them in Me.'); return; }
   run = newRun({ mode: 'lesson', challenge: challenge || null, idx: i, total: queue.length, queue, wasDone: !!state.done[L.id] });
@@ -15470,6 +15478,7 @@ function nextItem() {
   if (mode === 'choice') asChoice(it);
   if (mode === 'typed') renderTyped(it); else if (mode === 'reveal') renderReveal(it); else if (it.t === 'mc' || it._asMC) renderMC(it); else if (it.t === 'match') renderMatch(it); else renderOrder(it);
   if (run.mode === 'session' && !$('#stage .cardtag')) $('#stage').insertAdjacentHTML('afterbegin', cardTag(it)); // order cards add their own
+  if (it._card) $('#stage').insertAdjacentHTML('beforeend', '<div class="rmbox rmpre"><button class="linkbtn" id="rmPre">Remove this question</button></div>');
   $('#stageWrap').scrollTop = 0;
   // Each new card moves focus to its question, so screen readers read it out and Tab starts from the top of the card.
   const pq = $('#stage .prompt'); if (pq && !$('#lesson').hidden && !$('#stage').contains(document.activeElement)) { pq.setAttribute('tabindex', '-1'); pq.focus({ preventScroll: true }); }
@@ -16333,7 +16342,7 @@ function setTrial(v) { try { localStorage.setItem('wl-trial', v); } catch (e) {}
 function needGate() { return !ACCT && !gateOffline && trialState() !== 'on'; }
 // Where the sign-up screen opens: "save your progress" after a trial, else the welcome (or sign-in when asked for).
 function gateStart(fallback) { return trialState() === 'done' ? (hasProgress() ? 'save' : 'welcome') : fallback || 'welcome'; }
-const TRY_COURSES = [['policy', 'Laws, bills and who argues what in AI policy'], ['lingo', 'What Hill staffers really mean'], ['proc', 'How a bill moves through Congress'], ['side', 'Laws that backfired, and why']];
+const TRY_COURSES = [['policy', 'Laws, bills and who argues what in AI policy'], ['lingo', 'What Hill staffers really mean'], ['proc', 'How a bill moves through Congress']];
 function startTrial(k) {
   if (!COURSES[k]) return;
   setTrial('on'); hideGate();
@@ -16968,6 +16977,18 @@ $('#repBody').addEventListener('click', async e => {
   catch (err) { toast(err.message); }
 });
 
+// Removing a question before answering it: it leaves the round without a grade, and the next card comes up.
+$('#stage').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t || !run || run.phase !== 'answer') return;
+  if (t.id === 'rmPre') { t.parentElement.innerHTML = `<p class="meta">Why remove it? Your answer helps fix the course.</p><div class="rmwhy">${RM_REASONS.map(([k, l]) => `<button class="chipbtn" data-rmpre="${k}">${l}</button>`).join('')}</div><button class="linkbtn" id="rmPreKeep">Keep it</button>`; return; }
+  if (t.id === 'rmPreKeep') { t.parentElement.innerHTML = '<button class="linkbtn" id="rmPre">Remove this question</button>'; return; }
+  if (t.dataset.rmpre) {
+    const it = run.cur; removeCard(it, t.dataset.rmpre); if (!it._retry) run.total = Math.max(0, run.total - 1);
+    toast('Removed. You can restore it in Me.');
+    if (!run.total) { quitRun(true); return; }
+    nextItem();
+  }
+});
 $('#fb').addEventListener('click', async e => {
   const t = e.target.closest('button'); if (!t || !run) return;
   const C = COURSES[state.course];
@@ -17201,9 +17222,12 @@ function renderCourseView() {
     ${C.description ? `<p class="cdesc">${esc(C.description)}</p>` : ''}
     <div class="csets">
       <div class="csrow"><span class="clab">In your daily mix</span><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="In your daily mix"></button></div>
-      ${on ? `<div class="csrow"><span class="clab">New cards a day</span><div class="cseg">${[3, 5, 10, 20].map(n => `<button data-perday="${n}" aria-pressed="${perDay(k) === n}">${n}</button>`).join('')}</div></div>` : `<p class="chint">Switch it on to get its cards in Today, or tap any lesson to try it.</p>`}
+      ${on ? '' : `<p class="chint">Switch it on to get its cards in Today, or tap any lesson to try it.</p>`}
+      ${cAdv[k] ? `${on ? `<div class="csrow"><span class="clab">New cards a day</span><div class="cseg">${[3, 5, 10, 20].map(n => `<button data-perday="${n}" aria-pressed="${perDay(k) === n}">${n}</button>`).join('')}</div></div>` : ''}
       ${keyTermRowHTML(k)}
       ${styleRowHTML(k)}
+      <div class="csrow"><button class="linkbtn" data-cadv="${esc(k)}" data-close="1">Hide advanced options</button></div>`
+      : `<div class="csrow"><button class="linkbtn" data-cadv="${esc(k)}">Advanced options</button></div>`}
     </div></div>`;
   const mine = C.group && G && C.authorId === G.player.id;
   $('#cinfo').hidden = !C.group;
@@ -17215,7 +17239,8 @@ function renderCourseView() {
   // The Key terms lesson sits above the units: it's the first lesson, but nothing else waits for it.
   const ki = LESSONS.findIndex(l => l.unit === -1);
   const keyBlock = ki < 0 ? '' : (() => { const L = LESSONS[ki], d = state.done[L.id], left = L.items.filter(it => !state.srs[it.id] && !isRemoved(it.id)).length;
-    return `<section class="ublock open keyblock${d ? ' done' : ''}"><div class="lessons"><button class="lrow${d ? ' done' : ''}${ki === next ? ' next' : ''}" data-idx="${ki}"><span class="ld">${d ? ICON.check : ''}</span><span class="lt">Key terms</span><span class="ls">${d ? 'In reviews' : `${left} term${left === 1 ? '' : 's'}${ki === next ? ' · Start here' : ''}`}</span></button></div></section>`; })();
+    // Shown as unit 0, in the same style as the units below, so it reads as part of the course. Tapping it starts the lesson.
+    return `<section class="ublock keyblock${d ? ' done' : ''}${ki === next ? ' cur' : ''}"><button class="uhead" data-idx="${ki}"><span class="ut"><b>0 · Key terms</b></span><span class="uc${ki === next ? ' kstart' : ''}">${d ? 'In reviews' : `${left} term${left === 1 ? '' : 's'}${ki === next ? ' · Start here' : ''}`}</span></button></section>`; })();
   $('#path').innerHTML = keyBlock + C.units.map((u, ui) => {
     const ls = LESSONS.map((l, i) => [l, i]).filter(([l]) => l.unit === ui);
     const nd = ls.filter(([l]) => state.done[l.id]).length, all = nd === ls.length;
@@ -17232,11 +17257,10 @@ function keyTermRowHTML(k) {
   return `<div class="csrow"><span class="clab">Key terms</span><button class="linkbtn" data-keyterms="${esc(k)}">${known ? `${known} of ${n} skipped · Change` : `Skip terms I know`}</button></div>`;
 }
 // Answer style on a course page, for courses with short-answer cards (the only cards it changes). Each course can have its own.
-// Hidden behind "Answer style" until opened (cAdv, declared early), unless the course already has its own.
+// The course page's Advanced options (cAdv[course], declared early) hold new cards a day, key terms and this row.
 function styleRowHTML(k) {
   if (!courseCards(k).some(c => c.item.t === 'recall')) return '';
   const st = styleFor(k), own = ((state.prefs || {}).courseStyle || {})[k];
-  if (!own && !cAdv[k]) return `<div class="csrow"><span class="clab">Answer style</span><button class="linkbtn" data-cadv="${esc(k)}">${esc(STYLE_OPTS.find(o => o[0] === st)[1])} · Change</button></div>`;
   const def = (STYLE_OPTS.find(o => o[0] === answerStyle()) || [])[1];
   const short = { mixed: 'Mixed', short: 'Short answers', typed: 'Typed' };
   return `<div class="csrow cstack"><span class="clab">Answer style</span><div class="cseg">${STYLE_OPTS.map(([v]) => `<button data-cstyle="${v}" aria-pressed="${st === v}">${short[v]}</button>`).join('')}</div></div><p class="chint">${STYLE_BLURB[st]} ${own ? `Set for this course only. <button class="linkbtn" data-cstyle="">Use my default (${def})</button>` : `Your default from Me.`}</p>`;
@@ -17256,7 +17280,7 @@ document.addEventListener('click', e => {
   const pd = e.target.closest('[data-perday]'); if (pd) { setPerDay(state.course, +pd.dataset.perday); renderHome(); return; }
   const cs = e.target.closest('[data-cstyle]'); if (cs) { const v = cs.dataset.cstyle; setCourseStyle(state.course, v); renderHome(); toast(!v ? 'This course follows your default style again.' : v === 'short' ? `Short answers on for ${COURSES[state.course].name}.` : `Answer style changed for ${COURSES[state.course].name}.`); return; }
   const kt = e.target.closest('[data-keyterms]'); if (kt) { openKeyTerms(kt.dataset.keyterms); return; }
-  const ca = e.target.closest('[data-cadv]'); if (ca) { cAdv[ca.dataset.cadv] = true; renderHome(); return; }
+  const ca = e.target.closest('[data-cadv]'); if (ca) { cAdv[ca.dataset.cadv] = !ca.dataset.close; renderHome(); return; }
   if (e.target.closest('#cMake')) openAdd();
 });
 
