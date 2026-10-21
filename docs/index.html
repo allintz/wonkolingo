@@ -750,8 +750,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-21-7b3a1b6';
-  window.WL_BUILT_AT = +'1792601447000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-21-779c1c9';
+  window.WL_BUILT_AT = +'1792604362000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -16290,7 +16290,7 @@ function renderGoogleBtns() {
   if (gisState !== 'ready') return;
   document.querySelectorAll('.gbtn:not([data-done])').forEach(el => {
     el.dataset.done = '1'; el.innerHTML = '';
-    try { google.accounts.id.renderButton(el, { theme: 'filled_black', size: 'large', shape: 'pill', text: el.dataset.text || 'continue_with', width: Math.min(340, Math.max(200, el.clientWidth || 300)) }); } catch (e) {}
+    try { google.accounts.id.renderButton(el, { theme: matchMedia('(prefers-color-scheme: light)').matches ? 'outline' : 'filled_black', size: 'large', shape: 'pill', text: el.dataset.text || 'continue_with', width: Math.min(340, Math.max(200, el.clientWidth || 300)) }); } catch (e) {}
   });
 }
 // The app's native buttons: get the provider's token from WonkoNative, then carry on as the web button does.
