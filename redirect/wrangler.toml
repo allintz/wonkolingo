@@ -1,3 +1,9 @@
-name = "hill-speak"
+# wonkolingo.com and www.wonkolingo.com send visitors to the live site, keeping the path (wonkolingo.com/#course/proc works).
+# Deploy: cd redirect && npx wrangler deploy
+name = "wonkolingo-redirect"
 main = "worker.js"
 compatibility_date = "2026-09-01"
+routes = [
+  { pattern = "wonkolingo.com", custom_domain = true },
+  { pattern = "www.wonkolingo.com", custom_domain = true }
+]
