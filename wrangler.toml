@@ -17,6 +17,6 @@ database_id = "0c6cfe6d-28ad-4e54-9b96-78d55d165124"
 EMAIL_FROM = "WonkoLingo <codes@wonkolingo.com>"
 # Players who can open the review page (/admin.html). Alex's account.
 ADMIN_PLAYERS = "2rpep26wjp"
-# Google sign-in (Google Cloud OAuth clients; ids aren't secret). Web: the site's Google button. iOS: the iPhone app.
-GOOGLE_CLIENT_ID = "752750115216-ahqvib60io00s4eiqfsqch4c9vjbo0u0.apps.googleusercontent.com"
-GOOGLE_IOS_CLIENT_ID = "752750115216-j2pucs8m4rakhb8ds08l7l2r89vpble2.apps.googleusercontent.com"
+# Google sign-in (OAuth clients in the "wonkolingo" Google Cloud project, alex.l.lintz@gmail.com; ids aren't secret). Web: the site's Google button. iOS: the iPhone app.
+GOOGLE_CLIENT_ID = "99780571438-eplle9ig7c79mp0arjvo355dv0ifdiia.apps.googleusercontent.com"
+GOOGLE_IOS_CLIENT_ID = "99780571438-hrp1j9okg9g0jn40lbvsi9hk4ql7lj9d.apps.googleusercontent.com"
