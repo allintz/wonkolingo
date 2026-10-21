@@ -519,6 +519,68 @@ tests.email = async () => {
   await c.close();
 };
 
+// ---------- 10/21: disputing a grade re-grades it; closing the app mid-session resumes it
+tests.disputeAndResume = async () => {
+  const c = await ctx(); const p = await page(c);
+  await p.route('**/api/grade', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ score: 0, percent: 10, feedback: 'Missed the point.', points: [], missed: [] }) }));
+  await p.route('**/api/dispute', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ score: 3, percent: 100, feedback: 'Correct on review.', reply: 'You were right.', outcome: 'upheld', points: [], missed: [] }) }));
+  await signUp(p); await addToMix(p, 'policy'); await ev(p, `state.prefs = state.prefs || {}; state.prefs.style = 'typed'; save()`); await ev(p, `go('today')`);
+  await p.click('#todayGo');
+  let typed = false;
+  for (let i = 0; i < 15 && !typed; i++) { if (await ev(p, `run.phase === 'answer' && run.cur._mode === 'typed'`)) typed = true; else await answerOne(p); }
+  ok(typed, 'a typed card comes up');
+  if (typed) {
+    const card = await ev(p, 'run.cur._card');
+    await p.fill('#recallIn', 'my answer'); await p.click('[data-conf="sure"]');
+    await p.waitForFunction(() => run.phase === 'feedback', null, { timeout: 8000 });
+    await p.click('#dispute');
+    ok(await p.locator('#checkBtn').innerText() === 'Get a second opinion', 'with the note box open, the main button sends the dispute', await p.locator('#checkBtn').innerText());
+    await p.fill('#dispNote', 'My answer names a real proposal.'); await settle(p); await p.click('#checkBtn');
+    await p.waitForFunction(() => run.phase === 'feedback', null, { timeout: 8000 }).catch(() => {});
+    ok(await ev(p, 'run.cur._card') === card, 'still on the same card after the dispute');
+    ok(/You were right/.test(await p.locator('#fb').innerText()) && await p.locator('#checkBtn').innerText() === 'Continue', 'the second grade replaces the first', await p.locator('#fb').innerText());
+    ok(await ev(p, `state.srs[${JSON.stringify(card)}].ok`) >= 1, 'the upheld grade is what gets scheduled');
+    // Cancel goes back to the first grade
+    await answerOne(p);
+    for (let i = 0; i < 15; i++) { if (await ev(p, `run && run.phase === 'answer' && run.cur._mode === 'typed'`)) break; if (!await answerOne(p)) break; }
+    if (await ev(p, `run && run.phase === 'answer' && run.cur._mode === 'typed'`)) {
+      await p.fill('#recallIn', 'x'); await p.click('[data-conf="sure"]'); await p.waitForFunction(() => run.phase === 'feedback', null, { timeout: 8000 });
+      await p.click('#dispute'); await p.click('#dispCancel');
+      ok(await ev(p, 'run.phase') === 'feedback' && await visible(p, '#dispute') && await p.locator('#checkBtn').innerText() === 'Continue', 'Cancel returns to the first grade');
+    }
+  }
+  // Resume: reload mid-session, same card comes back, XP not doubled
+  if (await ev(p, `run && run.phase === 'feedback'`)) await answerOne(p);
+  const before = await ev(p, `run ? { card: run.cur._card, left: run.queue.length, graded: run.graded.size, xp: state.xp + run.xp - (run.bankedXp || 0) } : null`);
+  ok(!!before, 'still mid-session before reload');
+  if (before) {
+    await p.reload(); await p.waitForTimeout(800);
+    const after = await ev(p, `run ? { card: run.cur._card, left: run.queue.length, graded: run.graded.size, xp: state.xp + run.xp - (run.bankedXp || 0) } : null`);
+    ok(after && await visible(p, '#lesson'), 'reloading mid-session reopens the session', after);
+    ok(after && after.card === before.card && after.left === before.left && after.graded === before.graded, 'it resumes on the same card with the same queue', { before, after });
+    ok(after && after.xp === before.xp, 'XP is not counted twice', { before, after });
+    await ev(p, 'quitRun(true)'); await p.reload(); await p.waitForTimeout(800);
+    ok(!await visible(p, '#lesson'), 'after quitting, a reload opens home');
+    // An hour-old saved session is dropped
+    await ev(p, 'startSession(true)');
+    ok(await ev(p, `!!run && !!localStorage.getItem('wl-run')`), 'starting a session saves it for resuming', await ev(p, `({ run: !!run, due: dueCards(dstr(new Date())).length, fresh: newCardsAvailable('policy').length })`));
+    await ev(p, `(() => { const s = JSON.parse(localStorage.getItem('wl-run')); s.at -= 3601e3; localStorage.setItem('wl-run', JSON.stringify(s)); history.replaceState(null, '', location.href); })()`);
+    await p.evaluate(() => { window.saveRun = () => {}; });
+    await p.goto(BASE + '/?' + Date.now()); await p.waitForTimeout(800);
+    ok(!await visible(p, '#lesson') && !await ev(p, `localStorage.getItem('wl-run')`), 'a session older than an hour is not resumed');
+  }
+  // A reload right after a change keeps it (load() crashed on startup before 10/21 and fell back to a blank state).
+  await ev(p, `setMix('proc', true)`); await p.reload(); await p.waitForTimeout(300);
+  ok(await ev(p, `inMix('proc') && inMix('policy')`), 'a mix change survives an immediate reload', await ev(p, 'state.mix'));
+  // An expanded unit stays expanded when the page re-renders.
+  await ev(p, `go('course', 'policy')`); await p.waitForTimeout(200);
+  const ui = await ev(p, `[...document.querySelectorAll('#path .uhead')].findIndex(b => b.getAttribute('aria-expanded') === 'false')`);
+  if (ui >= 0) { await p.click(`#path .uhead[data-unit="${ui}"]`); await ev(p, 'renderHome()');
+    ok(await p.getAttribute(`#path .uhead[data-unit="${ui}"]`, 'aria-expanded') === 'true', 'an opened unit stays open after a re-render'); }
+  ok(p.errors.length === 0, 'disputeAndResume: no page errors', p.errors);
+  await c.close();
+};
+
 for (const [name, fn] of Object.entries(tests)) {
   if (ONLY && !ONLY.has(name)) continue;
   const t0 = Date.now();

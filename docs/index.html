@@ -474,6 +474,18 @@ svg { display: block; }
 .chead .ctop { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .chead h1 { margin: 0; font-size: 26px; font-weight: 800; line-height: 1.15; }
 .chead .cmeta { color: var(--muted); font-size: 14px; }
+.chead h1 + .cmeta { margin-top: 4px; }
+.chead .cdesc { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
+.csets { background: var(--surface-2); border: 1px solid var(--line-deep); border-radius: 14px; padding: 4px 14px; margin-top: 4px; }
+.csets .csrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; flex-wrap: wrap; }
+.csets .csrow + .csrow { border-top: 1px solid var(--line-deep); }
+.csets .clab { font-size: 14px; font-weight: 700; color: var(--fg); }
+.csets .chint { margin: -4px 0 10px; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.cseg { display: inline-flex; border: 1px solid var(--line-deep); border-radius: 10px; overflow: hidden; }
+.cseg button { background: transparent; border: 0; padding: 6px 12px; color: var(--muted); font-weight: 700; font-size: 14px; white-space: nowrap; }
+.cseg button + button { border-left: 1px solid var(--line-deep); }
+.cseg button[aria-pressed="true"] { color: var(--brass); background: var(--brass-soft); }
+@media (max-width: 560px) { .csets .cstack { flex-direction: column; align-items: stretch; gap: 8px; } .cstack .cseg { display: flex; } .cstack .cseg button { flex: 1; padding: 7px 6px; } }
 .perday { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 14px; color: var(--muted); }
 .perday button { background: var(--surface-2); border: 1px solid var(--line-deep); border-radius: 10px; padding: 5px 13px; color: var(--muted); font-weight: 700; }
 .perday button[aria-pressed="true"] { border-color: var(--brass); color: var(--brass); background: var(--brass-soft); }
@@ -14490,6 +14502,8 @@ const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const WEEKDAYS = [false, true, true, true, true, true, false];
 let LESSONS = [];
 let VIEW = 'today';
+// Units the player opened or closed on a course page, so a re-render (a sync finishing, say) doesn't undo it.
+const unitOpen = {};
 function buildLessons() {
   const C = COURSES[state.course];
   LESSONS = [];
@@ -14537,7 +14551,8 @@ function load() {
 // Saved or synced progress with a missing or wrong-typed field (an old version, a bug, a hand edit) is repaired rather
 // than crashing every launch: wrong types are dropped, then the defaults fill in.
 function isObj(v) { return !!v && typeof v === 'object' && !Array.isArray(v); }
-const isDayStr = d => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d);
+// A function declaration, so load() can use it at startup (a const here isn't defined yet when load() runs).
+function isDayStr(d) { return typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d); }
 function dropBadTypes(s) {
   ['done', 'srs', 'hints', 'mix', 'xpBy', 'newCounts', 'removed', 'myTerms', 'accepted', 'prefs', 'settings'].forEach(k => { if (s[k] !== undefined && !isObj(s[k])) delete s[k]; });
   ['activeDays', 'jumped'].forEach(k => { if (s[k] !== undefined && !Array.isArray(s[k])) delete s[k]; });
@@ -14703,7 +14718,7 @@ function renderProgress() {
 
 $('#path').addEventListener('click', e => {
   const u = e.target.closest('[data-unit]');
-  if (u) { const b = u.closest('.ublock'); const l = b.querySelector('.lessons'); l.hidden = !l.hidden; b.classList.toggle('open', !l.hidden); u.setAttribute('aria-expanded', String(!l.hidden)); return; }
+  if (u) { const b = u.closest('.ublock'); const l = b.querySelector('.lessons'); l.hidden = !l.hidden; b.classList.toggle('open', !l.hidden); u.setAttribute('aria-expanded', String(!l.hidden)); unitOpen[state.course + '|' + u.dataset.unit] = !l.hidden; return; }
   const n = e.target.closest('[data-idx]');
   if (!n) return;
   const i = +n.dataset.idx;
@@ -14877,7 +14892,7 @@ function goHome(fromBack) {
   if (window.glHide) glHide();
   // Leave the history entry the lesson added, so Back afterwards goes where the player expects.
   const pushed = history.state && history.state.wl === 'run';
-  run = null; show(null);
+  run = null; show(null); clearRun();
   if (pushed && fromBack !== true) history.back(); if (needGate()) showGate('signin'); if (pendingCourses) { const p = pendingCourses; pendingCourses = null; installCourses(p); } renderHome(); window.scrollTo(0, 0); }
 // Quitting mid-lesson keeps the XP and practice day for cards already answered, since their reviews were already rescheduled.
 // Mid-session, the first tap on quit asks once (answers so far are already saved either way); Back quits at once.
@@ -14899,8 +14914,44 @@ function bankRun() {
   if (run.graded.size) bumpStreak();
   save();
 }
-addEventListener('pagehide', () => { if (run && run.graded.size && $('#result').hidden) bankRun(); });
-document.addEventListener('visibilitychange', () => { if (document.hidden && run && run.graded.size && $('#result').hidden) bankRun(); });
+addEventListener('pagehide', () => { if (run && run.graded.size && $('#result').hidden) bankRun(); saveRun(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden && run && run.graded.size && $('#result').hidden) bankRun(); if (document.hidden) saveRun(); });
+// An unfinished lesson or session is kept for an hour, so closing the app (or the phone dropping it) resumes where you were.
+// The card on screen comes back unless it was already graded; its review was saved when it was graded.
+const RUNKEY = 'wl-run', RUN_KEEP = 3600e3;
+const runCard = it => { const { _gs, _snap, _detail, _opts, _mode, ...rest } = it; return rest; };
+function saveRun() {
+  if (!run || !$('#result').hidden) return;
+  const queue = (run.cur && (run.phase === 'answer' || run.phase === 'selfgrade') ? [run.cur] : []).concat(run.queue);
+  if (!queue.length) return clearRun();
+  const L = run.mode === 'lesson' ? LESSONS[run.idx] : null;
+  const snap = { at: Date.now(), owner: ACCT && ACCT.player ? ACCT.player.id : null, mode: run.mode, course: state.course, lesson: L ? L.id : null,
+    idx: run.idx, challenge: run.challenge || null, wasDone: !!run.wasDone, total: run.total, queue: queue.map(runCard),
+    graded: [...run.graded], wrong: [...run.wrong], mcCourses: [...(run.mcCourses || [])], mcRecall: run.mcRecall || 0,
+    xp: run.xp, bankedXp: run.bankedXp || 0, reviewed: run.reviewed, remembered: run.remembered, newSeen: run.newSeen, correct: run.correct };
+  try { localStorage.setItem(RUNKEY, JSON.stringify(snap)); } catch (e) {}
+}
+function clearRun() { try { localStorage.removeItem(RUNKEY); } catch (e) {} }
+function resumeRun() {
+  let s; try { s = JSON.parse(localStorage.getItem(RUNKEY)); } catch (e) {}
+  if (!s) return false;
+  const owner = ACCT && ACCT.player ? ACCT.player.id : null;
+  if (!(Date.now() - s.at < RUN_KEEP) || s.owner !== owner || !Array.isArray(s.queue) || !s.queue.length) { clearRun(); return false; }
+  if (s.mode === 'lesson') {
+    if (!COURSES[s.course]) { clearRun(); return false; }
+    if (state.course !== s.course) { state.course = s.course; buildLessons(); }
+    if (!LESSONS[s.idx] || LESSONS[s.idx].id !== s.lesson) { clearRun(); return false; }
+  }
+  const queue = s.queue.filter(q => !isRemoved(q._card));
+  if (!queue.length) { clearRun(); return false; }
+  run = newRun({ mode: s.mode, idx: s.idx, challenge: s.challenge, wasDone: s.wasDone, total: s.total, queue,
+    graded: new Set(s.graded), wrong: new Set(s.wrong), mcCourses: new Set(s.mcCourses), mcRecall: s.mcRecall,
+    xp: s.xp, bankedXp: s.bankedXp, reviewed: s.reviewed, remembered: s.remembered, newSeen: s.newSeen, correct: s.correct });
+  show('#lesson');
+  nextItem();
+  toast('Picked up where you left off.');
+  return true;
+}
 
 function updateBar() {
   const pct = Math.round(run.correct / run.total * 100);
@@ -14915,6 +14966,7 @@ function nextItem() {
   resetFoot();
   if (!run.queue.length) return finish();
   run.cur = run.queue.shift(); run.sel = null; run.phase = 'answer'; run.phaseAt = performance.now();
+  saveRun();
   updateBar();
   const it = run.cur;
   if (it.t === 'recall' && it._retry) it._noAI = true;
@@ -15187,32 +15239,38 @@ $('#fb').addEventListener('click', e => {
   if (sb && run.phase === 'selfgrade') { showTyped(run.cur, +sb.dataset.self, '', run.selfConf || 'sure', 'self'); return; }
   if (e.target.closest('#regrade') && run.phase === 'feedback') { const it = run.cur; const conf = run.selfConf; undoTyped(it); $('#foot').className = 'lfoot'; selfGrade(it, it._conf || 'sure', ''); }
 });
-// "I think the grader is wrong": collect an optional note, get a second opinion from a stronger model, and replace the grade.
-$('#fb').addEventListener('click', async e => {
-  if (!run || run.phase !== 'feedback') return;
-  const it = run.cur;
-  if (e.target.closest('#dispute')) {
-    $('#gradeMeta').outerHTML = `<div class="repbox" id="dispBox"><label class="gq" for="dispNote">Why do you think the grader is wrong?</label><textarea id="dispNote" rows="3" maxlength="800" placeholder="For example: my second policy is real (say where it comes from), or the grader misread what I said."></textarea><div class="row"><button class="btn ghost sm" id="dispSend">Get a second opinion</button></div><p class="meta">Your answer and note are saved so the course and grader can be improved.</p></div>`;
+// "I think the grader is wrong": collect a note, get a second opinion from a stronger model, and replace the grade.
+// While the note box is open, the main button sends it (Continue would skip the card), and Cancel goes back.
+$('#fb').addEventListener('click', e => {
+  if (!run) return;
+  if (e.target.closest('#dispute') && run.phase === 'feedback') {
+    const meta = $('#gradeMeta'); run.metaHTML = meta.outerHTML;
+    meta.outerHTML = `<div class="repbox" id="dispBox"><label class="gq" for="dispNote">Why do you think the grader is wrong?</label><textarea id="dispNote" rows="3" maxlength="800" placeholder="For example: my second policy is real (say where it comes from), or the grader misread what I said."></textarea><p class="meta">A stronger grader re-grades your answer with your note and replaces this grade. Your answer and note are saved so the course and grader can be improved. <button class="linkbtn" id="dispCancel">Cancel</button></p></div>`;
+    run.phase = 'disputeNote'; setCheck(true, true, 'Get a second opinion');
     $('#dispNote').focus(); return;
   }
-  if (e.target.closest('#dispSend')) {
-    const note = ($('#dispNote').value || '').trim();
-    if (note.length < 10) { toast('Say briefly why you think the grade is wrong. The second grader uses it.'); $('#dispNote').focus(); return; }
-    $('#dispBox').innerHTML = '<p class="checking"><span class="spin" aria-hidden="true"></span>Getting a second opinion…</p>';
-    run.phase = 'disputing'; setCheck(false, false);
-    try {
-      const r = await apiCall('/api/dispute', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [], explain: it.x || '', response: it._resp || '', open: it.open === true, first: it._detail, note, course: it._course || '', card: it._card || '' });
-      if (!run || run.cur !== it) return;
-      // Remember answers accepted on appeal so the grader credits the same point next time this card comes up.
-      if (r.outcome === 'upheld' || r.outcome === 'partly_upheld') { state.accepted = state.accepted || {}; state.accepted[it._card] = [...(state.accepted[it._card] || []), { r: String(it._resp || '').slice(0, 400), why: String(r.reply || '').slice(0, 300) }].slice(-3); save(); }
-      undoTyped(it); showTyped(it, r.score, r.feedback, it._conf || 'sure', 'ai', r);
-    } catch (err) {
-      if (!run || run.cur !== it) return;
-      run.phase = 'feedback'; setCheck(true, true, 'Continue');
-      const box = $('#dispBox'); if (box) box.innerHTML = `<p class="meta">${esc(err instanceof TypeError ? 'Couldn’t reach the grader.' : err.message)}</p>`;
-    }
+  if (e.target.closest('#dispCancel') && run.phase === 'disputeNote') {
+    $('#dispBox').outerHTML = run.metaHTML; run.phase = 'feedback'; setCheck(true, true, 'Continue');
   }
 });
+async function sendDispute() {
+  const it = run.cur;
+  const note = ($('#dispNote').value || '').trim();
+  if (note.length < 10) { toast('Say briefly why you think the grade is wrong. The second grader uses it.'); $('#dispNote').focus(); return; }
+  $('#dispBox').innerHTML = '<p class="checking"><span class="spin" aria-hidden="true"></span>Getting a second opinion…</p>';
+  run.phase = 'disputing'; setCheck(true, false, 'Re-grading…');
+  try {
+    const r = await apiCall('/api/dispute', { question: [it.p, it.q].filter(Boolean).join(' '), answer: typedAnswerOf(it), keys: it.keys || [], explain: it.x || '', response: it._resp || '', open: it.open === true, first: it._detail, note, course: it._course || '', card: it._card || '' });
+    if (!run || run.cur !== it) return;
+    // Remember answers accepted on appeal so the grader credits the same point next time this card comes up.
+    if (r.outcome === 'upheld' || r.outcome === 'partly_upheld') { state.accepted = state.accepted || {}; state.accepted[it._card] = [...(state.accepted[it._card] || []), { r: String(it._resp || '').slice(0, 400), why: String(r.reply || '').slice(0, 300) }].slice(-3); save(); }
+    undoTyped(it); showTyped(it, r.score, r.feedback, it._conf || 'sure', 'ai', r);
+  } catch (err) {
+    if (!run || run.cur !== it) return;
+    run.phase = 'feedback'; setCheck(true, true, 'Continue');
+    const box = $('#dispBox'); if (box) box.innerHTML = `<p class="meta">${esc(err instanceof TypeError ? 'Couldn’t reach the grader.' : err.message)} The first grade stands.</p>`;
+  }
+}
 
 // srsGrade defaults to good (3) when correct and missed (1) when wrong; matching with misses passes 2.
 function grade(ok, ansHTML, heading, srsGrade) {
@@ -15233,6 +15291,7 @@ function grade(ok, ansHTML, heading, srsGrade) {
 $('#checkBtn').onclick = () => {
   if (!run || performance.now() - (run.phaseAt || 0) < 350) return;
   if (run.phase === 'feedback') nextItem();
+  else if (run.phase === 'disputeNote') sendDispute();
   else if (run.phase === 'answer') check();
 };
 
@@ -15243,7 +15302,7 @@ function bumpStreak() {
 }
 function streakInfo() { return computeStreak(state.activeDays, state.settings, dstr(new Date())); }
 function finish() {
-  bumpStreak();
+  bumpStreak(); clearRun();
   if (run.mode === 'session') return finishSession();
   const L = LESSONS[run.idx];
   state.done[L.id] = true;
@@ -15279,7 +15338,9 @@ function finishSession() {
 document.addEventListener('keydown', e => {
   if (!run || $('#lesson').hidden) return;
   if (e.key === 'Escape') { if (e.target.matches && e.target.matches('textarea, input')) { e.target.blur(); return; } quitRun(); return; }
-  if (e.target.matches && e.target.matches('textarea, input')) { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.target.id === 'recallIn' && run.phase === 'answer') { e.preventDefault(); submitTyped('sure'); } return; }
+  if (e.target.matches && e.target.matches('textarea, input')) { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.target.id === 'recallIn' && run.phase === 'answer') { e.preventDefault(); submitTyped('sure'); }
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && e.target.id === 'dispNote' && run.phase === 'disputeNote') { e.preventDefault(); sendDispute(); }
+    return; }
   if (run.phase === 'selfgrade' && /^[1-4]$/.test(e.key)) { showTyped(run.cur, +e.key - 1, '', run.selfConf || 'sure', 'self'); return; }
   // Enter on another focused button (dispute, regrade, report) should press that button, not Continue.
   if (e.key === 'Enter' && e.target.closest && e.target.closest('button, a, [tabindex]') && e.target !== $('#checkBtn')) return;
@@ -16400,10 +16461,13 @@ function renderCourseView() {
   const k = state.course, C = COURSES[k]; if (!C) return;
   const p = courseProgress(k), on = inMix(k), cards = courseCards(k).length;
   $('#courseHead').innerHTML = `<div class="chead"><button class="back" data-go="courses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg> Courses</button>
-    <div class="ctop"><div><h1>${esc(C.name)}</h1><div class="cmeta">${cards} cards · ${C.units.length} unit${C.units.length === 1 ? '' : 's'} · ${p.done} of ${p.total} lessons</div></div><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="In your daily mix"></button></div>
-    ${on ? `<div class="perday"><span>New cards a day</span>${[3, 5, 10, 20].map(n => `<button data-perday="${n}" aria-pressed="${perDay(k) === n}">${n}</button>`).join('')}</div>` : `<p class="note">Not in your daily mix. Switch it on to get its cards in Today, or tap any lesson to try it.</p>`}
-    ${styleRowHTML(k)}
-    ${C.description ? `<p class="cmeta">${esc(C.description)}</p>` : ''}</div>`;
+    <div><h1>${esc(C.name)}</h1><div class="cmeta">${cards} cards · ${C.units.length} unit${C.units.length === 1 ? '' : 's'} · ${p.done} of ${p.total} lessons done</div></div>
+    ${C.description ? `<p class="cdesc">${esc(C.description)}</p>` : ''}
+    <div class="csets">
+      <div class="csrow"><span class="clab">In your daily mix</span><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="In your daily mix"></button></div>
+      ${on ? `<div class="csrow"><span class="clab">New cards a day</span><div class="cseg">${[3, 5, 10, 20].map(n => `<button data-perday="${n}" aria-pressed="${perDay(k) === n}">${n}</button>`).join('')}</div></div>` : `<p class="chint">Switch it on to get its cards in Today, or tap any lesson to try it.</p>`}
+      ${styleRowHTML(k)}
+    </div></div>`;
   const mine = C.group && G && C.authorId === G.player.id;
   $('#cinfo').hidden = !C.group;
   $('#cinfo').innerHTML = C.group ? `<span>${esc(C.meta)}</span>${mine ? `<button class="linkbtn" id="ciReports">${C.openReports} open report${C.openReports === 1 ? '' : 's'}</button><button class="linkbtn" id="ciUpdate">Upload new version</button><button class="linkbtn" id="ciDelete">Remove course</button>` : `<button class="linkbtn" id="ciBlock">Block ${esc(C.author)}</button>`}` : '';
@@ -16413,8 +16477,8 @@ function renderCourseView() {
   $('#path').innerHTML = C.units.map((u, ui) => {
     const ls = LESSONS.map((l, i) => [l, i]).filter(([l]) => l.unit === ui);
     const nd = ls.filter(([l]) => state.done[l.id]).length, all = nd === ls.length;
-    const open = ui === curUnit;
-    return `<section class="ublock${open ? ' open cur' : ''}${all ? ' done' : ''}"><button class="uhead" data-unit="${ui}" aria-expanded="${open}"><span class="ut"><b>${ui + 1} · ${esc(u.title)}</b>${nd && !all ? `<span class="thin"><i style="width:${nd / ls.length * 100}%"></i></span>` : ''}</span><span class="uc">${nd}/${ls.length}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+    const ov = unitOpen[k + '|' + ui], open = ov !== undefined ? ov : ui === curUnit;
+    return `<section class="ublock${open ? ' open' : ''}${ui === curUnit ? ' cur' : ''}${all ? ' done' : ''}"><button class="uhead" data-unit="${ui}" aria-expanded="${open}"><span class="ut"><b>${ui + 1} · ${esc(u.title)}</b>${nd && !all ? `<span class="thin"><i style="width:${nd / ls.length * 100}%"></i></span>` : ''}</span><span class="uc">${nd}/${ls.length}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
       <div class="lessons"${open ? '' : ' hidden'}>${ls.map(([l, i]) => { const d = state.done[l.id], isNext = i === next; return `<button class="lrow${d ? ' done' : ''}${isNext ? ' next' : ''}" data-idx="${i}"><span class="ld">${d ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>' : ''}</span><span class="lt">${esc(l.title)}</span><span class="ls">${d ? 'In reviews' : isNext ? 'Up next' : ''}</span></button>`; }).join('')}</div></section>`;
   }).join('');
 }
@@ -16424,7 +16488,8 @@ function styleRowHTML(k) {
   if (!courseCards(k).some(c => c.item.t === 'recall')) return '';
   const st = styleFor(k), own = ((state.prefs || {}).courseStyle || {})[k];
   const def = (STYLE_OPTS.find(o => o[0] === answerStyle()) || [])[1];
-  return `<div class="perday"><span>Answer style</span>${STYLE_OPTS.map(([v, l]) => `<button data-cstyle="${v}" aria-pressed="${st === v}">${l}</button>`).join('')}</div><p class="cmeta">${STYLE_BLURB[st]} ${own ? `Just for this course. <button class="linkbtn" data-cstyle="">Use my default (${def})</button>` : `This is your default (${def}, set in Me); tap another to change it for this course only.`}</p>`;
+  const short = { mixed: 'Mixed', short: 'Short answers', typed: 'Typed' };
+  return `<div class="csrow cstack"><span class="clab">Answer style</span><div class="cseg">${STYLE_OPTS.map(([v]) => `<button data-cstyle="${v}" aria-pressed="${st === v}">${short[v]}</button>`).join('')}</div></div><p class="chint">${STYLE_BLURB[st]} ${own ? `Set for this course only. <button class="linkbtn" data-cstyle="">Use my default (${def})</button>` : `Your default from Me.`}</p>`;
 }
 // One course's answer style; '' clears it so the course follows the default in Me.
 function setCourseStyle(k, v) {
@@ -16586,7 +16651,7 @@ function scheduleSync() {
 document.addEventListener('visibilitychange', () => { if (document.hidden) { if (ACCT) syncNow(); } else refreshAccount(); });
 
 if (API) $('#privLink').href = SITE + '/privacy.html';
-if (needGate()) showGate();
+if (needGate()) showGate(); else resumeRun();
 apiCall('/api/config').then(d => { EMAIL_OK = !!d.email; if (!$('#gate').hidden && !gateUI.busy) renderGate(); if (VIEW === 'me' && !run) renderAcctCard(); }).catch(() => {});
 refreshAccount();
 refreshBoard();
