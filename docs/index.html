@@ -125,6 +125,24 @@ svg { display: block; }
 .beat { margin-left: 4px; background: none; border: 2px solid var(--line-deep); border-radius: 8px; padding: 0 8px; font-size: 12px; font-weight: 900; color: var(--primary); }
 .rec { display: block; font-size: 13px; word-break: break-all; background: var(--bg); border: 2px solid var(--line); border-radius: 8px; padding: 6px 8px; color: var(--fg); }
 .glinks { display: flex; flex-wrap: wrap; gap: 14px; }
+/* Me: the account card as a settings list */
+.acct-who { color: var(--fg) !important; }
+.setlist { list-style: none; margin: 2px 0 0; padding: 0; border: 1px solid var(--line-deep); border-radius: 12px; overflow: hidden; background: var(--surface-2); }
+.setlist > li + li { border-top: 1px solid var(--line); }
+.setrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 48px; padding: 12px 14px; background: none; border: 0; color: var(--fg); font-weight: 700; font-size: 15px; text-align: left; }
+.setrow:hover:not(.still) { background: var(--surface); }
+.setrow .sl { min-width: 0; }
+.setrow .sv { display: flex; align-items: center; gap: 4px; color: var(--muted); font-weight: 600; min-width: 0; }
+.setrow .sv .trunc { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 46vw; }
+.setrow .chev { width: 16px; height: 16px; flex: none; }
+.setrow.danger .sl { color: var(--bad); }
+.setpanel { padding: 14px; display: grid; gap: 10px; }
+.setpanel h4 { margin: 0; font-size: 15px; }
+.acct-more { justify-self: start; }
+.acct-out { justify-self: start; }
+.pwwrap { position: relative; display: block; }
+.pwwrap input { padding-right: 64px !important; }
+.pwtoggle { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: none; border: 0; padding: 6px 8px; color: var(--brass); font-weight: 800; font-size: 14px; }
 .result .vs { color: var(--fg); font-weight: 800; }
 
 /* group courses */
@@ -15522,7 +15540,7 @@ function acctStatusText() {
   if (!ACCT) return 'You’re not signed in, so progress is kept on this device only.';
   if (syncState === 'offline') return 'Can’t reach the server right now. Your progress is kept on this device and saves to your account when you’re back online.';
   if (syncState === 'saving' || !ACCT) return 'Saving your progress…';
-  return 'Your progress is saved to your account.';
+  return 'Progress saved to your account.';
 }
 
 // Passkeys (WebAuthn). The server's options use base64url strings; the browser wants bytes.
@@ -15607,13 +15625,24 @@ function hideGate() {
   if ($('#lesson').hidden && $('#result').hidden) document.body.classList.remove('in-lesson');
   renderHome();
 }
+// A password field with a Show/Hide button, so players can check what they typed.
+function pwFld(id, label, attrs, cls) {
+  return `<label class="fld${cls ? ' ' + cls : ''}"><span>${label}</span><span class="pwwrap"><input id="${id}" type="password" ${attrs}><button type="button" class="pwtoggle" aria-label="Show password" aria-pressed="false">Show</button></span></label>`;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('.pwtoggle'); if (!b) return;
+  e.preventDefault();
+  const i = b.parentElement.querySelector('input'), show = i.type === 'password';
+  i.type = show ? 'text' : 'password'; b.textContent = show ? 'Hide' : 'Show';
+  b.setAttribute('aria-pressed', String(show)); b.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+});
 function renderGate() {
   const g = gateUI, el = $('#gateIn'), dis = g.busy ? ' disabled' : '';
   const keep = {}; ['gtName', 'gtUser', 'gtPass', 'gtCode', 'gtRec', 'gtEmail', 'gtVCode', 'gtEmailIn', 'gtECode'].forEach(id => { const x = document.getElementById(id); if (x) keep[id] = x.value; });
   const owl = m => `<img class="mascot m-result" src="mascot/${m}.webp" alt="">`;
   // Back sits in the top-left corner, like other apps. Not on the first screen, a fresh account's passkey step, or the merge question.
   $('#gtBack').hidden = ['welcome', 'passkey', 'merge', 'verify'].includes(g.step);
-  const fld = (id, label, attrs) => `<label class="fld gate-fld"><span>${label}</span><input id="${id}" ${attrs}></label>`;
+  const fld = (id, label, attrs) => /type="password"/.test(attrs) ? pwFld(id, label, attrs.replace('type="password"', ''), 'gate-fld') : `<label class="fld gate-fld"><span>${label}</span><input id="${id}" ${attrs}></label>`;
   let h = '';
   if (g.step === 'welcome') {
     h = `${owl('wave')}<h2>Welcome to WonkoLingo</h2><p>Learn policy a few minutes a day, with friends. Make an account so your progress is saved and follows you to any device.</p>
@@ -15780,20 +15809,35 @@ function renderAcctCard() {
       : `<label class="fld"><span>Code from your other device</span><input id="aCodeIn" maxlength="9" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" placeholder="ABCD-EFGH"></label><div class="row"><button class="btn ghost sm" id="aCodeGo"${dis}>Sign in</button></div><p class="meta">To get a code, open WonkoLingo where you’re already signed in, go to Me and choose “Sign in on another device”.</p>`;
     h += `<div class="glinks"><button class="linkbtn" id="aMode">${a.mode === 'recovery' ? 'Use a code instead' : 'Use a recovery code instead'}</button><button class="linkbtn" id="aCancel">Cancel</button></div>`;
   } else if (ACCT) {
-    if (a.pwForm) h += `<form class="acct-pw" id="aPwForm" autocomplete="on"><label class="fld"><span>Username</span><input id="aPwUser" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="40" value="${esc(ACCT.username || '')}"></label>${ACCT.username && !freshSignIn() ? '<label class="fld"><span>Current password</span><input id="aPwCur" name="current-password" type="password" autocomplete="current-password"></label>' : ''}<label class="fld"><span>${ACCT.username ? 'New password' : 'Password'} (8 or more characters)</span><input id="aPwPass" name="password" type="password" minlength="8" autocomplete="new-password"></label><div class="row"><button class="btn sm" type="submit"${dis}>Save</button><button class="linkbtn" type="button" id="aPwCancel">Cancel</button></div></form>`;
-    else h += ACCT.username ? `<div class="kv"><span>Username</span><span><b>${esc(ACCT.username)}</b> · <button class="linkbtn" id="aPwEdit">Change password</button></span></div>` : `<p>Add a username and password so you can sign in on any device.</p><div class="row"><button class="btn sm" id="aPwEdit"${dis}>Set a password</button></div>`;
-    if (ACCT.email) h += `<div class="kv"><span>Email</span><span><b>${esc(ACCT.email)}</b> · <button class="linkbtn" id="aEmailRm"${dis}>Remove</button></span></div>`;
-    else if (EMAIL_OK && a.emailSent) h += `<form class="acct-pw" id="aEmailCodeForm"><label class="fld"><span>Code sent to ${esc(a.emailSent)}</span><input id="aEmailCode" inputmode="numeric" maxlength="7" autocomplete="one-time-code" placeholder="123456"></label><div class="row"><button class="btn sm" type="submit"${dis}>Confirm</button><button class="linkbtn" type="button" id="aEmailCancel">Use a different email</button></div></form>`;
-    else if (EMAIL_OK && a.emailForm) h += `<form class="acct-pw" id="aEmailForm"><label class="fld"><span>Email</span><input id="aEmail" type="email" maxlength="254" autocomplete="email" autocapitalize="none" spellcheck="false"></label><div class="row"><button class="btn sm" type="submit"${dis}>Send a code</button><button class="linkbtn" type="button" id="aEmailCancel">Cancel</button></div></form>`;
-    else if (EMAIL_OK) h += `<p class="meta">Add an email so you can reset a forgotten password: <button class="linkbtn" id="aEmailAdd"${dis}>add email</button></p>`;
-    if (PASSKEY_OK) h += pk ? `<p class="meta">Passkey added: you can also sign in with Face ID or Touch ID.</p>` : `<p class="meta">Or sign in with Face ID or Touch ID: <button class="linkbtn" id="aPk"${dis}>add a passkey</button></p>`;
-    h += a.link
-      ? `<p>On your other device, open WonkoLingo, go to Me, choose “I already have an account” and enter:</p><code class="rec acode">${esc(a.link.code.slice(0, 4) + '-' + a.link.code.slice(4))}</code><p class="meta">Works once, for 10 minutes. <button class="linkbtn" id="aLink"${dis}>Get a new code</button></p>`
-      : `<div class="row"><button class="btn ghost sm" id="aLink"${dis}>Sign in on another device</button></div>`;
-    if (a.recShown) h += `<p>Keep this somewhere safe. It signs in to your account on any device, and anyone who has it can use your account.</p><code class="rec">${esc(ACCT.recovery || ACCT.token)}</code>`;
-    h += `<div class="glinks"><button class="linkbtn" id="aRec">${a.recShown ? 'Hide recovery code' : 'Recovery code'}</button>${pk && PASSKEY_OK ? `<button class="linkbtn" id="aPk"${dis}>Add another passkey</button>` : ''}<button class="linkbtn" id="aOthers"${dis}>${a.othersArmed ? 'Click again to sign out other devices' : 'Sign out other devices'}</button><button class="linkbtn" id="aSwitch">Use a different account</button><button class="linkbtn" id="aOut">${a.outArmed ? 'Click again to sign out' : 'Sign out'}</button><button class="linkbtn" id="aDel"${dis}>${a.delArmed ? 'Click again to delete' : 'Delete account'}</button></div>`;
+    // A settings list: one row per way in, each opening its form in place; rarely used options sit under "More options".
+    const chev = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
+    const row = (id, label, value, cls) => `<li><button class="setrow${cls ? ' ' + cls : ''}" id="${id}"${dis}><span class="sl">${label}</span><span class="sv">${value}${chev}</span></button></li>`;
+    const still = (label, value) => `<li><div class="setrow still"><span class="sl">${label}</span><span class="sv">${value}</span></div></li>`;
+    const panel = inner => `<li class="setpanel">${inner}</li>`;
+    h += `<p class="acct-who">Signed in as <b>${esc(ACCT.username || ACCT.player.name)}</b></p><ul class="setlist">`;
+    h += a.pwForm ? panel(`<form class="acct-pw" id="aPwForm" autocomplete="on"><h4>${ACCT.username ? 'Change password' : 'Set a password'}</h4><label class="fld"><span>Username</span><input id="aPwUser" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="40" value="${esc(ACCT.username || '')}"></label>${ACCT.username && !freshSignIn() ? pwFld('aPwCur', 'Current password', 'name="current-password" autocomplete="current-password"') : ''}${pwFld('aPwPass', (ACCT.username ? 'New password' : 'Password') + ' (8 or more characters)', 'name="password" minlength="8" autocomplete="new-password"')}<div class="row"><button class="btn sm" type="submit"${dis}>Save</button><button class="linkbtn" type="button" id="aPwCancel">Cancel</button></div></form>`)
+      : row('aPwEdit', 'Password', ACCT.username ? 'Change' : 'Set up');
+    if (ACCT.email) h += a.emailOpen ? panel(`<p><b>${esc(ACCT.email)}</b> is confirmed. You can use it to sign in if you forget your password.</p><div class="row"><button class="btn ghost sm" id="aEmailRm"${dis}>Remove email</button><button class="linkbtn" id="aEmailOpen">Done</button></div>`) : row('aEmailOpen', 'Email', `<span class="trunc">${esc(ACCT.email)}</span>`);
+    else if (EMAIL_OK && a.emailSent) h += panel(`<form class="acct-pw" id="aEmailCodeForm"><label class="fld"><span>Code sent to ${esc(a.emailSent)}</span><input id="aEmailCode" inputmode="numeric" maxlength="7" autocomplete="one-time-code" placeholder="123456"></label><div class="row"><button class="btn sm" type="submit"${dis}>Confirm</button><button class="linkbtn" type="button" id="aEmailCancel">Use a different email</button></div></form>`);
+    else if (EMAIL_OK && a.emailForm) h += panel(`<form class="acct-pw" id="aEmailForm"><label class="fld"><span>Email, for resetting a forgotten password</span><input id="aEmail" type="email" maxlength="254" autocomplete="email" autocapitalize="none" spellcheck="false"></label><div class="row"><button class="btn sm" type="submit"${dis}>Send a code</button><button class="linkbtn" type="button" id="aEmailCancel">Cancel</button></div></form>`);
+    else if (EMAIL_OK) h += row('aEmailAdd', 'Email', 'Add');
+    if (PASSKEY_OK) h += pk ? still('Face ID or Touch ID', 'On') : row('aPk', 'Face ID or Touch ID', 'Set up');
+    h += a.link ? panel(`<p>On your other device, choose “I already have an account”, then “Use a code from another device”, and enter:</p><code class="rec acode">${esc(a.link.code.slice(0, 4) + '-' + a.link.code.slice(4))}</code><p class="meta">Works once, for 10 minutes. <button class="linkbtn" id="aLink"${dis}>Get a new code</button></p>`)
+      : row('aLink', 'Sign in on another device', '');
+    h += `</ul>`;
+    h += `<button class="linkbtn acct-more" id="aMore" aria-expanded="${!!a.more}">${a.more ? 'Fewer options' : 'More options'}</button>`;
+    if (a.more) {
+      h += `<ul class="setlist">${row('aRec', 'Recovery code', a.recShown ? 'Hide' : 'Show')}`;
+      if (a.recShown) h += panel(`<p>Keep this somewhere safe. It signs in to your account on any device, and anyone who has it can use your account.</p><code class="rec">${esc(ACCT.recovery || ACCT.token)}</code>`);
+      if (pk && PASSKEY_OK) h += row('aPk', 'Add another passkey', '');
+      h += row('aOthers', a.othersArmed ? 'Tap again to sign out other devices' : 'Sign out other devices', '');
+      h += row('aSwitch', 'Use a different account', '');
+      h += row('aDel', a.delArmed ? 'Tap again to delete your account' : 'Delete account', '', 'danger');
+      h += `</ul>`;
+      if (a.delArmed) h += `<p class="gerr">Deleting removes your account, progress, lesson results and any courses you wrote, on every device. It can’t be undone.</p>`;
+    }
+    h += `<button class="btn ghost sm acct-out" id="aOut"${dis}>${a.outArmed ? 'Tap again to sign out' : 'Sign out'}</button>`;
     if (a.outArmed && !a.outForce) h += `<p class="gerr">Signing out clears this device. ${ACCT.username || pk ? 'Sign back in with your password, passkey or recovery code.' : 'Without a password or passkey, you’ll need your recovery code to get back in.'}</p>`;
-    if (a.delArmed) h += `<p class="gerr">Deleting removes your account, progress, lesson results and any courses you wrote, on every device. It can’t be undone.</p>`;
   } else h += `<div class="row"><button class="btn sm" id="aGate">Create an account or sign in</button></div>`;
   if (a.err) h += `<p class="gerr">${a.err}</p>`;
   el.innerHTML = h;
@@ -15806,11 +15850,13 @@ $('#acctCard').addEventListener('click', async e => {
   if (t.id === 'aSwitch') { a.outArmed = false; showGate('signin'); return; }
   if (t.id === 'aPwEdit') { a.pwForm = true; renderAcctCard(); const x = $('#aPwPass'); if (x) x.focus(); return; }
   if (t.id === 'aPwCancel') { a.pwForm = false; renderAcctCard(); return; }
+  if (t.id === 'aMore') { a.more = !a.more; renderAcctCard(); return; }
+  if (t.id === 'aEmailOpen') { a.emailOpen = !a.emailOpen; renderAcctCard(); return; }
   if (t.id === 'aEmailAdd') { a.emailForm = true; renderAcctCard(); const x = $('#aEmail'); if (x) x.focus(); return; }
   if (t.id === 'aEmailCancel') { a.emailForm = !!a.emailSent; a.emailSent = ''; renderAcctCard(); return; }
   if (t.id === 'aEmailRm') {
     a.busy = true; renderAcctCard();
-    try { await apiCall('/api/email/remove', {}); ACCT.email = null; saveA(); toast('Email removed.'); } catch (err) { a.err = acctErr(err); }
+    try { await apiCall('/api/email/remove', {}); ACCT.email = null; a.emailOpen = false; saveA(); toast('Email removed.'); } catch (err) { a.err = acctErr(err); }
     a.busy = false; renderAcctCard(); return;
   }
   if (t.id === 'aCancel') { a.mode = ''; renderAcctCard(); return; }
