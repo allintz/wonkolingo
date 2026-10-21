@@ -159,7 +159,7 @@ Depending on how well they know the card, the player sees its multiple-choice ve
 }
 ```
 
-`items` is 3 to 7 unique steps (up to 160 characters each), listed in the **correct** order. `ends` labels the two ends of the list (up to 30 characters each), such as `["First", "Last"]` or `["Weakest", "Strongest"]`. `p` and `x` are required.
+`p` must say what is being ordered on its own ("Put the Senate's cloture process in order", not "Put the usual steps in order"): in daily reviews the card shows up without its lesson title. `items` is 3 to 7 unique steps (up to 160 characters each), listed in the **correct** order. `ends` labels the two ends of the list (up to 30 characters each), such as `["First", "Last"]` or `["Weakest", "Strongest"]`. `p` and `x` are required.
 
 ## Before you hand over the file
 

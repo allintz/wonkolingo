@@ -345,6 +345,10 @@ svg { display: block; }
 .pool { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 8px; border-top: 2px solid var(--line); }
 .chip { text-align: left; background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 12px; padding: 10px 14px; font-weight: 700; font-size: 15px; }
 .slots .chip { flex: 1; border-color: var(--primary); background: var(--primary-soft); }
+.order .chip, .pool .chip { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.chip.lifted { opacity: .35; }
+.chip.ghost { position: fixed; left: 0; top: 0; z-index: 1000; pointer-events: none; margin: 0; box-shadow: 0 10px 24px rgb(0 0 0 / .45); }
+.slots li.drop .chip, .slots li.drop .empty { outline: 2px dashed var(--brass); outline-offset: 3px; }
 .order-ans { margin: 0; padding-left: 22px; }
 
 .lfoot { border-top: 2px solid var(--line); background: var(--bg); padding-inline: 16px; padding-block: 16px calc(16px + env(safe-area-inset-bottom, 0px)); transition: background .15s; }
@@ -562,6 +566,11 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .rmlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .rmlist li { display: grid; gap: 4px; padding: 12px 14px; background: var(--surface); border-radius: 12px; }
 .rmlist li p { margin: 0; }
+.ktlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ktlist li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px 10px 14px; background: var(--surface); border-radius: 12px; font-weight: 700; }
+.ktk { flex: none; border: 2px solid var(--line-deep); background: transparent; color: var(--muted); border-radius: 999px; padding: 6px 14px; font-weight: 800; font-size: 14px; }
+.ktk[aria-pressed="true"] { background: var(--brass-soft); border-color: var(--brass); color: var(--fg); }
+.ktk[aria-pressed="true"]::before { content: "✓ "; }
 /* Sign-up screen */
 .gate { z-index: 30; }
 .gate-in .gate-fld { width: 100%; max-width: 340px; text-align: left; }
@@ -684,6 +693,11 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   <div class="stage"><div class="stage-in" id="rmBody"></div></div>
 </section>
 
+<section class="overlay sheet" role="dialog" aria-modal="true" aria-labelledby="ktTitle" id="ktSheet" hidden>
+  <div class="lbar"><button class="icon-btn" id="ktClose" aria-label="Not now"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2 id="ktTitle">Key terms</h2></div>
+  <div class="stage"><div class="stage-in" id="ktBody"></div></div>
+</section>
+
 <style>body.in-lesson .toast { bottom: auto; top: calc(64px + env(safe-area-inset-top, 0px)); }</style>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
@@ -702,7 +716,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-21-fe7b255';
+  window.WL_BUILD = '2026-10-21-7b24c11';
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -843,7 +857,7 @@ const UNITS = [
      },
      {
       "t": "order",
-      "p": "Put these in order from coldest to warmest.",
+      "p": "You ask a Hill staffer whether their boss will cosponsor a bill. Put these replies in order from coldest to warmest.",
       "ends": [
        "Coldest",
        "Warmest"
@@ -1261,7 +1275,7 @@ const UNITS = [
      },
      {
       "t": "order",
-      "p": "Order these follow-ups from weakest to strongest signal.",
+      "p": "After you meet with a Hill office about a bill, put these follow-ups in order from weakest to strongest signal of interest.",
       "ends": [
        "Weakest",
        "Strongest"
@@ -1398,7 +1412,7 @@ const PROC_UNITS = [
     "items": [
      {
       "t": "order",
-      "p": "Put the usual steps in order.",
+      "p": "Put the usual steps for a bill in order, from introduction to the floor.",
       "ends": [
        "First",
        "Last"
@@ -1784,7 +1798,7 @@ const PROC_UNITS = [
      },
      {
       "t": "order",
-      "p": "Put the cloture process in order.",
+      "p": "Put the Senate’s cloture process for ending a filibuster in order.",
       "ends": [
        "First",
        "Last"
@@ -1918,7 +1932,7 @@ const PROC_UNITS = [
      },
      {
       "t": "order",
-      "p": "Put the reconciliation process in order.",
+      "p": "Put the budget reconciliation process in order.",
       "ends": [
        "First",
        "Last"
@@ -2140,7 +2154,7 @@ const PROC_UNITS = [
      },
      {
       "t": "order",
-      "p": "Put a veto fight in order.",
+      "p": "Put a fight over a presidential veto in order.",
       "ends": [
        "First",
        "Last"
@@ -2721,7 +2735,7 @@ const FRONTIER_UNITS = [
     "items": [
      {
       "t": "order",
-      "p": "Put the IVO review cycle in order.",
+      "p": "Under the FRONTIER Act, put the review cycle between a developer and its independent verification organization (IVO) in order.",
       "ends": [
        "First",
        "Last"
@@ -2877,7 +2891,7 @@ const FRONTIER_UNITS = [
     "items": [
      {
       "t": "order",
-      "p": "Put a contested emergency order in order.",
+      "p": "Under the FRONTIER Act, a lab contests an emergency order from the Secretary. Put the steps in order.",
       "ends": [
        "First",
        "Last"
@@ -14721,11 +14735,13 @@ const GL_RE = (() => {
   re.idx = GL_IDX;
   return re;
 })();
+// The glossary term the current card asks about, so its own tooltip doesn't give the answer away.
+let GL_SKIP = [];
 function gl(text, seen) {
   if (text === null || text === undefined) return '';
   const h = esc(text);
   if (!GL_RE || !text) return h;
-  seen = seen || new Set();
+  seen = seen || new Set(GL_SKIP);
   return h.replace(GL_RE, m => {
     const i = GL_RE.idx.get(m.toLowerCase());
     if (i === undefined || seen.has(i)) return m;
@@ -14815,7 +14831,8 @@ const COURSES = Object.assign(Object.create(null), {
   proc: { name: 'Procedure', units: PROC_UNITS, pre: 'p', created: '2026-10-16', updated: '2026-10-21',
     caveat: ['These simplify standard House and Senate procedure as described in CRS reports and the chambers’ rules. Precedents and each Congress’s rules package change details over time, and there are exceptions to almost everything here.', 'News examples are paraphrased from 2023 to 2025 coverage, not real headlines.'],
     meta: 'Draft · 2026-10-16 · Not reviewed by a procedure expert' },
-  policy: { name: 'AI Policy Landscape', units: POLICY_UNITS, pre: 'a', created: '2026-10-16', updated: '2026-10-21', description: 'Specific laws, bills, proposals and frameworks in the 2026 debate over AI risk policy, and who argues what. Pairs with AI Policy Toolkit, which covers how the tools themselves work.',
+  policy: { name: 'AI Policy Landscape', units: POLICY_UNITS, pre: 'a',
+    keyTerms: ['model weights', 'open-weight', 'training run', 'alignment', 'superintelligence', 'safety case', 'model card', 'overhang', 'black-box access', 'deployer', 'export controls', 'know-your-customer', 'preemption', 'safe harbor', 'duty of care', 'strict liability', 'negligence', 'antitrust'], created: '2026-10-16', updated: '2026-10-21', description: 'Specific laws, bills, proposals and frameworks in the 2026 debate over AI risk policy, and who argues what. Pairs with AI Policy Toolkit, which covers how the tools themselves work.',
     caveat: ['Drawn from the AI Risk Legislation Tracker, the pacing.tech agenda (Douglas, Dillon, Moore, Leech and Avin) and IFP\u2019s report on automated AI R&D, with facts current as of October 2026. Frameworks, claims about what a policy would do, and objections are the views of the people who hold them, not settled fact.', 'Revised on October 19, 2026 to cut duplicates and report trivia, then re-checked by a second AI, which corrected many attributions. On October 20, general explanations of how each tool works moved to AI Policy Toolkit, so this course focuses on specific laws, bills, actors and frameworks. Many questions have more than one right answer, and the grader accepts any specific, correct one. No person has reviewed it.'],
     meta: 'Draft \u00b7 revised 2026-10-20 \u00b7 Fact-checked by AI, not by a person' },
   tools: { name: 'AI Policy Toolkit', units: TOOLS_UNITS, pre: 't', created: '2026-10-17', updated: '2026-10-21', description: 'The main policy tools for reducing catastrophic AI risk: what each is for, what makes it distinctive, and the main objections. 40 tools in 6 families, plus risk-to-tool scenarios.',
@@ -14887,7 +14904,7 @@ function isObj(v) { return !!v && typeof v === 'object' && !Array.isArray(v); }
 // A function declaration, so load() can use it at startup (a const here isn't defined yet when load() runs).
 function isDayStr(d) { return typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d); }
 function dropBadTypes(s) {
-  ['done', 'srs', 'hints', 'mix', 'xpBy', 'newCounts', 'removed', 'myTerms', 'accepted', 'prefs', 'settings'].forEach(k => { if (s[k] !== undefined && !isObj(s[k])) delete s[k]; });
+  ['done', 'srs', 'hints', 'mix', 'xpBy', 'newCounts', 'removed', 'myTerms', 'keyTerms', 'accepted', 'prefs', 'settings'].forEach(k => { if (s[k] !== undefined && !isObj(s[k])) delete s[k]; });
   ['activeDays', 'jumped'].forEach(k => { if (s[k] !== undefined && !Array.isArray(s[k])) delete s[k]; });
   ['xp', 'xpBase', 'streak', 'newCount', 'resetAt', 'prefsAt', 'mixAt', 'settingsAt'].forEach(k => { if (s[k] !== undefined && !Number.isFinite(s[k])) delete s[k]; });
   if (s.course != null && typeof s.course !== 'string') delete s.course;
@@ -14899,7 +14916,8 @@ function dropBadTypes(s) {
     if (s.settings.past !== undefined && !Array.isArray(s.settings.past)) delete s.settings.past;
   }
   if (s.prefs) ['courseStyle', 'rem'].forEach(k => { if (s.prefs[k] !== undefined && !isObj(s.prefs[k])) delete s.prefs[k]; });
-  ['mix', 'removed'].forEach(k => { if (s[k]) for (const [id, v] of Object.entries(s[k])) if (!isObj(v)) delete s[k][id]; });
+  ['mix', 'removed', 'keyTerms'].forEach(k => { if (s[k]) for (const [id, v] of Object.entries(s[k])) if (!isObj(v)) delete s[k][id]; });
+  if (s.keyTerms) for (const v of Object.values(s.keyTerms)) if (!Array.isArray(v.known)) v.known = [];
   return s;
 }
 function normalizeState(s) {
@@ -14944,7 +14962,7 @@ function termCard(g, gi) {
   const fam = pool.filter(x => (x.cat || '') === (g.cat || ''));
   const src = fam.length >= 3 ? fam : pool, wrong = [];
   for (let k = 0; wrong.length < 3 && k < src.length; k++) { const c = src[(gi * 7 + k * 13) % src.length]; if (!wrong.includes(c.term)) wrong.push(c.term); }
-  return { id: 'gu0l0#' + termSlug(g.term), t: 'recall', p: `What does “${g.term}” mean?`, answer: g.def, keys: [], x: 'Saved from a card you were reading. Tap the underlined term in any card to see this again.',
+  return { id: 'gu0l0#' + termSlug(g.term), _gterm: g.term, t: 'recall', p: `What does “${g.term}” mean?`, answer: g.def, keys: [], x: 'Saved from a card you were reading. Tap the underlined term in any card to see this again.',
     choice: { p: `Which term matches this definition? “${masked}”`, o: [g.term, ...wrong.filter(w => w.toLowerCase() !== g.term.toLowerCase())].slice(0, 4), a: 0 } };
 }
 function ensureTermsCourse() {
@@ -14968,6 +14986,47 @@ function toggleMyTerm(term, def) {
   else { state.myTerms[term] = def ? { at: Date.now(), def } : Date.now(); const first = !COURSES.terms; ensureTermsCourse(); if (first && !inMix('terms')) setMix('terms', true); toast(first ? 'Added. My terms is now in your daily mix.' : 'Added to My terms.'); }
   ensureTermsCourse(); save(); if (!run) renderHome();
 }
+/* ---------- key terms: a course's jargon, checked off once, then taught as cards at the start of the course ---------- */
+// state.keyTerms[course] = { at, known: [terms] } once the player has gone through the list; terms not marked known become cards.
+const keyTermList = k => ((COURSES[k] && COURSES[k].keyTerms) || []).filter(t => GLOSSARY.some(g => g.term === t));
+const keyTermsAnswered = k => !!(state.keyTerms || {})[k];
+function keyTermCards(k) {
+  const C = COURSES[k], kt = (state.keyTerms || {})[k]; if (!C || !kt) return [];
+  const known = new Set(kt.known || []);
+  return keyTermList(k).filter(t => !known.has(t)).map(t => {
+    const gi = GLOSSARY.findIndex(g => g.term === t);
+    return { ...termCard(GLOSSARY[gi], gi), id: C.pre + 'u0l0#key-' + termSlug(t), x: 'One of this course’s key terms. Tap an underlined term in any card to see its definition again.' };
+  });
+}
+let ktCourse = null, ktKnown = new Set(), ktThen = null;
+const ktAsked = new Set(); // courses whose list was closed with "not now" since the page loaded
+function openKeyTerms(k, then) {
+  ktCourse = k; ktKnown = new Set(((state.keyTerms || {})[k] || {}).known || []); ktThen = then || null;
+  renderKeyTerms(); openSheet('#ktSheet');
+}
+function renderKeyTerms() {
+  const C = COURSES[ktCourse], terms = keyTermList(ktCourse), n = terms.filter(t => !ktKnown.has(t)).length;
+  $('#ktTitle').textContent = 'Key terms: ' + C.name;
+  $('#ktBody').innerHTML = `<p>This course uses these terms a lot. Tap <b>Know it</b> only for terms you could explain to a colleague. The rest become short cards at the start of the course, so leave anything you only half know.</p>
+    <ul class="ktlist">${terms.map(t => `<li><span>${esc(t)}</span><button class="ktk" data-kt="${esc(t)}" aria-pressed="${ktKnown.has(t)}">Know it</button></li>`).join('')}</ul>
+    <div class="row"><button class="btn" id="ktDone">${n ? `Add ${n} term${n === 1 ? '' : 's'}` : 'Done'}</button>${n ? '<button class="linkbtn" id="ktAll">I know all of these</button>' : ''}</div>`;
+}
+function finishKeyTerms(known) {
+  const k = ktCourse, n = keyTermList(k).length - known.size;
+  state.keyTerms = { ...(state.keyTerms || {}), [k]: { at: Date.now(), known: [...known] } };
+  save(); closeSheet('#ktSheet');
+  toast(n ? `Added ${n} key term${n === 1 ? '' : 's'}. They come first in this course.` : 'No key terms added.');
+  const then = ktThen; ktThen = null;
+  if (then) then(); else renderHome();
+}
+$('#ktBody').addEventListener('click', e => {
+  const b = e.target.closest('[data-kt]');
+  if (b) { const t = b.dataset.kt; if (ktKnown.has(t)) ktKnown.delete(t); else ktKnown.add(t); renderKeyTerms(); return; }
+  if (e.target.closest('#ktDone')) finishKeyTerms(ktKnown);
+  if (e.target.closest('#ktAll')) finishKeyTerms(new Set(keyTermList(ktCourse)));
+});
+// Closing without choosing means "not now": the session goes ahead and the list comes back next time the app opens.
+$('#ktClose').onclick = () => { ktAsked.add(ktCourse); closeSheet('#ktSheet'); const then = ktThen; ktThen = null; if (then) then(); };
 // A lesson counts as done once every card in it is in your reviews. Recomputed from the cards, so it stays right when courses are edited.
 function refreshDone() {
   state.done = state.done || {};
@@ -15017,8 +15076,8 @@ function renderStyleCard() {
     <p>${st === 'mixed' ? 'New cards are multiple choice. Once you know a card, you recall it in your head, reveal the answer and rate yourself. One card you know well each session is typed and checked by AI.' : st === 'short' ? 'Short-answer cards always ask you to type your answer, and AI grades it. Multiple-choice cards stay multiple choice. More thinking per card than Mixed.' : 'Every multiple-choice and short-answer card asks you to type your answer, and AI grades it. Slower, but the most practice.'}</p>
     ${Object.keys((state.prefs || {}).courseStyle || {}).length ? `<p class="meta">Some courses have their own style, set on their course page.</p>` : `<p class="meta">Each course can also have its own, on its course page.</p>`}
     <p class="meta">Cards per session</p>
-    <div class="seg">${[[8, '8'], [12, '12'], [20, '20'], [0, 'No limit']].map(([n, t]) => `<button data-size="${n}" class="${sessionSize() === n ? 'on' : ''}">${t}</button>`).join('')}</div>
-    <p>Reviews come first, then new cards. Anything left over waits for “Keep going” or tomorrow.</p>`;
+    <div class="seg">${[[5, '5'], [8, '8'], [12, '12'], [20, '20'], [0, 'No limit']].map(([n, t]) => `<button data-size="${n}" class="${sessionSize() === n ? 'on' : ''}">${t}</button>`).join('')}</div>
+    <p>Each session is one round. Reviews come first, then new cards; whatever’s left is the next round, one tap away.</p>`;
 }
 $('#styleCard').addEventListener('click', e => {
   const b = e.target.closest('[data-style], [data-size]'); if (!b) return;
@@ -15115,7 +15174,8 @@ function whenText(day) { const n = dayDiff(dstr(new Date()), day); return n <= 0
 const cardId = (lessonId, k, it) => it && it.id ? (lessonId.startsWith('c:') ? lessonId.split(':').slice(0, 2).join(':') + ':i:' + it.id : it.id) : lessonId + '#' + k;
 function courseCards(key) {
   const C = COURSES[key]; if (!C) return [];
-  const out = [];
+  // Key-term cards come first, so they're the first new cards the player gets from the course.
+  const out = keyTermCards(key).map(it => ({ id: it.id, course: key, lessonId: C.pre + 'key', item: it }));
   C.units.forEach((u, ui) => u.lessons.forEach((l, li) => { const lid = C.pre + 'u' + ui + 'l' + li; l.items.forEach((it, k) => out.push({ id: cardId(lid, k, it), course: key, lessonId: lid, item: it })); }));
   return out;
 }
@@ -15206,6 +15266,8 @@ function freshForToday(today, extra) {
 function startSession(extra) {
   const today = dstr(new Date());
   if (!mixKeys().length) { toast('Add a course to your daily mix first.'); go('courses'); return; }
+  const ask = extra === 'reviews' ? null : mixKeys().find(k => keyTermList(k).length && !keyTermsAnswered(k) && !ktAsked.has(k));
+  if (ask) { openKeyTerms(ask, () => startSession(extra)); return; }
   const size = sessionSize();
   const due = dueCards(today).slice(0, size || SESSION_REVIEWS);
   const fresh = (extra === 'reviews' ? [] : freshForToday(today, extra)).slice(0, size ? Math.max(0, size - due.length) : undefined);
@@ -15310,6 +15372,7 @@ function nextItem() {
   resetFoot();
   if (!run.queue.length) return finish();
   run.cur = run.queue.shift(); run.sel = null; run.phase = 'answer'; run.phaseAt = performance.now();
+  GL_SKIP = run.cur._gterm ? [GLOSSARY.findIndex(g => g.term === run.cur._gterm)] : [];
   saveRun();
   updateBar();
   const it = run.cur;
@@ -15418,11 +15481,52 @@ function renderOrder(it) {
   if (!run.pool || run.poolFor !== it) { run.pool = shuffle(it.items.map((_, i) => i)); run.ans = []; run.poolFor = it; }
   const slots = it.items.map((_, k) => `<li>${run.ans[k] !== undefined ? `<button class="chip" data-a="${k}">${esc(it.items[run.ans[k]])}</button>` : '<span class="empty"></span>'}</li>`).join('');
   const pool = run.pool.filter(i => !run.ans.includes(i)).map(i => `<button class="chip" data-p="${i}">${esc(it.items[i])}</button>`).join('');
-  $('#stage').innerHTML = `<p class="kicker">Put them in order</p><h3 class="prompt">${gl(it.p)}</h3><div class="order"><div class="end">${esc(it.ends[0])}</div><ol class="slots">${slots}</ol><div class="end">${esc(it.ends[1])}</div></div><div class="pool">${pool || '<span class="end">All placed. Tap one above to take it back.</span>'}</div>`;
-  $('#stage').querySelectorAll('[data-p]').forEach(b => b.onclick = () => { if (run.phase !== 'answer') return; run.ans.push(+b.dataset.p); run.phaseAt = 0; renderOrder(it); });
-  $('#stage').querySelectorAll('[data-a]').forEach(b => b.onclick = () => { if (run.phase !== 'answer') return; run.ans.splice(+b.dataset.a, 1); renderOrder(it); });
+  $('#stage').innerHTML = `<p class="kicker">Put them in order · tap or drag</p><h3 class="prompt">${gl(it.p)}</h3><div class="order"><div class="end">${esc(it.ends[0])}</div><ol class="slots">${slots}</ol><div class="end">${esc(it.ends[1])}</div></div><div class="pool">${pool || '<span class="end">All placed. Tap one above to take it back.</span>'}</div>`;
+  $('#stage').querySelectorAll('[data-p]').forEach(b => b.onclick = () => { if (run.phase !== 'answer' || Date.now() - ordDragEnd < 400) return; run.ans.push(+b.dataset.p); run.phaseAt = 0; renderOrder(it); });
+  $('#stage').querySelectorAll('[data-a]').forEach(b => b.onclick = () => { if (run.phase !== 'answer' || Date.now() - ordDragEnd < 400) return; run.ans.splice(+b.dataset.a, 1); renderOrder(it); });
+  $('#stage').querySelectorAll('.order .chip, .pool .chip').forEach(b => b.onpointerdown = e => orderDrag(it, b, e));
   setCheck(true, run.ans.length === it.items.length);
   if (run.mode === 'session' && !$('#stage .cardtag')) $('#stage').insertAdjacentHTML('afterbegin', `<p class="cardtag">${it._new ? 'New' : 'Review'} · ${esc((COURSES[it._course] || {}).name || '')}</p>`);
+}
+
+// Drag a step to any spot: from the pool into a spot, or from one spot to another (step 5 to spot 2). Dropping a placed
+// step outside the list sends it back to the pool. A tap still places a step or takes it back.
+let ordDragEnd = 0;
+function orderDrag(it, b, e) {
+  if (run.phase !== 'answer' || e.button > 0) return;
+  const from = b.dataset.a !== undefined ? { a: +b.dataset.a } : { p: +b.dataset.p };
+  const sx = e.clientX, sy = e.clientY, slots = [...$('#stage').querySelectorAll('.slots li')], list = $('#stage .slots');
+  let ghost = null, over = -1, dx = 0, dy = 0;
+  const target = (x, y) => {
+    const r = list.getBoundingClientRect();
+    if (x < r.left - 24 || x > r.right + 24 || y < r.top - 24 || y > r.bottom + 24) return -1;
+    let best = -1, bd = Infinity;
+    slots.forEach((li, i) => { const q = li.getBoundingClientRect(), d = Math.abs(y - (q.top + q.bottom) / 2); if (d < bd) { bd = d; best = i; } });
+    return best;
+  };
+  const move = ev => {
+    if (!ghost) {
+      if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return;
+      const r = b.getBoundingClientRect(); dx = sx - r.left; dy = sy - r.top;
+      ghost = b.cloneNode(true); ghost.classList.add('ghost'); ghost.style.width = r.width + 'px'; document.body.appendChild(ghost); b.classList.add('lifted');
+    }
+    ev.preventDefault();
+    ghost.style.transform = `translate(${ev.clientX - dx}px, ${ev.clientY - dy}px)`;
+    const k = target(ev.clientX, ev.clientY);
+    if (k !== over) { slots.forEach((li, i) => li.classList.toggle('drop', i === k)); over = k; }
+  };
+  const up = ev => {
+    removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+    if (!ghost) return;
+    ghost.remove(); ordDragEnd = Date.now();
+    if (ev.type === 'pointerup' && run && run.cur === it && run.phase === 'answer') {
+      const ans = run.ans.slice(), v = from.a !== undefined ? ans.splice(from.a, 1)[0] : from.p;
+      if (over >= 0) ans.splice(Math.min(over, ans.length), 0, v);
+      run.ans = ans; run.phaseAt = 0;
+    }
+    renderOrder(it);
+  };
+  addEventListener('pointermove', move, { passive: false }); addEventListener('pointerup', up); addEventListener('pointercancel', up);
 }
 
 function check() {
@@ -15677,14 +15781,16 @@ function finishSession() {
   const acc = run.reviewed ? Math.round(run.remembered / run.reviewed * 100) : 100;
   const posting = groupPostSession(run.xp, acc, run.reviewed, run.newSeen);
   const more = dueCards(today).length, canLearn = mixKeys().some(k => newCardsAvailable(k).length);
+  // What's left of today (reviews plus new cards still allowed), offered as the next round.
+  const tc = todayCounts(today), left = tc.due + mixKeys().reduce((a, k) => a + (tc.byNew[k] || 0), 0), size = sessionSize(), nextN = size ? Math.min(size, left) : left;
   const tomorrow = Object.entries(state.srs).filter(([id, c]) => c.due === addDays(today, 1) && scheduledCard(id)).length;
   const parts = [];
   if (run.reviewed) parts.push(`You remembered ${run.remembered} of ${run.reviewed} review${run.reviewed === 1 ? '' : 's'}`);
   if (run.newSeen) parts.push(`learned ${run.newSeen} new card${run.newSeen === 1 ? '' : 's'}`);
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${more ? more + ' more reviews are due.' : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${posting && G ? `<p class="meta" id="postLine">Posting to ${esc(G.groupName)}…</p>` : ''}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">Done</button>${more || canLearn ? `<button class="btn ghost" id="rMore">${more ? 'Keep reviewing' : 'Learn more'}</button>` : ''}</div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${left ? `${left} card${left === 1 ? '' : 's'} left today.` : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${posting && G ? `<p class="meta" id="postLine">Posting to ${esc(G.groupName)}…</p>` : ''}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">Done</button>${left || canLearn ? `<button class="btn ghost" id="rMore">${left ? `Next ${nextN}` : 'Learn more'}</button>` : ''}</div>`;
   show('#result');
   $('#rHome').onclick = () => goHome(); $('#rHome').focus();
-  if ($('#rMore')) $('#rMore').onclick = () => startSession(more ? 'reviews' : true);
+  if ($('#rMore')) $('#rMore').onclick = () => startSession(left ? false : true);
   postLine(posting);
 }
 
@@ -16752,12 +16858,13 @@ function renderToday() {
   const el = $('#todayWrap'); if (!el) return;
   const today = dstr(new Date());
   if (!mixKeys().length && !Object.keys(state.srs).length) { el.innerHTML = welcomeHTML(); return; }
-  const t = todayCounts(today), total = t.nDue + t.nNew;
+  const t = todayCounts(today), total = t.nDue + t.nNew, size = sessionSize(), all = total + Math.max(0, t.rest);
+  const rounds = size && all > size ? Math.ceil(all / size) : 1;
   const day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date().getDay()];
   if (total > 0) {
     const mins = Math.max(1, Math.round(t.nDue * 0.6 + t.nNew * 0.4));
     const parts = [t.nDue ? `${t.nDue} review${t.nDue === 1 ? '' : 's'}` : '', t.nNew ? `${t.nNew} new` : ''].filter(Boolean).join(' and ');
-    el.innerHTML = `<section class="today"><div class="t-day">${day}</div><h2>Ready when you are.<br><span class="gold">${total} card${total === 1 ? '' : 's'}</span> today.</h2><p>${parts}, about ${mins} minute${mins === 1 ? '' : 's'}.${t.rest > 0 ? ` ${t.rest} more wait for a later session.` : ''}</p><div class="t-row"><div class="btns"><button class="btn" id="todayGo">Start</button></div><img class="mascot m-hero" src="mascot/read.webp" alt=""></div></section>`;
+    el.innerHTML = `<section class="today"><div class="t-day">${day}</div><h2>Ready when you are.<br><span class="gold">${rounds > 1 ? `${all} cards` : `${total} card${total === 1 ? '' : 's'}`}</span> today.</h2><p>${rounds > 1 ? `${rounds} rounds of up to ${size}. This round: ${parts}, about ${mins} minute${mins === 1 ? '' : 's'}.` : `${parts}, about ${mins} minute${mins === 1 ? '' : 's'}.${t.rest > 0 ? ` ${t.rest} more wait for a later session.` : ''}`}</p><div class="t-row"><div class="btns"><button class="btn" id="todayGo">Start</button></div><img class="mascot m-hero" src="mascot/read.webp" alt=""></div></section>`;
   } else {
     const next = Object.entries(state.srs).filter(([id, c]) => c.due > today && scheduledCard(id)).map(([, c]) => c.due).sort()[0];
     const canLearn = mixKeys().some(k => newCardsAvailable(k).length);
@@ -16864,6 +16971,7 @@ function renderCourseView() {
       <div class="csrow"><span class="clab">In your daily mix</span><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="In your daily mix"></button></div>
       ${on ? `<div class="csrow"><span class="clab">New cards a day</span><div class="cseg">${[3, 5, 10, 20].map(n => `<button data-perday="${n}" aria-pressed="${perDay(k) === n}">${n}</button>`).join('')}</div></div>` : `<p class="chint">Switch it on to get its cards in Today, or tap any lesson to try it.</p>`}
       ${styleRowHTML(k)}
+      ${keyTermRowHTML(k)}
     </div></div>`;
   const mine = C.group && G && C.authorId === G.player.id;
   $('#cinfo').hidden = !C.group;
@@ -16880,6 +16988,12 @@ function renderCourseView() {
   }).join('');
 }
 
+// Key terms on a course page: check them before the first session, or change the answers later.
+function keyTermRowHTML(k) {
+  const n = keyTermList(k).length; if (!n) return '';
+  const kt = (state.keyTerms || {})[k], added = kt ? n - new Set(kt.known || []).size : 0;
+  return `<div class="csrow"><span class="clab">Key terms</span><button class="linkbtn" data-keyterms="${esc(k)}">${kt ? `${added} of ${n} added · Change` : `Check ${n} terms`}</button></div>`;
+}
 // Answer style on a course page, for courses with short-answer cards (the only cards it changes). Each course can have its own.
 function styleRowHTML(k) {
   if (!courseCards(k).some(c => c.item.t === 'recall')) return '';
@@ -16902,6 +17016,7 @@ document.addEventListener('click', e => {
   if (m) { const k = m.dataset.mix, on = !inMix(k); setMix(k, on); toast(on ? `${COURSES[k].name} is in your daily mix.` : `${COURSES[k].name} is out of your mix. Its progress is kept.`); renderHome(); return; }
   const pd = e.target.closest('[data-perday]'); if (pd) { setPerDay(state.course, +pd.dataset.perday); renderHome(); return; }
   const cs = e.target.closest('[data-cstyle]'); if (cs) { const v = cs.dataset.cstyle; setCourseStyle(state.course, v); renderHome(); toast(!v ? 'This course follows your default style again.' : v === 'short' ? `Short answers on for ${COURSES[state.course].name}.` : `Answer style changed for ${COURSES[state.course].name}.`); return; }
+  const kt = e.target.closest('[data-keyterms]'); if (kt) { openKeyTerms(kt.dataset.keyterms); return; }
   if (e.target.closest('#cMake')) openAdd();
 });
 
@@ -17008,6 +17123,9 @@ function mergeStates(a, b) {
   // Removed questions: the newest change to each card wins, so a restore on one device sticks on the other.
   out.removed = { ...(b.removed || {}) };
   Object.entries(a.removed || {}).forEach(([id, r]) => { if (!out.removed[id] || (r.at || 0) >= (out.removed[id].at || 0)) out.removed[id] = r; });
+  // Key-term answers: the newest answer for each course wins.
+  out.keyTerms = { ...(b.keyTerms || {}) };
+  Object.entries(a.keyTerms || {}).forEach(([k, v]) => { if (!out.keyTerms[k] || (v.at || 0) >= (out.keyTerms[k].at || 0)) out.keyTerms[k] = v; });
   out.hints = { ...(b.hints || {}), ...(a.hints || {}) };
   out.accepted = { ...(b.accepted || {}), ...(a.accepted || {}) };
   return out;

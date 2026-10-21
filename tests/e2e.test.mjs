@@ -53,6 +53,8 @@ async function signUp(p, { name = 'Tester ' + rnd(), username = 'u' + rnd(), pas
   await p.waitForSelector('#gate', { state: 'hidden', timeout: 15000 });
   return { name, username, password };
 }
+// Starts today's session; a course's key-terms list may come up first, and Done (everything added) continues.
+async function clickGo(p, sel) { await p.click(sel); if (await visible(p, '#ktSheet')) await p.click('#ktDone'); }
 async function addToMix(p, key) { await ev(p, `go('courses')`); await p.click(`.switch[data-mix="${key}"]`); }
 // Answers whatever card is showing, correctly unless told otherwise; returns false once the session or lesson is over.
 // The app ignores a tap on Check or Continue in the first moment after the screen changes (stray double taps), as a person would.
@@ -136,7 +138,7 @@ tests.accountAndSession = async () => {
   await ev(p1, `go('today')`);
   ok(await clickable(p1, '#todayGo') === true, 'Start is clickable on Today', await clickable(p1, '#todayGo'));
   const xp0 = await ev(p1, 'state.xp');
-  await p1.click('#todayGo');
+  await clickGo(p1, '#todayGo');
   let steps = 0, sawTypes = new Set();
   while (steps++ < 120) { const t = await ev(p1, `run && run.cur ? run.cur._mode + ':' + run.cur.t : ''`); if (t) sawTypes.add(t); if (!await answerOne(p1, { wrong: steps === 2 })) break; }
   ok(await visible(p1, '#result'), 'session reaches the result screen', { steps, types: [...sawTypes] });
@@ -281,7 +283,7 @@ tests.phoneLayout = async () => {
   const hidden = await ev(p, `(() => { const tabs = document.querySelector('#tabs'); const tb = tabs.getBoundingClientRect(); const items = [...document.querySelectorAll('#home button, #home a')].filter(b => b.offsetParent); const last = items[items.length - 1]; if (!last) return 'no buttons'; const r = last.getBoundingClientRect(); return r.bottom <= tb.top + 1 ? true : (last.id || last.textContent.trim().slice(0, 30)) + ' bottom ' + Math.round(r.bottom) + ' tabs top ' + Math.round(tb.top); })()`);
   ok(hidden === true, 'phone Me: last button is above the tab bar when scrolled down', hidden);
   // In a session the answer button must be on screen.
-  await ev(p, `go('today')`); await p.click('#todayGo');
+  await ev(p, `go('today')`); await clickGo(p, '#todayGo');
   ok(await clickable(p, '#checkBtn') === true || await visible(p, '#recallIn'), 'phone session: Check button reachable', await clickable(p, '#checkBtn'));
   ok(p.errors.length === 0, 'phone layout: no page errors', p.errors);
   await c.close();
@@ -298,14 +300,14 @@ tests.network = async () => {
     ok(await visible(p, '.gerr'), 'offline sign-up shows an error');
     ok(!(await p.locator('#gtMake').isDisabled()), 'offline sign-up: button usable again after the error');
     ok(await visible(p, '#gtOffline'), 'offline sign-up offers Continue offline');
-    if (await visible(p, '#gtOffline')) { await p.click('#gtOffline'); ok(!await visible(p, '#gate'), 'Continue offline closes the sign-up screen'); await ev(p, `go('courses')`); await p.click('.switch[data-mix="lingo"]'); await ev(p, `go('today')`); await p.click('#todayGo'); for (let i = 0; i < 4; i++) await answerOne(p); ok(p.errors.length === 0, 'offline: a session works', p.errors); }
+    if (await visible(p, '#gtOffline')) { await p.click('#gtOffline'); ok(!await visible(p, '#gate'), 'Continue offline closes the sign-up screen'); await ev(p, `go('courses')`); await p.click('.switch[data-mix="lingo"]'); await ev(p, `go('today')`); await clickGo(p, '#todayGo'); for (let i = 0; i < 4; i++) await answerOne(p); ok(p.errors.length === 0, 'offline: a session works', p.errors); }
     await c.close();
   }
   { // Signed in, then the API dies: sessions still work and the Saved chip says so.
     const c = await ctx(); const p = await page(c);
     await signUp(p); await addToMix(p, 'proc'); await ev(p, `go('today')`);
     await p.route('**/api/**', r => r.abort('internetdisconnected'));
-    await p.click('#todayGo'); let n = 0; while (n++ < 60 && await answerOne(p)) {}
+    await clickGo(p, '#todayGo'); let n = 0; while (n++ < 60 && await answerOne(p)) {}
     ok(await visible(p, '#result'), 'API down: session still finishes');
     await p.click('#rHome'); await p.waitForTimeout(1500);
     const chip = await p.getAttribute('#saved', 'data-s').catch(() => '');
@@ -360,7 +362,7 @@ tests.me = async () => {
   await ev(p, `go('me')`);
   ok(!badText(await p.locator('#home').innerText()), 'Me text is clean', badText(await p.locator('#home').innerText()));
   // Remove a question mid-session, then restore it from Me.
-  await ev(p, `go('today')`); await p.click('#todayGo');
+  await ev(p, `go('today')`); await clickGo(p, '#todayGo');
   const card = await ev(p, 'run.cur._card');
   await answerOne(p); if (await ev(p, `run.phase`) === 'selfgrade') await answerOne(p);
   const rm = await visible(p, '#rmBtn');
@@ -402,7 +404,7 @@ tests.fixes = async () => {
       await p.fill('#gtName', 'Busy'); await p.fill('#gtUser', 'busy' + rnd()); await p.fill('#gtPass', 'password123'); await p.click('#gtMake');
       await p.waitForSelector('#gtOffline', { timeout: 5000 }).catch(() => {});
       ok(await visible(p, '#gtOffline'), `sign-up after a ${status} offers Continue offline`);
-      if (await visible(p, '#gtOffline')) { await p.click('#gtOffline'); await ev(p, `go('courses')`); await p.click('.switch[data-mix="lingo"]'); await ev(p, `go('today')`); await p.click('#todayGo'); await answerOne(p); await ev(p, 'quitRun(true)');
+      if (await visible(p, '#gtOffline')) { await p.click('#gtOffline'); await ev(p, `go('courses')`); await p.click('.switch[data-mix="lingo"]'); await ev(p, `go('today')`); await clickGo(p, '#todayGo'); await answerOne(p); await ev(p, 'quitRun(true)');
         ok(await p.getAttribute('#saved', 'data-s') === 'local', 'without an account the chip says progress is on this device', await p.getAttribute('#saved', 'data-s')); }
       await c.close();
     }
@@ -410,25 +412,25 @@ tests.fixes = async () => {
   const c = await ctx(); const p = await page(c);
   const who = await signUp(p); await addToMix(p, 'proc'); await ev(p, `go('today')`);
   { // Quit asks once mid-session; Back quits; answers already given count.
-    await p.click('#todayGo'); await answerOne(p); if (await ev(p, 'run.phase') === 'feedback') await answerOne(p);
+    await clickGo(p, '#todayGo'); await answerOne(p); if (await ev(p, 'run.phase') === 'feedback') await answerOne(p);
     await p.click('#quitBtn'); ok(await visible(p, '#lesson'), 'first tap on quit mid-session keeps the lesson open');
     await p.click('#quitBtn'); ok(!await visible(p, '#lesson'), 'second tap quits');
     ok(await ev(p, `state.activeDays.includes(dstr(new Date())) && state.xp > 0`), 'quitting keeps the practice day and XP', await ev(p, 'state.xp'));
     const xp1 = await ev(p, 'state.xp');
-    await p.click('#todayGo'); await answerOne(p); if (await ev(p, 'run.phase') === 'feedback') await answerOne(p);
+    await clickGo(p, '#todayGo'); await answerOne(p); if (await ev(p, 'run.phase') === 'feedback') await answerOne(p);
     await p.goBack(); await p.waitForTimeout(300);
     ok(!await visible(p, '#lesson') && await ev(p, 'run === null'), 'Back quits a lesson instead of leaving the app', p.url());
     ok(p.url().startsWith(BASE), 'still on the app after Back');
     ok(await ev(p, 'state.xp') > xp1, 'Back keeps the XP earned so far', { xp1, now: await ev(p, 'state.xp') });
     // Quitting and switching tabs at once: the app's own step back over the lesson entry must not undo the switch.
-    await p.click('#todayGo'); await answerOne(p); await ev(p, `quitRun(true); go('courses')`); await p.waitForTimeout(800);
+    await clickGo(p, '#todayGo'); await answerOne(p); await ev(p, `quitRun(true); go('courses')`); await p.waitForTimeout(800);
     ok(await ev(p, 'VIEW') === 'courses' && await visible(p, '#cSearch'), 'a tab change right after quitting sticks', await ev(p, 'VIEW'));
     await ev(p, `go('courses')`); await ev(p, `go('me')`); await p.goBack(); await p.waitForTimeout(200);
     ok(await ev(p, 'VIEW') === 'courses', 'Back returns to the previous tab', await ev(p, 'VIEW'));
   }
   { // Closing the page mid-session keeps the practice day and XP.
     const c2 = await ctx(); const p2 = await page(c2); await signUp(p2); await addToMix(p2, 'lingo'); await ev(p2, `go('today')`);
-    await p2.click('#todayGo'); await answerOne(p2); if (await ev(p2, 'run.phase') === 'feedback') await answerOne(p2);
+    await clickGo(p2, '#todayGo'); await answerOne(p2); if (await ev(p2, 'run.phase') === 'feedback') await answerOne(p2);
     const earned = await ev(p2, 'run.xp');
     await p2.goto(BASE + '/#me'); await p2.waitForTimeout(300);
     ok(await ev(p2, 'state.xp') === earned && earned > 0, 'closing the page mid-session banks the XP once', { earned, now: await ev(p2, 'state.xp') });
@@ -437,7 +439,7 @@ tests.fixes = async () => {
   }
   { // Typed answers: Enter checks.
     await ev(p, `state.prefs = { ...(state.prefs || {}), style: 'typed' }; save();`); await ev(p, `go('today')`);
-    await p.click(await visible(p, '#todayGo') ? '#todayGo' : await visible(p, '#resumeBtn') ? '#resumeBtn' : '#todayMore');
+    await clickGo(p, await visible(p, '#todayGo') ? '#todayGo' : await visible(p, '#resumeBtn') ? '#resumeBtn' : '#todayMore');
     // Matching and ordering cards are never typed; answer those until a typed card comes up.
     for (let i = 0; i < 8 && !await visible(p, '#recallIn') && await ev(p, '!!run'); i++) await answerOne(p);
     if (await visible(p, '#recallIn')) { await p.fill('#recallIn', 'my answer'); await p.press('#recallIn', 'Enter'); await p.waitForFunction(() => run && run.phase !== 'answer', null, { timeout: 15000 }).catch(() => {});
@@ -458,7 +460,7 @@ tests.fixes = async () => {
   { // Two tabs: a save in one is folded into the other.
     const p3 = await page(c); await p3.goto(BASE + '/'); await p3.waitForTimeout(500);
     const before = await ev(p3, 'Object.keys(state.srs).length');
-    await ev(p, `go('today')`); await p.click(await visible(p, '#todayGo') ? '#todayGo' : '#todayMore'); await answerOne(p); if (await ev(p, 'run.phase') === 'feedback') await answerOne(p); await ev(p, 'quitRun(true)');
+    await ev(p, `go('today')`); await clickGo(p, await visible(p, '#todayGo') ? '#todayGo' : '#todayMore'); await answerOne(p); if (await ev(p, 'run.phase') === 'feedback') await answerOne(p); await ev(p, 'quitRun(true)');
     await p3.waitForTimeout(500);
     ok(await ev(p3, 'Object.keys(state.srs).length') > before, 'the other tab picks up the new progress', { before, after: await ev(p3, 'Object.keys(state.srs).length') });
     await p3.close();
@@ -530,7 +532,7 @@ tests.disputeAndResume = async () => {
   await p.route('**/api/grade', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ score: 0, percent: 10, feedback: 'Missed the point.', points: [], missed: [] }) }));
   await p.route('**/api/dispute', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ score: 3, percent: 100, feedback: 'Correct on review.', reply: 'You were right.', outcome: 'upheld', points: [], missed: [] }) }));
   await signUp(p); await addToMix(p, 'policy'); await ev(p, `state.prefs = state.prefs || {}; state.prefs.style = 'typed'; save()`); await ev(p, `go('today')`);
-  await p.click('#todayGo');
+  await clickGo(p, '#todayGo');
   let typed = false;
   for (let i = 0; i < 15 && !typed; i++) { if (await ev(p, `run.phase === 'answer' && run.cur._mode === 'typed'`)) typed = true; else await answerOne(p); }
   ok(typed, 'a typed card comes up');
@@ -596,6 +598,56 @@ tests.extras = async () => {
     const src = await ev(p, `[...document.querySelectorAll('#fb .srcs a')].map(a => ({ href: a.href, target: a.target, text: a.textContent }))`);
     ok(src.length > 0 && src.every(x => /^https?:/.test(x.href) && x.target === '_blank' && x.text && !x.text.includes('/')), 'feedback shows source links by site name', src);
     await ev(p, 'quitRun(true)');
+  }
+  { // Key terms: the list comes up before the first session with Landscape; "Know it" terms get no card, the rest come first.
+    await ev(p, `if (run) quitRun(true); delete state.keyTerms; ktAsked.clear(); setMix('policy', true); go('today')`);
+    await p.click(await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
+    ok(await visible(p, '#ktSheet'), 'key terms list shows before the first session with the course');
+    const n = await p.locator('#ktSheet [data-kt]').count();
+    await p.locator('#ktSheet [data-kt]').nth(0).click(); await p.locator('#ktSheet [data-kt]').nth(1).click();
+    ok(await p.locator('#ktSheet [data-kt][aria-pressed="true"]').count() === 2, 'Know it toggles on each term');
+    await p.click('#ktDone');
+    const r = await ev(p, `({ known: state.keyTerms.policy.known.length, cards: keyTermCards('policy').length, first: courseCards('policy')[0].id, run: !!run, sheet: !document.querySelector('#ktSheet').hidden })`);
+    ok(n > 10 && r.known === 2 && r.cards === n - 2 && r.first.startsWith('au0l0#key-') && r.run && !r.sheet, 'known terms skipped, the rest come first, then the session starts', { n, ...r });
+    ok(await ev(p, `(() => { const i = GLOSSARY.findIndex(g => g.term === 'preemption'); GL_SKIP = [i]; const a = gl('What does preemption mean?'); GL_SKIP = []; return !a.includes('class="gl"') && gl('preemption').includes('class="gl"'); })()`), 'a term card does not underline its own term');
+    await ev(p, `quitRun(true); go('course', 'policy')`);
+    ok(/\d+ of \d+ added/.test(await p.locator('[data-keyterms]').innerText()), 'course page shows how many key terms were added');
+    await p.click('[data-keyterms]'); ok(await visible(p, '#ktSheet'), 'course page reopens the list');
+    await p.click('#ktClose'); ok(!await visible(p, '#ktSheet'), 'closing the list hides it');
+    await ev(p, `setMix('policy', false)`);
+  }
+  { // Order cards: drag a placed step to another spot (step 5 to spot 2), and drag from the pool into a spot.
+    await ev(p, `if (run) quitRun(true); go('course', 'proc'); buildLessons(); startLesson(0)`);
+    for (let i = 0; i < 10 && await ev(p, `run && run.cur.t !== 'order'`); i++) await answerOne(p);
+    if (await ev(p, `run && run.cur.t === 'order'`)) {
+      const drag = async (from, to) => {
+        const a = await p.locator(from).first().boundingBox(), b = await p.locator(to).first().boundingBox();
+        await p.mouse.move(a.x + a.width / 2, a.y + a.height / 2); await p.mouse.down();
+        await p.mouse.move(a.x + a.width / 2, a.y + a.height / 2 + 12, { steps: 3 });
+        await p.mouse.move(b.x + 40, b.y + b.height / 2, { steps: 8 }); await p.mouse.up();
+      };
+      const pool0 = await ev(p, 'run.pool.slice()');
+      await drag('#stage .pool [data-p]', '#stage .slots li:nth-child(1)');
+      ok(await ev(p, 'run.ans.length') === 1 && await ev(p, 'run.ans[0]') === pool0[0], 'dragging from the pool places the step', await ev(p, 'run.ans'));
+      for (let i = 0; i < 9 && await p.locator('#stage .pool [data-p]').count(); i++) { await p.waitForTimeout(450); await p.locator('#stage .pool [data-p]').first().click(); }
+      const before = await ev(p, 'run.ans.slice()');
+      await drag('#stage .slots li:nth-child(5) .chip', '#stage .slots li:nth-child(2)');
+      const after = await ev(p, 'run.ans.slice()');
+      const want = before.slice(); want.splice(1, 0, want.splice(4, 1)[0]);
+      ok(JSON.stringify(after) === JSON.stringify(want), 'dragging step 5 to spot 2 moves it there', { before, after });
+      ok(!await p.locator('.chip.ghost').count(), 'the dragged copy is gone after the drop');
+    } else ok(false, 'found an order card in the first Procedure lesson');
+    await ev(p, 'if (run) quitRun(true)');
+  }
+  { // Rounds: with 5 cards a session, Today shows the day as rounds and the result screen offers the next round.
+    await ev(p, `state.prefs = { ...(state.prefs || {}), sessionSize: 5 }; setMix('lingo', true); setMix('proc', true); go('today')`);
+    const txt = await p.locator('#todayWrap').innerText();
+    ok(/rounds of up to 5/.test(txt), 'Today shows rounds of 5', txt.slice(0, 200));
+    await clickGo(p, await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
+    ok(await ev(p, 'run.total') <= 5, 'a round has at most 5 cards', await ev(p, 'run.total'));
+    let n = 0; while (n++ < 30 && await answerOne(p)) {}
+    ok(/^Next \d/.test(await p.locator('#rMore').innerText().catch(() => '')), 'result screen offers the next round', await p.locator('#rMore').innerText().catch(() => ''));
+    await ev(p, `state.prefs.sessionSize = 12; save(); goHome()`);
   }
   { // Course dates near the top of the course page.
     await ev(p, `go('course', 'policy')`);
