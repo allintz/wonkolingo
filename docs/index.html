@@ -3064,6 +3064,305 @@ const FRONTIER_UNITS = [
  }
 ];
 
+/* Built-in Policy Side Effects. Source of truth: courses/policy-side-effects.json in this folder (sources in policy-side-effects.sources.json); regenerate this block from it after edits. */
+const SIDE_UNITS = [
+  {
+    "title": "Policy side effects",
+    "desc": "Real laws that backfired, got routed around, or landed on the wrong people. Each card describes a policy; you guess what went wrong.",
+    "lessons": [
+      {
+        "title": "Routing around the rule",
+        "items": [
+          {
+            "id": "su0l0#nvzgnzo",
+            "t": "recall",
+            "open": true,
+            "p": "In 1989 Mexico City banned most drivers from using their car one weekday a week, based on the last digit of the license plate, to cut air pollution. Studies found air quality did not improve. Name one way drivers may have gotten around the ban.",
+            "answer": "Researchers have proposed several: some households bought a second car, often an older and dirtier used one, with a plate allowed on their banned day; others ignored the ban or used exemptions; and some shifted driving to evenings and weekends. Which mattered most is disputed.",
+            "keys": [
+              "Any one of: bought a second car with a different plate, ignored the ban or used exemptions, or shifted driving to other times"
+            ],
+            "x": "Economist Lucas Davis (2008) found no improvement for any pollutant, vehicle registration data suggesting households bought extra, often older, cars, and higher pollution on weekends and late at night. Later work with household surveys (Guerra and Millard-Ball, 2017) found few households owning two restricted cars, and argues that ignoring the ban and shifting trips explain more. Lesson: if a rule restricts one unit (one car, one account, one model), check how cheaply people can get around it.",
+            "choice": {
+              "p": "In 1989 Mexico City banned most cars from driving one weekday a week, by license plate, to cut pollution. Air quality didn't improve. Which explanation have researchers proposed?",
+              "o": [
+                "Some households bought a second, often older, car with a plate allowed on their banned day",
+                "The city's buses switched to dirtier diesel fuel the same year, cancelling out the drop in car pollution",
+                "Factories expanded output once traffic eased, so industrial pollution replaced the cuts from cars",
+                "The city stopped testing car emissions once the ban began, so the remaining cars polluted more"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Researchers did not point to a bus fuel change; the proposed explanations are second cars, ignoring the ban and shifting trips.",
+                "Researchers didn't attribute the result to industry; the evidence points to how drivers responded.",
+                "Emissions testing continued; the debate is about how drivers got around the ban."
+              ]
+            }
+          },
+          {
+            "id": "su0l0#n30e38w",
+            "t": "recall",
+            "open": true,
+            "p": "From 1696 to 1851, England taxed houses by their number of windows, because windows were easy for assessors to count and big houses had more of them. Name one thing homeowners and builders did in response, and one harm it caused.",
+            "answer": "They bricked up existing windows and built new houses with fewer windows. That cut light and ventilation, which doctors at the time blamed for disease, and the lost light was a large cost on top of the tax itself.",
+            "keys": [
+              "Bricked up windows or built houses with fewer windows",
+              "Less light and fresh air, which doctors linked to disease"
+            ],
+            "x": "Economists Wallace Oates and Robert Schwab (2015) used local tax records to measure how the tax changed window counts, and roughly estimated the extra cost (the lost light) at about 60% of the revenue raised. Bricked-up windows are still visible on old English buildings. Lesson: when a policy keys on a proxy that is cheap to change (a count, a size, a threshold), people change the proxy instead of the thing it was meant to measure.",
+            "choice": {
+              "p": "England taxed houses by number of windows from 1696 to 1851. What was the best-known unintended result?",
+              "o": [
+                "People bricked up windows and built darker houses, cutting light and air, which doctors blamed for disease",
+                "Glassmakers raised prices sharply, so rich families paid most of the tax through costlier glass",
+                "Wealthy owners rebuilt their houses as many small rented flats, which were exempt from the tax",
+                "Assessors took bribes to undercount windows, so the tax raised almost nothing and was dropped within a decade"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "The documented response was fewer windows, not a shift of the burden onto glass prices.",
+                "The well-documented response was fewer windows, not a shift to exempt flats.",
+                "The tax lasted over 150 years; the documented response was people reducing their window counts."
+              ]
+            }
+          },
+          {
+            "id": "su0l0#nxblkib",
+            "t": "recall",
+            "open": true,
+            "p": "French labor law adds a bundle of obligations (works councils, union representatives, layoff-plan rules) once a firm reaches 50 employees. Researchers looking at how many firms there are of each size found something odd near that line. What was it, and why does it matter?",
+            "answer": "Far more firms have exactly 49 employees than 50: firms stop growing just below the threshold to avoid the obligations. That means productive firms stay smaller than they otherwise would, which costs output and jobs, with workers bearing much of the cost.",
+            "keys": [
+              "Firms bunch just below 50 employees (many at 49, few at 50)",
+              "Firms hold back growth, costing output or jobs"
+            ],
+            "x": "Garicano, Lelarge and Van Reenen counted 416 French manufacturing firms with 49 employees and only 160 with 50, a break in an otherwise smooth size distribution. Their cost estimates depend on assumptions and range from under 1% to several percent of GDP. Lesson: any bright-line threshold (headcount, revenue, compute) invites actors to stay just under it, or to split into smaller entities.",
+            "choice": {
+              "p": "France adds many labor obligations at 50 employees. What pattern shows up in the count of French firms by size?",
+              "o": [
+                "Many more firms have 49 employees than 50, because firms stop growing just below the line",
+                "Firms rush past 50 quickly, because the obligations come with tax credits that make growth cheaper",
+                "Firm sizes are smooth through 50, showing the obligations cost too little to change any decisions",
+                "Firms jump from 49 straight to about 100 employees, to spread the fixed costs over more workers"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "The obligations are costs, not subsidies, and the data show firms piling up just under 50.",
+                "The distribution has a clear break at 50, which is why researchers study it.",
+                "The data show a pile-up at 49, not a jump past the threshold."
+              ]
+            }
+          },
+          {
+            "id": "su0l0#n7z6txz",
+            "t": "recall",
+            "open": true,
+            "p": "The US Endangered Species Act restricts what private landowners can do with land that hosts a listed species. The red-cockaded woodpecker nests only in old pine trees. How did some North Carolina timber owners near woodpecker colonies respond?",
+            "answer": "They cut their forests earlier, before trees got old enough to host woodpecker nests, so the protected bird never moved in and the land-use restrictions never applied. The law ended up reducing the habitat it was meant to protect on private land.",
+            "keys": [
+              "Harvested trees earlier or younger, before they could become nesting habitat",
+              "Kept the species from arriving so restrictions never applied"
+            ],
+            "x": "Lueck and Michael (2003) studied over 1,000 forest plots and found that plots closer to woodpecker colonies were more likely to be harvested, and cut younger. It's one team and one species, but a clear example of 'preemptive' avoidance. Lesson: when a rule is triggered by finding something on your property (a species, a dangerous capability, a document), people may avoid ever creating or discovering the trigger.",
+            "choice": {
+              "p": "The Endangered Species Act limits land use where protected species live. How did some timber owners near red-cockaded woodpecker colonies respond?",
+              "o": [
+                "They cut their pines young, before the trees could host nests that would bring restrictions",
+                "They sold their land to the government at high prices, which used up most of the budget for protection",
+                "They planted extra pines to attract the birds, hoping for federal payments for hosting them",
+                "They moved the birds to public land themselves, which caused many colonies to fail"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "The study found earlier harvesting, not land sales.",
+                "There was no federal payment for hosting the bird, so the incentive ran the other way: avoid it.",
+                "The documented response was changing harvest timing, not relocating birds."
+              ]
+            }
+          },
+          {
+            "id": "su0l0#nw6cw8q",
+            "t": "recall",
+            "open": true,
+            "p": "In August 2010 the maker of OxyContin, an opioid painkiller, replaced it with a crush-resistant version, with FDA support, so it would be harder to snort or inject. Misuse of OxyContin fell. What went wrong?",
+            "answer": "Many people already dependent on opioids switched to heroin, which was cheap and unregulated. Heroin deaths began rising the next month, and researchers estimate each prevented opioid death was replaced by a heroin death, so total deaths did not fall.",
+            "keys": [
+              "People switched to heroin or fentanyl",
+              "Heroin deaths rose, offsetting the prevented opioid deaths"
+            ],
+            "x": "Two independent teams reached this conclusion. Evans, Lieber and Power found no net drop in combined opioid and heroin deaths. Alpert, Powell and Pacula found heroin deaths rose most in states where OxyContin misuse had been highest before the change. Lesson: if you make one route to a strongly wanted good harder, ask what the next-best substitute is, and whether it is less regulated and more dangerous.",
+            "choice": {
+              "p": "In 2010 OxyContin was reformulated to be crush-resistant, to reduce misuse. What did researchers find happened next?",
+              "o": [
+                "Many users switched to heroin, and heroin deaths rose enough to offset the drop in OxyContin deaths",
+                "Doctors stopped prescribing OxyContin altogether, leaving many pain patients without any treatment",
+                "Users found an easy way to defeat the new coating within weeks, so misuse returned to its old level",
+                "Misuse fell and overdose deaths fell with it, making it a model for other drug rules"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "The main finding is not about prescribing; it is that people already dependent switched to heroin.",
+                "Misuse of OxyContin itself did fall; the problem was substitution to other drugs.",
+                "OxyContin misuse fell, but heroin deaths rose to offset it, so total deaths did not fall."
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "title": "Who ends up paying",
+        "items": [
+          {
+            "id": "su0l1#nitvj51",
+            "t": "recall",
+            "open": true,
+            "p": "'Ban the box' laws stopped employers from asking about criminal records on job applications, to help people with records get hired, a group that is disproportionately young Black men. What went wrong, according to later studies?",
+            "answer": "Without the record, some employers appear to have guessed who had one based on race, so they called back young Black men less often. The racial gap in callbacks grew, and employment of young low-skilled Black men fell.",
+            "keys": [
+              "Employers guessed at records using race",
+              "Racial gaps in callbacks or hiring grew"
+            ],
+            "x": "In a field experiment with about 15,000 fake applications in New Jersey and New York City, Agan and Starr found the white-over-Black callback gap at affected employers grew from about 7% to about 43%. Applicants with records did gain callbacks; Black applicants without records lost them. Doleac and Hansen found the laws lowered employment of young low-skilled Black men by about 3.4 points, though Rose (2021) found little effect in Seattle, so the size is debated. Lesson: hidden information gets replaced by proxies.",
+            "choice": {
+              "p": "'Ban the box' laws stopped employers from asking about criminal records on applications. What did later studies find?",
+              "o": [
+                "Some employers guessed at records by race, so callbacks fell for young Black men and racial gaps grew",
+                "Employers shifted to running background checks on everyone, so hiring took months longer for all applicants",
+                "Applicants with records were hired more, but they left their jobs faster than others",
+                "Employers moved jobs to states without the laws, so total hiring fell in the states that passed them"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Studies focused on who got called back; the key finding was a wider racial gap.",
+                "Applicants with records did get more callbacks, but Black applicants without records lost callbacks, so the racial gap grew. The studies didn't track how long hires stayed.",
+                "Neither study found this. The documented effect was employers guessing at records by race."
+              ]
+            }
+          },
+          {
+            "id": "su0l1#ntcol4e",
+            "t": "recall",
+            "open": true,
+            "p": "Chile requires firms with 20 or more female workers to provide or pay for childcare, to support working mothers. Men don't count toward the threshold. What did researchers find about women hired by covered firms?",
+            "answer": "Once a firm crossed the threshold, the women it hired got lower starting wages (about 9% to 20% lower than women the same firm hired before crossing). Employers passed much of the cost of the benefit back to the women it was meant to help.",
+            "keys": [
+              "Women got lower starting wages at covered firms",
+              "The cost of the benefit was passed back to women"
+            ],
+            "x": "Prada, Rucci and Urzúa followed firms as they grew past 20 female workers. Other studies differ: Escobar (2014) found firms bunching just below 20 women and no effect on average wages, and another found the cost spread across all workers. This fits an older US finding by Jonathan Gruber (1994) that mandated childbirth coverage was paid for mostly through lower wages for the targeted workers. Lesson: a mandate triggered by employing a group can cut that group's pay or hiring.",
+            "choice": {
+              "p": "Chile requires firms with 20+ female workers to provide childcare. What did researchers find about women those firms hired?",
+              "o": [
+                "Their starting wages were lower, so women paid for much of the benefit themselves",
+                "They were promoted faster, because firms wanted to recover their childcare spending through higher output",
+                "Firms replaced them with men at higher wages, so the share of women in covered firms fell to almost zero",
+                "Their wages were the same, because the government reimbursed employers for the full cost"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "The study's finding was about starting wages, which were 9% to 20% lower, not promotions.",
+                "One study found firms staying just under 20 women, but nothing close to replacing women entirely; the main finding is lower starting wages.",
+                "Employers bear the cost in Chile, and it showed up in lower starting wages for women."
+              ]
+            }
+          },
+          {
+            "id": "su0l1#n9rc6z2",
+            "t": "recall",
+            "open": true,
+            "p": "The EU's 2018 privacy law (GDPR) aimed partly at the data-hungry online ad industry dominated by Google and Facebook. Websites had to answer for the data practices of the outside tech vendors they used. Which vendors gained market share?",
+            "answer": "Google and Facebook. Websites cut their outside vendors after GDPR, but dropped smaller ones first and kept the biggest, so vendor markets became about 17% more concentrated in the short run. Most of that faded by late 2018, except in advertising.",
+            "keys": [
+              "The largest vendors (Google, Facebook) gained share",
+              "Sites dropped smaller vendors, so concentration rose"
+            ],
+            "x": "Johnson, Shriver and Goldberg tracked 27,000+ top websites. Vendor use fell about 15% the week GDPR took effect, mostly among smaller vendors; concentration in ad vendors stayed about 6% above its old level. Separate studies found GDPR also led to fewer apps and less venture investment in EU tech. Lesson: fixed compliance costs and legal risk tend to favor big incumbents that can absorb them.",
+            "choice": {
+              "p": "GDPR, the EU's 2018 privacy law, aimed partly at the big ad platforms. What happened to the market for website tech vendors?",
+              "o": [
+                "Sites dropped smaller vendors first, so Google and Facebook gained share and concentration rose",
+                "Big platforms left Europe, so smaller European vendors took over most of the market",
+                "Sites stopped using outside vendors almost entirely and built their own tools in-house",
+                "Nothing measurable changed, because most sites ignored the law in its first year"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Google and Facebook stayed and gained relative share.",
+                "Vendor use fell about 15%, far short of disappearing, and mostly among smaller vendors.",
+                "Researchers measured a clear drop in vendor use the week the law took effect."
+              ]
+            }
+          },
+          {
+            "id": "su0l1#nmhsubf",
+            "t": "recall",
+            "open": true,
+            "p": "After Enron, the 2002 Sarbanes-Oxley Act (SOX) gave employees who report corporate fraud the right to file retaliation complaints, first handled by the Labor Department's OSHA. How did these complaints turn out in the first three years, and why?",
+            "answer": "Whistleblowers almost never won: OSHA found for employees in about 3.6% of resolved cases. Many lost before the facts were weighed, on the short 90-day filing deadline or narrow readings of who is covered (for example, employees of subsidiaries), and OSHA often misapplied the burden of proof.",
+            "keys": [
+              "Whistleblowers rarely won (about 4% of cases)",
+              "Lost on procedure or coverage: short deadline, narrow definitions, or the burden of proof"
+            ],
+            "x": "Law professor Richard Moberly counted 13 employee wins out of 361 resolved complaints. Employees did much better before judges than at OSHA when the facts were weighed (about 56% vs 11%), and 18% of OSHA losses came from missing the deadline. Lesson: a protection can exist on paper but fail in practice. Check who decides cases, the deadlines and the coverage rules. This matters for current proposals to protect AI lab whistleblowers.",
+            "choice": {
+              "p": "Sarbanes-Oxley (SOX, the 2002 post-Enron fraud law) let whistleblowers file retaliation complaints. How did those complaints fare at first?",
+              "o": [
+                "Employees won only about 4% of cases, often losing on deadlines or narrow coverage rules",
+                "Employees won most cases, and the flood of claims led Congress to cap damages within two years",
+                "Most cases were never decided, because companies settled nearly all of them before any ruling",
+                "Employees won about half the time, similar to other workplace retaliation laws"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Employees rarely won; there was no such cap.",
+                "Settlements happened, but most resolved cases ended against employees.",
+                "The win rate was far lower, around 3.6%."
+              ]
+            }
+          },
+          {
+            "id": "su0l1#ng1o4j0",
+            "t": "recall",
+            "open": true,
+            "p": "Business groups have long warned that workplace safety inspections cost firms so much they destroy jobs. California's safety agency picked some high-hazard workplaces at random to inspect. What did researchers find, compared with workplaces not inspected?",
+            "answer": "The feared harm didn't show up. Inspected workplaces had about 9% fewer injury claims and 26% lower workers' compensation costs (about $355,000 saved on average), with no detectable drop in jobs, sales, payroll or survival.",
+            "keys": [
+              "Fewer injuries and lower injury costs",
+              "No detectable loss of jobs, sales or survival"
+            ],
+            "x": "Levine, Toffel and Johnson (Science, 2012) compared 409 randomly inspected workplaces with 409 matched ones, a careful design, though for one state's program. Not every predicted backfire happens. Lesson: before believing a feared side effect, check whether the regulated party also gains from the rule (here, fewer costly injuries), and look for past cases where the same fear was tested.",
+            "choice": {
+              "p": "California randomly chose high-hazard workplaces for safety inspections. Compared with uninspected ones, what did researchers find?",
+              "o": [
+                "Fewer injuries and lower injury costs, with no detectable loss of jobs or sales",
+                "Fewer injuries, but about one in ten inspected firms closed within four years from the costs",
+                "No change in injuries, because firms fixed problems only on inspection day",
+                "More reported injuries, because inspections made workers more willing to report them"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "The study found no detectable effect on firm survival.",
+                "Injury claims fell about 9% and costs about 26% over four years.",
+                "Injury claims and costs fell, which is the reverse of this."
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+
 /* Built-in AI Policy Toolkit (formerly AI Policy Tools). Source of truth: courses/ai-policy-tools.json in this folder; regenerate this block from it after edits. */
 const TOOLS_UNITS = [
  {
@@ -14494,7 +14793,10 @@ const COURSES = Object.assign(Object.create(null), {
     meta: 'Draft \u00b7 2026-10-19 \u00b7 Fact-checked by AI, not by a person' },
   frontier: { name: 'FRONTIER Act', units: FRONTIER_UNITS, pre: 'f',
     caveat: ['Based on the introduced text of H.R. 9925 (July 23, 2026). Status, cosponsors and reactions checked October 19, 2026. Simplified: check the bill text before relying on details, and expect changes if the bill moves in committee.', 'Each question was checked against the bill text by a second AI, and its corrections were applied. No person has reviewed it.'],
-    meta: 'Draft · 2026-10-16, attributions rechecked 2026-10-19 · Fact-checked by AI, not by a person' }
+    meta: 'Draft · 2026-10-16, attributions rechecked 2026-10-19 · Fact-checked by AI, not by a person' },
+  side: { name: 'Policy Side Effects', units: SIDE_UNITS, pre: 's', description: 'Real laws that backfired, got routed around, or landed on the wrong people. Each card describes a policy; you guess what happened.',
+    caveat: ['Ten cases drawn from published research, current as of October 2026. Several findings are disputed, and the cards say so.', 'Drafted and independently fact-checked by AI; no person has reviewed it.'],
+    meta: 'Draft · 2026-10-21 · Fact-checked by AI, not by a person' }
 });
 
 // Defined early because the home screen renders before the later script sections run.
