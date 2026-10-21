@@ -19,3 +19,4 @@ EMAIL_FROM = "WonkoLingo <codes@wonkolingo.com>"
 ADMIN_PLAYERS = "2rpep26wjp"
 # Google sign-in (Google Cloud OAuth clients; ids aren't secret). Web: the site's Google button. iOS: the iPhone app.
 GOOGLE_CLIENT_ID = "752750115216-ahqvib60io00s4eiqfsqch4c9vjbo0u0.apps.googleusercontent.com"
+GOOGLE_IOS_CLIENT_ID = "752750115216-j2pucs8m4rakhb8ds08l7l2r89vpble2.apps.googleusercontent.com"
