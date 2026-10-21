@@ -749,7 +749,7 @@ tests.google = async () => {
   const cfg = await (await fetch(BASE + '/api/config')).json();
   if (!cfg.google) { console.log('google: skipped (server has no GOOGLE_CLIENT_ID)'); return; }
   const { createSign, createPrivateKey } = await import('node:crypto');
-  const KEY = JSON.parse((await import('node:fs')).readFileSync(new URL('./google-test-key.json', import.meta.url)));
+  const KEY = JSON.parse((await import('node:fs')).readFileSync(new URL('./idp-test-key.json', import.meta.url)));
   const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url');
   const tok = claims => { const now = Math.floor(Date.now() / 1000), h = b64({ alg: 'RS256', kid: 'wl-test' }), b = b64({ iss: 'https://accounts.google.com', aud: cfg.google, iat: now, exp: now + 3600, ...claims });
     return h + '.' + b + '.' + createSign('RSA-SHA256').update(h + '.' + b).sign(createPrivateKey({ key: KEY.private, format: 'jwk' })).toString('base64url'); };
@@ -819,6 +819,11 @@ tests.regressions = async () => {
   const d = await ev(p, `(() => { let calls = 0; const real = bumpStreak; bumpStreak = () => { calls++; }; run = newRun({ mode: 'session', total: 1, queue: [] });
     bumpRunDay(); bumpRunDay(); bumpRunDay(); run = null; bumpStreak = real; return calls; })()`);
   ok(d === 1, 'a run bumps the practice day once', d);
+  // Order cards in a session show their label once.
+  { const c2 = await ctx(), q = await page(c2); await q.goto(BASE + '/'); await q.click('[data-try="proc"]');
+    for (let i = 0; i < 6 && await ev(q, `run && run.cur.t !== 'order'`); i++) await answerOne(q);
+    if (await ev(q, `run && run.cur.t === 'order'`)) ok(await ev(q, `document.querySelectorAll('#stage .cardtag').length`) === 1, 'an order card shows its label once');
+    await c2.close(); }
   ok(p.errors.length === 0, 'regressions: no page errors', p.errors);
   await c.close();
 };

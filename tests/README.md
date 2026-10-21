@@ -12,10 +12,10 @@ wrangler d1 execute DB --local --persist-to .wrangler/email --file schema.sql
 wrangler dev --local --port 8791 --ip 127.0.0.1 --compatibility-date 2026-04-17 --persist-to .wrangler/email --var EMAIL_TEST_MODE:1
 ```
 
-Google sign-in tests need a server that trusts the test key in `tests/google-test-key.json` (localhost only):
+Google and Apple sign-in tests need a server that trusts the test key in `tests/idp-test-key.json` (localhost only):
 
 ```
-wrangler dev --local --port 8795 --ip 127.0.0.1 --compatibility-date 2026-04-17 --persist-to .wrangler/g --var "GOOGLE_CLIENT_ID:test-client.apps.googleusercontent.com" --var "GOOGLE_TEST_JWKS:$(node -e "console.log(JSON.stringify(require('./tests/google-test-key.json').jwks))")"
+wrangler dev --local --port 8795 --ip 127.0.0.1 --compatibility-date 2026-04-17 --persist-to .wrangler/g --var "GOOGLE_CLIENT_ID:test-client.apps.googleusercontent.com" --var "GOOGLE_IOS_CLIENT_ID:test-ios.apps.googleusercontent.com" --var "IDP_TEST_JWKS:$(node -e "console.log(JSON.stringify(require('./tests/idp-test-key.json').jwks))")"
 ```
 
 (The pinned wrangler's local runtime only supports compatibility dates up to 2026-04-17; the override is local-only. Email test mode only works on localhost.)
@@ -28,6 +28,6 @@ wrangler dev --local --port 8795 --ip 127.0.0.1 --compatibility-date 2026-04-17 
 | `security.test.mjs` | 40 checks, one or more per 10/21 red-team finding: bad dates can't break the board, huge schedules can't slow it, shared account caps (IPv6 /64 too), rate limits under parallel requests, one-use codes, feed text, XP cap, CORS, names, state shape, course deletion, blocked reports | `node tests/security.test.mjs http://127.0.0.1:8799` |
 | `email.test.mjs` | 23 checks: adding and confirming an email, one address per account, code tries, signing in by email, setting a new password after, limits, deletion | `node tests/email.test.mjs http://127.0.0.1:8791` |
 | `e2e.test.mjs` | ~420 browser checks in headless Chrome at phone and desktop size: cold start on every route, sign-up and sign-in, a full session, every card in every course rendered and answered in every answer style, saved states of every shape, phone layout, offline and slow networks, groups, Me settings, the 10/21 client fixes, and (on the 8791 server) the email screens. `ONLY=name1,name2` runs some tests. | `node tests/e2e.test.mjs http://localhost:8799` and `ONLY=email node tests/e2e.test.mjs http://localhost:8791` |
-| `google.test.mjs` | 19 checks: Google sign-in makes, finds and connects accounts; bad tokens (audience, expiry, issuer, key, tampering, alg none) are refused; deletion frees the Google account | `node tests/google.test.mjs http://127.0.0.1:8795` (Google test server) |
+| `idp.test.mjs` | ~28 checks: Google (web and iOS clients) and Apple sign-in make, find and connect accounts; bad tokens (audience, expiry, issuer, key, tampering, alg none, wrong provider) are refused; deletion frees the account | `node tests/idp.test.mjs http://127.0.0.1:8795` (sign-in test server) |
 | `smoke.mjs` | the built page starts cleanly on every route with the network cut off; `deploy.sh` runs it before deploying | `node tests/smoke.mjs` |
 | `live-smoke.mjs` | read-only check of the live site after a deploy; `deploy.sh` runs it | `node tests/live-smoke.mjs` |

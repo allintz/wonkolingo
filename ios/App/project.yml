@@ -40,6 +40,9 @@ targets:
         # Passkeys for the live site (served from /.well-known/apple-app-site-association by the Worker).
         com.apple.developer.associated-domains:
           - webcredentials:wonkolingo.alex-l-lintz.workers.dev
+        # Sign in with Apple (WonkoNativePlugin.appleSignIn).
+        com.apple.developer.applesignin:
+          - Default
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.alexlintz.wonkolingo

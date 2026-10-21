@@ -2,6 +2,7 @@
 // forgot their password gets back in). Mail goes out through Resend, using the RESEND_API_KEY secret and the EMAIL_FROM
 // variable (an address on a domain verified with Resend). Until both are set, /api/config says email is off and the
 // app hides it. EMAIL_TEST_MODE=1 (local `wrangler dev` only) skips sending and returns the code, for the tests.
+import { providerConfig } from './idp.js';
 import { randomString, sha256, takeRate, ipKey, newSession, accountInfo, playerById } from './accounts.js';
 
 export const EMAIL_LIMITS = { codeMinutes: 15, triesPerCode: 5, sendsPerPlayerPerHour: 5, sendsPerAddressPerHour: 5, sendsPerNetPerHour: 20, checksPerNetPerHour: 30 };
@@ -45,7 +46,7 @@ const codeOf = b => String(b.code || '').replace(/\D/g, '');
 // Routes that work signed out. Returns a Response, or null if the path isn't ours.
 export async function publicEmailApi(req, env, path, { json, fail, body }) {
   const m = req.method;
-  if (m === 'GET' && path === '/api/config') return json({ email: emailReady(env, req), google: env.GOOGLE_CLIENT_ID || null });
+  if (m === 'GET' && path === '/api/config') return json({ email: emailReady(env, req), ...providerConfig(env) });
   // Step 1 of signing in by email: always the same answer, so nobody can use it to find out who has an account.
   if (m === 'POST' && path === '/api/email/signin-request') {
     if (!emailReady(env, req)) return fail('Email isn’t set up yet.', 503);

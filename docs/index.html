@@ -600,7 +600,14 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .gate-back { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 10px); left: 12px; display: flex; align-items: center; gap: 2px; background: none; border: 0; padding: 8px 10px 8px 4px; color: var(--brass); font-weight: 700; font-size: 16px; z-index: 31; }
 .gate-back svg { width: 22px; height: 22px; }
 [tabindex="-1"]:focus { outline: none; }
-.gate-g { width: 100%; max-width: 340px; display: grid; justify-items: center; min-height: 44px; }
+.gate-g { width: 100%; max-width: 340px; display: grid; justify-items: center; gap: 10px; min-height: 44px; }
+/* Sign in with Apple and Google buttons in the iPhone app, per each company's button guidelines. */
+.idp-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 340px; min-height: 48px; border-radius: 99px; font: 700 17px/1 var(--f-ui); padding: 0 20px; border: 1px solid transparent; }
+.idp-btn svg { width: 20px; height: 20px; flex: none; }
+.idp-btn.apple { background: #000; color: #fff; }
+.idp-btn.google { background: #131314; color: #e3e3e3; border-color: #8e918f; }
+@media (prefers-color-scheme: dark) { .idp-btn.apple { background: #fff; color: #000; } }
+@media (prefers-color-scheme: light) { .idp-btn.google { background: #fff; color: #1f1f1f; border-color: #747775; } }
 .gate-g .btn { width: 100%; }
 .gate-or { color: var(--muted); font-size: 14px; margin: 4px 0 -4px; }
 .gate-more { justify-content: center; }
@@ -743,8 +750,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-21-fecf3f4';
-  window.WL_BUILT_AT = +'1792600570000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-21-7b3a1b6';
+  window.WL_BUILT_AT = +'1792601447000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -15461,7 +15468,7 @@ function nextItem() {
   const mode = it._mode = askMode(it);
   if (mode === 'choice') asChoice(it);
   if (mode === 'typed') renderTyped(it); else if (mode === 'reveal') renderReveal(it); else if (it.t === 'mc' || it._asMC) renderMC(it); else if (it.t === 'match') renderMatch(it); else renderOrder(it);
-  if (run.mode === 'session') $('#stage').insertAdjacentHTML('afterbegin', cardTag(it));
+  if (run.mode === 'session' && !$('#stage .cardtag')) $('#stage').insertAdjacentHTML('afterbegin', cardTag(it)); // order cards add their own
   $('#stageWrap').scrollTop = 0;
   // Each new card moves focus to its question, so screen readers read it out and Tab starts from the top of the card.
   const pq = $('#stage .prompt'); if (pq && !$('#lesson').hidden && !$('#stage').contains(document.activeElement)) { pq.setAttribute('tabindex', '-1'); pq.focus({ preventScroll: true }); }
@@ -16145,7 +16152,7 @@ async function refreshAccount() {
   if (!ACCT) return;
   try {
     const d = await apiCall('/api/me');
-    ACCT.player = d.player; ACCT.passkeys = d.passkeys; ACCT.username = d.username || null; ACCT.email = d.email || null; ACCT.google = d.google || null; saveA();
+    ACCT.player = d.player; ACCT.passkeys = d.passkeys; ACCT.username = d.username || null; ACCT.email = d.email || null; ACCT.google = d.google || null; ACCT.apple = d.apple || null; saveA();
     const was = G ? G.code : null, now = d.group ? d.group.code : null;
     if (was !== now) {
       G = d.group ? { code: d.group.code, groupName: d.group.groupName, player: d.player } : null; saveG(); board = null;
@@ -16224,7 +16231,7 @@ function completeSignIn(d, keepLocal) {
   if (!keepLocal && state.owner !== d.player.id) state = { ...blankState(), course: state.course };
   state.owner = d.player.id; save(true);
   // signedIn: when this device signed in, so a fresh sign-in can set a new password without the old one.
-  ACCT = { token: d.token, player: d.player, passkeys: d.passkeys || 0, username: d.username || null, email: d.email || null, google: d.google || null, signedIn: Date.now() }; saveA();
+  ACCT = { token: d.token, player: d.player, passkeys: d.passkeys || 0, username: d.username || null, email: d.email || null, google: d.google || null, apple: d.apple || null, signedIn: Date.now() }; saveA();
   G = d.group ? { code: d.group.code, groupName: d.group.groupName, player: d.player } : null; saveG();
   board = null; try { localStorage.removeItem(CKEY); } catch (e) {}
   Object.assign(acctUI, { mode: '', merge: null, link: null, recShown: false, outArmed: false, err: '' });
@@ -16249,25 +16256,36 @@ let gateUI = { step: 'welcome', busy: false, err: '' };
 // Set only when the server can't be reached to make an account, so the app stays usable offline; asked again next launch.
 let gateOffline = false;
 let EMAIL_OK = false; // set from /api/config: email sign-in and confirmation exist only once the server can send mail
-/* ---------- Sign in with Google (Google Identity Services) ----------
-   /api/config names the Google client id when the server has one. The button then leads the sign-in and sign-up
-   screens; the page posts Google's ID token to /api/google. Not in the iPhone app, where Google blocks web sign-in. */
-let GOOGLE_ID = null, gisState = ''; // gisState: '', 'loading', 'ready' or 'failed'
-const googleOn = () => !!GOOGLE_ID && !NATIVE && gisState !== 'failed';
+/* ---------- Sign in with Google and Apple ----------
+   /api/config names Google's client ids. On the web, Google's own button (Google Identity Services) leads the sign-in
+   and sign-up screens. In the iPhone app, native buttons run Sign in with Apple and Google (in Apple's sign-in sheet,
+   which Google allows) through WonkoNative. Either way the provider's ID token goes to /api/google or /api/apple. */
+let GOOGLE_ID = null, GOOGLE_IOS_ID = null, gisState = ''; // gisState: '', 'loading', 'ready' or 'failed'
+const googleOn = () => NATIVE ? !!GOOGLE_IOS_ID : !!GOOGLE_ID && gisState !== 'failed';
+const appleOn = () => NATIVE;
+const idpOn = () => googleOn() || appleOn();
+const IDP_NAME = { google: 'Google', apple: 'Apple' };
 function loadGoogle() {
   if (!GOOGLE_ID || NATIVE || gisState) return;
   gisState = 'loading';
   const sc = document.createElement('script'); sc.src = 'https://accounts.google.com/gsi/client'; sc.async = true;
   sc.onload = () => {
-    try { google.accounts.id.initialize({ client_id: GOOGLE_ID, callback: r => googleCredential(r.credential), ux_mode: 'popup', use_fedcm_for_button: true }); gisState = 'ready'; }
+    try { google.accounts.id.initialize({ client_id: GOOGLE_ID, callback: r => idpCredential('google', r.credential), ux_mode: 'popup', use_fedcm_for_button: true }); gisState = 'ready'; }
     catch (e) { gisState = 'failed'; }
     if (!$('#gate').hidden) renderGate(); else if (VIEW === 'me' && !run) renderAcctCard();
   };
   sc.onerror = () => { gisState = 'failed'; if (!$('#gate').hidden) renderGate(); else if (VIEW === 'me' && !run) renderAcctCard(); };
   document.head.appendChild(sc);
 }
-// Google draws its own button into each .gbtn placeholder; until its script loads, the placeholder holds a plain one.
-function gbtnHTML(text) { return `<div class="gbtn" data-text="${text}"><button class="btn ghost" disabled>Loading Google…</button></div>`; }
+const APPLE_LOGO = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.97-3.46-1.07-1.57-2.74-1.78-3.33-1.8-1.42-.15-2.77.83-3.49.83-.72 0-1.83-.81-3.01-.79-1.55.02-2.98.9-3.78 2.29-1.61 2.8-.41 6.94 1.16 9.21.77 1.11 1.68 2.36 2.88 2.31 1.16-.05 1.59-.75 2.99-.75 1.4 0 1.79.75 3.01.72 1.24-.02 2.03-1.13 2.79-2.25.88-1.29 1.24-2.53 1.26-2.6-.03-.01-2.42-.93-2.45-3.71zM14.08 5.85c.64-.77 1.07-1.85.95-2.92-.92.04-2.03.61-2.69 1.38-.59.68-1.11 1.77-.97 2.82 1.02.08 2.07-.52 2.71-1.28z"/></svg>';
+const G_LOGO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.09A6.6 6.6 0 0 1 5.49 12c0-.73.13-1.43.35-2.09V7.07H2.18A11 11 0 0 0 1 12c0 1.77.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1A11 11 0 0 0 2.18 7.07l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/></svg>';
+// The Google button: native in the app; on the web, a placeholder Google draws its own button into once its script loads.
+function gbtnHTML(text) {
+  if (NATIVE) return `<button class="idp-btn google" data-idp="google">${G_LOGO}<span>${text === 'signin_with' ? 'Sign in' : 'Continue'} with Google</span></button>`;
+  return `<div class="gbtn" data-text="${text}"><button class="btn ghost" disabled>Loading Google…</button></div>`;
+}
+const appleBtnHTML = text => `<button class="idp-btn apple" data-idp="apple">${APPLE_LOGO}<span>${text === 'signin_with' ? 'Sign in' : 'Continue'} with Apple</span></button>`;
+function idpButtonsHTML(text) { return (appleOn() ? appleBtnHTML(text) : '') + (googleOn() ? gbtnHTML(text) : ''); }
 function renderGoogleBtns() {
   if (gisState !== 'ready') return;
   document.querySelectorAll('.gbtn:not([data-done])').forEach(el => {
@@ -16275,20 +16293,34 @@ function renderGoogleBtns() {
     try { google.accounts.id.renderButton(el, { theme: 'filled_black', size: 'large', shape: 'pill', text: el.dataset.text || 'continue_with', width: Math.min(340, Math.max(200, el.clientWidth || 300)) }); } catch (e) {}
   });
 }
+// The app's native buttons: get the provider's token from WonkoNative, then carry on as the web button does.
+async function nativeIdp(provider) {
+  const inGate = !$('#gate').hidden;
+  try {
+    const r = provider === 'apple' ? await Native.wonko.appleSignIn({}) : await Native.wonko.googleSignIn({ clientId: GOOGLE_IOS_ID });
+    await idpCredential(provider, r.credential, r.name);
+  } catch (e) {
+    if (e && e.code === 'canceled') return;
+    const msg = `${IDP_NAME[provider]} sign-in didn’t work. ${(e && e.message) || 'Please try again.'}`;
+    if (inGate) { gateUI.err = esc(msg); renderGate(); } else { acctUI.err = esc(msg); renderAcctCard(); }
+  }
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-idp]'); if (b && !b.disabled) nativeIdp(b.dataset.idp); });
 // From the sign-up screen: sign in, or make an account (which keeps this device's progress, as with a password).
-// From Me while signed in: connect Google to the account.
-async function googleCredential(cred) {
+// From Me while signed in: connect the provider to the account.
+async function idpCredential(provider, cred, name) {
+  const body = { credential: cred, ...(name ? { name } : {}) };
   if (ACCT && $('#gate').hidden) {
     acctUI.busy = true; acctUI.err = ''; renderAcctCard();
-    try { const r = await apiCall('/api/google', { credential: cred }); ACCT.google = r.google; saveA(); toast('Google connected. You can sign in with it from now on.'); }
+    try { const r = await apiCall('/api/' + provider, body); ACCT[provider] = r[provider]; saveA(); toast(`${IDP_NAME[provider]} connected. You can sign in with it from now on.`); }
     catch (err) { acctUI.err = acctErr(err); }
     acctUI.busy = false; renderAcctCard(); return;
   }
-  gateStep(async () => {
-    // '-' sends no account token, so switching accounts signs in rather than connecting Google to the current one.
-    const d = await apiCall('/api/google', { credential: cred }, '-');
+  return gateStep(async () => {
+    // '-' sends no account token, so switching accounts signs in rather than connecting to the current one.
+    const d = await apiCall('/api/' + provider, body, '-');
     if (!d.created) { gateSignedIn(d); return; }
-    ACCT = { token: d.token, player: d.player, passkeys: 0, username: null, google: d.google, signedIn: Date.now() }; saveA();
+    ACCT = { token: d.token, player: d.player, passkeys: 0, username: null, google: d.google || null, apple: d.apple || null, signedIn: Date.now() }; saveA();
     state.owner = d.player.id; save(true); renderGroup(); syncNow();
     toast('Account created. Welcome, ' + d.player.name + '.'); hideGate();
   });
@@ -16348,8 +16380,8 @@ function renderGate() {
     const n = Object.keys(state.srs || {}).length;
     h = g.step === 'save' ? `${owl('cheer')}<h2>Save your progress</h2><p>${n ? `You’ve learned ${n} card${n === 1 ? '' : 's'}.` : 'Nice start.'} Make an account to keep ${n === 1 ? 'it' : 'them'}, get reviews at the right time, and pick up on any device.</p>`
       : `${owl('think')}<h2>Create your account</h2><p>${g.pk ? 'Friends in your groups see your display name. Next, Face ID or Touch ID saves a passkey, so there’s no password to remember.' : 'Friends in your groups see your display name. You sign in with your username and password, and your phone or browser can save them for you.'}</p>`;
-    const gg = googleOn(), showForm = !gg || g.pwOpen;
-    if (gg) h += `<div class="gate-g">${gbtnHTML('continue_with')}</div>${showForm ? '<p class="gate-or">or with a username and password</p>' : '<button class="linkbtn" id="gtPwOpen">Use a username and password instead</button>'}`;
+    const gg = idpOn(), showForm = !gg || g.pwOpen;
+    if (gg) h += `<div class="gate-g">${idpButtonsHTML('continue_with')}</div>${showForm ? '<p class="gate-or">or with a username and password</p>' : '<button class="linkbtn" id="gtPwOpen">Use a username and password instead</button>'}`;
     if (showForm) h += `
       <form class="gate-form" id="gtForm" autocomplete="on">
         ${fld('gtName', 'Display name', 'name="nickname" maxlength="24" autocomplete="nickname" autocapitalize="words" spellcheck="false"')}
@@ -16389,9 +16421,9 @@ function renderGate() {
       <form class="gate-form" id="gtForm">${fld('gtRec', 'Recovery code', 'autocomplete="off" autocapitalize="off" spellcheck="false"')}
       <div class="rbtns"><button class="btn" type="submit" id="gtRecGo"${dis}>Sign in</button></div></form>`;
   } else {
-    const gg = googleOn(), showForm = !gg || g.pwOpen;
+    const gg = idpOn(), showForm = !gg || g.pwOpen;
     h = `${owl('read')}<h2>Sign in</h2>`;
-    if (gg) h += `<div class="gate-g">${gbtnHTML('signin_with')}</div>${showForm ? '' : '<button class="linkbtn" id="gtPwOpen">Sign in with a username and password</button>'}`;
+    if (gg) h += `<div class="gate-g">${idpButtonsHTML('signin_with')}</div>${showForm ? '' : '<button class="linkbtn" id="gtPwOpen">Sign in with a username and password</button>'}`;
     if (showForm) h += `
       <form class="gate-form" id="gtForm" autocomplete="on">
         ${fld('gtUser', 'Username', 'name="username" maxlength="40" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"')}
@@ -16526,7 +16558,11 @@ function renderAcctCard() {
     const still = (label, value) => `<li><div class="setrow still"><span class="sl">${label}</span><span class="sv">${value}</span></div></li>`;
     const panel = inner => `<li class="setpanel">${inner}</li>`;
     h += `<p class="acct-who">Signed in as <b>${esc(ACCT.username || ACCT.player.name)}</b></p><ul class="setlist">`;
-    if (ACCT.google) h += still('Google', `<span class="trunc">${esc(ACCT.google === 'connected' ? 'Connected' : ACCT.google)}</span>`);
+    const shown = v => `<span class="trunc">${esc(v === 'connected' ? 'Connected' : v)}</span>`;
+    if (ACCT.apple) h += still('Apple', shown(ACCT.apple));
+    else if (appleOn()) h += `<li><button class="setrow" data-idp="apple"${dis}><span class="sl">Sign in with Apple</span><span class="sv">Connect${chev}</span></button></li>`;
+    if (ACCT.google) h += still('Google', shown(ACCT.google));
+    else if (googleOn() && NATIVE) h += `<li><button class="setrow" data-idp="google"${dis}><span class="sl">Sign in with Google</span><span class="sv">Connect${chev}</span></button></li>`;
     else if (googleOn()) h += a.gOpen ? panel(`<p>Connect a Google account, then sign in with it on any device.</p>${gbtnHTML('continue_with')}<div class="row"><button class="linkbtn" id="aGCancel">Cancel</button></div>`) : row('aG', 'Sign in with Google', 'Connect');
     h += a.pwForm ? panel(`<form class="acct-pw" id="aPwForm" autocomplete="on"><h4>${ACCT.username ? 'Change password' : 'Set a password'}</h4><label class="fld"><span>Username</span><input id="aPwUser" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="40" value="${esc(ACCT.username || '')}"></label>${ACCT.username && !freshSignIn() ? pwFld('aPwCur', 'Current password', 'name="current-password" autocomplete="current-password"') : ''}${pwFld('aPwPass', (ACCT.username ? 'New password' : 'Password') + ' (8 or more characters)', 'name="password" minlength="8" autocomplete="new-password"')}<div class="row"><button class="btn sm" type="submit"${dis}>Save</button><button class="linkbtn" type="button" id="aPwCancel">Cancel</button></div></form>`)
       : row('aPwEdit', 'Password', ACCT.username ? 'Change' : 'Set up');
@@ -16550,7 +16586,7 @@ function renderAcctCard() {
       if (a.delArmed) h += `<p class="gerr">Deleting removes your account, progress, lesson results and any courses you wrote, on every device. It can’t be undone.</p>`;
     }
     h += `<button class="btn ghost sm acct-out" id="aOut"${dis}>${a.outArmed ? 'Tap again to sign out' : 'Sign out'}</button>`;
-    if (a.outArmed && !a.outForce) h += `<p class="gerr">Signing out clears this device. ${ACCT.username || pk || ACCT.google ? 'Sign back in with Google, your password, passkey or recovery code.' : 'Without Google, a password or a passkey, you’ll need your recovery code to get back in.'}</p>`;
+    if (a.outArmed && !a.outForce) h += `<p class="gerr">Signing out clears this device. ${ACCT.username || pk || ACCT.google || ACCT.apple ? 'Sign back in the way you set up (Apple, Google, password or passkey) or with your recovery code.' : 'Without Apple, Google, a password or a passkey, you’ll need your recovery code to get back in.'}</p>`;
   } else h += `<div class="row"><button class="btn sm" id="aGate">Create an account or sign in</button></div>`;
   if (a.err) h += `<p class="gerr">${a.err}</p>`;
   el.innerHTML = h;
@@ -17414,7 +17450,7 @@ if (API) $('#privLink').href = SITE + '/privacy.html';
 // A trial still 'on' at startup with no session to pick up (closed on the result screen, or over an hour ago) is over.
 if (!ACCT && trialState() === 'on' && !resumeRun()) setTrial('done');
 if (needGate()) showGate(gateStart()); else if (!run) resumeRun();
-apiCall('/api/config').then(d => { EMAIL_OK = !!d.email; GOOGLE_ID = typeof d.google === 'string' && d.google ? d.google : null; loadGoogle(); if (!$('#gate').hidden && !gateUI.busy) renderGate(); if (VIEW === 'me' && !run) renderAcctCard(); }).catch(() => {});
+apiCall('/api/config').then(d => { EMAIL_OK = !!d.email; GOOGLE_ID = typeof d.google === 'string' && d.google ? d.google : null; GOOGLE_IOS_ID = typeof d.googleIos === 'string' && d.googleIos ? d.googleIos : null; loadGoogle(); if (!$('#gate').hidden && !gateUI.busy) renderGate(); if (VIEW === 'me' && !run) renderAcctCard(); }).catch(() => {});
 refreshAccount();
 refreshBoard();
 loadCourses();

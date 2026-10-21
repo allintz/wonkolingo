@@ -185,11 +185,13 @@ CREATE TABLE IF NOT EXISTS review_marks (
   PRIMARY KEY (kind, ref)
 );
 
--- Google accounts used to sign in (Google's stable account id "sub"), one per player.
-CREATE TABLE IF NOT EXISTS google_ids (
-  sub TEXT PRIMARY KEY,
+-- Google and Apple accounts used to sign in (the provider's stable account id "sub"), one per provider per player.
+CREATE TABLE IF NOT EXISTS sign_in_ids (
+  provider TEXT NOT NULL,
+  sub TEXT NOT NULL,
   player_id TEXT NOT NULL,
   email TEXT,
-  created_at INTEGER NOT NULL
+  created_at INTEGER NOT NULL,
+  PRIMARY KEY (provider, sub)
 );
-CREATE INDEX IF NOT EXISTS google_ids_player ON google_ids (player_id);
+CREATE INDEX IF NOT EXISTS sign_in_ids_player ON sign_in_ids (player_id);
