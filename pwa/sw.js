@@ -12,7 +12,9 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const req = e.request, url = new URL(req.url);
   if (req.method !== 'GET' || url.pathname.includes('/api/')) return;
-  const isPage = req.mode === 'navigate' || (url.origin === location.origin && /\/(index\.html)?$/.test(url.pathname));
+  const isPage = url.origin === location.origin && /\/(index\.html)?$/.test(url.pathname);
+  // Other pages (privacy, review) go straight to the network, so they never replace the app's cached copy.
+  if (req.mode === 'navigate' && !isPage) return;
   if (isPage) {
     // Network first, so a new version shows up as soon as you're online; cached copy when offline.
     e.respondWith(fetch(req).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put('./', copy)); return r; })

@@ -1,0 +1,36 @@
+// The review page (/admin.html): disputed grades, removed questions, crash reports and reports on group courses, in one
+// place instead of shell scripts. Only players listed in ADMIN_PLAYERS (wrangler.toml [vars], comma-separated ids) get in.
+const isAdmin = (env, me) => !!me && String(env.ADMIN_PLAYERS || '').split(',').map(s => s.trim()).filter(Boolean).includes(me.id);
+const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
+const KINDS = ['dispute', 'bug', 'removal', 'report'];
+
+export async function adminApi(req, env, path, me, body) {
+  if (!isAdmin(env, me)) return json({ error: 'Not allowed.' }, 403);
+  const db = env.DB;
+  if (req.method === 'GET' && path === '/api/admin/summary') {
+    const [disputes, removals, bugs, reports] = await Promise.all([
+      db.prepare(`SELECT id, created_at AS at, course, card, question, answer, response, note, outcome,
+          json_extract(first_json, '$.percent') AS firstPct, json_extract(regrade_json, '$.percent') AS regradePct,
+          json_extract(regrade_json, '$.reply') AS reply FROM disputes WHERE status = 'open' ORDER BY id DESC LIMIT 100`).all(),
+      // Removals since the card was last marked reviewed, most-removed first.
+      db.prepare(`SELECT f.course, f.card, MAX(f.question) AS question, SUM(f.reason != 'restored') AS removed, SUM(f.reason = 'restored') AS restored,
+          group_concat(CASE WHEN f.reason != 'restored' THEN f.reason END) AS reasons, MAX(f.created_at) AS at
+          FROM card_feedback f LEFT JOIN review_marks m ON m.kind = 'removal' AND m.ref = f.card
+          WHERE m.at IS NULL OR f.created_at > m.at GROUP BY f.course, f.card HAVING removed > 0 ORDER BY removed DESC, at DESC LIMIT 100`).all(),
+      db.prepare(`SELECT id, created_at AS at, build, app, place, message, substr(stack, 1, 600) AS stack, ua FROM bug_reports WHERE done = 0 ORDER BY id DESC LIMIT 100`).all(),
+      db.prepare(`SELECT r.id, r.created_at AS at, r.item_text AS item, r.note, r.version, c.title, c.slug FROM reports r JOIN courses c ON c.id = r.course_id
+          WHERE r.resolved = 0 ORDER BY r.id DESC LIMIT 100`).all()
+    ]);
+    return json({ disputes: disputes.results, removals: removals.results, bugs: bugs.results, reports: reports.results });
+  }
+  if (req.method === 'POST' && path === '/api/admin/resolve') {
+    const kind = body.kind, ref = String(body.id || '').slice(0, 200);
+    if (!KINDS.includes(kind) || !ref) return json({ error: 'Unknown item.' }, 400);
+    if (kind === 'dispute') await db.prepare(`UPDATE disputes SET status = 'done' WHERE id = ?`).bind(+ref).run();
+    if (kind === 'bug') await db.prepare('UPDATE bug_reports SET done = 1 WHERE id = ?').bind(+ref).run();
+    if (kind === 'report') await db.prepare('UPDATE reports SET resolved = 1 WHERE id = ?').bind(+ref).run();
+    if (kind === 'removal') await db.prepare('INSERT OR REPLACE INTO review_marks (kind, ref, at) VALUES (?, ?, ?)').bind('removal', ref, Date.now()).run();
+    return json({ ok: true });
+  }
+  return json({ error: 'Not found.' }, 404);
+}

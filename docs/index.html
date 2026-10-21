@@ -152,6 +152,8 @@ svg { display: block; }
 .setpanel { padding: 14px; display: grid; gap: 10px; }
 .setpanel h4 { margin: 0; font-size: 15px; }
 .acct-more { justify-self: start; }
+.setrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 0 8px; font-weight: 700; }
+#advBody { margin-top: 6px; }
 .acct-out { justify-self: start; }
 .pwwrap { position: relative; display: block; }
 .pwwrap input { padding-right: 64px !important; }
@@ -582,6 +584,11 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .gate-back[hidden] { display: none; }
 .gate-back { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 10px); left: 12px; display: flex; align-items: center; gap: 2px; background: none; border: 0; padding: 8px 10px 8px 4px; color: var(--brass); font-weight: 700; font-size: 16px; z-index: 31; }
 .gate-back svg { width: 22px; height: 22px; }
+.trylist { display: grid; gap: 10px; width: 100%; max-width: 380px; }
+.trybtn { display: grid; gap: 2px; text-align: left; background: var(--surface-2); border: 1px solid var(--line-deep); border-radius: 14px; padding: 12px 16px; color: var(--fg); }
+.trybtn:hover, .trybtn:focus-visible { border-color: var(--brass); }
+.trybtn b { font-size: 16px; }
+.trybtn span { font-size: 14px; color: var(--muted); }
 .gate-form { display: grid; gap: 12px; justify-items: center; width: 100%; max-width: 340px; }
 .gate-form .gate-fld { max-width: none; }
 .acct-pw { display: grid; gap: 10px; }
@@ -716,7 +723,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-21-3be0ae3';
+  window.WL_BUILD = '2026-10-21-310c10f';
+  window.WL_BUILT_AT = +'1792597512000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -14725,7 +14733,9 @@ function computeStreak(days, settings, today) {
 // Tooltip definitions for jargon in card text. Source of truth: courses/glossary.json (regenerate this block from it).
 const GLOSSARY = [{"term": "6(b) authority", "match": ["Section 6(b) authority", "6(b) authority"], "def": "Power under Section 6(b) of the FTC Act letting the Federal Trade Commission order companies to submit information for studies of an industry, separate from any enforcement case.", "src": "https://www.law.cornell.edu/uscode/text/15/46", "cat": "law"}, {"term": "abnormally dangerous activity", "match": ["abnormally dangerous activity", "abnormally dangerous activities"], "def": "An activity so risky even when done carefully (such as blasting with explosives) that tort law holds whoever carries it out strictly liable for the harm it causes.", "src": "https://www.law.cornell.edu/wex/abnormally_dangerous_activity", "cat": "law"}, {"term": "abuse of discretion", "match": ["abuse of discretion"], "def": "A deferential standard courts use to review a decision-maker's choice: the court overturns it only if it was clearly unreasonable, arbitrary, or unsupported by the facts or law.", "src": "https://www.law.cornell.edu/wex/abuse_of_discretion", "cat": "law"}, {"term": "affirmative defense", "match": ["affirmative defense"], "def": "A defense that raises new facts which defeat liability even if the plaintiff's claims are true. The defendant has to plead and prove it, and it is often resolved only after costly discovery, well into a case.", "src": "https://www.law.cornell.edu/wex/affirmative_defense", "cat": "law"}, {"term": "AGI", "match": ["AGI"], "def": "Artificial general intelligence: a hypothetical AI system that matches or exceeds human ability across most cognitive tasks. Definitions vary and there is no agreed test.", "src": "https://en.wikipedia.org/wiki/Artificial_general_intelligence", "cat": "tech"}, {"term": "algorithmic efficiency", "match": ["algorithmic efficiency"], "def": "How much compute a training method needs to reach a given level of performance. Algorithmic progress lets the same capability be reached with less compute over time.", "src": "https://epoch.ai/blog/algorithmic-progress-in-language-models", "cat": "tech"}, {"term": "alignment", "match": ["alignment", "misaligned"], "def": "In AI, the problem of making a system's goals and behavior match what its developers and users intend. A misaligned model pursues goals other than those intended.", "src": "https://en.wikipedia.org/wiki/AI_alignment", "cat": "tech"}, {"term": "antitrust", "match": ["antitrust"], "def": "The body of law that protects competition, chiefly by banning monopolization and agreements among competitors that restrain trade, such as price-fixing. In the US, mainly the Sherman and Clayton Acts.", "src": "https://www.law.cornell.edu/wex/antitrust", "cat": "law"}, {"term": "appropriations", "match": ["appropriations"], "def": "Legislation that provides money for federal agencies and programs. Congress separately passes authorizing laws that create programs; a program can be authorized yet receive no appropriated funds.", "src": "https://www.everycrsreport.com/reports/R46497.html", "cat": "congress"}, {"term": "arbitrary and capricious", "match": ["arbitrary, capricious", "arbitrary and capricious"], "def": "A standard under the Administrative Procedure Act for judging agency actions. Courts set aside an action only if it lacked a rational basis, ignored key factors or ran counter to the evidence.", "src": "https://www.law.cornell.edu/uscode/text/5/706", "cat": "law"}, {"term": "arbitration clause", "match": ["arbitration clauses", "arbitration clause"], "def": "A contract term requiring disputes to be decided by a private arbitrator instead of a court, which can limit a person's ability to sue.", "src": "https://www.law.cornell.edu/wex/arbitration", "cat": "law"}, {"term": "attestation", "match": ["attestation"], "def": "A cryptographically verifiable statement from hardware or software about its own state or activity, such as what a chip was used for.", "src": "https://csrc.nist.gov/glossary/term/attestation", "cat": "tech"}, {"term": "automatic stay", "match": ["automatic stay"], "def": "A stay is a court order pausing a legal proceeding or the effect of a decision while a case is pending. An automatic stay takes effect by default, without a court having to order it.", "src": "https://www.law.cornell.edu/wex/stay", "cat": "law"}, {"term": "autonomous weapons", "match": ["autonomous weapons"], "def": "Weapon systems that, once activated, can select and engage targets without further human intervention.", "src": "https://www.everycrsreport.com/reports/IF11150.html", "cat": "policy"}, {"term": "back pay", "match": ["back pay"], "def": "Wages an employee should have earned but did not because of an employer's unlawful act, such as a retaliatory firing. Courts or agencies can order the employer to pay it.", "src": "https://www.law.cornell.edu/wex/back_pay", "cat": "law"}, {"term": "black-box access", "match": ["black-box", "black-box access"], "def": "Access to an AI model limited to sending inputs and seeing outputs, with no view of its internals such as weights, activations or training data.", "src": "https://arxiv.org/abs/2401.14446", "cat": "tech"}, {"term": "cartel", "match": ["cartel"], "def": "A group of competing firms that agree to coordinate prices, output or markets instead of competing. Such agreements are generally illegal under US antitrust law.", "src": "https://www.law.cornell.edu/wex/cartel", "cat": "law"}, {"term": "cause of action", "match": ["cause of action"], "def": "The legal basis that entitles a person to sue: a set of facts that, if proven, give the plaintiff a right to a remedy from the defendant.", "src": "https://www.law.cornell.edu/wex/cause_of_action", "cat": "law"}, {"term": "CBRN", "match": ["CBRN"], "def": "Chemical, biological, radiological and nuclear: the categories of weapons of mass destruction often used to group the most severe AI misuse risks.", "src": "https://en.wikipedia.org/wiki/CBRN_defense", "cat": "tech"}, {"term": "chain-of-thought", "match": ["chain-of-thought"], "def": "The step-by-step written reasoning a language model produces before giving its final answer.", "src": "https://developers.google.com/machine-learning/glossary#chain-of-thought-prompting", "cat": "tech"}, {"term": "chokepoint", "match": ["chokepoint"], "def": "A narrow point in a supply chain or route, controlled by few firms or places, where restricting access can affect everything downstream.", "src": "https://www.vocabulary.com/dictionary/chokepoint", "cat": "policy"}, {"term": "civil penalty", "match": ["civil penalty", "civil penalties"], "def": "A fine that a government agency or court imposes for breaking a law or regulation, enforced through a civil case without criminal punishment.", "src": "https://www.law.cornell.edu/wex/penalty", "cat": "law"}, {"term": "clear and convincing evidence", "match": ["clear and convincing evidence"], "def": "A standard of proof higher than 'more likely than not' and lower than 'beyond a reasonable doubt': the claim must be shown to be highly probable.", "src": "https://www.law.cornell.edu/wex/clear_and_convincing_evidence", "cat": "law"}, {"term": "cloture", "match": ["cloture"], "def": "The Senate procedure for ending debate and moving to a vote. For most legislation it takes 60 votes, so a failed cloture vote usually blocks a bill from advancing.", "src": "https://www.law.cornell.edu/wex/cloture", "cat": "congress"}, {"term": "codify", "match": ["codify", "codifies"], "def": "In policy usage, to write a rule into statute, often one that previously existed only in agency policy, an executive order or court decisions, so it has the force of law.", "src": "https://www.law.cornell.edu/wex/codify", "cat": "law"}, {"term": "collective-action problem", "match": ["collective-action problem"], "def": "A situation where everyone would be better off cooperating, but each actor has an incentive to hold back, so the shared goal goes unmet.", "src": "https://en.wikipedia.org/wiki/Collective_action_problem", "cat": "policy"}, {"term": "collusion", "match": ["collusion", "collusive"], "def": "A secret or unlawful agreement between parties, such as competitors, to act together in a way that harms others, for example by fixing prices.", "src": "https://www.law.cornell.edu/wex/collusion", "cat": "law"}, {"term": "community benefit agreement", "match": ["community benefit agreements", "community benefit agreement"], "def": "A contract between a developer and community groups or local government in which the developer commits to local benefits (jobs, payments, environmental protections) in exchange for support for a project.", "src": "https://en.wikipedia.org/wiki/Community_benefits_agreement", "cat": "law"}, {"term": "companion bill", "match": ["House companion", "companion bill", "companion bills"], "def": "A bill introduced in one chamber that is identical or substantially similar to a bill in the other chamber, so both can move through committees at the same time.", "src": "https://m.myfloridahouse.gov/Sections/PublicGuide/glossary.aspx?Filter=C", "cat": "congress"}, {"term": "conference committee", "match": ["dropped in conference", "conference committee", "conference committees"], "def": "A temporary panel of House and Senate members that negotiates a single version of a bill when the two chambers have passed different versions. Provisions are often dropped there.", "src": "https://www.everycrsreport.com/reports/98-696GOV.html", "cat": "congress"}, {"term": "cosponsor", "match": ["cosponsors", "original cosponsor", "original cosponsors", "cosponsor"], "def": "A member of Congress who formally signs on to support a bill introduced by its sponsor. Original cosponsors are those listed when the bill is first introduced.", "src": "https://www.everycrsreport.com/reports/RS22477.html", "cat": "congress"}, {"term": "curtailable load", "match": ["curtailable", "curtailable load", "curtailable loads"], "def": "A large electricity user that can reduce its power draw on request when the grid is strained, often in exchange for lower rates or faster grid access.", "src": "https://en.wikipedia.org/wiki/Demand_response", "cat": "policy"}, {"term": "cutout", "match": ["cutouts", "cutout"], "def": "An intermediary used to hide the real party behind a transaction or operation.", "src": "https://www.dictionary.com/browse/cutout", "cat": "policy"}, {"term": "deployer", "match": ["deployer", "deployers"], "def": "An organization that puts an AI system to use in its own products or operations, as distinct from the developer that built the underlying model.", "src": "https://artificialintelligenceact.eu/article/3/", "cat": "policy"}, {"term": "design defect", "match": ["design defect"], "def": "A product-liability claim that a product is unreasonably dangerous because of how it was designed, so every unit carries the flaw.", "src": "https://www.law.cornell.edu/wex/design_defect", "cat": "law"}, {"term": "discovery", "match": ["costly discovery"], "def": "The pretrial phase of a lawsuit in which each side can demand evidence from the other, such as documents and depositions. It is often the most expensive part of litigation.", "src": "https://www.law.cornell.edu/wex/discovery", "cat": "law"}, {"term": "discussion draft", "match": ["discussion draft"], "def": "Bill text that lawmakers circulate for feedback before formally introducing it. It has no bill number and cannot be acted on until it is introduced.", "cat": "congress"}, {"term": "distillation", "match": ["distillation", "adversarial distillation"], "def": "Training one model to imitate another, stronger model's outputs. In US policy debates, adversarial distillation means foreign rivals, mainly Chinese AI firms, doing this with US models without permission.", "src": "https://developers.google.com/machine-learning/glossary#distillation", "cat": "tech"}, {"term": "DNA synthesis", "match": ["DNA synthesis"], "def": "Manufacturing DNA molecules to a specified sequence, usually by commercial providers who ship them to customers. It is a key step in turning a genetic design into a working organism.", "src": "https://en.wikipedia.org/wiki/Artificial_gene_synthesis", "cat": "tech"}, {"term": "duty of care", "match": ["statutory duty of care", "duty of care"], "def": "A legal obligation to take reasonable care to avoid foreseeable harm to others. A statutory duty of care is one written into a statute instead of developed by courts.", "src": "https://www.law.cornell.edu/wex/duty_of_care", "cat": "law"}, {"term": "elicitation", "match": ["elicitation"], "def": "In AI evaluations, the effort testers put into drawing out a model's full capabilities, for example through better prompts, tools or fine-tuning. Weak elicitation can understate what a model can do.", "src": "https://metr.org/blog/2024-03-15-guidelines-for-capability-elicitation/", "cat": "tech"}, {"term": "exfiltration", "match": ["exfiltrate", "exfiltration"], "def": "Unauthorized copying or transfer of data out of a system. For AI, the main concern is model weights being copied out of a lab by thieves or insiders, or possibly in future by the model itself.", "src": "https://csrc.nist.gov/glossary/term/exfiltration", "cat": "tech"}, {"term": "export controls", "match": ["export controls"], "def": "Government restrictions on sending certain goods, software or technology abroad, usually for national security. In the US, the Commerce Department's BIS administers controls on dual-use items such as AI chips.", "src": "https://www.bis.gov/regulations/ear", "cat": "policy"}, {"term": "failure to warn", "match": ["failure to warn"], "def": "A product-liability claim that a maker did not give adequate warnings or instructions about a product's non-obvious dangers.", "src": "https://www.law.cornell.edu/wex/products_liability", "cat": "law"}, {"term": "fine-tuning", "match": ["fine-tuning", "fine-tunes", "fine-tuned"], "def": "Further training of an already-trained model on additional data to adapt its behavior. It can also be used to remove a model's safety training.", "src": "https://developers.google.com/machine-learning/glossary#fine-tuning", "cat": "tech"}, {"term": "fissile material", "match": ["fissile material"], "def": "Material, such as highly enriched uranium or plutonium, that can sustain a nuclear chain reaction; it is the essential ingredient of nuclear weapons.", "src": "https://en.wikipedia.org/wiki/Fissile_material", "cat": "policy"}, {"term": "FLOP", "match": ["FLOP"], "def": "Floating-point operation: one arithmetic step, such as an addition or multiplication, on numbers stored in floating-point format. The total FLOP used to train a model is a common measure of its scale, e.g. 10^26.", "src": "https://en.wikipedia.org/wiki/Floating_point_operations_per_second", "cat": "tech"}, {"term": "foundation model", "match": ["foundation model", "foundation-model"], "def": "A large AI model trained on broad data that can be adapted to many different tasks, such as the models behind major chatbots.", "src": "https://developers.google.com/machine-learning/glossary#foundation-model", "cat": "tech"}, {"term": "foundry", "match": ["foundries", "foundry"], "def": "A chip factory that manufactures chips designed by other companies. TSMC and Samsung are the leading foundries for advanced chips, and TSMC makes most leading AI chips.", "src": "https://en.wikipedia.org/wiki/Foundry_model", "cat": "tech"}, {"term": "general-purpose AI", "match": ["general-purpose AI"], "def": "AI models that can competently perform a wide range of distinct tasks. The EU AI Act sets specific obligations for 'general-purpose AI models'.", "src": "https://artificialintelligenceact.eu/article/3/", "cat": "tech"}, {"term": "general-purpose technology", "match": ["general-purpose technology"], "def": "A technology that spreads across many sectors and spawns further innovation, such as electricity or computers.", "src": "https://en.wikipedia.org/wiki/General-purpose_technology", "cat": "policy"}, {"term": "geoengineering", "match": ["geoengineering"], "def": "Deliberate large-scale intervention in Earth's climate system, such as reflecting sunlight back to space, to counter global warming.", "src": "https://en.wikipedia.org/wiki/Climate_engineering", "cat": "policy"}, {"term": "germline genetic engineering", "match": ["germline genetic engineering", "germline"], "def": "Editing genes in eggs, sperm or embryos, so the changes are inherited by future generations.", "src": "https://www.genome.gov/genetics-glossary/Germ-Line", "cat": "tech"}, {"term": "grid interconnection", "match": ["grid interconnection"], "def": "The process and approval required to connect a new power plant or large electricity user to the transmission grid, often a long queue.", "src": "https://www.energy.gov/eere/i2x/interconnection-innovation-e-xchange", "cat": "policy"}, {"term": "immunity", "match": ["immunity", "civil immunity"], "def": "Legal protection that shields a person or organization from being sued or held liable for certain acts.", "src": "https://www.law.cornell.edu/wex/immunity", "cat": "law"}, {"term": "inference", "match": ["inference", "inference compute"], "def": "Running a trained model to produce outputs, as opposed to training it. Inference compute is the computing power used for this, for example to serve customers.", "src": "https://developers.google.com/machine-learning/glossary#inference", "cat": "tech"}, {"term": "infrastructure-as-a-service", "match": ["infrastructure-as-a-service"], "def": "A cloud service model in which customers rent computing power, storage and networking from a provider instead of owning the hardware.", "src": "https://csrc.nist.gov/glossary/term/infrastructure_as_a_service", "cat": "tech"}, {"term": "insider threat", "match": ["insider-threat", "insider threat"], "def": "The risk that someone with authorized access, such as an employee or contractor, misuses it to cause harm, for example by stealing data.", "src": "https://csrc.nist.gov/glossary/term/insider_threat", "cat": "tech"}, {"term": "joint resolution", "match": ["joint resolution"], "def": "A legislative measure that, like a bill, must pass both chambers and be signed by the President (or pass over a veto) to become law. Used for continuing appropriations and to approve or block executive actions.", "src": "https://www.senate.gov/legislative/common/briefing/leg_laws_acts.htm", "cat": "congress"}, {"term": "know-your-customer", "match": ["know-your-customer", "KYC"], "def": "Rules requiring a business to verify who its customers are and watch for suspicious activity. They originated in banking and are proposed for cloud computing.", "src": "https://www.fincen.gov/resources/statutes-and-regulations/cdd-final-rule", "cat": "policy"}, {"term": "lame duck", "match": ["lame duck", "lame-duck"], "def": "The period after a November election and before the new Congress takes office in January. A lame-duck session is Congress meeting then, including members who lost or are retiring.", "src": "https://www.senate.gov/legislative/LameDuckSessions.htm", "cat": "congress"}, {"term": "lithography", "match": ["lithography", "DUV"], "def": "The chipmaking step that uses light to print circuit patterns onto silicon wafers. Deep-ultraviolet (DUV) tools are the older generation, still essential for making advanced chips.", "src": "https://www.asml.com/en/products/duv-lithography-systems", "cat": "tech"}, {"term": "major questions doctrine", "match": ["major-questions", "major questions doctrine"], "def": "A Supreme Court doctrine under which courts reject agency actions of vast economic or political significance unless Congress clearly authorized them.", "src": "https://www.law.cornell.edu/wex/major_questions_doctrine", "cat": "law"}, {"term": "market allocation", "match": ["market allocation"], "def": "An agreement among competitors to divide customers, territories or products among themselves instead of competing for them. US antitrust law treats it as illegal per se.", "src": "https://www.justice.gov/atr/price-fixing-bid-rigging-and-market-allocation-schemes", "cat": "law"}, {"term": "markup", "match": ["markup"], "def": "The committee meeting where members debate, amend and vote on a bill, deciding whether and in what form to send it to the full chamber.", "src": "https://www.everycrsreport.com/reports/98-245GOV.html", "cat": "congress"}, {"term": "merger review", "match": ["merger review"], "def": "Government examination of a proposed merger or acquisition to decide whether it may substantially lessen competition, in which case enforcers can sue to block or reshape it.", "src": "https://www.law.cornell.edu/uscode/text/15/18", "cat": "law"}, {"term": "mission creep", "match": ["mission creep"], "def": "The gradual expansion of a program or institution's activities beyond its original goals.", "src": "https://en.wikipedia.org/wiki/Mission_creep", "cat": "policy"}, {"term": "model card", "match": ["model card", "model cards", "system card"], "def": "A document published with an AI model describing its intended uses, how it was evaluated, its limitations and safety test results. A system card covers a model plus its surrounding product.", "src": "https://arxiv.org/abs/1810.03993", "cat": "tech"}, {"term": "model weights", "match": ["model weights", "weights"], "def": "The numerical parameters a neural network learns during training. Whoever holds a model's weights can run, copy or modify it, including stripping its safeguards.", "src": "https://developers.google.com/machine-learning/glossary#weight", "cat": "tech"}, {"term": "negligence", "match": ["negligence", "negligence standard"], "def": "Failure to use the care a reasonably prudent person would use in similar circumstances. A negligence standard makes a defendant liable only for harm caused by such a failure.", "src": "https://www.law.cornell.edu/wex/negligence", "cat": "law"}, {"term": "open-weight", "match": ["open-weight"], "def": "Describes an AI model whose trained weights are published for anyone to download, run and modify.", "src": "https://www.ntia.gov/issues/artificial-intelligence/open-model-weights-report", "cat": "tech"}, {"term": "overhang", "match": ["overhang", "capability overhang", "overhangs"], "def": "A buildup of unused potential, such as spare compute, efficiency gains or ideas, that could produce a sudden jump in AI capabilities once a constraint is lifted.", "src": "https://wiki.aiimpacts.org/ai_timelines/hardware_and_ai_timelines/hardware_overhang", "cat": "tech"}, {"term": "per se", "match": ["per se"], "def": "Latin for 'by itself.' In antitrust, a per se violation is conduct (such as price-fixing) treated as automatically illegal, with no weighing of its actual effects on competition.", "src": "https://www.law.cornell.edu/wex/per_se", "cat": "law"}, {"term": "preemption", "match": ["preemption", "preempt", "preempts", "preempting"], "def": "The doctrine, based on the Constitution's Supremacy Clause, that valid federal law overrides conflicting state law. Congress can preempt state law expressly or by implication.", "src": "https://www.law.cornell.edu/wex/preemption", "cat": "law"}, {"term": "price-fixing", "match": ["price-fixing"], "def": "An agreement among competitors to raise, lower or stabilize prices instead of setting them independently. It is illegal per se under US antitrust law.", "src": "https://www.law.cornell.edu/wex/price_fixing", "cat": "law"}, {"term": "product liability", "match": ["product-liability", "product liability"], "def": "The legal responsibility of makers and sellers for injuries caused by defective products, usually through claims of design defect, manufacturing defect or failure to warn.", "src": "https://www.law.cornell.edu/wex/products_liability", "cat": "law"}, {"term": "public benefit corporation", "match": ["public benefit corporation"], "def": "A for-profit corporation whose charter commits it to a stated public benefit, and whose directors must balance that benefit and stakeholders' interests against shareholders' financial interests.", "src": "https://www.law.cornell.edu/wex/public_benefit_corporation", "cat": "law"}, {"term": "punitive damages", "match": ["punitive damages"], "def": "Money a court awards on top of compensation for harm, meant to punish especially bad conduct and deter others from similar conduct.", "src": "https://www.law.cornell.edu/wex/punitive_damages", "cat": "law"}, {"term": "race to the bottom", "match": ["races to the bottom", "race to the bottom"], "def": "Competition in which actors keep lowering standards, such as safety or regulation, to gain an advantage over rivals.", "src": "https://en.wikipedia.org/wiki/Race_to_the_bottom", "cat": "policy"}, {"term": "reasonable care", "match": ["reasonable care"], "def": "The degree of caution a reasonably prudent person would use in the same situation. Failing to exercise it is the core of negligence.", "src": "https://www.law.cornell.edu/wex/reasonable_care", "cat": "law"}, {"term": "reconciliation", "match": ["reconciliation bill", "reconciliation bills", "reconciliation"], "def": "A fast-track budget procedure that lets certain tax, spending and debt-limit bills pass the Senate by simple majority, without a filibuster. Under the Byrd rule, provisions with no or merely incidental budget effect can be struck.", "src": "https://www.law.cornell.edu/wex/reconciliation", "cat": "congress"}, {"term": "recursive self-improvement", "match": ["recursive self-improvement"], "def": "A hypothesized process in which AI systems improve the design of their own successors, which then improve further, potentially speeding progress.", "src": "https://en.wikipedia.org/wiki/Recursive_self-improvement", "cat": "tech"}, {"term": "red-teaming", "match": ["red-teaming"], "def": "Deliberately probing a system the way an adversary would, to find weaknesses before real attackers or users do.", "src": "https://csrc.nist.gov/glossary/term/red_team", "cat": "tech"}, {"term": "regulatory capture", "match": ["lobbying and capture", "invites capture", "monitors get captured", "regulatory capture"], "def": "When a regulator or monitor comes to serve the interests of the industry it oversees, at the expense of the public it is meant to protect.", "src": "https://en.wikipedia.org/wiki/Regulatory_capture", "cat": "policy"}, {"term": "reinforcement learning", "match": ["reinforcement learning"], "def": "A training method in which a model learns by trial and error, receiving rewards for desired behavior. It is widely used to train AI models after pretraining.", "src": "https://developers.google.com/machine-learning/glossary#reinforcement-learning-rl", "cat": "tech"}, {"term": "reinsurance", "match": ["reinsurance"], "def": "Insurance for insurers: an insurer passes part of its risk to another company, or a government backstop, to limit losses from very large or correlated claims.", "src": "https://en.wikipedia.org/wiki/Reinsurance", "cat": "policy"}, {"term": "safe harbor", "match": ["safe harbor", "safe harbors"], "def": "A legal provision that protects a party from liability or penalty as long as it meets specified conditions.", "src": "https://www.law.cornell.edu/wex/safe_harbor", "cat": "law"}, {"term": "safety case", "match": ["safety case", "safety cases"], "def": "A structured, evidence-backed argument that a system is acceptably safe in a particular context. Some regulators require them, for example for nuclear plants and offshore oil and gas in the UK.", "src": "https://www.aisi.gov.uk/work/safety-cases-at-aisi", "cat": "tech"}, {"term": "sandbagging", "match": ["sandbagging"], "def": "An AI model strategically underperforming on an evaluation, hiding capabilities it actually has.", "src": "https://arxiv.org/abs/2406.07358", "cat": "tech"}, {"term": "sandbox", "match": ["sandbox", "sandboxing", "sandboxes"], "def": "An isolated computing environment that limits what software inside it can access, used to test or contain programs.", "src": "https://csrc.nist.gov/glossary/term/sandbox", "cat": "tech"}, {"term": "Senate confirmation", "match": ["Senate confirmation", "Senate-confirmed"], "def": "The Senate's constitutional 'advice and consent' power to approve or reject the President's nominees for senior federal posts. Lower-level officials can be appointed without it.", "src": "https://www.senate.gov/about/powers-procedures/nominations.htm", "cat": "congress"}, {"term": "sense of Congress", "match": ["sense of Congress"], "def": "A provision or resolution that states Congress's opinion. It has no binding legal effect, even when included in a bill that becomes law.", "src": "https://www.everycrsreport.com/reports/98-825GOV.html", "cat": "congress"}, {"term": "severability clause", "match": ["severability clause"], "def": "A provision stating that if a court strikes down one part of a law or contract, the remaining parts stay in effect.", "src": "https://www.law.cornell.edu/wex/severability_clause", "cat": "law"}, {"term": "shell company", "match": ["shell companies", "shell company"], "def": "A company with few or no real operations or assets, sometimes used to hide who is actually behind a transaction.", "src": "https://www.law.cornell.edu/wex/shell_company", "cat": "law"}, {"term": "state capacity", "match": ["state capacity"], "def": "A government's ability to carry out its policies effectively, including expertise, staff, funding and administrative reach.", "src": "https://en.wikipedia.org/wiki/State_capacity", "cat": "policy"}, {"term": "strict liability", "match": ["strict liability"], "def": "Liability for harm regardless of fault or how much care was taken. US courts apply it to abnormally dangerous activities and, in most states, to some defective-product claims.", "src": "https://www.law.cornell.edu/wex/strict_liability", "cat": "law"}, {"term": "structural separation", "match": ["structural separation"], "def": "A remedy that bars one company from operating in two connected lines of business, such as owning cloud infrastructure and the AI models that run on it.", "src": "https://www.law.berkeley.edu/sidebar/tejas-narechania-regulating-ai-technology/", "cat": "policy"}, {"term": "subpoena power", "match": ["subpoena power"], "def": "Authority to issue subpoenas: legal orders compelling a person to testify or hand over documents, backed by penalties for refusing.", "src": "https://www.law.cornell.edu/wex/subpoena", "cat": "law"}, {"term": "sunset provision", "match": ["sunset", "sunset provision"], "def": "A clause that makes a law, program or agency expire automatically after a set period unless lawmakers renew it.", "src": "https://www.law.cornell.edu/wex/sunset_law", "cat": "law"}, {"term": "superintelligence", "match": ["superintelligence"], "def": "Hypothetical AI that greatly exceeds human cognitive ability in virtually all domains.", "src": "https://en.wikipedia.org/wiki/Superintelligence", "cat": "tech"}, {"term": "telemetry", "match": ["telemetry"], "def": "Data collected automatically from a device and sent elsewhere for monitoring, such as a chip's power draw or usage.", "src": "https://csrc.nist.gov/glossary/term/telemetry", "cat": "tech"}, {"term": "Tenth Amendment", "match": ["Tenth Amendment"], "def": "The constitutional amendment reserving to the states, or the people, powers not delegated to the federal government.", "src": "https://www.law.cornell.edu/constitution/tenth_amendment", "cat": "law"}, {"term": "test-time compute", "match": ["test-time compute", "inference-time scaling", "inference-time compute"], "def": "Computing power spent while a model is answering, for example letting it reason longer, which can improve performance without further training.", "src": "https://en.wikipedia.org/wiki/Neural_scaling_law", "cat": "tech"}, {"term": "tort", "match": ["tort", "tort liability"], "def": "A civil wrong, other than breach of contract, that causes harm and lets the injured person sue for damages. Negligence is the most common tort.", "src": "https://www.law.cornell.edu/wex/tort", "cat": "law"}, {"term": "trade secret", "match": ["trade-secret", "trade secret", "trade secrets"], "def": "Confidential business information, such as a formula, process or technique, that has value because competitors do not know it. The law protects it against theft and misuse.", "src": "https://www.law.cornell.edu/wex/trade_secret", "cat": "law"}, {"term": "training run", "match": ["training run", "training runs"], "def": "One complete process of training an AI model on data, which for frontier models can take months and vast amounts of compute.", "src": "https://developers.google.com/machine-learning/glossary#training", "cat": "tech"}, {"term": "unanimous consent", "match": ["unanimous consent", "unanimous-consent"], "def": "A way for the Senate to act quickly by setting aside its normal rules. It succeeds only if no senator objects, so any single senator can block it.", "src": "https://www.everycrsreport.com/files/20101201_96-548_b31e48c7ecd79f248928781ce74bbf8f6e210fc7.html", "cat": "congress"}, {"term": "uplift", "match": ["uplift"], "def": "In AI safety testing, how much a model improves someone's ability to do a task, such as building a weapon, compared with existing resources like internet search.", "src": "https://www.rand.org/pubs/research_reports/RRA2977-2.html", "cat": "tech"}, {"term": "vested equity", "match": ["vested equity"], "def": "Company shares or stock options an employee has fully earned under a vesting schedule, so they belong to the employee even after leaving the company.", "src": "https://en.wikipedia.org/wiki/Vesting", "cat": "law"}, {"term": "willful misconduct", "match": ["willful misconduct"], "def": "Wrongful conduct done intentionally and knowingly, as opposed to by accident or carelessness. It is a much higher bar to prove than negligence.", "src": "https://www.law.cornell.edu/wex/willful", "cat": "law"}];
 /* Wraps the first use of each glossary term in a card with a tappable definition. Pass the same Set across one card's texts. */
-const GL_RE = (() => {
+// let, so course content downloaded by the iPhone app can rebuild it with a newer glossary (applyContent).
+let GL_RE = buildGlRe();
+function buildGlRe() {
   const forms = [];
   GLOSSARY.forEach((g, i) => (g.match || [g.term]).forEach(m => forms.push([m.toLowerCase(), i])));
   forms.sort((a, b) => b[0].length - a[0].length);
@@ -14734,7 +14744,7 @@ const GL_RE = (() => {
   const re = new RegExp('(?<![\\w&#])(' + forms.map(f => f[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')(?!\\w)', 'gi');
   re.idx = GL_IDX;
   return re;
-})();
+}
 // The glossary term the current card asks about, so its own tooltip doesn't give the answer away.
 let GL_SKIP = [];
 function gl(text, seen) {
@@ -14846,6 +14856,37 @@ const COURSES = Object.assign(Object.create(null), {
     meta: 'Draft · 2026-10-21 · Fact-checked by AI, not by a person' }
 });
 
+/* ---------- course content updates for the iPhone app ----------
+   The app bundles the page, so its built-in courses date from its build. At launch it fetches /content.json (written by
+   build.sh) and uses it when it's newer, so course edits reach phones without an App Store update. The last download is
+   kept in localStorage and applied before the first render. The website always serves the latest page and skips this. */
+const CONTENT_KEY = 'wl-content';
+const IN_APP = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+let contentAt = window.WL_BUILT_AT || 0, pendingContent = null;
+function applyContent(d) {
+  if (!d || !(d.builtAt > contentAt) || !d.courses || typeof d.courses !== 'object') return false;
+  for (const [k, c] of Object.entries(d.courses)) {
+    if (!c || !Array.isArray(c.units) || !c.units.length || typeof c.name !== 'string' || typeof c.pre !== 'string') continue;
+    if (COURSES[k] && COURSES[k].group) continue;
+    COURSES[k] = { ...(COURSES[k] || {}), ...c };
+  }
+  if (Array.isArray(d.glossary) && d.glossary.length) { GLOSSARY.length = 0; GLOSSARY.push(...d.glossary); GL_RE = buildGlRe(); }
+  if (d.sources && typeof d.sources === 'object') Object.assign(CARD_SOURCES, d.sources);
+  contentAt = d.builtAt;
+  return true;
+}
+if (IN_APP) try { applyContent(JSON.parse(localStorage.getItem(CONTENT_KEY))); } catch (e) {}
+async function checkContent() {
+  if (!IN_APP) return;
+  try {
+    const r = await fetch(SITE + '/content.json', { cache: 'no-cache' }); if (!r.ok) return;
+    const d = await r.json(); if (!(d.builtAt > contentAt)) return;
+    try { localStorage.setItem(CONTENT_KEY, JSON.stringify(d)); } catch (e) {}
+    if (run) { pendingContent = d; return; } // not mid-session: the cards on screen would change under the player
+    if (applyContent(d)) { buildLessons(); renderHome(); }
+  } catch (e) {}
+}
+
 // Defined early because the home screen renders before the later script sections run.
 const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const WEEKDAYS = [false, true, true, true, true, true, false];
@@ -14854,10 +14895,15 @@ let cQuery = ''; // the Courses search box
 let VIEW = 'today';
 // Units the player opened or closed on a course page, so a re-render (a sync finishing, say) doesn't undo it.
 const unitOpen = {};
+// Settings tucked away until opened: Advanced in Me, and the answer style row on each course page.
+let advOpen = false;
+const cAdv = {};
 function buildLessons() {
   const C = COURSES[state.course];
   LESSONS = [];
   if (!C) return;
+  const kt = keyTermCards(state.course);
+  if (kt.length) LESSONS.push({ title: 'Key terms', items: kt, unit: -1, id: C.pre + 'key' });
   C.units.forEach((u, ui) => u.lessons.forEach((l, li) => LESSONS.push({ ...l, unit: ui, id: C.pre + 'u' + ui + 'l' + li })));
 }
 const jumpKey = ui => COURSES[state.course].pre ? COURSES[state.course].pre + ui : ui;
@@ -14986,20 +15032,20 @@ function toggleMyTerm(term, def) {
   else { state.myTerms[term] = def ? { at: Date.now(), def } : Date.now(); const first = !COURSES.terms; ensureTermsCourse(); if (first && !inMix('terms')) setMix('terms', true); toast(first ? 'Added. My terms is now in your daily mix.' : 'Added to My terms.'); }
   ensureTermsCourse(); save(); if (!run) renderHome();
 }
-/* ---------- key terms: a course's jargon, checked off once, then taught as cards at the start of the course ---------- */
-// state.keyTerms[course] = { at, known: [terms] } once the player has gone through the list; terms not marked known become cards.
+/* ---------- key terms: a course's jargon, taught as its first lesson ---------- */
+// Every key term is a card in the course's first lesson ("Key terms"); the rest of the course isn't locked behind it.
+// state.keyTerms[course] = { at, known: [terms] } holds terms the player marked as already known, which are skipped.
 const keyTermList = k => ((COURSES[k] && COURSES[k].keyTerms) || []).filter(t => GLOSSARY.some(g => g.term === t));
 const keyTermsAnswered = k => !!(state.keyTerms || {})[k];
 function keyTermCards(k) {
-  const C = COURSES[k], kt = (state.keyTerms || {})[k]; if (!C || !kt) return [];
-  const known = new Set(kt.known || []);
+  const C = COURSES[k]; if (!C) return [];
+  const known = new Set(((state.keyTerms || {})[k] || {}).known || []);
   return keyTermList(k).filter(t => !known.has(t)).map(t => {
     const gi = GLOSSARY.findIndex(g => g.term === t);
     return { ...termCard(GLOSSARY[gi], gi), id: C.pre + 'u0l0#key-' + termSlug(t), x: 'One of this course’s key terms. Tap an underlined term in any card to see its definition again.' };
   });
 }
 let ktCourse = null, ktKnown = new Set(), ktThen = null;
-const ktAsked = new Set(); // courses whose list was closed with "not now" since the page loaded
 function openKeyTerms(k, then) {
   ktCourse = k; ktKnown = new Set(((state.keyTerms || {})[k] || {}).known || []); ktThen = then || null;
   renderKeyTerms(); openSheet('#ktSheet');
@@ -15007,15 +15053,15 @@ function openKeyTerms(k, then) {
 function renderKeyTerms() {
   const C = COURSES[ktCourse], terms = keyTermList(ktCourse), n = terms.filter(t => !ktKnown.has(t)).length;
   $('#ktTitle').textContent = 'Key terms: ' + C.name;
-  $('#ktBody').innerHTML = `<p>This course uses these terms a lot. Tap <b>Know it</b> only for terms you could explain to a colleague. The rest become short cards at the start of the course, so leave anything you only half know.</p>
+  $('#ktBody').innerHTML = `<p>These are the course’s first lesson. Tap <b>Know it</b> for terms you could already explain to a colleague, and they’re skipped. Leave anything you only half know.</p>
     <ul class="ktlist">${terms.map(t => `<li><span>${esc(t)}</span><button class="ktk" data-kt="${esc(t)}" aria-pressed="${ktKnown.has(t)}">Know it</button></li>`).join('')}</ul>
-    <div class="row"><button class="btn" id="ktDone">${n ? `Add ${n} term${n === 1 ? '' : 's'}` : 'Done'}</button>${n ? '<button class="linkbtn" id="ktAll">I know all of these</button>' : ''}</div>`;
+    <div class="row"><button class="btn" id="ktDone">Done</button>${n ? '<button class="linkbtn" id="ktAll">I know all of these</button>' : ''}</div>`;
 }
 function finishKeyTerms(known) {
   const k = ktCourse, n = keyTermList(k).length - known.size;
   state.keyTerms = { ...(state.keyTerms || {}), [k]: { at: Date.now(), known: [...known] } };
-  save(); closeSheet('#ktSheet');
-  toast(n ? `Added ${n} key term${n === 1 ? '' : 's'}. They come first in this course.` : 'No key terms added.');
+  save(); closeSheet('#ktSheet'); if (state.course === k) buildLessons();
+  toast(n ? `${n} key term${n === 1 ? '' : 's'} left to learn.` : 'Key terms skipped.');
   const then = ktThen; ktThen = null;
   if (then) then(); else renderHome();
 }
@@ -15025,15 +15071,17 @@ $('#ktBody').addEventListener('click', e => {
   if (e.target.closest('#ktDone')) finishKeyTerms(ktKnown);
   if (e.target.closest('#ktAll')) finishKeyTerms(new Set(keyTermList(ktCourse)));
 });
-// Closing without choosing means "not now": the session goes ahead and the list comes back next time the app opens.
-$('#ktClose').onclick = () => { ktAsked.add(ktCourse); closeSheet('#ktSheet'); const then = ktThen; ktThen = null; if (then) then(); };
+$('#ktClose').onclick = () => { closeSheet('#ktSheet'); ktThen = null; };
 // A lesson counts as done once every card in it is in your reviews. Recomputed from the cards, so it stays right when courses are edited.
 function refreshDone() {
   state.done = state.done || {};
   Object.keys(COURSES).forEach(k => { const C = COURSES[k]; C.units.forEach((u, ui) => u.lessons.forEach((l, li) => {
     const lid = C.pre + 'u' + ui + 'l' + li, ids = l.items.map((it, j) => cardId(lid, j, it));
     if (ids.length && ids.every(id => state.srs[id] || isRemoved(id))) state.done[lid] = true; else delete state.done[lid];
-  })); });
+  }));
+    const kids = keyTermCards(k).map(c => c.id);
+    if (kids.length && kids.every(id => state.srs[id] || isRemoved(id))) state.done[C.pre + 'key'] = true; else delete state.done[C.pre + 'key'];
+  });
 }
 function renderHome() {
   ensureTermsCourse();
@@ -15068,18 +15116,24 @@ $('#installCard').addEventListener('click', async e => {
   if (!e.target.closest('#installBtn') || !installPrompt) return;
   installPrompt.prompt(); try { await installPrompt.userChoice; } catch (err) {} installPrompt = null; renderInstallCard();
 });
+// Sessions in Me: sounds up front; answer style and cards per round sit under Advanced, since the defaults suit most players.
 function renderStyleCard() {
   const st = answerStyle();
-  $('#styleCard').innerHTML = `<h3>Daily sessions</h3>
+  $('#styleCard').innerHTML = `<h3>Sessions</h3>
+    <div class="setrow"><span>Sounds</span><button class="switch" id="soundSw" aria-pressed="${soundOn()}" aria-label="Sounds"></button></div>
+    <button class="linkbtn acct-more" id="advBtn" aria-expanded="${advOpen}">${advOpen ? 'Hide advanced' : 'Advanced'}</button>
+    <div id="advBody"${advOpen ? '' : ' hidden'}>
     <p class="meta">Default answer style</p>
     <div class="seg"><button data-style="mixed" class="${st === 'mixed' ? 'on' : ''}">Mixed</button><button data-style="short" class="${st === 'short' ? 'on' : ''}">Short answers</button><button data-style="typed" class="${st === 'typed' ? 'on' : ''}">Type everything</button></div>
     <p>${st === 'mixed' ? 'New cards are multiple choice. Once you know a card, you recall it in your head, reveal the answer and rate yourself. One card you know well each session is typed and checked by AI.' : st === 'short' ? 'Short-answer cards always ask you to type your answer, and AI grades it. Multiple-choice cards stay multiple choice. More thinking per card than Mixed.' : 'Every multiple-choice and short-answer card asks you to type your answer, and AI grades it. Slower, but the most practice.'}</p>
     ${Object.keys((state.prefs || {}).courseStyle || {}).length ? `<p class="meta">Some courses have their own style, set on their course page.</p>` : `<p class="meta">Each course can also have its own, on its course page.</p>`}
-    <p class="meta">Cards per session</p>
+    <p class="meta">Cards per round</p>
     <div class="seg">${[[5, '5'], [8, '8'], [12, '12'], [20, '20'], [0, 'No limit']].map(([n, t]) => `<button data-size="${n}" class="${sessionSize() === n ? 'on' : ''}">${t}</button>`).join('')}</div>
-    <p>Each session is one round. Reviews come first, then new cards; whatever’s left is the next round, one tap away.</p>`;
+    <p>Each session is one round. Reviews come first, then new cards; whatever’s left is the next round, one tap away.</p></div>`;
 }
 $('#styleCard').addEventListener('click', e => {
+  if (e.target.closest('#advBtn')) { advOpen = !advOpen; renderStyleCard(); return; }
+  if (e.target.closest('#soundSw')) { const on = !soundOn(); state.prefs = { ...(state.prefs || {}), sound: on }; state.prefsAt = Date.now(); save(); renderStyleCard(); if (on) sfx('good'); return; }
   const b = e.target.closest('[data-style], [data-size]'); if (!b) return;
   state.prefs = { ...(state.prefs || {}), ...(b.dataset.style ? { style: b.dataset.style } : { sessionSize: +b.dataset.size }) }; state.prefsAt = Date.now(); save(); renderStyleCard();
 });
@@ -15266,8 +15320,6 @@ function freshForToday(today, extra) {
 function startSession(extra) {
   const today = dstr(new Date());
   if (!mixKeys().length) { toast('Add a course to your daily mix first.'); go('courses'); return; }
-  const ask = extra === 'reviews' ? null : mixKeys().find(k => keyTermList(k).length && !keyTermsAnswered(k) && !ktAsked.has(k));
-  if (ask) { openKeyTerms(ask, () => startSession(extra)); return; }
   const size = sessionSize();
   const due = dueCards(today).slice(0, size || SESSION_REVIEWS);
   const fresh = (extra === 'reviews' ? [] : freshForToday(today, extra)).slice(0, size ? Math.max(0, size - due.length) : undefined);
@@ -15299,7 +15351,9 @@ function goHome(fromBack) {
   // Leave the history entry the lesson added, so Back afterwards goes where the player expects.
   const pushed = history.state && history.state.wl === 'run';
   run = null; show(null); clearRun();
-  if (pushed && fromBack !== true) stepBack(); if (needGate()) showGate('signin'); if (pendingCourses) { const p = pendingCourses; pendingCourses = null; installCourses(p); } renderHome(); window.scrollTo(0, 0); }
+  if (trialState() === 'on' && !ACCT) setTrial('done');
+  if (pushed && fromBack !== true) stepBack(); if (needGate()) showGate(gateStart('signin')); if (pendingCourses) { const p = pendingCourses; pendingCourses = null; installCourses(p); }
+  if (pendingContent) { const d = pendingContent; pendingContent = null; if (applyContent(d)) buildLessons(); } renderHome(); window.scrollTo(0, 0); }
 // Quitting mid-lesson keeps the XP and practice day for cards already answered, since their reviews were already rescheduled.
 // Mid-session, the first tap on quit asks once (answers so far are already saved either way); Back quits at once.
 function quitRun(force, fromBack) {
@@ -15760,7 +15814,7 @@ function bumpStreak() {
 }
 function streakInfo() { return computeStreak(state.activeDays, state.settings, dstr(new Date())); }
 function finish() {
-  bumpStreak(); clearRun();
+  bumpStreak(); clearRun(); sfx('done');
   if (run.mode === 'session') return finishSession();
   const L = LESSONS[run.idx];
   state.done[L.id] = true;
@@ -15771,7 +15825,7 @@ function finish() {
   const acc = Math.round(firstTry / run.total * 100);
   const posting = !run.wasDone && state.course !== 'terms' ? groupPost(L, run.xp, acc) : null;
   const nextL = LESSONS[run.idx + 1];
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc, posting)}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">Continue</button></div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc, posting)}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT ? 'Continue' : 'Save my progress'}</button></div>`;
   show('#result');
   $('#rHome').onclick = () => goHome(); $('#rHome').focus();
   postLine(posting);
@@ -15788,7 +15842,7 @@ function finishSession() {
   const parts = [];
   if (run.reviewed) parts.push(`You remembered ${run.remembered} of ${run.reviewed} review${run.reviewed === 1 ? '' : 's'}`);
   if (run.newSeen) parts.push(`learned ${run.newSeen} new card${run.newSeen === 1 ? '' : 's'}`);
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${left ? `${left} card${left === 1 ? '' : 's'} left today.` : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${posting && G ? `<p class="meta" id="postLine">Posting to ${esc(G.groupName)}…</p>` : ''}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">Done</button>${left || canLearn ? `<button class="btn ghost" id="rMore">${left ? `Next ${nextN}` : 'Learn more'}</button>` : ''}</div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${left ? `${left} card${left === 1 ? '' : 's'} left today.` : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${posting && G ? `<p class="meta" id="postLine">Posting to ${esc(G.groupName)}…</p>` : ''}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT ? 'Done' : 'Save my progress'}</button>${(left || canLearn) && ACCT ? `<button class="btn ghost" id="rMore">${left ? `Next ${nextN}` : 'Learn more'}</button>` : ''}</div>`;
   show('#result');
   $('#rHome').onclick = () => goHome(); $('#rHome').focus();
   if ($('#rMore')) $('#rMore').onclick = () => startSession(left ? false : true);
@@ -15840,8 +15894,38 @@ if (NATIVE) {
   Native.notes.addListener('localNotificationActionPerformed', () => { if (!run) go('today'); });
 }
 function buzz(kind) {
+  sfx(kind);
   if (!Native) return;
   (kind === 'tap' ? Native.haptics.impact({ style: 'LIGHT' }) : Native.haptics.notification({ type: kind === 'bad' ? 'WARNING' : 'SUCCESS' })).catch(() => {});
+}
+/* ---------- sounds: short synthesized chimes for right, wrong and a finished session (Me, then Sounds, turns them off) ---------- */
+let AC = null;
+function soundOn() { return !(state.prefs && state.prefs.sound === false); }
+// Browsers only start audio from a tap, so the audio context is made (or woken) on the first one.
+function audioCtx() {
+  try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch (e) { AC = null; }
+  return AC;
+}
+addEventListener('pointerdown', () => { if (soundOn()) audioCtx(); }, { passive: true, capture: true });
+// [frequency in Hz, start, length] per note. Right: a quick rising chime. Wrong: a soft falling pair. Done: a little fanfare.
+const SFX = {
+  good: { notes: [[987.8, 0, 0.12], [1318.5, 0.075, 0.32]], wave: 'sine', vol: 0.2, bell: 0.35 },
+  bad: { notes: [[349.2, 0, 0.16], [261.6, 0.13, 0.3]], wave: 'triangle', vol: 0.16, bell: 0 },
+  done: { notes: [[523.3, 0, 0.14], [659.3, 0.11, 0.14], [784, 0.22, 0.14], [1046.5, 0.33, 0.55]], wave: 'sine', vol: 0.2, bell: 0.3 }
+};
+function sfx(kind) {
+  const S = SFX[kind]; if (!S || !soundOn()) return;
+  const ac = audioCtx(); if (!ac) return;
+  try {
+    const t0 = ac.currentTime + 0.01, out = ac.createGain(); out.gain.value = S.vol; out.connect(ac.destination);
+    S.notes.forEach(([f, at, len]) => [[f, 1], [f * 2, S.bell]].forEach(([hz, amp]) => {
+      if (!amp) return;
+      const o = ac.createOscillator(), g = ac.createGain(), t = t0 + at;
+      o.type = S.wave; o.frequency.value = hz;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(amp, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+      o.connect(g); g.connect(out); o.start(t); o.stop(t + len + 0.03);
+    }));
+  } catch (e) {}
 }
 function nativeSoon() { if (!Native) return; clearTimeout(nativeTimer); nativeTimer = setTimeout(nativeSync, 1200); }
 function nativeSync() { pushWidget(); scheduleReminders(); }
@@ -16126,7 +16210,7 @@ function signOut(msg) {
   try { if (Native) Native.notes.getPending().then(p => p.notifications.length && Native.notes.cancel({ notifications: p.notifications.map(n => ({ id: n.id })) })).catch(() => {}); } catch (e) {}
   installCourses([]); renderGroup();
   toast(msg || 'Signed out. This device is cleared.');
-  showGate();
+  showGate(gateStart());
 }
 
 /* ---------- sign-up screen: every device makes an account or signs in before using the app ---------- */
@@ -16134,7 +16218,21 @@ let gateUI = { step: 'welcome', busy: false, err: '' };
 // Set only when the server can't be reached to make an account, so the app stays usable offline; asked again next launch.
 let gateOffline = false;
 let EMAIL_OK = false; // set from /api/config: email sign-in and confirmation exist only once the server can send mail
-function needGate() { return !ACCT && !gateOffline; }
+// New players try a short session before making an account: picking a course on the welcome screen starts one
+// (localStorage 'wl-trial' = 'on'), and leaving that session ('done') brings the screen back to save their progress.
+function trialState() { try { return localStorage.getItem('wl-trial') || ''; } catch (e) { return ''; } }
+function setTrial(v) { try { localStorage.setItem('wl-trial', v); } catch (e) {} }
+function needGate() { return !ACCT && !gateOffline && trialState() !== 'on'; }
+// Where the sign-up screen opens: "save your progress" after a trial, else the welcome (or sign-in when asked for).
+function gateStart(fallback) { return trialState() === 'done' ? (hasProgress() ? 'save' : 'welcome') : fallback || 'welcome'; }
+const TRY_COURSES = [['policy', 'Laws, bills and who argues what in AI policy'], ['lingo', 'What Hill staffers really mean'], ['proc', 'How a bill moves through Congress'], ['side', 'Laws that backfired, and why']];
+function startTrial(k) {
+  if (!COURSES[k]) return;
+  setTrial('on'); hideGate();
+  if (!inMix(k)) setMix(k, true);
+  state.course = k; save(); buildLessons();
+  startSession(false);
+}
 function showGate(step) {
   gateUI.step = step || 'welcome'; gateUI.busy = false; gateUI.pk = false;
   // Opened to switch accounts from a signed-in device: backing out just closes it.
@@ -16162,22 +16260,28 @@ function renderGate() {
   const keep = {}; ['gtName', 'gtUser', 'gtPass', 'gtCode', 'gtRec', 'gtEmail', 'gtVCode', 'gtEmailIn', 'gtECode'].forEach(id => { const x = document.getElementById(id); if (x) keep[id] = x.value; });
   const owl = m => `<img class="mascot m-result" src="mascot/${m}.webp" alt="">`;
   // Back sits in the top-left corner, like other apps. Not on the first screen, a fresh account's passkey step, or the merge question.
-  $('#gtBack').hidden = ['welcome', 'passkey', 'merge', 'verify'].includes(g.step);
+  $('#gtBack').hidden = ['welcome', 'passkey', 'merge', 'verify', 'save'].includes(g.step);
   const fld = (id, label, attrs) => /type="password"/.test(attrs) ? pwFld(id, label, attrs.replace('type="password"', ''), 'gate-fld') : `<label class="fld gate-fld"><span>${label}</span><input id="${id}" ${attrs}></label>`;
   let h = '';
   if (g.step === 'welcome') {
-    h = `${owl('wave')}<h2>Welcome to WonkoLingo</h2><p>Learn policy a few minutes a day, with friends. Make an account so your progress is saved and follows you to any device.</p>
-      ${joinParam ? '<p class="meta">You’ve been invited to a group. Make an account or sign in, then you can join it.</p>' : ''}
-      <div class="rbtns"><button class="btn" id="gtNew"${dis}>Create an account</button><button class="btn ghost" id="gtHave"${dis}>I already have an account</button></div>`;
-  } else if (g.step === 'create') {
-    h = `${owl('think')}<h2>Create your account</h2><p>${g.pk ? 'Friends in your groups see your display name. Next, Face ID or Touch ID saves a passkey, so there’s no password to remember.' : 'Friends in your groups see your display name. You sign in with your username and password, and your phone or browser can save them for you.'}</p>
+    h = `${owl('wave')}<h2>Welcome to WonkoLingo</h2><p>Learn policy a few minutes a day, with friends. What do you want to learn first?</p>
+      ${joinParam ? '<p class="meta">You’ve been invited to a group. Try a course, then make an account to join it.</p>' : ''}
+      <div class="trylist">${TRY_COURSES.filter(([k]) => COURSES[k]).map(([k, d]) => `<button class="trybtn" data-try="${k}"${dis}><b>${esc(COURSES[k].name)}</b><span>${esc(d)}</span></button>`).join('')}</div>
+      <p class="meta">Five quick cards, no account needed yet.</p>
+      <div class="glinks"><button class="linkbtn" id="gtHave">I already have an account</button><button class="linkbtn" id="gtNew">Create an account</button></div>`;
+  } else if (g.step === 'create' || g.step === 'save') {
+    const n = Object.keys(state.srs || {}).length;
+    h = g.step === 'save' ? `${owl('cheer')}<h2>Save your progress</h2><p>${n ? `You’ve learned ${n} card${n === 1 ? '' : 's'}.` : 'Nice start.'} Make an account to keep ${n === 1 ? 'it' : 'them'}, get reviews at the right time, and pick up on any device.</p>`
+      : `${owl('think')}<h2>Create your account</h2><p>${g.pk ? 'Friends in your groups see your display name. Next, Face ID or Touch ID saves a passkey, so there’s no password to remember.' : 'Friends in your groups see your display name. You sign in with your username and password, and your phone or browser can save them for you.'}</p>`;
+    h += `
       <form class="gate-form" id="gtForm" autocomplete="on">
         ${fld('gtName', 'Display name', 'name="nickname" maxlength="24" autocomplete="nickname" autocapitalize="words" spellcheck="false"')}
         ${g.pk ? '' : fld('gtUser', 'Username', 'name="username" maxlength="40" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"') + fld('gtPass', 'Password (8 or more characters)', 'name="password" type="password" minlength="8" autocomplete="new-password"')}
         ${EMAIL_OK ? fld('gtEmail', 'Email (optional, to reset a forgotten password)', 'name="email" type="email" maxlength="254" autocomplete="email" autocapitalize="none" spellcheck="false"') : ''}
         <div class="rbtns"><button class="btn" type="submit" id="gtMake"${dis}>${g.pk ? 'Continue' : 'Create account'}</button></div>
       </form>
-      ${PASSKEY_OK ? `<button class="linkbtn" id="gtPkMode">${g.pk ? 'Use a username and password instead' : 'Use a passkey instead of a password'}</button>` : ''}`;
+      ${PASSKEY_OK ? `<button class="linkbtn" id="gtPkMode">${g.pk ? 'Use a username and password instead' : 'Use a passkey instead of a password'}</button>` : ''}
+      ${g.step === 'save' ? '<button class="linkbtn" id="gtHave">I already have an account</button>' : ''}`;
   } else if (g.step === 'passkey') {
     h = `${owl('cheer')}<h2>Save a passkey</h2><p>Then you can sign in on your other devices with Face ID, Touch ID or your device PIN. There’s nothing to remember.</p>
       <div class="rbtns"><button class="btn" id="gtPk"${dis}>Save a passkey</button></div>`;
@@ -16236,7 +16340,7 @@ const gateVal = id => (document.getElementById(id) || {}).value || '';
 $('#gate').addEventListener('submit', e => {
   e.preventDefault(); if (gateUI.busy) return;
   const g = gateUI;
-  if (g.step === 'create') gateStep(async () => {
+  if (g.step === 'create' || g.step === 'save') gateStep(async () => {
     const name = gateVal('gtName').trim();
     if (!name) throw new Error('Pick a display name to show friends.');
     if (g.pk) { await ensureAccount(name); syncNow(); toast('Account created.'); g.step = PASSKEY_OK ? 'passkey' : 'done'; if (g.step === 'done') hideGate(); return; }
@@ -16292,11 +16396,12 @@ $('#gate').addEventListener('click', e => {
   // Submit buttons inside a form are handled by the submit listener above.
   const t = e.target.closest('button'); if (!t || (t.type === 'submit' && t.closest('form')) || gateUI.busy) return;
   const g = gateUI; g.err = ''; g.offerOffline = false;
+  if (t.dataset.try) { startTrial(t.dataset.try); return; }
   if (t.id === 'gtNew') { g.step = 'create'; g.pk = false; renderGate(); return; }
   if (t.id === 'gtHave') { g.step = 'signin'; renderGate(); return; }
   if (t.id === 'gtBack') {
     if ((g.step === 'signin' || g.step === 'create') && g.switching) { hideGate(); return; }
-    g.step = g.step === 'code' || g.step === 'recovery' || g.step === 'email' ? 'signin' : g.step === 'emailcode' ? 'email' : 'welcome'; renderGate(); return;
+    g.step = g.step === 'code' || g.step === 'recovery' || g.step === 'email' ? 'signin' : g.step === 'emailcode' ? 'email' : gateStart(); renderGate(); return;
   }
   if (t.id === 'gtPkMode') { g.pk = !g.pk; renderGate(); return; }
   if (t.id === 'gtCodeMode') { g.step = 'code'; renderGate(); return; }
@@ -16971,16 +17076,21 @@ function renderCourseView() {
     <div class="csets">
       <div class="csrow"><span class="clab">In your daily mix</span><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="In your daily mix"></button></div>
       ${on ? `<div class="csrow"><span class="clab">New cards a day</span><div class="cseg">${[3, 5, 10, 20].map(n => `<button data-perday="${n}" aria-pressed="${perDay(k) === n}">${n}</button>`).join('')}</div></div>` : `<p class="chint">Switch it on to get its cards in Today, or tap any lesson to try it.</p>`}
-      ${styleRowHTML(k)}
       ${keyTermRowHTML(k)}
+      ${styleRowHTML(k)}
     </div></div>`;
   const mine = C.group && G && C.authorId === G.player.id;
   $('#cinfo').hidden = !C.group;
   $('#cinfo').innerHTML = C.group ? `<span>${esc(C.meta)}</span>${mine ? `<button class="linkbtn" id="ciReports">${C.openReports} open report${C.openReports === 1 ? '' : 's'}</button><button class="linkbtn" id="ciUpdate">Upload new version</button><button class="linkbtn" id="ciDelete">Remove course</button>` : `<button class="linkbtn" id="ciBlock">Block ${esc(C.author)}</button>`}` : '';
   $('#caveat').innerHTML = `<h3>How sure are these answers?</h3>${C.caveat.map(t => `<p>${esc(t)}</p>`).join('')}<div class="meta">${esc(C.meta)}</div>`;
   const next = LESSONS.findIndex(l => !state.done[l.id]);
-  const curUnit = next >= 0 ? LESSONS[next].unit : -1;
-  $('#path').innerHTML = C.units.map((u, ui) => {
+  const nextU = LESSONS.findIndex(l => l.unit >= 0 && !state.done[l.id]);
+  const curUnit = nextU >= 0 ? LESSONS[nextU].unit : -1;
+  // The Key terms lesson sits above the units: it's the first lesson, but nothing else waits for it.
+  const ki = LESSONS.findIndex(l => l.unit === -1);
+  const keyBlock = ki < 0 ? '' : (() => { const L = LESSONS[ki], d = state.done[L.id], left = L.items.filter(it => !state.srs[it.id]).length;
+    return `<section class="ublock open keyblock${d ? ' done' : ''}"><div class="lessons"><button class="lrow${d ? ' done' : ''}${ki === next ? ' next' : ''}" data-idx="${ki}"><span class="ld">${d ? ICON.check : ''}</span><span class="lt">Key terms</span><span class="ls">${d ? 'In reviews' : `${left} term${left === 1 ? '' : 's'}${ki === next ? ' · Start here' : ''}`}</span></button></div></section>`; })();
+  $('#path').innerHTML = keyBlock + C.units.map((u, ui) => {
     const ls = LESSONS.map((l, i) => [l, i]).filter(([l]) => l.unit === ui);
     const nd = ls.filter(([l]) => state.done[l.id]).length, all = nd === ls.length;
     const ov = unitOpen[k + '|' + ui], open = ov !== undefined ? ov : ui === curUnit;
@@ -16992,13 +17102,15 @@ function renderCourseView() {
 // Key terms on a course page: check them before the first session, or change the answers later.
 function keyTermRowHTML(k) {
   const n = keyTermList(k).length; if (!n) return '';
-  const kt = (state.keyTerms || {})[k], added = kt ? n - new Set(kt.known || []).size : 0;
-  return `<div class="csrow"><span class="clab">Key terms</span><button class="linkbtn" data-keyterms="${esc(k)}">${kt ? `${added} of ${n} added · Change` : `Check ${n} terms`}</button></div>`;
+  const known = new Set(((state.keyTerms || {})[k] || {}).known || []).size;
+  return `<div class="csrow"><span class="clab">Key terms</span><button class="linkbtn" data-keyterms="${esc(k)}">${known ? `${known} of ${n} skipped · Change` : `Skip terms I know`}</button></div>`;
 }
 // Answer style on a course page, for courses with short-answer cards (the only cards it changes). Each course can have its own.
+// Hidden behind "Answer style" until opened (cAdv, declared early), unless the course already has its own.
 function styleRowHTML(k) {
   if (!courseCards(k).some(c => c.item.t === 'recall')) return '';
   const st = styleFor(k), own = ((state.prefs || {}).courseStyle || {})[k];
+  if (!own && !cAdv[k]) return `<div class="csrow"><span class="clab">Answer style</span><button class="linkbtn" data-cadv="${esc(k)}">${esc(STYLE_OPTS.find(o => o[0] === st)[1])} · Change</button></div>`;
   const def = (STYLE_OPTS.find(o => o[0] === answerStyle()) || [])[1];
   const short = { mixed: 'Mixed', short: 'Short answers', typed: 'Typed' };
   return `<div class="csrow cstack"><span class="clab">Answer style</span><div class="cseg">${STYLE_OPTS.map(([v]) => `<button data-cstyle="${v}" aria-pressed="${st === v}">${short[v]}</button>`).join('')}</div></div><p class="chint">${STYLE_BLURB[st]} ${own ? `Set for this course only. <button class="linkbtn" data-cstyle="">Use my default (${def})</button>` : `Your default from Me.`}</p>`;
@@ -17018,6 +17130,7 @@ document.addEventListener('click', e => {
   const pd = e.target.closest('[data-perday]'); if (pd) { setPerDay(state.course, +pd.dataset.perday); renderHome(); return; }
   const cs = e.target.closest('[data-cstyle]'); if (cs) { const v = cs.dataset.cstyle; setCourseStyle(state.course, v); renderHome(); toast(!v ? 'This course follows your default style again.' : v === 'short' ? `Short answers on for ${COURSES[state.course].name}.` : `Answer style changed for ${COURSES[state.course].name}.`); return; }
   const kt = e.target.closest('[data-keyterms]'); if (kt) { openKeyTerms(kt.dataset.keyterms); return; }
+  const ca = e.target.closest('[data-cadv]'); if (ca) { cAdv[ca.dataset.cadv] = true; renderHome(); return; }
   if (e.target.closest('#cMake')) openAdd();
 });
 
@@ -17167,12 +17280,14 @@ function scheduleSync() {
 document.addEventListener('visibilitychange', () => { if (document.hidden) { if (ACCT) syncNow(); } else refreshAccount(); });
 
 if (API) $('#privLink').href = SITE + '/privacy.html';
-if (needGate()) showGate(); else resumeRun();
+if (needGate()) showGate(gateStart()); else resumeRun();
 apiCall('/api/config').then(d => { EMAIL_OK = !!d.email; if (!$('#gate').hidden && !gateUI.busy) renderGate(); if (VIEW === 'me' && !run) renderAcctCard(); }).catch(() => {});
 refreshAccount();
 refreshBoard();
 loadCourses();
 syncNow();
+checkContent();
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkContent(); });
 if (Native) nativeSync();
 </script>
 <script>if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});</script>

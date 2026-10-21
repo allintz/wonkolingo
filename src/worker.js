@@ -6,6 +6,7 @@ import { validateCourse, COURSE_LIMITS, computeStreak } from './course-format.js
 import Anthropic from '@anthropic-ai/sdk';
 import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor, defineTerm } from './grade.js';
 import { publicEmailApi, emailApi } from './email.js';
+import { adminApi } from './admin.js';
 import { randomString, sha256, accountInfo, publicAccountApi, accountApi, takeRate, netId, ipKey, screen, screenFail, takeNewAccount, ACCOUNT_LIMITS } from './accounts.js';
 const REMOVE_REASONS = ['trivia', 'wrong', 'unclear', 'known', 'other', 'restored'];
 
@@ -104,6 +105,7 @@ async function moveToGroup(env, me, code, name) {
 
 async function api(req, env, path) {
   const m = req.method;
+  if (path.startsWith('/api/admin/')) return adminApi(req, env, path, await auth(req, env), m === 'POST' ? await body(req) : {});
 
   if (m === 'POST' && path === '/api/groups') {
     const b = await body(req);
@@ -425,6 +427,11 @@ export default {
     // Lets the iPhone app use this site's passkeys (Apple's associated domains, webcredentials).
     if (url.pathname === '/.well-known/apple-app-site-association') {
       return new Response(JSON.stringify(APPLE_APP_SITE_ASSOCIATION), { headers: { 'Content-Type': 'application/json' } });
+    }
+    // Course content for the iPhone app, whose page runs at capacitor://localhost and so needs CORS to read it.
+    if (url.pathname === '/content.json') {
+      const r = await env.ASSETS.fetch(req);
+      return withCors(new Response(r.body, r), req);
     }
     return env.ASSETS.fetch(req);
   }

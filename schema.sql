@@ -176,3 +176,11 @@ CREATE TABLE IF NOT EXISTS bug_reports (
   done INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_bug_reports_open ON bug_reports(done, created_at);
+
+-- The review page's "done" marks for items without their own status column (removed questions, by card id).
+CREATE TABLE IF NOT EXISTS review_marks (
+  kind TEXT NOT NULL,
+  ref TEXT NOT NULL,
+  at INTEGER NOT NULL,
+  PRIMARY KEY (kind, ref)
+);

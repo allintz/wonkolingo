@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WonkoLingo Review</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;600;700;800&family=Alegreya+Sans+SC:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* The app's Night library palette (see the tokens at the top of wonkolingo.html). */
+:root { --bg: #0e141b; --surface: #18212b; --surface-2: #131b23; --line: #263240; --fg: #e6e1d6; --muted: #9aa3ad; --brass: #e8b75a; --good: #7fc59a; --bad: #e8826b; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 Karla, system-ui, sans-serif; }
+main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font: 800 28px 'Alegreya Sans SC', serif; color: var(--brass); margin: 0 0 4px; }
+h2 { font: 800 20px 'Alegreya Sans SC', serif; margin: 32px 0 10px; display: flex; gap: 10px; align-items: baseline; }
+h2 .n { font: 700 14px Karla, sans-serif; color: var(--muted); }
+.sub { color: var(--muted); margin: 0 0 8px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; }
+.tabs a { color: var(--fg); text-decoration: none; border: 1px solid var(--line); border-radius: 99px; padding: 6px 14px; font-weight: 700; font-size: 14px; }
+.tabs a b { color: var(--brass); }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin: 0 0 10px; }
+.item .top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.item .meta { font-size: 13px; color: var(--muted); }
+.item p { margin: 6px 0; }
+.item .lab { font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-top: 10px; }
+.item pre { white-space: pre-wrap; word-break: break-word; font-size: 13px; background: var(--surface-2); padding: 8px 10px; border-radius: 8px; margin: 4px 0 0; }
+.up { color: var(--good); font-weight: 800; } .down { color: var(--bad); font-weight: 800; }
+button { font: inherit; cursor: pointer; }
+.done { flex: none; background: none; border: 1px solid var(--line); color: var(--fg); border-radius: 99px; padding: 5px 12px; font-weight: 700; font-size: 14px; }
+.done:hover { border-color: var(--brass); }
+.btn { background: var(--brass); color: #1a1408; border: 0; border-radius: 12px; padding: 10px 16px; font-weight: 800; }
+.empty { color: var(--muted); }
+.msg { background: var(--surface); border-radius: 14px; padding: 18px; }
+a { color: var(--brass); }
+</style>
+</head><body><main>
+<h1>Review</h1>
+<p class="sub">Disputed grades, removed questions, crash reports and reports on friends’ courses. Mark an item done once you’ve acted on it (or decided not to).</p>
+<div id="out"><p class="empty">Loading…</p></div>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const when = t => t ? new Date(t).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
+const REASON = { trivia: 'Just trivia', wrong: 'Wrong or misleading', unclear: 'Confusing', known: 'Know it already', other: 'Other' };
+// Signed in through the app on this same site, so its account token is in this browser's storage.
+let token = ''; try { token = (JSON.parse(localStorage.getItem('wl-account')) || {}).token || ''; } catch (e) {}
+let data = null;
+async function call(path, body) {
+  const r = await fetch(path, { method: body ? 'POST' : 'GET', headers: { Authorization: 'Bearer ' + token, ...(body ? { 'Content-Type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(d.error || 'Request failed'), { status: r.status });
+  return d;
+}
+function pct(n) { return n == null ? '?' : Math.round(n) + '%'; }
+const SECTIONS = [
+  ['disputes', 'dispute', 'Disputed grades', 'Players who thought the AI grader got it wrong. If the second opinion upheld a real idea the card missed, add it to the card; if the grader was at fault, fix the prompt.', d => `
+    <div class="top"><div><b>${esc(d.question)}</b><div class="meta">${esc(d.course)} · ${esc(d.card)} · ${when(d.at)}</div></div><button class="done" data-k="dispute" data-id="${d.id}">Done</button></div>
+    <div class="lab">Their answer</div><p>${esc(d.response)}</p>
+    <div class="lab">Why they disputed</div><p>${esc(d.note)}</p>
+    <div class="lab">Result</div><p>First grade ${pct(d.firstPct)}, second opinion ${pct(d.regradePct)} · <span class="${/upheld/.test(d.outcome || '') ? 'up' : 'down'}">${esc(String(d.outcome || 'no second opinion').replace('_', ' '))}</span></p>
+    ${d.reply ? `<pre>${esc(d.reply)}</pre>` : ''}
+    <div class="lab">Model answer</div><p>${esc(d.answer)}</p>`],
+  ['removals', 'removal', 'Removed questions', 'Questions players took out of their reviews, most-removed first. Several “trivia” or “wrong” removals mean rewrite or cut the card.', d => `
+    <div class="top"><div><b>${esc(d.question)}</b><div class="meta">${esc(d.course)} · ${esc(d.card)} · last ${when(d.at)}</div></div><button class="done" data-k="removal" data-id="${esc(d.card)}">Done</button></div>
+    <p><b>${d.removed}</b> removal${d.removed === 1 ? '' : 's'}${d.restored ? `, ${d.restored} restored` : ''}: ${esc(String(d.reasons || '').split(',').map(r => REASON[r] || r).join(', '))}</p>`],
+  ['bugs', 'bug', 'Crash reports', 'Errors the app caught and sent in. Fix, then mark done.', d => `
+    <div class="top"><div><b>${esc(d.message)}</b><div class="meta">${d.app ? 'iPhone app' : 'Web'} · build ${esc(d.build)} · at ${esc(d.place || 'Today')} · ${when(d.at)}</div></div><button class="done" data-k="bug" data-id="${d.id}">Done</button></div>
+    ${d.stack ? `<pre>${esc(d.stack)}</pre>` : ''}<p class="meta">${esc(d.ua)}</p>`],
+  ['reports', 'report', 'Reports on friends’ courses', 'Problems players flagged on group-made courses. The course author sees these too.', d => `
+    <div class="top"><div><b>${esc(d.title)}</b><div class="meta">version ${d.version} · ${when(d.at)}</div></div><button class="done" data-k="report" data-id="${d.id}">Done</button></div>
+    <div class="lab">Card</div><p>${esc(d.item)}</p><div class="lab">Report</div><p>${esc(d.note)}</p>`]
+];
+// Everything open, as plain text to paste into a Claude session that's fixing cards.
+function asText() {
+  return SECTIONS.map(([key, , title]) => `## ${title}\n` + (data[key].length ? data[key].map(d => '- ' + JSON.stringify(d)).join('\n') : '(none)')).join('\n\n');
+}
+function render() {
+  const total = SECTIONS.reduce((a, [k]) => a + data[k].length, 0);
+  let h = `<div class="tabs">${SECTIONS.map(([k, , t]) => `<a href="#${k}">${t} <b>${data[k].length}</b></a>`).join('')}</div>`;
+  h += total ? `<p><button class="btn" id="copy">Copy everything open, for Claude</button></p>` : `<p class="empty">Nothing waiting. All clear.</p>`;
+  for (const [key, , title, blurb, row] of SECTIONS) {
+    h += `<h2 id="${key}">${title} <span class="n">${data[key].length} open</span></h2><p class="sub">${blurb}</p>`;
+    h += data[key].length ? data[key].map(d => `<div class="item">${row(d)}</div>`).join('') : '<p class="empty">None.</p>';
+  }
+  $('#out').innerHTML = h;
+}
+async function load() {
+  if (!token) { $('#out').innerHTML = `<div class="msg"><p>Sign in to WonkoLingo on this site first, then come back.</p><p><a href="./">Open WonkoLingo</a></p></div>`; return; }
+  try { data = await call('/api/admin/summary'); render(); }
+  catch (e) { $('#out').innerHTML = `<div class="msg"><p>${e.status === 403 ? 'This account can’t open the review page.' : 'Couldn’t load: ' + esc(e.message)}</p></div>`; }
+}
+document.addEventListener('click', async e => {
+  const b = e.target.closest('.done');
+  if (b) {
+    b.disabled = true; b.textContent = '…';
+    try { await call('/api/admin/resolve', { kind: b.dataset.k, id: b.dataset.id }); const sec = SECTIONS.find(s => s[1] === b.dataset.k)[0]; data[sec] = data[sec].filter(d => String(b.dataset.k === 'removal' ? d.card : d.id) !== b.dataset.id); render(); }
+    catch (err) { b.disabled = false; b.textContent = 'Retry'; }
+  }
+  if (e.target.id === 'copy') { try { await navigator.clipboard.writeText(asText()); e.target.textContent = 'Copied'; } catch (err) { e.target.textContent = 'Copy failed'; } }
+});
+load();
+</script>
+</body></html>

@@ -18,6 +18,10 @@ SRC="$HOME/Documents/Obsidian Vault/05_Reference/WonkoLingo/wonkolingo.html"  # 
 # Stamp the app version (date and commit) into the page, so bug reports say which build they came from.
 BUILD_ID="$(date +%Y-%m-%d)-$(git rev-parse --short HEAD 2>/dev/null || echo local)"
 sed -i '' "s/__WL_BUILD__/$BUILD_ID/" docs/index.html
+BUILT_AT="$(date +%s)000"
+sed -i '' "s/__WL_BUILT_AT__/$BUILT_AT/" docs/index.html
+# Course content as its own file, which the iPhone app checks at launch so course edits reach it without a new build.
+node scripts/build_content.mjs docs/index.html docs/content.json "$BUILT_AT"
 
 # The course validator lives in the page source; copy it so the server checks uploads with the same rules.
 {
@@ -27,6 +31,7 @@ sed -i '' "s/__WL_BUILD__/$BUILD_ID/" docs/index.html
 } > src/course-format.js
 cp course-guide.md docs/course-guide.md 2>/dev/null || true
 cp privacy.html docs/privacy.html
+cp admin.html docs/admin.html
 # Mascot images live next to the page source in the vault; the page loads them from mascot/.
 mkdir -p docs/mascot && cp "$(dirname "$SRC")"/mascot/*.webp docs/mascot/
 mkdir -p docs/icons && cp "$(dirname "$SRC")"/icons/*.png docs/icons/
