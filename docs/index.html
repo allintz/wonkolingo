@@ -609,6 +609,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 @media (prefers-color-scheme: dark) { .idp-btn.apple { background: #fff; color: #000; } }
 @media (prefers-color-scheme: light) { .idp-btn.google { background: #fff; color: #1f1f1f; border-color: #747775; } }
 .gate-g .btn { width: 100%; }
+.gsi-slot { display: flex; justify-content: center; width: 100%; min-height: 44px; }
 .gate-or { color: var(--muted); font-size: 14px; margin: 4px 0 -4px; }
 .gate-more { justify-content: center; }
 .trylist { display: grid; gap: 10px; width: 100%; max-width: 380px; }
@@ -750,8 +751,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-21-fc2c11c';
-  window.WL_BUILT_AT = +'1792605140000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-21-14edb2f';
+  window.WL_BUILT_AT = +'1792605476000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -16282,13 +16283,13 @@ const G_LOGO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4"
 // The Google button: native in the app; on the web, a placeholder Google draws its own button into once its script loads.
 function gbtnHTML(text) {
   if (NATIVE) return `<button class="idp-btn google" data-idp="google">${G_LOGO}<span>${text === 'signin_with' ? 'Sign in' : 'Continue'} with Google</span></button>`;
-  return `<div class="gbtn" data-text="${text}"><button class="btn ghost" disabled>Loading Google…</button></div>`;
+  return `<div class="gsi-slot" data-text="${text}"><button class="btn ghost" disabled>Loading Google…</button></div>`;
 }
 const appleBtnHTML = text => `<button class="idp-btn apple" data-idp="apple">${APPLE_LOGO}<span>${text === 'signin_with' ? 'Sign in' : 'Continue'} with Apple</span></button>`;
 function idpButtonsHTML(text) { return (appleOn() ? appleBtnHTML(text) : '') + (googleOn() ? gbtnHTML(text) : ''); }
 function renderGoogleBtns() {
   if (gisState !== 'ready') return;
-  document.querySelectorAll('.gbtn:not([data-done])').forEach(el => {
+  document.querySelectorAll('.gsi-slot:not([data-done])').forEach(el => {
     el.dataset.done = '1'; el.innerHTML = '';
     try { google.accounts.id.renderButton(el, { theme: matchMedia('(prefers-color-scheme: light)').matches ? 'outline' : 'filled_black', size: 'large', shape: 'pill', text: el.dataset.text || 'continue_with', width: Math.min(340, Math.max(200, el.clientWidth || 300)) }); } catch (e) {}
   });
@@ -16379,7 +16380,7 @@ function renderGate() {
   } else if (g.step === 'create' || g.step === 'save') {
     const n = Object.keys(state.srs || {}).length;
     h = g.step === 'save' ? `${owl('cheer')}<h2>Save your progress</h2><p>${n ? `You’ve learned ${n} card${n === 1 ? '' : 's'}.` : 'Nice start.'} Make an account to keep ${n === 1 ? 'it' : 'them'}, get reviews at the right time, and pick up on any device.</p>`
-      : `${owl('think')}<h2>Create your account</h2><p>${g.pk ? 'Friends in your groups see your display name. Next, Face ID or Touch ID saves a passkey, so there’s no password to remember.' : 'Friends in your groups see your display name. You sign in with your username and password, and your phone or browser can save them for you.'}</p>`;
+      : `${owl('think')}<h2>Create your account</h2><p>${idpOn() && !g.pwOpen ? 'Your progress is saved to your account and follows you to any device.' : g.pk ? 'Friends in your groups see your display name. Next, Face ID or Touch ID saves a passkey, so there’s no password to remember.' : 'Friends in your groups see your display name. You sign in with your username and password, and your phone or browser can save them for you.'}</p>`;
     const gg = idpOn(), showForm = !gg || g.pwOpen;
     if (gg) h += `<div class="gate-g">${idpButtonsHTML('continue_with')}</div>${showForm ? '<p class="gate-or">or with a username and password</p>' : '<button class="linkbtn" id="gtPwOpen">Use a username and password instead</button>'}`;
     if (showForm) h += `
