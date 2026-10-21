@@ -162,3 +162,17 @@ CREATE TABLE IF NOT EXISTS email_codes (
   tries INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_email_codes_player ON email_codes(player_id, kind);
+-- Errors the app hit, sent by the crash banner (2026-10-21): message, where, app version and browser, with no account
+-- or progress data. Read with scripts/bugs.sh.
+CREATE TABLE IF NOT EXISTS bug_reports (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  message TEXT NOT NULL,
+  stack TEXT,
+  place TEXT,
+  build TEXT,
+  app INTEGER NOT NULL DEFAULT 0,
+  ua TEXT,
+  created_at INTEGER NOT NULL,
+  done INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_bug_reports_open ON bug_reports(done, created_at);

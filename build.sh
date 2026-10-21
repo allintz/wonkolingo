@@ -15,6 +15,9 @@ SRC="$HOME/Documents/Obsidian Vault/05_Reference/WonkoLingo/wonkolingo.html"  # 
   echo '<script>if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});</script>'
   echo '</body></html>'
 } > docs/index.html
+# Stamp the app version (date and commit) into the page, so bug reports say which build they came from.
+BUILD_ID="$(date +%Y-%m-%d)-$(git rev-parse --short HEAD 2>/dev/null || echo local)"
+sed -i '' "s/__WL_BUILD__/$BUILD_ID/" docs/index.html
 
 # The course validator lives in the page source; copy it so the server checks uploads with the same rules.
 {

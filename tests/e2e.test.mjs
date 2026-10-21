@@ -420,6 +420,9 @@ tests.fixes = async () => {
     ok(!await visible(p, '#lesson') && await ev(p, 'run === null'), 'Back quits a lesson instead of leaving the app', p.url());
     ok(p.url().startsWith(BASE), 'still on the app after Back');
     ok(await ev(p, 'state.xp') > xp1, 'Back keeps the XP earned so far', { xp1, now: await ev(p, 'state.xp') });
+    // Quitting and switching tabs at once: the app's own step back over the lesson entry must not undo the switch.
+    await p.click('#todayGo'); await answerOne(p); await ev(p, `quitRun(true); go('courses')`); await p.waitForTimeout(800);
+    ok(await ev(p, 'VIEW') === 'courses' && await visible(p, '#cSearch'), 'a tab change right after quitting sticks', await ev(p, 'VIEW'));
     await ev(p, `go('courses')`); await ev(p, `go('me')`); await p.goBack(); await p.waitForTimeout(200);
     ok(await ev(p, 'VIEW') === 'courses', 'Back returns to the previous tab', await ev(p, 'VIEW'));
   }
@@ -434,7 +437,9 @@ tests.fixes = async () => {
   }
   { // Typed answers: Enter checks.
     await ev(p, `state.prefs = { ...(state.prefs || {}), style: 'typed' }; save();`); await ev(p, `go('today')`);
-    await p.click(await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
+    await p.click(await visible(p, '#todayGo') ? '#todayGo' : await visible(p, '#resumeBtn') ? '#resumeBtn' : '#todayMore');
+    // Matching and ordering cards are never typed; answer those until a typed card comes up.
+    for (let i = 0; i < 8 && !await visible(p, '#recallIn') && await ev(p, '!!run'); i++) await answerOne(p);
     if (await visible(p, '#recallIn')) { await p.fill('#recallIn', 'my answer'); await p.press('#recallIn', 'Enter'); await p.waitForFunction(() => run && run.phase !== 'answer', null, { timeout: 15000 }).catch(() => {});
       ok(await ev(p, 'run.phase') !== 'answer', 'Enter in a typed answer checks it'); }
     else ok(false, 'typed style shows a text box');
@@ -578,6 +583,48 @@ tests.disputeAndResume = async () => {
   if (ui >= 0) { await p.click(`#path .uhead[data-unit="${ui}"]`); await ev(p, 'renderHome()');
     ok(await p.getAttribute(`#path .uhead[data-unit="${ui}"]`, 'aria-expanded') === 'true', 'an opened unit stays open after a re-render'); }
   ok(p.errors.length === 0, 'disputeAndResume: no page errors', p.errors);
+  await c.close();
+};
+
+// ---------- 11. Sources on cards, course dates, search, bug reports (10/21)
+tests.extras = async () => {
+  const c = await ctx(); const p = await page(c);
+  await signUp(p);
+  { // Sources: a small link under the explanation, opening in a new tab.
+    await ev(p, `go('course', 'tools')`); await ev(p, 'startLesson(0)');
+    await answerOne(p); if (await ev(p, 'run.phase') === 'selfgrade') await answerOne(p);
+    const src = await ev(p, `[...document.querySelectorAll('#fb .srcs a')].map(a => ({ href: a.href, target: a.target, text: a.textContent }))`);
+    ok(src.length > 0 && src.every(x => /^https?:/.test(x.href) && x.target === '_blank' && x.text && !x.text.includes('/')), 'feedback shows source links by site name', src);
+    await ev(p, 'quitRun(true)');
+  }
+  { // Course dates near the top of the course page.
+    await ev(p, `go('course', 'policy')`);
+    const d = await p.locator('.cdates').innerText().catch(() => '');
+    ok(/^Made [A-Z][a-z]{2} \d{1,2}, 20\d\d · updated [A-Z][a-z]{2} \d{1,2}, 20\d\d$/.test(d) || /^Made [A-Z][a-z]{2} \d{1,2}, 20\d\d$/.test(d), 'course page shows when it was made and updated', d);
+  }
+  { // Search across cards and the glossary.
+    await ev(p, `go('courses')`);
+    await p.fill('#cSearch', 'export controls');
+    const n = await p.locator('#cSearchOut .sres').count();
+    ok(n > 3 && !await visible(p, '#cLists'), 'search finds cards and hides the course lists', n);
+    await p.locator('#cSearchOut .sres:has(.sans) summary').first().click();
+    ok(await p.locator('#cSearchOut .sres[open] .sans').first().isVisible(), 'tapping a result shows its answer');
+    await p.fill('#cSearch', 'cloture'); ok((await p.locator('#cSearchOut').innerText()).includes('Terms'), 'search finds glossary terms');
+    await p.fill('#cSearch', 'zzqx nothing here'); ok(/Nothing matches/.test(await p.locator('#cSearchOut').innerText()), 'no-match message');
+    await p.fill('#cSearch', '<img src=x onerror=window.__pwned=1>'); await p.waitForTimeout(200);
+    ok(await ev(p, 'window.__pwned === undefined'), 'search text is escaped');
+    await p.fill('#cSearch', ''); ok(await visible(p, '#cLists'), 'clearing search brings the course lists back');
+    await ev(p, `go('today')`); await ev(p, `go('courses')`); ok(await p.inputValue('#cSearch') === '', 'search box survives re-render');
+  }
+  { // Bug reports: an error shows the banner and is sent to the server once.
+    const posted = p.waitForResponse(r => r.url().endsWith('/api/bug'), { timeout: 5000 }).catch(() => null);
+    await ev(p, `setTimeout(() => { throw new Error('e2e test error ${rnd()}'); }, 0); null`);
+    const r = await posted;
+    ok(r && r.status() === 200, 'an uncaught error is reported to the server', r && r.status());
+    ok(await p.locator('[role="alert"]').isVisible().catch(() => false), 'the crash banner shows with a Reload button');
+  }
+  const pageErrors = p.errors.filter(e => !/e2e test error/.test(e));
+  ok(pageErrors.length === 0, 'extras: no page errors', pageErrors);
   await c.close();
 };
 

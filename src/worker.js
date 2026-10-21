@@ -157,6 +157,17 @@ async function api(req, env, path) {
   const acct = await publicAccountApi(req, env, path, { json, fail, body, cleanName }) || await publicEmailApi(req, env, path, { json, fail, body });
   if (acct) return acct;
 
+  // The app hit an error (sent by its crash banner). No account data; limited per network and per day.
+  if (m === 'POST' && path === '/api/bug') {
+    const b = await body(req);
+    const message = cleanText(b.message, 300).trim();
+    if (!message) return fail('Nothing to report.');
+    if (!await takeRate(env, await ipKey(req, 'bug'), 20, 'hour') || !await takeRate(env, 'bug:all', 500, 'day')) return json({ ok: true, dropped: true });
+    await env.DB.prepare('INSERT INTO bug_reports (message, stack, place, build, app, ua, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)')
+      .bind(message, cleanText(b.stack, 1500), cleanText(b.where, 60), cleanText(b.build, 40), b.app ? 1 : 0, cleanText(b.ua, 160), Date.now()).run();
+    return json({ ok: true });
+  }
+
   // A player removed a question from their reviews (or put it back). Kept as course feedback; see scripts/removals.sh.
   if (m === 'POST' && path === '/api/feedback/remove') {
     const who = await graderId(req, env), b = await body(req);
@@ -335,10 +346,10 @@ async function api(req, env, path) {
 
   // ---- group-made courses ----
   if (m === 'GET' && path === '/api/courses') {
-    const rows = await env.DB.prepare(`SELECT c.id, c.slug, c.title, c.json, c.version, c.author_id, p.name AS author, c.updated_at,
+    const rows = await env.DB.prepare(`SELECT c.id, c.slug, c.title, c.json, c.version, c.author_id, p.name AS author, c.created_at, c.updated_at,
       (SELECT COUNT(*) FROM reports r WHERE r.course_id = c.id AND r.resolved = 0) AS open_reports
       FROM courses c JOIN players p ON p.id = c.author_id WHERE c.group_code = ? AND c.author_id NOT IN (SELECT blocked_id FROM blocks WHERE player_id = ?) ORDER BY c.created_at`).bind(me.group_code, me.id).all();
-    return json({ courses: rows.results.map(r => ({ slug: r.slug, title: r.title, version: r.version, authorId: r.author_id, author: r.author, updatedAt: r.updated_at, openReports: r.open_reports, course: JSON.parse(r.json) })) });
+    return json({ courses: rows.results.map(r => ({ slug: r.slug, title: r.title, version: r.version, authorId: r.author_id, author: r.author, createdAt: r.created_at, updatedAt: r.updated_at, openReports: r.open_reports, course: JSON.parse(r.json) })) });
   }
 
   if (m === 'POST' && path === '/api/courses') {

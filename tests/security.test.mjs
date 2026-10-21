@@ -117,5 +117,13 @@ r = await call('/api/courses', { token: M.token }); ok(r.s === 200 && !r.d.cours
 r = await call('/api/account', { raw: '{"name":' + '"' + 'x'.repeat(200000) + '"}' }); ok(r.s !== 500, 'oversized body handled', r.s);
 r = await call('/api/account', { raw: '{not json' }); ok(r.s !== 500, 'malformed JSON handled', r.s);
 
+// ---- 12. Bug reports: stored, cleaned, limited per network
+IP = net();
+r = await call('/api/bug', { body: { message: 'boom \u001b[31m red', stack: 'at x', where: '#me', build: 'test', app: false, ua: 'node' } }); ok(r.s === 200 && r.d.ok && !r.d.dropped, 'bug report stored', r.d);
+let dropped = false;
+for (let i = 0; i < 21; i++) { r = await call('/api/bug', { body: { message: 'flood ' + i } }); if (r.d && r.d.dropped) dropped = true; }
+ok(dropped, 'bug reports from one network are capped', r.d);
+r = await call('/api/bug', { body: { message: '' } }); ok(r.s === 400, 'empty bug report refused', r.s);
+
 console.log(`PASS ${pass}  FAIL ${failN}`); fails.forEach(f => console.log('FAIL', f));
 process.exit(failN ? 1 : 0);
