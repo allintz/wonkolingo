@@ -11,3 +11,7 @@ run_worker_first = ["/api/*", "/.well-known/*"]
 binding = "DB"
 database_name = "hill-speak"
 database_id = "0c6cfe6d-28ad-4e54-9b96-78d55d165124"
+
+# Sender for sign-in and confirmation codes (src/email.js). Email switches on once the RESEND_API_KEY secret is set too.
+[vars]
+EMAIL_FROM = "WonkoLingo <codes@wonkolingo.com>"
