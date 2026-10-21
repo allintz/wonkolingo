@@ -702,7 +702,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-21-aa1d890';
+  window.WL_BUILD = '2026-10-21-fe7b255';
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -15449,7 +15449,9 @@ function hostOf(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } c
 function sourcesHTML(id) {
   const urls = ((typeof CARD_SOURCES !== 'undefined' && CARD_SOURCES[id]) || []).filter(u => /^https?:\/\//.test(u) && hostOf(u)).slice(0, 3);
   if (!urls.length) return '';
-  return `<p class="srcs">Source${urls.length > 1 ? 's' : ''}: ${urls.map(u => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(hostOf(u))}</a>`).join(' · ')}</p>`;
+  // Short links ("Source", or "Sources 1 2 3") with the site name on hover and for screen readers, so they stay out of the way.
+  if (urls.length === 1) return `<p class="srcs"><a href="${esc(urls[0])}" target="_blank" rel="noopener" title="${esc(hostOf(urls[0]))}" aria-label="Source: ${esc(hostOf(urls[0]))}">Source</a></p>`;
+  return `<p class="srcs">Sources ${urls.map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener" title="${esc(hostOf(u))}" aria-label="Source ${i + 1}: ${esc(hostOf(u))}">${i + 1}</a>`).join(' ')}</p>`;
 }
 function reportHTML(it) { return sourcesHTML(it._card) + ((COURSES[it._course] || {}).group && G ? '<div class="repbox"><button class="linkbtn" id="repBtn">Report a problem</button></div>' : '') + removeHTML(it); }
 // "Remove this question": takes it out of the player's own reviews, and the reason goes to the server as course feedback.
