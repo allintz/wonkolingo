@@ -11,7 +11,7 @@ const ID_ALPHABET = 'abcdefghijkmnpqrstuvwxyz23456789';
 const SECRET_ALPHABET = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
 // Origins allowed to use passkeys; the passkey's site (rpID) is the origin's hostname.
 const PASSKEY_ORIGINS = ['https://wonkolingo.alex-l-lintz.workers.dev', 'http://localhost:8799', 'http://localhost:8791'];
-export const ACCOUNT_LIMITS = { newAccountsPerIpPerDay: 20, codeClaimsPerIpPerHour: 10, passkeysPerPlayer: 10, codeMinutes: 10 };
+export const ACCOUNT_LIMITS = { newAccountsPerIpPerDay: 20, codeClaimsPerIpPerHour: 10, passkeysPerPlayer: 10, codeMinutes: 10, passwordTriesPerIpPerHour: 30, passwordTriesPerNamePerHour: 10 };
 
 export function randomString(n, alphabet) {
   const bytes = crypto.getRandomValues(new Uint8Array(n));
@@ -63,7 +63,44 @@ function expectedOrigins(site, resp) {
 // What the client needs to know about a signed-in player.
 export async function accountInfo(env, p) {
   const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM passkeys WHERE player_id = ?').bind(p.id).first();
-  return { player: { id: p.id, name: p.name }, group: p.solo ? null : { code: p.group_code, groupName: p.group_name }, passkeys: n.n };
+  const pw = await env.DB.prepare('SELECT username FROM passwords WHERE player_id = ?').bind(p.id).first();
+  return { player: { id: p.id, name: p.name }, group: p.solo ? null : { code: p.group_code, groupName: p.group_name }, passkeys: n.n, username: pw ? pw.username : null };
+}
+
+// Usernames and passwords. No email, so a forgotten password is reset by signing in another way and setting a new one.
+const PBKDF2_ITERATIONS = 100000; // the most Workers allow
+const cleanUsername = s => String(s || '').trim().toLowerCase();
+function usernameProblem(u) {
+  if (u.length < 3 || u.length > 40) return 'Pick a username of 3 to 40 characters.';
+  if (!/^[a-z0-9._@+-]+$/.test(u)) return 'Usernames can use letters, numbers and . _ - + @ (no spaces).';
+  return '';
+}
+const passwordProblem = pw => typeof pw !== 'string' || pw.length < 8 ? 'Use a password of at least 8 characters.' : pw.length > 200 ? 'That password is too long.' : '';
+async function pbkdf2(password, salt, iterations) {
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
+  return new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations }, key, 256));
+}
+async function hashPassword(password) {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  return `pbkdf2$${PBKDF2_ITERATIONS}$${b64url(salt)}$${b64url(await pbkdf2(password, salt, PBKDF2_ITERATIONS))}`;
+}
+async function checkPassword(password, stored) {
+  const [kind, iters, salt, hash] = String(stored).split('$');
+  if (kind !== 'pbkdf2') return false;
+  const got = b64url(await pbkdf2(password, fromB64url(salt), +iters));
+  let diff = got.length ^ hash.length;
+  for (let i = 0; i < Math.min(got.length, hash.length); i++) diff |= got.charCodeAt(i) ^ hash.charCodeAt(i);
+  return diff === 0;
+}
+// Sets (or changes) an account's username and password. Returns an error message, or '' on success.
+async function setPassword(env, playerId, username, password) {
+  const u = cleanUsername(username), up = usernameProblem(u) || passwordProblem(password);
+  if (up) return up;
+  const taken = await env.DB.prepare('SELECT player_id FROM passwords WHERE username = ?').bind(u).first();
+  if (taken && taken.player_id !== playerId) return 'That username is taken. Try another.';
+  await env.DB.prepare('INSERT INTO passwords (player_id, username, hash, updated_at) VALUES (?, ?, ?, ?) ON CONFLICT(player_id) DO UPDATE SET username = excluded.username, hash = excluded.hash, updated_at = excluded.updated_at')
+    .bind(playerId, u, await hashPassword(password), Date.now()).run();
+  return '';
 }
 async function playerById(env, id) {
   return env.DB.prepare('SELECT p.id, p.name, p.group_code, g.name AS group_name, g.solo FROM players p JOIN groups g ON g.code = p.group_code WHERE p.id = ?').bind(id).first();
@@ -74,13 +111,36 @@ export async function publicAccountApi(req, env, path, { json, fail, body, clean
   const m = req.method;
   // A new account with no group, made on the sign-up screen with the player's display name.
   if (m === 'POST' && path === '/api/account') {
-    const name = cleanName((await body(req)).name, 24) || 'Player';
+    const b = await body(req);
+    const name = cleanName(b.name, 24) || 'Player';
+    // Optional username and password, checked before anything is created.
+    const withPw = b.username !== undefined || b.password !== undefined;
+    if (withPw) {
+      const u = cleanUsername(b.username), up = usernameProblem(u) || passwordProblem(b.password);
+      if (up) return fail(up);
+      if (await env.DB.prepare('SELECT 1 FROM passwords WHERE username = ?').bind(u).first()) return fail('That username is taken. Try another.', 409);
+    }
     if (name !== 'Player') { const mod = await moderate(env, `Display name: ${name}`); if (!mod.allowed) return fail('That name can’t be used: ' + mod.reason, 422); }
     if (!await takeRate(env, await ipKey(req, 'acct'), ACCOUNT_LIMITS.newAccountsPerIpPerDay, 'day')) return fail('Too many new accounts from this network today. Try again tomorrow.', 429);
     const code = await createHomeGroup(env);
     const id = randomString(10, ID_ALPHABET), secret = randomString(24, SECRET_ALPHABET);
     await env.DB.prepare('INSERT INTO players (id, group_code, name, key_hash, created_at) VALUES (?, ?, ?, ?, ?)').bind(id, code, name, await sha256(secret), Date.now()).run();
-    return json({ token: id + '.' + secret, player: { id, name }, group: null, passkeys: 0 });
+    let username = null;
+    if (withPw) { const e = await setPassword(env, id, b.username, b.password); if (!e) username = cleanUsername(b.username); }
+    return json({ token: id + '.' + secret, player: { id, name }, group: null, passkeys: 0, username });
+  }
+  // Sign in with a username and password.
+  if (m === 'POST' && path === '/api/password/login') {
+    const b = await body(req), u = cleanUsername(b.username);
+    if (!u || typeof b.password !== 'string' || !b.password) return fail('Enter your username and password.');
+    if (!await takeRate(env, await ipKey(req, 'pw'), ACCOUNT_LIMITS.passwordTriesPerIpPerHour, 'hour')
+      || !await takeRate(env, 'pwname:' + (await sha256('wl-pw:' + u)).slice(0, 16), ACCOUNT_LIMITS.passwordTriesPerNamePerHour, 'hour'))
+      return fail('Too many sign-in attempts. Wait an hour, or sign in with a passkey or a code.', 429);
+    const row = await env.DB.prepare('SELECT player_id, hash FROM passwords WHERE username = ?').bind(u).first();
+    if (!row || !await checkPassword(b.password, row.hash)) return fail('That username and password don’t match.', 401);
+    const p = await playerById(env, row.player_id);
+    if (!p) return fail('That account no longer exists.', 404);
+    return json({ token: await newSession(env, p.id, 'password'), ...(await accountInfo(env, p)) });
   }
   // Sign in with a code shown on a device that is already signed in.
   if (m === 'POST' && path === '/api/link/claim') {
@@ -142,7 +202,7 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
     for (const sql of ['DELETE FROM courses WHERE author_id = ?', 'DELETE FROM reports WHERE player_id = ?', 'DELETE FROM completions WHERE player_id = ?',
       'DELETE FROM player_state WHERE player_id = ?', 'DELETE FROM sessions WHERE player_id = ?', 'DELETE FROM passkeys WHERE player_id = ?',
       'DELETE FROM link_codes WHERE player_id = ?', 'DELETE FROM webauthn_challenges WHERE player_id = ?', 'DELETE FROM grade_usage WHERE player_id = ?',
-      'DELETE FROM disputes WHERE who = ?', 'DELETE FROM card_feedback WHERE who = ?']) stmts.push(env.DB.prepare(sql).bind(id));
+      'DELETE FROM disputes WHERE who = ?', 'DELETE FROM card_feedback WHERE who = ?', 'DELETE FROM passwords WHERE player_id = ?']) stmts.push(env.DB.prepare(sql).bind(id));
     stmts.push(env.DB.prepare('DELETE FROM blocks WHERE player_id = ? OR blocked_id = ?').bind(id, id), env.DB.prepare('DELETE FROM players WHERE id = ?').bind(id));
     if (me.solo) stmts.push(env.DB.prepare('DELETE FROM groups WHERE code = ? AND solo = 1').bind(me.group_code));
     await env.DB.batch(stmts);
@@ -156,6 +216,12 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
     if (!p) return fail('That player no longer exists.', 404);
     await env.DB.prepare('INSERT OR IGNORE INTO blocks (player_id, blocked_id, created_at) VALUES (?, ?, ?)').bind(me.id, other, Date.now()).run();
     return json({ ok: true });
+  }
+  // Set or change this account's username and password.
+  if (m === 'POST' && path === '/api/password') {
+    const b = await body(req), e = await setPassword(env, me.id, b.username, b.password);
+    if (e) return fail(e, /taken/.test(e) ? 409 : 400);
+    return json({ ok: true, username: cleanUsername(b.username) });
   }
   // Leave a group but keep the account and its progress.
   if (m === 'POST' && path === '/api/leave') {

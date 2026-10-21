@@ -137,3 +137,10 @@ CREATE TABLE IF NOT EXISTS card_feedback (
   created_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_card_feedback_card ON card_feedback(card, created_at);
+-- Optional username and password for an account (2026-10-20). PBKDF2-SHA256; usernames are stored lowercase and unique.
+CREATE TABLE IF NOT EXISTS passwords (
+  player_id TEXT PRIMARY KEY,
+  username TEXT NOT NULL UNIQUE,
+  hash TEXT NOT NULL,
+  updated_at INTEGER NOT NULL
+);

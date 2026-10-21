@@ -193,6 +193,26 @@ r = await call('/api/feedback/remove', { token: S.token, body: { course: 'lingo'
 r = await call('/api/feedback/remove', { token: S.token, body: { course: 'lingo', card: 'u0l0#0', reason: 'hate it' } }); ok(r.s === 400, 'unknown reason refused', r);
 r = await call('/api/feedback/remove', { token: S.token, body: { reason: 'trivia' } }); ok(r.s === 400, 'missing card refused', r);
 
+// ---- usernames and passwords
+const uname = 'tester' + randomBytes(3).toString('hex');
+r = await call('/api/account', { body: { name: 'Pat', username: uname.toUpperCase(), password: 'short' } }); ok(r.s === 400, 'sign-up: short password refused', r);
+r = await call('/api/account', { body: { name: 'Pat', username: 'a b', password: 'longenough1' } }); ok(r.s === 400, 'sign-up: username with a space refused', r);
+r = await call('/api/account', { body: { name: 'Pat', username: uname.toUpperCase(), password: 'correct horse 1' } }); ok(r.s === 200 && r.d.username === uname, 'sign-up with username and password (stored lowercase)', r.d);
+const P = r.d;
+r = await call('/api/account', { body: { name: 'Other', username: uname, password: 'another pass 2' } }); ok(r.s === 409, 'sign-up: taken username refused before creating anything', r);
+r = await call('/api/me', { token: P.token }); ok(r.d.username === uname, 'me shows the username', r.d);
+r = await call('/api/password/login', { body: { username: uname, password: 'wrong password' } }); ok(r.s === 401, 'wrong password refused', r);
+r = await call('/api/password/login', { body: { username: '  ' + uname.toUpperCase() + ' ', password: 'correct horse 1' } }); ok(r.s === 200 && r.d.player.id === P.player.id && r.d.token && r.d.token !== P.token, 'password sign-in (any case) gives a new device token', r.d);
+r = await call('/api/me', { token: r.d.token }); ok(r.s === 200, 'password device token works', r.s);
+r = await call('/api/password', { token: S.token, body: { username: uname, password: 'mine now 123' } }); ok(r.s === 409, 'cannot take another account’s username', r);
+r = await call('/api/password', { token: P.token, body: { username: uname + 'x', password: 'new password 3' } }); ok(r.s === 200 && r.d.username === uname + 'x', 'change username and password', r.d);
+r = await call('/api/password/login', { body: { username: uname, password: 'correct horse 1' } }); ok(r.s === 401, 'old username no longer works', r);
+r = await call('/api/password/login', { body: { username: uname + 'x', password: 'new password 3' } }); ok(r.s === 200, 'new username and password work', r);
+r = await call('/api/password', { token: S.token, body: { username: 'solo' + randomBytes(3).toString('hex'), password: 'add one later' } }); ok(r.s === 200, 'existing account adds a password later', r);
+const ipPw = '10.252.' + randomBytes(1)[0] + '.' + randomBytes(1)[0];
+for (let i = 0; i < 11; i++) last = (await call('/api/password/login', { body: { username: 'nobody' + uname, password: 'guess ' + i }, ip: ipPw })).s;
+ok(last === 429, 'password guessing on one username is rate-limited', last);
+
 // ---- the old flow still works for a page that hasn't updated
 r = await call('/api/join', { body: { code, name: 'Legacy' } }); ok(r.s === 200 && r.d.token, 'signed-out join still creates a player', r);
 

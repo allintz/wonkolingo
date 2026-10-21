@@ -527,6 +527,12 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .gate-in .okbox { text-align: left; }
 .gate-in .linkbtn { justify-self: center; }
 .gate-in .gerr { color: var(--bad); font-weight: 700; }
+.gate-back[hidden] { display: none; }
+.gate-back { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 10px); left: 12px; display: flex; align-items: center; gap: 2px; background: none; border: 0; padding: 8px 10px 8px 4px; color: var(--brass); font-weight: 700; font-size: 16px; z-index: 31; }
+.gate-back svg { width: 22px; height: 22px; }
+.gate-form { display: grid; gap: 12px; justify-items: center; width: 100%; max-width: 340px; }
+.gate-form .gate-fld { max-width: none; }
+.acct-pw { display: grid; gap: 10px; }
 </style>
 
 <header class="top">
@@ -606,6 +612,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 </section>
 
 <section class="overlay result gate" id="gate" hidden>
+  <button class="gate-back" id="gtBack" aria-label="Back" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>Back</button>
   <div class="result-in gate-in" id="gateIn"></div>
 </section>
 
@@ -14383,7 +14390,7 @@ function renderInstallCard() {
   if (NATIVE || isStandalone() || (!isIOS() && !installPrompt)) { el.hidden = true; return; }
   el.hidden = false;
   el.innerHTML = `<h3>Put WonkoLingo on your home screen</h3>` + (isIOS()
-    ? `<p>${onSite ? 'In Safari, tap the Share button, then <b>Add to Home Screen</b>.' : `Open <a href="${SITE}" target="_blank" rel="noopener">${SITE.replace('https://', '')}</a> in Safari, tap Share, then <b>Add to Home Screen</b>.`} It opens full screen like an app, and works offline (answers are self-graded until you're back online).</p>${onSite ? '<p class="meta">The home-screen app starts signed out. Add a passkey in Account above first, then sign in with it there.</p>' : ''}`
+    ? `<p>${onSite ? 'In Safari, tap the Share button, then <b>Add to Home Screen</b>.' : `Open <a href="${SITE}" target="_blank" rel="noopener">${SITE.replace('https://', '')}</a> in Safari, tap Share, then <b>Add to Home Screen</b>.`} It opens full screen like an app, and works offline (answers are self-graded until you're back online).</p>${onSite ? '<p class="meta">The home-screen app starts signed out: sign in there with your username and password.</p>' : ''}`
     : `<p>Install it as an app: it opens in its own window and works offline.</p><div class="row"><button class="btn sm" id="installBtn">Install app</button></div>`);
 }
 $('#installCard').addEventListener('click', async e => {
@@ -15165,10 +15172,10 @@ const PASSKEY_OK = NATIVE || (!!(window.PublicKeyCredential && navigator.credent
 const CLOUD = '<path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.9 11a3.75 3.75 0 0 1-.4 7.5z"/>';
 function hasProgress() { return Object.keys(state.srs || {}).length > 0 || xpTotal(state) > 0 || Object.keys(state.myTerms || {}).length > 0; }
 // Makes this device's account (from the sign-up screen). Progress already on the device goes into it.
-function ensureAccount(name) {
+function ensureAccount(name, pw) {
   if (ACCT) return Promise.resolve(ACCT);
-  if (!acctPending) acctPending = apiCall('/api/account', { name }).then(d => {
-    ACCT = { token: d.token, player: d.player, passkeys: 0 }; saveA();
+  if (!acctPending) acctPending = apiCall('/api/account', { name, ...(pw || {}) }).then(d => {
+    ACCT = { token: d.token, player: d.player, passkeys: 0, username: d.username || null }; saveA();
     state.owner = d.player.id; save(true);
     renderGroup(); // a fresh form, so the display name defaults to this account's
     if (VIEW === 'me' && !run) renderAcctCard();
@@ -15181,7 +15188,7 @@ async function refreshAccount() {
   if (!ACCT) return;
   try {
     const d = await apiCall('/api/me');
-    ACCT.player = d.player; ACCT.passkeys = d.passkeys; saveA();
+    ACCT.player = d.player; ACCT.passkeys = d.passkeys; ACCT.username = d.username || null; saveA();
     const was = G ? G.code : null, now = d.group ? d.group.code : null;
     if (was !== now) {
       G = d.group ? { code: d.group.code, groupName: d.group.groupName, player: d.player } : null; saveG(); board = null;
@@ -15256,7 +15263,7 @@ function beginSignIn(d) {
 function completeSignIn(d, keepLocal) {
   if (!keepLocal && state.owner !== d.player.id) state = { ...blankState(), course: state.course };
   state.owner = d.player.id; save(true);
-  ACCT = { token: d.token, player: d.player, passkeys: d.passkeys || 0 }; saveA();
+  ACCT = { token: d.token, player: d.player, passkeys: d.passkeys || 0, username: d.username || null }; saveA();
   G = d.group ? { code: d.group.code, groupName: d.group.groupName, player: d.player } : null; saveG();
   board = null; try { localStorage.removeItem(CKEY); } catch (e) {}
   Object.assign(acctUI, { mode: '', merge: null, link: null, recShown: false, outArmed: false, err: '' });
@@ -15281,7 +15288,9 @@ let gateUI = { step: 'welcome', busy: false, err: '' };
 let gateOffline = false;
 function needGate() { return !ACCT && !gateOffline; }
 function showGate(step) {
-  gateUI.step = step || 'welcome'; gateUI.busy = false;
+  gateUI.step = step || 'welcome'; gateUI.busy = false; gateUI.pk = false;
+  // Opened to switch accounts from a signed-in device: backing out just closes it.
+  gateUI.switching = !!ACCT;
   $('#gate').hidden = false; document.body.classList.add('in-lesson'); renderGate();
 }
 function hideGate() {
@@ -15291,17 +15300,24 @@ function hideGate() {
 }
 function renderGate() {
   const g = gateUI, el = $('#gateIn'), dis = g.busy ? ' disabled' : '';
-  const keep = {}; ['gtName', 'gtCode', 'gtRec'].forEach(id => { const x = document.getElementById(id); if (x) keep[id] = x.value; });
+  const keep = {}; ['gtName', 'gtUser', 'gtPass', 'gtCode', 'gtRec'].forEach(id => { const x = document.getElementById(id); if (x) keep[id] = x.value; });
   const owl = m => `<img class="mascot m-result" src="mascot/${m}.webp" alt="">`;
+  // Back sits in the top-left corner, like other apps. Not on the first screen, a fresh account's passkey step, or the merge question.
+  $('#gtBack').hidden = ['welcome', 'passkey', 'merge'].includes(g.step);
+  const fld = (id, label, attrs) => `<label class="fld gate-fld"><span>${label}</span><input id="${id}" ${attrs}></label>`;
   let h = '';
   if (g.step === 'welcome') {
-    h = `${owl('wave')}<h2>Welcome to WonkoLingo</h2><p>Learn policy a few minutes a day, with friends. Make an account so your progress is saved and follows you to any device. No email or password.</p>
+    h = `${owl('wave')}<h2>Welcome to WonkoLingo</h2><p>Learn policy a few minutes a day, with friends. Make an account so your progress is saved and follows you to any device.</p>
       ${joinParam ? '<p class="meta">You’ve been invited to a group. Make an account or sign in, then you can join it.</p>' : ''}
       <div class="rbtns"><button class="btn" id="gtNew"${dis}>Create an account</button><button class="btn ghost" id="gtHave"${dis}>I already have an account</button></div>`;
-  } else if (g.step === 'name') {
-    h = `${owl('think')}<h2>What should we call you?</h2><p>Friends in your groups see this name. A nickname is fine.</p>
-      <label class="fld gate-fld"><span>Display name</span><input id="gtName" maxlength="24" autocomplete="nickname" autocapitalize="words" spellcheck="false"></label>
-      <div class="rbtns"><button class="btn" id="gtMake"${dis}>Continue</button><button class="btn ghost" id="gtBack"${dis}>Back</button></div>`;
+  } else if (g.step === 'create') {
+    h = `${owl('think')}<h2>Create your account</h2><p>${g.pk ? 'Friends in your groups see your display name. Next, Face ID or Touch ID saves a passkey, so there’s no password to remember.' : 'Friends in your groups see your display name. You sign in with your username and password, and your phone or browser can save them for you.'}</p>
+      <form class="gate-form" id="gtForm" autocomplete="on">
+        ${fld('gtName', 'Display name', 'name="nickname" maxlength="24" autocomplete="nickname" autocapitalize="words" spellcheck="false"')}
+        ${g.pk ? '' : fld('gtUser', 'Username', 'name="username" maxlength="40" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"') + fld('gtPass', 'Password (8 or more characters)', 'name="password" type="password" minlength="8" autocomplete="new-password"')}
+        <div class="rbtns"><button class="btn" type="submit" id="gtMake"${dis}>${g.pk ? 'Continue' : 'Create account'}</button></div>
+      </form>
+      ${PASSKEY_OK ? `<button class="linkbtn" id="gtPkMode">${g.pk ? 'Use a username and password instead' : 'Use a passkey instead of a password'}</button>` : ''}`;
   } else if (g.step === 'passkey') {
     h = `${owl('cheer')}<h2>Save a passkey</h2><p>Then you can sign in on your other devices with Face ID, Touch ID or your device PIN. There’s nothing to remember.</p>
       <div class="rbtns"><button class="btn" id="gtPk"${dis}>Save a passkey</button></div>`;
@@ -15309,62 +15325,90 @@ function renderGate() {
     const n = Object.keys(state.srs || {}).length;
     h = `${owl('think')}<h2>Keep this device’s progress?</h2><div class="okbox"><p>This device has progress (${n} card${n === 1 ? '' : 's'} in your reviews) that isn’t in the account you signed in to. Add it to that account?</p></div>
       <div class="rbtns"><button class="btn" data-merge="1"${dis}>Add it</button><button class="btn ghost" data-merge="0"${dis}>Leave it out</button></div>`;
+  } else if (g.step === 'code') {
+    h = `${owl('read')}<h2>Sign in with a code</h2><p>On a device where you’re signed in, open Me, then Account, then “Sign in on another device”, and enter the code here.</p>
+      <form class="gate-form" id="gtForm">${fld('gtCode', 'Sign-in code', 'maxlength="9" placeholder="ABCD-EFGH" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false"')}
+      <div class="rbtns"><button class="btn" type="submit" id="gtCodeGo"${dis}>Sign in</button></div></form>`;
+  } else if (g.step === 'recovery') {
+    h = `${owl('read')}<h2>Use your recovery code</h2><p>It’s under Me, then Account, then Recovery code, on any device where you’re signed in.</p>
+      <form class="gate-form" id="gtForm">${fld('gtRec', 'Recovery code', 'autocomplete="off" autocapitalize="off" spellcheck="false"')}
+      <div class="rbtns"><button class="btn" type="submit" id="gtRecGo"${dis}>Sign in</button></div></form>`;
   } else {
-    const rec = g.step === 'recovery';
-    h = `${owl('read')}<h2>Sign in</h2>${PASSKEY_OK && !rec ? `<div class="rbtns"><button class="btn" id="gtPkIn"${dis}>Sign in with a passkey</button></div><p class="meta">Or enter a code from a device where you’re signed in (Me, then Account, then “Sign in on another device”).</p>` : rec ? '' : '<p>Enter a code from a device where you’re signed in (Me, then Account, then “Sign in on another device”).</p>'}
-      ${rec ? `<label class="fld gate-fld"><span>Recovery code</span><input id="gtRec" autocomplete="off" autocapitalize="off" spellcheck="false"></label><div class="rbtns"><button class="btn ghost" id="gtRecGo"${dis}>Sign in</button></div>`
-        : `<label class="fld gate-fld"><span>Sign-in code</span><input id="gtCode" maxlength="9" placeholder="ABCD-EFGH" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false"></label><div class="rbtns"><button class="btn ghost" id="gtCodeGo"${dis}>Sign in with code</button></div>`}
-      <div class="glinks"><button class="linkbtn" id="gtRecMode">${rec ? 'Use a sign-in code instead' : 'Use a recovery code instead'}</button><button class="linkbtn" id="gtBack">Back</button></div>`;
+    h = `${owl('read')}<h2>Sign in</h2>
+      <form class="gate-form" id="gtForm" autocomplete="on">
+        ${fld('gtUser', 'Username', 'name="username" maxlength="40" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"')}
+        ${fld('gtPass', 'Password', 'name="password" type="password" autocomplete="current-password"')}
+        <div class="rbtns"><button class="btn" type="submit" id="gtPwGo"${dis}>Sign in</button></div>
+      </form>
+      ${PASSKEY_OK ? `<div class="rbtns"><button class="btn ghost" id="gtPkIn"${dis}>Sign in with a passkey</button></div>` : ''}
+      <div class="glinks"><button class="linkbtn" id="gtCodeMode">Use a code from another device</button><button class="linkbtn" id="gtRecMode">Use a recovery code</button></div>
+      <p class="meta">Forgot your password? Sign in another way, then set a new one in Me.</p>`;
   }
   if (g.err) h += `<p class="gerr">${g.err}</p>`;
   if (g.err && g.step === 'passkey') h += `<button class="linkbtn" id="gtLater">Do this later in Me</button>`;
   if (g.offerOffline) h += `<button class="linkbtn" id="gtOffline">Continue offline for now</button>`;
   el.innerHTML = h;
   Object.entries(keep).forEach(([id, v]) => { const x = document.getElementById(id); if (x) x.value = v; });
-  const f = el.querySelector('input'); if (f && !g.busy && !('ontouchstart' in window)) f.focus();
+  const f = el.querySelector('input'); if (f && !g.busy && !('ontouchstart' in window) && !f.value) f.focus();
 }
 function gateSignedIn(d) { beginSignIn(d); if (acctUI.merge) gateUI.step = 'merge'; else hideGate(); }
-$('#gate').addEventListener('click', async e => {
-  const t = e.target.closest('button'); if (!t || gateUI.busy) return;
-  const g = gateUI; g.err = ''; g.offerOffline = false;
-  const step = async fn => {
-    g.busy = true; renderGate();
-    try { await fn(); } catch (err) { g.err = acctErr(err); g.offerOffline = err instanceof TypeError && !ACCT; }
-    g.busy = false; if (!$('#gate').hidden) renderGate();
-  };
-  if (t.id === 'gtNew') { g.step = 'name'; renderGate(); return; }
-  if (t.id === 'gtHave') { g.step = 'signin'; renderGate(); return; }
-  if (t.id === 'gtBack') { g.step = 'welcome'; renderGate(); return; }
-  if (t.id === 'gtRecMode') { g.step = g.step === 'recovery' ? 'signin' : 'recovery'; renderGate(); return; }
-  if (t.id === 'gtLater' || t.id === 'gtOffline') { if (t.id === 'gtOffline') gateOffline = true; hideGate(); return; }
-  if (t.dataset.merge) { completeSignIn(acctUI.merge, t.dataset.merge === '1'); hideGate(); return; }
-  if (t.id === 'gtMake') step(async () => {
-    const name = ($('#gtName').value || '').trim();
-    if (!name) throw new Error('Pick a name to show friends.');
-    await ensureAccount(name); syncNow(); toast('Account created.');
-    if (PASSKEY_OK) g.step = 'passkey'; else hideGate();
+async function gateStep(fn) {
+  const g = gateUI; g.err = ''; g.offerOffline = false; g.busy = true; renderGate();
+  try { await fn(); } catch (err) { g.err = acctErr(err); g.offerOffline = err instanceof TypeError && !ACCT; }
+  g.busy = false; if (!$('#gate').hidden) renderGate();
+}
+const gateVal = id => (document.getElementById(id) || {}).value || '';
+// Each form's submit (Enter or the button): the browser's password manager sees a real form submission.
+$('#gate').addEventListener('submit', e => {
+  e.preventDefault(); if (gateUI.busy) return;
+  const g = gateUI;
+  if (g.step === 'create') gateStep(async () => {
+    const name = gateVal('gtName').trim();
+    if (!name) throw new Error('Pick a display name to show friends.');
+    if (g.pk) { await ensureAccount(name); syncNow(); toast('Account created.'); g.step = PASSKEY_OK ? 'passkey' : 'done'; if (g.step === 'done') hideGate(); return; }
+    const username = gateVal('gtUser').trim(), password = gateVal('gtPass');
+    if (username.length < 3) throw new Error('Pick a username of at least 3 characters.');
+    if (password.length < 8) throw new Error('Use a password of at least 8 characters.');
+    await ensureAccount(name, { username, password }); syncNow(); toast('Account created.'); hideGate();
   });
-  if (t.id === 'gtPk') step(async () => { await addPasskey(); hideGate(); });
-  if (t.id === 'gtPkIn') step(async () => {
-    const o = await apiCall('/api/passkey/login-options', {});
-    const resp = await passkeyGet(o.options);
-    gateSignedIn(await apiCall('/api/passkey/login', { challengeId: o.challengeId, response: resp }));
+  else if (g.step === 'signin') gateStep(async () => {
+    const username = gateVal('gtUser').trim(), password = gateVal('gtPass');
+    if (!username || !password) throw new Error('Enter your username and password.');
+    gateSignedIn(await apiCall('/api/password/login', { username, password }));
   });
-  if (t.id === 'gtCodeGo') step(async () => {
-    const code = ($('#gtCode').value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  else if (g.step === 'code') gateStep(async () => {
+    const code = gateVal('gtCode').toUpperCase().replace(/[^A-Z0-9]/g, '');
     if (code.length !== 8) throw new Error('The code has 8 letters and numbers, like ABCD-EFGH.');
     gateSignedIn(await apiCall('/api/link/claim', { code }));
   });
-  if (t.id === 'gtRecGo') step(async () => {
-    const tok = ($('#gtRec').value || '').trim();
+  else if (g.step === 'recovery') gateStep(async () => {
+    const tok = gateVal('gtRec').trim();
     if (!/^[a-z0-9]+\.[A-Za-z0-9]+$/.test(tok)) throw new Error('That doesn’t look like a recovery code.');
     const d = await apiCall('/api/me', null, tok).catch(err => { throw err.status === 401 ? new Error('That recovery code doesn’t match an account.') : err; });
     gateSignedIn({ ...d, token: tok });
   });
 });
-$('#gate').addEventListener('keydown', e => {
-  if (e.key !== 'Enter' || !e.target.matches('input') || gateUI.busy) return;
-  e.preventDefault(); const b = $('#gtMake') || $('#gtCodeGo') || $('#gtRecGo'); if (b) b.click();
+$('#gate').addEventListener('click', e => {
+  // Submit buttons inside a form are handled by the submit listener above.
+  const t = e.target.closest('button'); if (!t || (t.type === 'submit' && t.closest('form')) || gateUI.busy) return;
+  const g = gateUI; g.err = ''; g.offerOffline = false;
+  if (t.id === 'gtNew') { g.step = 'create'; g.pk = false; renderGate(); return; }
+  if (t.id === 'gtHave') { g.step = 'signin'; renderGate(); return; }
+  if (t.id === 'gtBack') {
+    if ((g.step === 'signin' || g.step === 'create') && g.switching) { hideGate(); return; }
+    g.step = g.step === 'code' || g.step === 'recovery' ? 'signin' : 'welcome'; renderGate(); return;
+  }
+  if (t.id === 'gtPkMode') { g.pk = !g.pk; renderGate(); return; }
+  if (t.id === 'gtCodeMode') { g.step = 'code'; renderGate(); return; }
+  if (t.id === 'gtRecMode') { g.step = 'recovery'; renderGate(); return; }
+  if (t.id === 'gtLater' || t.id === 'gtOffline') { if (t.id === 'gtOffline') gateOffline = true; hideGate(); return; }
+  if (t.dataset.merge) { completeSignIn(acctUI.merge, t.dataset.merge === '1'); hideGate(); return; }
+  if (t.id === 'gtPk') gateStep(async () => { await addPasskey(); hideGate(); });
+  if (t.id === 'gtPkIn') gateStep(async () => {
+    const o = await apiCall('/api/passkey/login-options', {});
+    const resp = await passkeyGet(o.options);
+    gateSignedIn(await apiCall('/api/passkey/login', { challengeId: o.challengeId, response: resp }));
+  });
 });
 
 function renderAcctCard() {
@@ -15384,13 +15428,15 @@ function renderAcctCard() {
       : `<label class="fld"><span>Code from your other device</span><input id="aCodeIn" maxlength="9" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" placeholder="ABCD-EFGH"></label><div class="row"><button class="btn ghost sm" id="aCodeGo"${dis}>Sign in</button></div><p class="meta">To get a code, open WonkoLingo where you’re already signed in, go to Me and choose “Sign in on another device”.</p>`;
     h += `<div class="glinks"><button class="linkbtn" id="aMode">${a.mode === 'recovery' ? 'Use a code instead' : 'Use a recovery code instead'}</button><button class="linkbtn" id="aCancel">Cancel</button></div>`;
   } else if (ACCT) {
-    if (PASSKEY_OK) h += pk ? `<p class="meta">Passkey added. Use it to sign in on any device that has it.</p>` : `<p>Add a passkey to sign in on a new phone or computer with Face ID, Touch ID or your device PIN.</p><div class="row"><button class="btn sm" id="aPk"${dis}>Add a passkey</button></div>`;
+    if (a.pwForm) h += `<form class="acct-pw" id="aPwForm" autocomplete="on"><label class="fld"><span>Username</span><input id="aPwUser" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="40" value="${esc(ACCT.username || '')}"></label><label class="fld"><span>${ACCT.username ? 'New password' : 'Password'} (8 or more characters)</span><input id="aPwPass" name="password" type="password" minlength="8" autocomplete="new-password"></label><div class="row"><button class="btn sm" type="submit"${dis}>Save</button><button class="linkbtn" type="button" id="aPwCancel">Cancel</button></div></form>`;
+    else h += ACCT.username ? `<div class="kv"><span>Username</span><span><b>${esc(ACCT.username)}</b> · <button class="linkbtn" id="aPwEdit">Change password</button></span></div>` : `<p>Add a username and password so you can sign in on any device.</p><div class="row"><button class="btn sm" id="aPwEdit"${dis}>Set a password</button></div>`;
+    if (PASSKEY_OK) h += pk ? `<p class="meta">Passkey added: you can also sign in with Face ID or Touch ID.</p>` : `<p class="meta">Or sign in with Face ID or Touch ID: <button class="linkbtn" id="aPk"${dis}>add a passkey</button></p>`;
     h += a.link
       ? `<p>On your other device, open WonkoLingo, go to Me, choose “I already have an account” and enter:</p><code class="rec acode">${esc(a.link.code.slice(0, 4) + '-' + a.link.code.slice(4))}</code><p class="meta">Works once, for 10 minutes. <button class="linkbtn" id="aLink"${dis}>Get a new code</button></p>`
       : `<div class="row"><button class="btn ghost sm" id="aLink"${dis}>Sign in on another device</button></div>`;
     if (a.recShown) h += `<p>Keep this somewhere safe. It signs in to your account on any device, and anyone who has it can use your account.</p><code class="rec">${esc(ACCT.token)}</code>`;
     h += `<div class="glinks"><button class="linkbtn" id="aRec">${a.recShown ? 'Hide recovery code' : 'Recovery code'}</button>${pk && PASSKEY_OK ? `<button class="linkbtn" id="aPk"${dis}>Add another passkey</button>` : ''}<button class="linkbtn" id="aSwitch">Use a different account</button><button class="linkbtn" id="aOut">${a.outArmed ? 'Click again to sign out' : 'Sign out'}</button><button class="linkbtn" id="aDel"${dis}>${a.delArmed ? 'Click again to delete' : 'Delete account'}</button></div>`;
-    if (a.outArmed) h += `<p class="gerr">Signing out clears this device. ${pk ? 'Sign back in with your passkey or recovery code.' : 'Without a passkey, you’ll need your recovery code to get back in.'}</p>`;
+    if (a.outArmed) h += `<p class="gerr">Signing out clears this device. ${ACCT.username || pk ? 'Sign back in with your password, passkey or recovery code.' : 'Without a password or passkey, you’ll need your recovery code to get back in.'}</p>`;
     if (a.delArmed) h += `<p class="gerr">Deleting removes your account, progress, lesson results and any courses you wrote, on every device. It can’t be undone.</p>`;
   } else h += `<div class="row"><button class="btn sm" id="aGate">Create an account or sign in</button></div>`;
   if (a.err) h += `<p class="gerr">${a.err}</p>`;
@@ -15401,7 +15447,9 @@ $('#acctCard').addEventListener('click', async e => {
   const t = e.target.closest('button'); if (!t || acctUI.busy) return;
   const a = acctUI; a.err = '';
   if (t.id === 'aGate') { showGate(); return; }
-  if (t.id === 'aSwitch') { a.mode = 'code'; a.outArmed = false; renderAcctCard(); const x = $('#aCodeIn'); if (x) x.focus(); return; }
+  if (t.id === 'aSwitch') { a.outArmed = false; showGate('signin'); return; }
+  if (t.id === 'aPwEdit') { a.pwForm = true; renderAcctCard(); const x = $('#aPwPass'); if (x) x.focus(); return; }
+  if (t.id === 'aPwCancel') { a.pwForm = false; renderAcctCard(); return; }
   if (t.id === 'aCancel') { a.mode = ''; renderAcctCard(); return; }
   if (t.id === 'aMode') { a.mode = a.mode === 'recovery' ? 'code' : 'recovery'; renderAcctCard(); return; }
   if (t.id === 'aRec') { a.recShown = !a.recShown; renderAcctCard(); return; }
@@ -15440,9 +15488,21 @@ $('#acctCard').addEventListener('click', async e => {
     beginSignIn({ ...d, token: tok });
   });
 });
-$('#acctCard').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); const b = $('#aCodeGo') || $('#aRecGo'); if (b && !acctUI.busy) b.click(); } });
+$('#acctCard').addEventListener('submit', async e => {
+  if (e.target.id !== 'aPwForm') return;
+  e.preventDefault(); const a = acctUI; if (a.busy) return;
+  const username = ($('#aPwUser').value || '').trim(), password = $('#aPwPass').value || '';
+  a.err = ''; a.busy = true; renderAcctCard();
+  try {
+    if (password.length < 8) throw new Error('Use a password of at least 8 characters.');
+    const r = await apiCall('/api/password', { username, password });
+    ACCT.username = r.username; saveA(); a.pwForm = false; toast('Password saved. Your phone or browser can remember it for you.');
+  } catch (err) { a.err = acctErr(err); }
+  a.busy = false; renderAcctCard();
+});
+$('#acctCard').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('input') && !e.target.closest('form')) { e.preventDefault(); const b = $('#aCodeGo') || $('#aRecGo'); if (b && !acctUI.busy) b.click(); } });
 // "Sign in" links elsewhere open the sign-in form in Me.
-document.addEventListener('click', e => { if (e.target.closest('[data-signin]')) { acctUI.mode = acctUI.mode || 'code'; acctUI.merge = null; } }, true);
+document.addEventListener('click', e => { if (e.target.closest('[data-signin]')) { e.preventDefault(); e.stopPropagation(); showGate('signin'); } }, true);
 
 async function refreshBoard() {
   if (!G) return renderGroup();
