@@ -14,7 +14,8 @@ const course = (id, title = 'Test Course', extra = {}) => ({ format: 'wonkolingo
   { t: 'recall', p: 'Q2', answer: 'ans', x: 'why' }] }] }], ...extra });
 
 // --- basics
-let r = await call('/api/nope', { method: 'OPTIONS' }); ok(r.s === 204 && r.h.get('access-control-allow-origin') === '*', 'OPTIONS CORS', r.s);
+let r = await call('/api/nope', { method: 'OPTIONS', headers: { Origin: 'https://allintz.github.io' } }); ok(r.s === 204 && r.h.get('access-control-allow-origin') === 'https://allintz.github.io', 'OPTIONS CORS for the GitHub Pages copy', r.s);
+r = await call('/api/nope', { method: 'OPTIONS', headers: { Origin: 'https://evil.example' } }); ok(!r.h.get('access-control-allow-origin'), 'no CORS for other websites', r.h.get('access-control-allow-origin'));
 r = await call('/api/nope'); ok(r.s === 401, 'unknown route without auth -> 401', r);
 r = await call('/'); ok(r.s === 200 && String(r.d).includes('const GLOSSARY'), 'static index served with glossary');
 r = await call('/course-guide.md'); ok(r.s === 200, 'course guide served');

@@ -1,0 +1,530 @@
+// Browser tests in headless Chrome against a LOCAL `wrangler dev` (they create accounts and groups, so never production).
+// Run: node tests/e2e.test.mjs http://localhost:8799   (needs Google Chrome; set CHROME=/path/to/chrome otherwise)
+// Covers: cold start on every route, sign-up and sign-in, a full session, every card rendered and answered in every
+// style, saved states of every shape, phone layout, offline and slow networks, groups, and Me settings.
+import { chromium } from 'playwright-core';
+import { randomBytes } from 'node:crypto';
+
+const BASE = (process.argv[2] || 'http://localhost:8799').replace(/\/$/, '');
+if (/workers\.dev|github\.io/.test(BASE)) { console.error('Local server only: these tests create accounts.'); process.exit(2); }
+const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const ONLY = process.env.ONLY ? new Set(process.env.ONLY.split(',')) : null;
+let pass = 0, failN = 0; const fails = [];
+const ok = (cond, name, extra) => { if (cond) pass++; else { failN++; fails.push(name + (extra !== undefined ? ' :: ' + JSON.stringify(extra).slice(0, 400) : '')); } };
+const rnd = () => randomBytes(4).toString('hex');
+const PHONE = { viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 };
+
+const browser = await chromium.launch({ executablePath: CHROME, headless: true });
+// Each context looks like its own network, so per-IP limits don't pile up across tests and runs.
+async function ctx(opts = {}) {
+  const c = await browser.newContext({ ...(opts.phone === false ? { viewport: { width: 1280, height: 900 } } : PHONE), extraHTTPHeaders: { 'CF-Connecting-IP': `10.${randomBytes(1)[0]}.${randomBytes(1)[0]}.${randomBytes(1)[0]}` } });
+  if (opts.storage) await c.addInitScript(s => { if (!sessionStorage.getItem('seeded')) { sessionStorage.setItem('seeded', '1'); Object.entries(s).forEach(([k, v]) => v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v)); } }, opts.storage);
+  return c;
+}
+// A page that records uncaught errors and console errors (network failures we cause on purpose are filtered by callers).
+async function page(c) {
+  const p = await c.newPage();
+  p.errors = []; p.consoleErrors = [];
+  p.on('pageerror', e => p.errors.push(String(e.message || e)));
+  p.on('console', m => { if (m.type() === 'error') p.consoleErrors.push(m.text()); });
+  return p;
+}
+const ev = (p, expr) => p.evaluate(expr);
+const visible = (p, sel) => p.locator(sel).first().isVisible().catch(() => false);
+// Nothing invisible may sit on top of the tab bar or the main buttons: the 10/20 startup crash left the page unclickable.
+async function clickable(p, sel) {
+  return p.evaluate(s => {
+    const el = document.querySelector(s); if (!el) return 'missing';
+    el.scrollIntoView({ block: 'center' });
+    const r = el.getBoundingClientRect(); if (!r.width || !r.height) return 'zero-size';
+    const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    return hit && (hit === el || el.contains(hit)) ? true : 'covered by ' + (hit ? hit.tagName + '#' + hit.id + '.' + hit.className : 'nothing');
+  }, sel);
+}
+// Text a player would see that means a template went wrong.
+const BAD_TEXT = /\bundefined\b|\bnull\b|\[object Object\]|NaN|&amp;|&lt;|&gt;|&quot;|&#\d+;|\$\{/;
+const badText = t => { const m = String(t).match(BAD_TEXT); return m ? m[0] + ' in: ' + String(t).slice(Math.max(0, m.index - 60), m.index + 60) : null; };
+
+async function signUp(p, { name = 'Tester ' + rnd(), username = 'u' + rnd(), password = 'correct horse ' + rnd() } = {}) {
+  await p.goto(BASE + '/');
+  await p.click('#gtNew');
+  await p.fill('#gtName', name); await p.fill('#gtUser', username); await p.fill('#gtPass', password);
+  await p.click('#gtMake');
+  await p.waitForSelector('#gate', { state: 'hidden', timeout: 15000 });
+  return { name, username, password };
+}
+async function addToMix(p, key) { await ev(p, `go('courses')`); await p.click(`.switch[data-mix="${key}"]`); }
+// Answers whatever card is showing, correctly unless told otherwise; returns false once the session or lesson is over.
+// The app ignores a tap on Check or Continue in the first moment after the screen changes (stray double taps), as a person would.
+const settle = p => p.waitForFunction(() => !run || performance.now() - (run.phaseAt || 0) >= 360, null, { timeout: 5000 }).catch(() => {});
+async function answerOne(p, { wrong = false } = {}) {
+  if (await visible(p, '#result')) return false;
+  const s = await ev(p, `run && run.cur ? { phase: run.phase, mode: run.cur._mode, t: run.cur.t, mc: !!(run.cur._opts && document.querySelector('#stage .opt')) } : null`);
+  if (!s) return false;
+  if (s.phase === 'feedback') { await settle(p); await p.click('#checkBtn'); return true; }
+  if (s.phase === 'selfgrade') { await p.click(`[data-self="${wrong ? 0 : 3}"]`); return true; }
+  if (s.phase !== 'answer') { await p.waitForTimeout(200); return true; }
+  if (s.mc) {
+    const i = await ev(p, `run.cur._opts.findIndex(o => ${wrong ? '!' : ''}o.right)`);
+    await p.click(`#stage .opt[data-i="${i}"]`); await p.click('#checkBtn'); return true;
+  }
+  if (s.mode === 'reveal') { await settle(p); await p.click('#checkBtn'); return true; }
+  if (s.mode === 'typed') { await p.fill('#recallIn', 'a test answer'); await p.click('[data-conf="sure"]'); await p.waitForFunction(() => run && run.phase !== 'grading', null, { timeout: 15000 }); return true; }
+  if (s.t === 'match') {
+    const n = await ev(p, `run.cur.pairs.length`);
+    for (let i = 0; i < n; i++) { await p.click(`.tile[data-s="l"][data-i="${i}"]`); await p.click(`.tile[data-s="r"][data-i="${i}"]`); }
+    await p.waitForFunction(() => run && run.phase !== 'answer', null, { timeout: 3000 }); return true;
+  }
+  if (s.t === 'order') {
+    const n = await ev(p, `run.cur.items.length`);
+    for (let i = 0; i < n; i++) await p.click(`.chip[data-p="${i}"]`);
+    await settle(p); await p.click('#checkBtn'); return true;
+  }
+  throw new Error('Unknown card state ' + JSON.stringify(s));
+}
+
+const tests = {};
+
+// ---------- 1. Cold start: every route, signed out, desktop and phone
+tests.coldStart = async () => {
+  const keys = await (async () => { const c = await ctx(); const p = await page(c); await p.goto(BASE + '/'); const k = await ev(p, 'Object.keys(COURSES)'); await c.close(); return k; })();
+  const routes = ['', '#today', '#courses', '#group', '#me', ...keys.map(k => '#course/' + k), '#course/nope', '#course/', '#%E0%A4%A', '#<img src=x onerror=alert(1)>', '?join=ABC123', '?join=<b>x</b>#me'];
+  for (const phone of [true, false]) for (const r of routes) {
+    const c = await ctx({ phone }); const p = await page(c);
+    await p.goto(BASE + '/' + r); await p.waitForTimeout(150);
+    ok(p.errors.length === 0, `cold start ${r || '/'} (${phone ? 'phone' : 'desktop'}): no page errors`, p.errors);
+    ok(await visible(p, '#gate'), `cold start ${r || '/'}: sign-up screen shows`);
+    ok(await clickable(p, '#gtNew') === true, `cold start ${r || '/'}: Create an account is clickable`, await clickable(p, '#gtNew'));
+    if (phone) {
+      await p.click('#gtHave'); ok(await visible(p, '#gtUser'), `${r || '/'}: sign-in form opens`);
+      ok(await clickable(p, '#gtBack') === true, `${r || '/'}: Back is clickable on sign-in`);
+      await p.click('#gtBack'); ok(await visible(p, '#gtNew'), `${r || '/'}: Back returns to welcome`);
+    }
+    ok(!badText(await p.locator('#gate').innerText()), `cold start ${r || '/'}: no template junk on the sign-up screen`, badText(await p.locator('#gate').innerText()));
+    await c.close();
+  }
+};
+
+// ---------- 2. Sign-up validation, then a full session, then sign-in elsewhere sees the same progress
+tests.accountAndSession = async () => {
+  const c = await ctx(); const p = await page(c);
+  await p.goto(BASE + '/'); await p.click('#gtNew');
+  await p.click('#gtMake'); ok(/display name/i.test(await p.locator('.gerr').innerText().catch(() => '')), 'empty name is refused with a message');
+  await p.fill('#gtName', 'Val'); await p.fill('#gtUser', 'ab'); await p.fill('#gtPass', 'longenough');
+  await p.click('#gtMake'); ok(/3 characters/.test(await p.locator('.gerr').innerText().catch(() => '')), 'short username is refused');
+  ok(await p.inputValue('#gtName') === 'Val', 'fields keep their values after an error');
+  await p.fill('#gtUser', 'abc' + rnd()); await p.fill('#gtPass', 'short');
+  await p.click('#gtMake'); await p.waitForTimeout(300);
+  ok(/8 characters/.test(await p.locator('.gerr').innerText().catch(() => '')) || await ev(p, `document.querySelector('#gtPass').matches(':invalid')`), 'short password is refused');
+  ok(await visible(p, '#gtName'), 'still on the create step after a short password');
+  await c.close();
+
+  const c1 = await ctx(); const p1 = await page(c1);
+  const who = await signUp(p1);
+  ok(p1.errors.length === 0, 'sign-up: no page errors', p1.errors);
+  const acct = await ev(p1, `JSON.parse(localStorage.getItem('wl-account'))`);
+  ok(acct && acct.token && acct.username === who.username, 'account saved on the device with its username', acct && { ...acct, token: !!acct.token });
+  ok(await visible(p1, '.welcome'), 'new player sees the welcome card');
+  ok(await clickable(p1, '#wBrowse') === true, 'Pick a course is clickable', await clickable(p1, '#wBrowse'));
+  // Taken username on a second sign-up
+  { const cx = await ctx(); const px = await page(cx); await px.goto(BASE + '/'); await px.click('#gtNew'); await px.fill('#gtName', 'Dup'); await px.fill('#gtUser', who.username.toUpperCase()); await px.fill('#gtPass', 'another password');
+    await px.click('#gtMake'); await px.waitForSelector('.gerr', { timeout: 8000 }).catch(() => {}); ok(/taken/i.test(await px.locator('.gerr').innerText().catch(() => '')), 'taken username (other case) is refused'); await cx.close(); }
+
+  await p1.click('#wBrowse'); ok(await ev(p1, 'VIEW') === 'courses', 'Pick a course opens Courses');
+  await addToMix(p1, 'policy'); await addToMix(p1, 'lingo');
+  ok(await ev(p1, `mixKeys().join()`) === 'policy,lingo', 'two courses in the mix', await ev(p1, `mixKeys()`));
+  await ev(p1, `go('today')`);
+  ok(await clickable(p1, '#todayGo') === true, 'Start is clickable on Today', await clickable(p1, '#todayGo'));
+  const xp0 = await ev(p1, 'state.xp');
+  await p1.click('#todayGo');
+  let steps = 0, sawTypes = new Set();
+  while (steps++ < 120) { const t = await ev(p1, `run && run.cur ? run.cur._mode + ':' + run.cur.t : ''`); if (t) sawTypes.add(t); if (!await answerOne(p1, { wrong: steps === 2 })) break; }
+  ok(await visible(p1, '#result'), 'session reaches the result screen', { steps, types: [...sawTypes] });
+  const runXp = await ev(p1, 'run && run.xp');
+  ok(await ev(p1, 'state.xp') === xp0 + runXp && runXp > 0, 'session XP added exactly once', { xp0, runXp, now: await ev(p1, 'state.xp') });
+  ok(!badText(await p1.locator('#result').innerText()), 'result screen text is clean', badText(await p1.locator('#result').innerText()));
+  await p1.click('#rHome');
+  ok(await ev(p1, `state.activeDays.includes(dstr(new Date()))`), 'today counts as a practice day');
+  ok(await ev(p1, `state.xp`) === xp0 + runXp, 'XP unchanged after going home');
+  await p1.waitForTimeout(2500);
+  ok(p1.errors.length === 0, 'session: no page errors', p1.errors);
+  const srsN = await ev(p1, 'Object.keys(state.srs).length');
+  ok(srsN > 0, 'cards were scheduled', srsN);
+  await ev(p1, 'syncNow()'); await p1.waitForFunction(() => typeof syncState === 'undefined' || syncState !== 'saving', null, { timeout: 10000 }).catch(() => {});
+  await p1.waitForTimeout(1500);
+
+  // Another device: sign in with the password, see the same progress.
+  const c2 = await ctx(); const p2 = await page(c2);
+  await p2.goto(BASE + '/'); await p2.click('#gtHave');
+  await p2.fill('#gtUser', who.username); await p2.fill('#gtPass', 'wrong password');
+  await p2.click('#gtPwGo'); await p2.waitForSelector('.gerr', { timeout: 8000 }).catch(() => {});
+  ok(/password|match|wrong/i.test(await p2.locator('.gerr').innerText().catch(() => '')), 'wrong password shows an error', await p2.locator('.gerr').innerText().catch(() => ''));
+  await p2.fill('#gtPass', who.password); await p2.press('#gtPass', 'Enter');
+  await p2.waitForSelector('#gate', { state: 'hidden', timeout: 10000 }).catch(() => {});
+  ok(!await visible(p2, '#gate'), 'Enter in the password field signs in');
+  await p2.waitForFunction(n => Object.keys(state.srs).length >= n, srsN, { timeout: 10000 }).catch(() => {});
+  ok(await ev(p2, 'Object.keys(state.srs).length') === srsN, 'progress follows the account to a new device', { srsN, got: await ev(p2, 'Object.keys(state.srs).length') });
+  ok(await ev(p2, 'state.xp') === await ev(p1, 'state.xp'), 'XP matches on the new device', { a: await ev(p1, 'state.xp'), b: await ev(p2, 'state.xp') });
+  ok(await ev(p2, 'mixKeys().join()') === 'policy,lingo', 'daily mix follows the account');
+  ok(p2.errors.length === 0, 'second device: no page errors', p2.errors);
+
+  // Sign out clears the device and shows the sign-up screen again.
+  await ev(p2, `go('me')`);
+  ok(await visible(p2, '#aOut'), 'Me shows Sign out');
+  await p2.click('#aOut'); await p2.click('#aOut'); await p2.waitForTimeout(600);
+  ok(await visible(p2, '#gate'), 'signing out shows the sign-up screen');
+  ok(await ev(p2, `Object.keys(state.srs).length`) === 0 && await ev(p2, `!localStorage.getItem('wl-account')`), 'device progress and sign-in cleared after sign out', await ev(p2, `Object.keys(state.srs).length`));
+  await c1.close(); await c2.close();
+};
+
+// ---------- 3. Every card in every course renders and can be answered, in each answer style
+tests.everyCard = async () => {
+  const c = await ctx(); const p = await page(c);
+  await p.goto(BASE + '/');
+  // No account: the functions still work, and nothing syncs, so this can scribble on state freely.
+  const out = await p.evaluate(() => {
+    const problems = [], counts = {};
+    const BAD = /\bundefined\b|\bnull\b|\[object Object\]|NaN|&amp;|&lt;|&gt;|&quot;|&#\d+;|\$\{/;
+    const look = (where, el, it) => { const t = el.innerText; const m = t.match(BAD); if (m && it && JSON.stringify(it).includes(m[0])) return; if (m) problems.push(where + ': "' + m[0] + '" in ' + t.slice(Math.max(0, m.index - 50), m.index + 50)); if (el.innerHTML.length < 40) problems.push(where + ': nearly empty'); };
+    const keys = Object.keys(COURSES).filter(k => k !== 'terms');
+    for (const style of ['mixed', 'reveal', 'typed', 'short']) {
+      state.prefs = state.prefs || {}; state.prefs.style = style === 'reveal' ? 'mixed' : style; state.prefs.courseStyle = {};
+      for (const k of keys) {
+        state.course = k; buildLessons();
+        for (let i = 0; i < LESSONS.length; i++) {
+          if (style === 'reveal') LESSONS[i].items.forEach((it, j) => { state.srs[cardId(LESSONS[i].id, j, it)] = { due: '2999-01-01', ok: 5, reps: 5 }; });
+          try { startLesson(i); } catch (e) { problems.push(`${style} ${k} lesson ${i}: start threw ${e.message}`); continue; }
+          let guard = 0;
+          while (run && guard++ < 200) {
+            const it = run.cur, where = `${style} ${k} ${it._card} (${it._mode}/${it.t})`;
+            counts[style + ':' + it._mode] = (counts[style + ':' + it._mode] || 0) + 1;
+            try {
+              look(where + ' question', document.querySelector('#stage'), it);
+              if (it._mode === 'typed') { showTyped(it, 3, '', 'sure', 'self'); }
+              else if (it._mode === 'reveal') { check(); look(where + ' reveal', document.querySelector('#fb'), it); showTyped(it, 3, '', 'sure', 'self'); }
+              else if (it.t === 'mc' || it._asMC) { pickMC(it._opts.findIndex(o => o.right)); check(); }
+              else if (it.t === 'match') grade(true, '');
+              else if (it.t === 'order') { run.ans = it.items.map((_, x) => x); check(); }
+              look(where + ' feedback', document.querySelector('#fb'), it);
+              if (run.phase !== 'feedback') problems.push(where + ': not in feedback after answering, phase ' + run.phase);
+            } catch (e) { problems.push(where + ': threw ' + e.message); }
+            if (!run.queue.length) break;
+            nextItem();
+          }
+          run = null; show(null);
+        }
+      }
+      state.srs = {}; state.done = {};
+    }
+    return { problems, counts };
+  });
+  ok(out.problems.length === 0, `every card renders cleanly (${Object.values(out.counts).reduce((a, b) => a + b, 0)} renders)`, out.problems.slice(0, 15));
+  if (out.problems.length) console.log('card problems (' + out.problems.length + '):\n  ' + out.problems.slice(0, 40).join('\n  '));
+  ok(out.counts['mixed:choice'] > 0 && out.counts['reveal:reveal'] > 0 && out.counts['typed:typed'] > 0, 'all answer modes were exercised', out.counts);
+  ok(p.errors.length === 0, 'every card: no page errors', p.errors.slice(0, 5));
+  await c.close();
+};
+
+// ---------- 4. Saved states of every shape must not break startup
+tests.stateMatrix = async () => {
+  const day = d => new Date(Date.now() - d * 864e5).toISOString().slice(0, 10);
+  const acct = JSON.stringify({ token: 'zz.notreal', player: { id: 'zz', name: 'Ghost' }, passkeys: 0 });
+  const states = {
+    corrupt: { 'hillspeak-v1': '{not json' },
+    emptyObject: { 'hillspeak-v1': '{}' },
+    jsonNull: { 'hillspeak-v1': 'null' },
+    jsonArray: { 'hillspeak-v1': '[1,2,3]' },
+    v1LessonPath: { 'hillspeak-v1': JSON.stringify({ done: { u0l0: true, u0l1: true }, xp: 120, streak: 3, last: day(1) }) },
+    nullFields: { 'hillspeak-v1': JSON.stringify({ done: null, xp: null, srs: null, activeDays: null, settings: null, mix: null, prefs: null, removed: null, myTerms: null, hints: null, newCounts: null, accepted: null, course: null }) },
+    wrongTypes: { 'hillspeak-v1': JSON.stringify({ done: [], xp: '12', srs: [], activeDays: 'x', settings: 5, mix: [], prefs: 'a', removed: [], myTerms: {}, course: 42 }) },
+    oddCards: { 'hillspeak-v1': JSON.stringify({ srs: { 'zzz#1': { due: day(3) }, 'au0l0#0': null, 'au0l0#1': { due: 'garbage', s: -1 }, 'c:gone:u0l0#0': { due: day(1), ok: 3 } }, mix: { policy: { on: true, perDay: 999 }, gone: { on: true } }, course: 'gone', activeDays: [day(0), day(1), 'bad'] }) },
+    unknownCourse: { 'hillspeak-v1': JSON.stringify({ course: 'nope', mix: { nope: { on: true } } }) },
+    badAccount: { 'wl-account': acct },
+    accountNoState: { 'wl-account': acct, 'hillspeak-v1': null },
+    badGroup: { 'wl-account': acct, 'hillspeak-group': JSON.stringify({ code: 'NOPE12', groupName: '<b>x</b>', player: { id: 'zz', name: 'G' }, token: 'zz.notreal' }) },
+    groupJunk: { 'hillspeak-group': '{"code":' },
+    accountJunk: { 'wl-account': '{"token":' },
+  };
+  for (const [name, storage] of Object.entries(states)) {
+    for (const route of ['', '#courses', '#course/policy', '#me', '#group']) {
+      const c = await ctx({ storage }); const p = await page(c);
+      await p.goto(BASE + '/' + route); await p.waitForTimeout(400);
+      ok(p.errors.length === 0, `state ${name} ${route || '/'}: no page errors`, p.errors);
+      const gate = await visible(p, '#gate');
+      if (!gate) for (const tab of ['today', 'courses', 'group', 'me']) {
+        const sel = `#tabs [data-tab="${tab}"]`;
+        const cl = await clickable(p, sel);
+        ok(cl === true, `state ${name} ${route || '/'}: tab ${tab} clickable`, cl);
+        if (cl === true) { await p.click(sel); await p.waitForTimeout(80); ok(await ev(p, 'VIEW') === tab, `state ${name}: tab ${tab} switches view`); }
+      }
+      ok(p.errors.length === 0, `state ${name} ${route || '/'}: no errors after clicking around`, p.errors);
+      await c.close();
+    }
+  }
+};
+
+// ---------- 5. Phone layout: no sideways scrolling, nothing hidden under the tab bar
+tests.phoneLayout = async () => {
+  const c = await ctx(); const p = await page(c);
+  await signUp(p); await addToMix(p, 'tools');
+  for (const v of ['today', 'courses', 'group', 'me']) {
+    await ev(p, `go('${v}')`); await p.waitForTimeout(150);
+    const w = await ev(p, `({ sw: document.documentElement.scrollWidth, iw: innerWidth })`);
+    ok(w.sw <= w.iw + 1, `phone ${v}: no sideways scroll`, w);
+    const wide = await ev(p, `[...document.querySelectorAll('main *, #home *')].filter(e => { const r = e.getBoundingClientRect(); return r.width && r.right > innerWidth + 1 && getComputedStyle(e).position !== 'fixed'; }).slice(0, 5).map(e => e.tagName + '.' + e.className + ' ' + Math.round(e.getBoundingClientRect().right))`);
+    ok(wide.length === 0, `phone ${v}: nothing sticks out past the screen edge`, wide);
+  }
+  await ev(p, `go('course', 'tools')`); await p.waitForTimeout(150);
+  ok(await ev(p, `document.documentElement.scrollWidth <= innerWidth + 1`), 'phone course page: no sideways scroll');
+  // Last element of Me must be reachable above the tab bar.
+  await ev(p, `go('me')`); await p.evaluate(() => window.scrollTo(0, document.body.scrollHeight)); await p.waitForTimeout(150);
+  const hidden = await ev(p, `(() => { const tabs = document.querySelector('#tabs'); const tb = tabs.getBoundingClientRect(); const items = [...document.querySelectorAll('#home button, #home a')].filter(b => b.offsetParent); const last = items[items.length - 1]; if (!last) return 'no buttons'; const r = last.getBoundingClientRect(); return r.bottom <= tb.top + 1 ? true : (last.id || last.textContent.trim().slice(0, 30)) + ' bottom ' + Math.round(r.bottom) + ' tabs top ' + Math.round(tb.top); })()`);
+  ok(hidden === true, 'phone Me: last button is above the tab bar when scrolled down', hidden);
+  // In a session the answer button must be on screen.
+  await ev(p, `go('today')`); await p.click('#todayGo');
+  ok(await clickable(p, '#checkBtn') === true || await visible(p, '#recallIn'), 'phone session: Check button reachable', await clickable(p, '#checkBtn'));
+  ok(p.errors.length === 0, 'phone layout: no page errors', p.errors);
+  await c.close();
+};
+
+// ---------- 6. Offline first launch and a dead or slow API
+tests.network = async () => {
+  { // Offline from the start: the sign-up screen must offer a way in.
+    const c = await ctx(); const p = await page(c);
+    await p.route('**/api/**', r => r.abort('internetdisconnected'));
+    await p.goto(BASE + '/'); await p.click('#gtNew');
+    await p.fill('#gtName', 'Offline'); await p.fill('#gtUser', 'off' + rnd()); await p.fill('#gtPass', 'password123');
+    await p.click('#gtMake'); await p.waitForTimeout(800);
+    ok(await visible(p, '.gerr'), 'offline sign-up shows an error');
+    ok(!(await p.locator('#gtMake').isDisabled()), 'offline sign-up: button usable again after the error');
+    ok(await visible(p, '#gtOffline'), 'offline sign-up offers Continue offline');
+    if (await visible(p, '#gtOffline')) { await p.click('#gtOffline'); ok(!await visible(p, '#gate'), 'Continue offline closes the sign-up screen'); await ev(p, `go('courses')`); await p.click('.switch[data-mix="lingo"]'); await ev(p, `go('today')`); await p.click('#todayGo'); for (let i = 0; i < 4; i++) await answerOne(p); ok(p.errors.length === 0, 'offline: a session works', p.errors); }
+    await c.close();
+  }
+  { // Signed in, then the API dies: sessions still work and the Saved chip says so.
+    const c = await ctx(); const p = await page(c);
+    await signUp(p); await addToMix(p, 'proc'); await ev(p, `go('today')`);
+    await p.route('**/api/**', r => r.abort('internetdisconnected'));
+    await p.click('#todayGo'); let n = 0; while (n++ < 60 && await answerOne(p)) {}
+    ok(await visible(p, '#result'), 'API down: session still finishes');
+    await p.click('#rHome'); await p.waitForTimeout(1500);
+    const chip = await p.getAttribute('#saved', 'data-s').catch(() => '');
+    ok(chip !== 'saved', 'API down: the Saved chip does not claim it saved', chip);
+    ok(p.errors.length === 0, 'API down: no page errors', p.errors);
+    await p.unroute('**/api/**'); await ev(p, 'syncNow()'); await p.waitForTimeout(2000);
+    ok(await p.getAttribute('#saved', 'data-s').catch(() => '') === 'saved', 'API back: progress saves', await p.getAttribute('#saved', 'data-s').catch(() => ''));
+    await c.close();
+  }
+  { // Slow API: no double accounts from double taps.
+    const c = await ctx(); const p = await page(c);
+    let posts = 0;
+    await p.route('**/api/account', async r => { posts++; await new Promise(res => setTimeout(res, 1500)); await r.continue(); });
+    await p.goto(BASE + '/'); await p.click('#gtNew');
+    await p.fill('#gtName', 'Slow'); await p.fill('#gtUser', 'slow' + rnd()); await p.fill('#gtPass', 'password123');
+    await p.click('#gtMake'); await p.click('#gtMake', { force: true, timeout: 500 }).catch(() => {}); await p.press('#gtPass', 'Enter').catch(() => {});
+    await p.waitForSelector('#gate', { state: 'hidden', timeout: 10000 }).catch(() => {});
+    ok(posts === 1, 'double tap on Create account sends one request', posts);
+    ok(p.errors.length === 0, 'slow API: no page errors', p.errors);
+    await c.close();
+  }
+};
+
+// ---------- 7. Groups between two accounts
+tests.groups = async () => {
+  const ca = await ctx(); const a = await page(ca); await signUp(a, { name: 'Ann ' + rnd() });
+  await ev(a, `go('group')`);
+  ok(await visible(a, '#gName') || await visible(a, '#gGroup'), 'Group tab offers to start or join a group');
+  const startBtn = await ev(a, `(() => { const b = [...document.querySelectorAll('#group button')].find(b => /start/i.test(b.textContent)); if (b) b.id = b.id || 'tStart'; return b ? '#' + b.id : null; })()`);
+  if (startBtn) await a.click(startBtn);
+  if (await visible(a, '#gGroup')) await a.fill('#gGroup', 'Test club ' + rnd());
+  await a.click('#gGo'); await a.waitForFunction(() => G && G.code, null, { timeout: 8000 }).catch(() => {});
+  const code = await ev(a, 'G && G.code');
+  ok(code && code.length === 6, 'started a group with a 6-character code', code);
+  const cb = await ctx(); const b = await page(cb); await signUp(b, { name: 'Bob ' + rnd() });
+  await b.goto(BASE + '/?join=' + code); await b.waitForTimeout(500); await ev(b, `go('group')`);
+  if (await visible(b, '#gCode')) { const v = await b.inputValue('#gCode'); if (!v) await b.fill('#gCode', code); }
+  await b.click('#gGo'); await b.waitForFunction(() => G && G.code, null, { timeout: 8000 }).catch(() => {});
+  ok(await ev(b, 'G && G.code') === code, 'second account joined with the code');
+  await ev(a, 'refreshBoard && refreshBoard()'); await a.waitForTimeout(1500);
+  const names = await ev(a, `board ? board.players.map(p => p.name) : []`);
+  ok(names.length === 2, 'leaderboard shows both players', names);
+  ok(!badText(await a.locator('#home').innerText()), 'group page text is clean', badText(await a.locator('#home').innerText()));
+  ok(a.errors.length === 0 && b.errors.length === 0, 'groups: no page errors', [...a.errors, ...b.errors]);
+  await ca.close(); await cb.close();
+};
+
+// ---------- 8. Me: settings, removed questions, password change
+tests.me = async () => {
+  const c = await ctx(); const p = await page(c);
+  const who = await signUp(p); await addToMix(p, 'policy');
+  await ev(p, `go('me')`);
+  ok(!badText(await p.locator('#home').innerText()), 'Me text is clean', badText(await p.locator('#home').innerText()));
+  // Remove a question mid-session, then restore it from Me.
+  await ev(p, `go('today')`); await p.click('#todayGo');
+  const card = await ev(p, 'run.cur._card');
+  await answerOne(p); if (await ev(p, `run.phase`) === 'selfgrade') await answerOne(p);
+  const rm = await visible(p, '#rmBtn');
+  if (rm) {
+    await p.click('#rmBtn'); await p.click('[data-rm="trivia"]'); await p.waitForTimeout(300);
+    ok(await visible(p, '#rmUndo'), 'removing shows Undo');
+    ok(await ev(p, `isRemoved(${JSON.stringify(card)})`), 'Remove this question marks the card removed', card);
+  } else ok(false, 'Remove this question button visible after answering');
+  await ev(p, 'quitRun(true)'); await ev(p, `go('me')`);
+  ok(await ev(p, `document.querySelector('#home').innerText.includes('Removed') || document.querySelector('#home').innerText.includes('removed')`), 'Me lists removed questions');
+  // Change the password, then sign in with the new one elsewhere.
+  if (await visible(p, '#aPwEdit')) await p.click('#aPwEdit');
+  ok(await visible(p, '#aPwPass'), 'Me offers a password field');
+  const np = 'brand new password ' + rnd();
+  ok(await visible(p, '#aPwCur'), 'changing a password asks for the current one');
+  await p.fill('#aPwPass', np); await p.press('#aPwPass', 'Enter'); await p.waitForTimeout(800);
+  ok(/current password/i.test(await p.locator('#acctCard .gerr').innerText().catch(() => '')), 'leaving the current password blank explains what to do');
+  await p.fill('#aPwCur', 'not my password'); await p.fill('#aPwPass', np); await p.press('#aPwPass', 'Enter'); await p.waitForTimeout(1200);
+  ok(/isn’t right/.test(await p.locator('#acctCard .gerr').innerText().catch(() => '')), 'a wrong current password is refused', await p.locator('#acctCard .gerr').innerText().catch(() => ''));
+  await p.fill('#aPwCur', who.password); await p.fill('#aPwPass', np); await p.press('#aPwPass', 'Enter'); await p.waitForTimeout(1500);
+  await ev(p, 'syncNow()'); await p.waitForTimeout(1500);
+  const c2 = await ctx(); const p2 = await page(c2); await p2.goto(BASE + '/'); await p2.click('#gtHave');
+  await p2.fill('#gtUser', who.username); await p2.fill('#gtPass', np); await p2.click('#gtPwGo');
+  await p2.waitForSelector('#gate', { state: 'hidden', timeout: 10000 }).catch(() => {});
+  ok(!await visible(p2, '#gate'), 'new password works on another device');
+  await p2.waitForTimeout(1500);
+  ok(await ev(p2, `isRemoved(${JSON.stringify(card)})`), 'removed question stays removed on the other device');
+  ok(p.errors.length === 0 && p2.errors.length === 0, 'Me: no page errors', [...p.errors, ...p2.errors]);
+  await c.close(); await c2.close();
+};
+
+// ---------- 9. Regression checks for the 10/21 client review
+tests.fixes = async () => {
+  { // Sign-up can always get in: a 429 or a 500 from the server offers "Continue offline".
+    for (const status of [429, 500]) {
+      const c = await ctx(); const p = await page(c);
+      await p.route('**/api/account', r => r.fulfill({ status, contentType: 'application/json', body: JSON.stringify({ error: 'Too many new accounts from this network today. Try again tomorrow.' }) }));
+      await p.goto(BASE + '/'); await p.click('#gtNew');
+      await p.fill('#gtName', 'Busy'); await p.fill('#gtUser', 'busy' + rnd()); await p.fill('#gtPass', 'password123'); await p.click('#gtMake');
+      await p.waitForSelector('#gtOffline', { timeout: 5000 }).catch(() => {});
+      ok(await visible(p, '#gtOffline'), `sign-up after a ${status} offers Continue offline`);
+      if (await visible(p, '#gtOffline')) { await p.click('#gtOffline'); await ev(p, `go('courses')`); await p.click('.switch[data-mix="lingo"]'); await ev(p, `go('today')`); await p.click('#todayGo'); await answerOne(p); await ev(p, 'quitRun(true)');
+        ok(await p.getAttribute('#saved', 'data-s') === 'local', 'without an account the chip says progress is on this device', await p.getAttribute('#saved', 'data-s')); }
+      await c.close();
+    }
+  }
+  const c = await ctx(); const p = await page(c);
+  const who = await signUp(p); await addToMix(p, 'proc'); await ev(p, `go('today')`);
+  { // Quit asks once mid-session; Back quits; answers already given count.
+    await p.click('#todayGo'); await answerOne(p); if (await ev(p, 'run.phase') === 'feedback') await answerOne(p);
+    await p.click('#quitBtn'); ok(await visible(p, '#lesson'), 'first tap on quit mid-session keeps the lesson open');
+    await p.click('#quitBtn'); ok(!await visible(p, '#lesson'), 'second tap quits');
+    ok(await ev(p, `state.activeDays.includes(dstr(new Date())) && state.xp > 0`), 'quitting keeps the practice day and XP', await ev(p, 'state.xp'));
+    const xp1 = await ev(p, 'state.xp');
+    await p.click('#todayGo'); await answerOne(p); if (await ev(p, 'run.phase') === 'feedback') await answerOne(p);
+    await p.goBack(); await p.waitForTimeout(300);
+    ok(!await visible(p, '#lesson') && await ev(p, 'run === null'), 'Back quits a lesson instead of leaving the app', p.url());
+    ok(p.url().startsWith(BASE), 'still on the app after Back');
+    ok(await ev(p, 'state.xp') > xp1, 'Back keeps the XP earned so far', { xp1, now: await ev(p, 'state.xp') });
+    await ev(p, `go('courses')`); await ev(p, `go('me')`); await p.goBack(); await p.waitForTimeout(200);
+    ok(await ev(p, 'VIEW') === 'courses', 'Back returns to the previous tab', await ev(p, 'VIEW'));
+  }
+  { // Closing the page mid-session keeps the practice day and XP.
+    const c2 = await ctx(); const p2 = await page(c2); await signUp(p2); await addToMix(p2, 'lingo'); await ev(p2, `go('today')`);
+    await p2.click('#todayGo'); await answerOne(p2); if (await ev(p2, 'run.phase') === 'feedback') await answerOne(p2);
+    const earned = await ev(p2, 'run.xp');
+    await p2.goto(BASE + '/#me'); await p2.waitForTimeout(300);
+    ok(await ev(p2, 'state.xp') === earned && earned > 0, 'closing the page mid-session banks the XP once', { earned, now: await ev(p2, 'state.xp') });
+    ok(await ev(p2, 'state.activeDays.includes(dstr(new Date()))'), 'closing the page mid-session keeps the practice day');
+    await c2.close();
+  }
+  { // Typed answers: Enter checks.
+    await ev(p, `state.prefs = { ...(state.prefs || {}), style: 'typed' }; save();`); await ev(p, `go('today')`);
+    await p.click(await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
+    if (await visible(p, '#recallIn')) { await p.fill('#recallIn', 'my answer'); await p.press('#recallIn', 'Enter'); await p.waitForFunction(() => run && run.phase !== 'answer', null, { timeout: 15000 }).catch(() => {});
+      ok(await ev(p, 'run.phase') !== 'answer', 'Enter in a typed answer checks it'); }
+    else ok(false, 'typed style shows a text box');
+    await ev(p, 'quitRun(true)'); await ev(p, `state.prefs.style = 'mixed'; save();`);
+  }
+  { // My terms: a removal survives a sync.
+    await ev(p, `toggleMyTerm('cloture'); syncNow()`); await p.waitForTimeout(1500);
+    await ev(p, `toggleMyTerm('cloture'); syncNow()`); await p.waitForTimeout(1500);
+    ok(await ev(p, `!hasTerm('cloture') && !COURSES.terms`), 'removed term stays removed after syncing', await ev(p, 'state.myTerms'));
+  }
+  { // Merging: the most recent change to a card wins, even with the same review count.
+    const r = await ev(p, `(() => { const a = { srs: { x: { due: '2027-01-10', last: '2026-10-20', s: 9, d: 5, reps: 1, at: 2000 } } }, b = { srs: { x: { due: '2026-10-23', last: '2026-10-20', s: 2, d: 5, reps: 1, at: 1000 } } };
+      return [mergeStates(a, b).srs.x.due, mergeStates(b, a).srs.x.due]; })()`);
+    ok(r[0] === '2027-01-10' && r[1] === '2027-01-10', 'newest grade wins the merge either way round', r);
+  }
+  { // Two tabs: a save in one is folded into the other.
+    const p3 = await page(c); await p3.goto(BASE + '/'); await p3.waitForTimeout(500);
+    const before = await ev(p3, 'Object.keys(state.srs).length');
+    await ev(p, `go('today')`); await p.click(await visible(p, '#todayGo') ? '#todayGo' : '#todayMore'); await answerOne(p); if (await ev(p, 'run.phase') === 'feedback') await answerOne(p); await ev(p, 'quitRun(true)');
+    await p3.waitForTimeout(500);
+    ok(await ev(p3, 'Object.keys(state.srs).length') > before, 'the other tab picks up the new progress', { before, after: await ev(p3, 'Object.keys(state.srs).length') });
+    await p3.close();
+  }
+  { // Landscape cards that duplicate a Toolkit card are skipped when both courses are in the mix.
+    const r = await ev(p, `(() => { const dups = courseCards('policy').filter(c => c.item.dup).length; setMix('policy', true); setMix('tools', false); const a = newCardsAvailable('policy').length; setMix('tools', true); const b = newCardsAvailable('policy').length; setMix('policy', false); setMix('tools', false); return { dups, a, b }; })()`);
+    ok(r.dups === 0 || r.a - r.b === r.dups, 'duplicate Landscape cards hidden only when Toolkit is in the mix', r);
+  }
+  { // Sign-out with unsynced progress while the server is down: a warning, then a second click signs out anyway.
+    await p.route('**/api/**', r => r.abort('internetdisconnected'));
+    await ev(p, `state.xpBy[DEV] = (state.xpBy[DEV] || 0) + 1; save();`); await ev(p, `go('me')`);
+    await p.click('#aOut'); await p.click('#aOut'); await p.waitForTimeout(800);
+    ok(await visible(p, '#acctCard .gerr') && !await visible(p, '#gate'), 'sign-out warns when progress hasn’t saved', await p.locator('#acctCard .gerr').innerText().catch(() => ''));
+    await p.click('#aOut'); await p.waitForTimeout(400);
+    ok(await visible(p, '#gate'), 'clicking again signs out anyway');
+    await p.unroute('**/api/**');
+  }
+  ok(p.errors.length === 0, 'fixes: no page errors', p.errors);
+  await c.close();
+  { // Group feed shows lesson titles from the app's own course copy, not text the poster sent.
+    const ca = await ctx(); const a = await page(ca); await signUp(a);
+    await ev(a, `go('group')`); await a.click('[data-gmode="start"]'); await a.fill('#gGroup', 'Feed club'); await a.fill('#gName', 'Ann'); await a.click('#gGo');
+    await a.waitForFunction(() => G && G.code, null, { timeout: 8000 });
+    await ev(a, `apiCall('/api/complete', { lessonId: 'au0l0', title: 'Visit spam.example now', xp: 10, acc: 90, day: dstr(new Date()) })`); await ev(a, 'refreshBoard()'); await a.waitForTimeout(800);
+    const txt = await a.locator('.feed').innerText().catch(() => '');
+    ok(!/spam\.example/.test(txt) && txt.includes(await ev(a, `COURSES.policy.units[0].lessons[0].title`)), 'feed uses the course’s own lesson title', txt);
+    await ca.close();
+  }
+};
+
+// ---------- 10. Email: confirm at sign-up, then a forgotten password (needs a server in email test mode; skipped otherwise)
+tests.email = async () => {
+  const cfg = await (await fetch(BASE + '/api/config')).json().catch(() => ({}));
+  if (!cfg.email) { console.log('  (email tests skipped: start wrangler dev with --var EMAIL_TEST_MODE:1)'); return; }
+  const c = await ctx(); const p = await page(c);
+  const tag = rnd(), email = `e2e.${tag}@example.com`, username = 'em' + tag;
+  await p.goto(BASE + '/'); await p.click('#gtNew');
+  await p.waitForSelector('#gtEmail', { timeout: 5000 }).catch(() => {});
+  ok(await visible(p, '#gtEmail'), 'sign-up offers an optional email when the server can send mail');
+  await p.fill('#gtName', 'Em'); await p.fill('#gtUser', username); await p.fill('#gtPass', 'first password 1'); await p.fill('#gtEmail', email);
+  const sent = p.waitForResponse(r => r.url().endsWith('/api/email'));
+  await p.click('#gtMake'); const code = (await (await sent).json()).devCode;
+  await p.waitForSelector('#gtVCode', { timeout: 8000 }).catch(() => {});
+  ok(await visible(p, '#gtVCode'), 'after sign-up with an email, the confirm-code step shows');
+  await p.fill('#gtVCode', code); await p.press('#gtVCode', 'Enter');
+  await p.waitForSelector('#gate', { state: 'hidden', timeout: 8000 }).catch(() => {});
+  ok(!await visible(p, '#gate') && await ev(p, 'ACCT.email') === email, 'code confirms the email and opens the app', await ev(p, 'ACCT && ACCT.email'));
+  await ev(p, `go('me')`); ok((await p.locator('#acctCard').innerText()).includes(email), 'Me shows the email');
+  await p.click('#aOut'); await p.click('#aOut'); await p.waitForTimeout(500);
+  // Forgot the password: sign in by email, then set a new one without the old.
+  await p.click('#gtHave'); await p.click('#gtEmailMode'); await p.fill('#gtEmailIn', email.toUpperCase());
+  const req = p.waitForResponse(r => r.url().endsWith('/api/email/signin-request'));
+  await p.press('#gtEmailIn', 'Enter'); const code2 = (await (await req).json()).devCode;
+  await p.waitForSelector('#gtECode', { timeout: 8000 }).catch(() => {});
+  await p.fill('#gtECode', code2); await p.press('#gtECode', 'Enter');
+  await p.waitForSelector('#gate', { state: 'hidden', timeout: 8000 }).catch(() => {});
+  ok(!await visible(p, '#gate') && await ev(p, 'VIEW') === 'me', 'email code signs in and opens Me');
+  ok(await visible(p, '#aPwPass') && !await visible(p, '#aPwCur'), 'a fresh email sign-in can set a new password without the old one');
+  await p.fill('#aPwPass', 'second password 2'); await p.press('#aPwPass', 'Enter'); await p.waitForTimeout(1500);
+  const r = await (await fetch(BASE + '/api/password/login', { method: 'POST', headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': '10.9.9.' + (Math.random() * 200 | 0) }, body: JSON.stringify({ username, password: 'second password 2' }) })).json();
+  ok(!!r.token, 'the new password works', r);
+  ok(p.errors.length === 0, 'email: no page errors', p.errors);
+  await c.close();
+};
+
+for (const [name, fn] of Object.entries(tests)) {
+  if (ONLY && !ONLY.has(name)) continue;
+  const t0 = Date.now();
+  try { await fn(); } catch (e) { ok(false, `${name} crashed: ${e.message.split('\n')[0]}`); }
+  console.log(`${name}: ${((Date.now() - t0) / 1000).toFixed(1)}s, ${failN} failures so far`);
+}
+await browser.close();
+console.log(`PASS ${pass}  FAIL ${failN}`); fails.forEach(f => console.log('FAIL', f));
+process.exit(failN ? 1 : 0);

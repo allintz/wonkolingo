@@ -331,8 +331,8 @@
         "p": "Why would a cap on frontier training runs probably not slow AI progress in proportion to the training forgone?",
         "o": [
          "Developers would substitute other inputs, like better algorithms, data and inference-time compute",
-         "Labs would simply ignore the cap, since no country could reliably detect a violation",
-         "The cap would cover only open-weight models, leaving closed frontier models free to scale",
+         "Labs would mostly ignore the cap, since countries can't reliably detect violations",
+         "The cap would mainly bind open-weight models, leaving closed frontier models free to scale",
          "Training compute has no real link to capability, so capping it would change nothing"
         ],
         "a": 0,
@@ -776,8 +776,8 @@
         "p": "Why might US intelligence agencies need unilateral ways to monitor foreign AI compute?",
         "o": [
          "Verification fails if big data centers are hidden, and deals may come before verification is ready",
-         "Intelligence monitoring is far cheaper than verification technology, so it could replace that work entirely",
-         "Foreign labs have agreed to share their compute data only with US intelligence agencies, not with others",
+         "Intelligence monitoring is far cheaper than verification technology, so it could take over that work",
+         "Foreign labs have agreed to share their compute data with US intelligence agencies instead of inspectors",
          "Verification technology is already mature, so intelligence agencies need only confirm its readings"
         ],
         "a": 0,
@@ -1218,7 +1218,7 @@
       {
        "id": "au1l1#10",
        "t": "mc",
-       "p": "Some critics say the companies building frontier AI shouldn't design the rules that pace it. Which of these approaches best fits that view?",
+       "p": "Some critics say the companies building frontier AI shouldn’t design the rules that pace it. What kind of approach fits that view?",
        "o": [
         "Government enforces clear liability with punitive damages, plus transparency rules set by law",
         "Frontier labs host embedded evaluators and coordinate under a narrow antitrust waiver, starting voluntarily",
@@ -1292,8 +1292,8 @@
         "p": "Which developers does California's SB 53 require to publish and follow a safety framework?",
         "o": [
          "Over 500 million dollars in annual revenue, training models with more than 10^26 operations",
-         "Any company of any size that offers an AI chatbot to California residents",
-         "Any developer training a model with more than 10^25 operations, whatever its revenue",
+         "Companies that offer an AI chatbot to California residents, whatever their size",
+         "Developers training a model with more than 10^25 operations, whatever their revenue",
          "Only developers that release open-weight models used by over 1 million people"
         ],
         "a": 0,
@@ -1334,7 +1334,8 @@
          "SB 53 gives the state no power to approve or block releases.",
          "SB 53 is a state law; federal preemption is a separate debate."
         ]
-       }
+       },
+       "dup": "tu1l0#nwkzhni"
       },
       {
        "id": "au2l0#5",
@@ -1391,7 +1392,8 @@
          "Disclosure mandates require documentation, not pre-approval.",
          "Model cards report test results; they don't replace testing."
         ]
-       }
+       },
+       "dup": "tu1l1#nyp4r0t"
       },
       {
        "id": "au2l0#7",
@@ -1420,7 +1422,8 @@
          "Disclosure mandates require publication, not FTC approval.",
          "Critics focus on legal risk, self-reporting and hazards, not length."
         ]
-       }
+       },
+       "dup": "tu1l1#nfpqfh9"
       },
       {
        "id": "au2l0#8",
@@ -1531,12 +1534,13 @@
          "SB 53 reports are confidential, with anonymized annual summaries.",
          "The laws cover large frontier developers generally."
         ]
-       }
+       },
+       "dup": "tu2l0#1"
       },
       {
        "id": "au2l1#n7bm7u7",
        "t": "recall",
-       "p": "Why might an AI incident reporting system need voluntary reports from individuals and citizen reports from the public, journalists and watchdogs, as well as mandatory reports from companies?",
+       "p": "Some researchers propose a 'hybrid' AI incident reporting system that adds voluntary reports from individuals and citizen reports from the public, journalists and watchdogs to mandatory company reports. What weakness of mandatory-only reporting is this meant to fix?",
        "answer": "Mandatory reporting only captures incidents within its legal scope, and each channel alone leaves gaps. Voluntary reports from individuals and groups, and citizen reports from the public, journalists and watchdogs, capture incidents the mandatory system misses, giving fuller and more representative data on AI harms.",
        "keys": [
         "Mandatory reports miss incidents outside their legal scope",
@@ -1544,19 +1548,19 @@
        ],
        "x": "This 'hybrid' design was proposed by Ren Bin Lee Dixon and Heather Frase of CSET (Georgetown's Center for Security and Emerging Technology) in March 2024. They note that healthcare's reliance on voluntary reporting led to missing incidents. They want all three channels under one federal framework with a standardized classification system, warning that uneven state or domain-specific standards make aggregate incident data unreliable.",
        "choice": {
-        "p": "Why might an AI incident reporting system need voluntary and citizen reports as well as mandatory company reports?",
+        "p": "What weakness of mandatory-only incident reporting is a 'hybrid' system, which adds voluntary and citizen reports, meant to fix?",
         "o": [
-         "Mandatory reports miss incidents outside their scope; voluntary and citizen reports fill the gaps",
-         "Mandatory reporting violates the First Amendment, so only voluntary reports are allowed",
-         "Companies already report everything, so citizen reports are needed only for small firms",
-         "A hybrid system would let each state keep its own separate incident reporting format"
+         "It captures only incidents inside its legal scope, so many others go unrecorded",
+         "Mandatory reporting may break the First Amendment, so voluntary reports must replace it",
+         "Companies report too many trivial incidents, so citizen reports help sort out what matters",
+         "It forces states to share one format, so a hybrid lets each state keep its own"
         ],
         "a": 0,
         "ow": [
          "",
          "In a hybrid system, mandatory reporting stays one of the channels.",
-         "The worry is that mandatory reporting misses incidents, not that it reports everything.",
-         "The proposal puts all channels under one federal framework with standard classification."
+         "The worry is that mandatory reporting misses incidents, not that it reports too many.",
+         "The proposal puts all channels under one federal framework with standard classification; it doesn't give each state its own format."
         ]
        }
       },
@@ -1610,7 +1614,8 @@
          "Oversight proposals involve reports and access, not open-sourcing.",
          "No such ruling is cited."
         ]
-       }
+       },
+       "dup": "tu1l3#n6pl4pl"
       },
       {
        "id": "au2l1#8",
@@ -1699,7 +1704,8 @@
          "Critics raise no such claim.",
          "Critics stress the opposite problem: efficiency gains let risky models fall below fixed thresholds."
         ]
-       }
+       },
+       "dup": "tu1l4#nqdq9z5"
       },
       {
        "id": "au2l2#n760r1c",
@@ -1766,8 +1772,8 @@
         "p": "Under NARA's August 2026 guidance, why might many officials' AI chats never become federal records?",
         "o": [
          "Material left on a vendor's platform isn't treated as received until captured",
-         "It orders agencies to delete all of their AI chat records after 30 days to save storage",
-         "It bans federal employees from using AI tools for any official work",
+         "It orders agencies to delete AI chat records after 30 days to save storage",
+         "It bars federal employees from using AI tools for official work",
          "It covers only the Defense Department and the intelligence agencies"
         ],
         "a": 0,
@@ -1867,7 +1873,8 @@
          "Compliance audits check the lab's own framework; the common critique runs the other way, that a weak framework can pass.",
          "Audit mandates cover the largest developers however they release their models."
         ]
-       }
+       },
+       "dup": "tu2l0#nver1jp"
       },
       {
        "t": "recall",
@@ -1974,7 +1981,8 @@
          "Seeing models before release is the main point of embedding evaluators.",
          "CAISI's testing is voluntary and does not include inspections inside labs."
         ]
-       }
+       },
+       "dup": "tu2l1#nwiayca"
       }
      ]
     },
@@ -2007,7 +2015,8 @@
          "The Hawley-Blumenthal bill would do this, but it has not passed.",
          "CAISI exists and runs voluntary testing; the EU AI Office has no role in US release decisions."
         ]
-       }
+       },
+       "dup": "tu2l2#nmj1b49"
       },
       {
        "t": "mc",
@@ -2061,7 +2070,8 @@
          "These proposals test models before release by design; critics question what the tests can show.",
          "The EU AI Office can request access to models, but it is not a pre-release gate for US releases."
         ]
-       }
+       },
+       "dup": "tu2l0#2"
       },
       {
        "t": "recall",
@@ -2090,7 +2100,8 @@
          "White-box access means model internals such as weights and activations, not corporate records.",
          "Deeper access calls for security safeguards; it doesn't mean publishing weights."
         ]
-       }
+       },
+       "dup": "tu2l0#n85becj"
       },
       {
        "t": "recall",
@@ -2109,7 +2120,7 @@
        "choice": {
         "p": "A lab releases a model with dangerous capabilities that its own tests missed. Which of these is a policy proposed to catch this?",
         "o": [
-         "Government testing of frontier models before release",
+         "Government evaluators testing each new frontier model before it ships",
          "Federal preemption of all state AI safety laws and audits",
          "Tighter export controls on advanced AI chips",
          "Mandatory watermarking of all AI-generated images and video"
@@ -2184,7 +2195,8 @@
          "Developers keep running their own tests; verification is an added check.",
          "Verifiers assess and certify; no design lets them seize models."
         ]
-       }
+       },
+       "dup": "tu2l3#n8af295"
       },
       {
        "t": "match",
@@ -2248,7 +2260,7 @@
        "choice": {
         "p": "Which of these is an objection critics have raised to requiring a government license before training or deploying frontier AI models?",
         "o": [
-         "FDA-style approval, applied simplistically, fits AI poorly: the product is hard to define, harms uncertain",
+         "FDA-style approval, applied simplistically, fits AI poorly: the product is hard to define and its harms uncertain",
          "Licenses would cover only open-weight models, leaving the closed frontier labs and their models unregulated",
          "Licensing would require labs to publish their model weights for review",
          "Licensing would hand all AI oversight to the fifty state governments instead of to Congress"
@@ -2260,7 +2272,8 @@
          "Licensing makes release conditional on approval; it doesn't require publishing weights.",
          "Licensing proposals such as the Ban ASI Act would create federal agencies."
         ]
-       }
+       },
+       "dup": "tu2l0#0"
       },
       {
        "t": "match",
@@ -2313,7 +2326,8 @@
          "US law has no force in the EU; critics' concerns are about the regulator's powers and funding.",
          "Proposals cover frontier developers generally."
         ]
-       }
+       },
+       "dup": "tu2l5#n7hmjuq"
       }
      ]
     }
@@ -2353,7 +2367,8 @@
          "A duty of care creates obligations for developers; it gives them no claims against government.",
          "Proposals cover frontier developers whatever their release model."
         ]
-       }
+       },
+       "dup": "tu2l0#3"
       },
       {
        "t": "mc",
@@ -2377,7 +2392,8 @@
         "SB 1047",
         "Passed the legislature in 2024",
         "Vetoed by Gov. Newsom in September 2024"
-       ]
+       ],
+       "dup": "tu3l0#n20c3t6"
       },
       {
        "t": "recall",
@@ -2460,7 +2476,8 @@
          "Proposals like the AI LEAD Act give individuals a right to sue.",
          "The proposal is precisely to treat AI software systems as products."
         ]
-       }
+       },
+       "dup": "tu3l1#n96emph"
       },
       {
        "t": "recall",
@@ -2504,8 +2521,8 @@
         "p": "Under Rep. Trahan's CLAIM Act discussion draft (Oct 2026), who is liable when an AI system injures a third party?",
         "o": [
          "The developer, however careful it was, unless a user or modifier intended the harm or was negligent",
-         "The user who gave the AI system its instructions, in every case where harm occurs",
-         "The developer, but only if a court first finds that it failed to take reasonable care to prevent the harm",
+         "The user who gave the AI system its instructions, since the user directed it",
+         "The developer, though one that took reasonable care isn’t liable",
          "No one, as long as the developer published a safety framework before the harm"
         ],
         "a": 0,
@@ -2574,7 +2591,8 @@
          "Insurers may demand information and audits, but no mandate requires publishing weights.",
          "Coverage would depend on the policy; critics' concern is whether anyone will write it at all."
         ]
-       }
+       },
+       "dup": "tu3l2#nlybbo0"
       },
       {
        "t": "recall",
@@ -2602,7 +2620,8 @@
          "SB 3444 creates no license; its condition is publishing a protocol.",
          "Critics focused on the low bar the bill sets for immunity."
         ]
-       }
+       },
+       "dup": "tu3l3#n6rph2t"
       },
       {
        "t": "match",
@@ -2655,7 +2674,8 @@
          "Nothing in the proposal requires sharing weights.",
          "The exemption covers US labs' own agreements; no foreign role is involved."
         ]
-       }
+       },
+       "dup": "tu3l5#ng368fw"
       }
      ]
     },
@@ -2693,7 +2713,7 @@
        "p": "As of Oct. 2026, which US states had enacted whistleblower protections for frontier AI lab employees?",
        "o": [
         "California (SB 53) and Illinois (SB 315)",
-        "Utah only (HB 286, passed by the legislature in March 2026)",
+        "Utah, through HB 286 (passed by the legislature in March 2026)",
         "California only, through SB 53 (in effect since Jan. 1, 2026)",
         "None yet; only the federal Grassley-Obernolte bill exists, and it has not passed"
        ],
@@ -2738,7 +2758,8 @@
          "The bill's key feature is protecting danger reports even without a legal violation.",
          "The bill targets employees of companies developing and deploying AI."
         ]
-       }
+       },
+       "dup": "tu3l4#nq8fg2t"
       },
       {
        "t": "recall",
@@ -2784,14 +2805,14 @@
        "choice": {
         "o": [
          "The nonprofit appoints the board, and its safety committee can require fixes, even halting a release",
-         "The nonprofit owns all of OpenAI's shares and must approve the price of every product",
-         "The nonprofit can only advise, while final safety decisions rest with the for-profit company's outside investors",
+         "The nonprofit owns most of OpenAI's shares and sets the price of each product",
+         "The nonprofit advises, while final safety decisions rest with the for-profit company's outside investors",
          "The California attorney general appoints an independent safety officer who can halt any OpenAI model release"
         ],
         "a": 0,
         "ow": [
          "",
-         "The nonprofit keeps control through board appointments; it doesn't own all shares or set prices.",
+         "The nonprofit keeps control through board appointments; it doesn't own most shares or set prices.",
          "The agreements give the nonprofit's safety committee real power to halt releases.",
          "The AGs monitor compliance; the safety committee belongs to the nonprofit."
         ]
@@ -2824,7 +2845,8 @@
          "Corporate structure doesn't trigger any federal licensing.",
          "Safety committees act internally; no agreement requires publishing every evaluation."
         ]
-       }
+       },
+       "dup": "tu3l6#ni36g3r"
       }
      ]
     }
@@ -2888,7 +2910,8 @@
          "Proposals put the switch with the companies or with DHS.",
          "A switch halts a system when needed; it doesn't require ending training."
         ]
-       }
+       },
+       "dup": "tu5l0#ns92ram"
       },
       {
        "t": "recall",
@@ -3010,8 +3033,8 @@
        "p": "What would the Stop Rogue AI Act (H.R. 10362) do about AI agents? (NIST is the National Institute of Standards and Technology.)",
        "o": [
         "Have NIST set agent standards (inventories, provenance, monitoring, logs) binding on federal agencies and contractors",
-        "Require every AI agent operating in the US to register with the Department of Homeland Security before it can run",
-        "Make AI developers strictly liable for any harm their agents cause, even when users misuse them",
+        "Require AI agents operating in the US to register with the Department of Homeland Security before they run",
+        "Make AI developers strictly liable for harm their agents cause, even when users misuse them",
         "Ban AI agents from making financial transactions on behalf of consumers without a license"
        ],
        "a": 0,
@@ -3133,9 +3156,9 @@
        "choice": {
         "o": [
          "It and the other developers, once notified, pause related work until set safety thresholds are met",
-         "The developer must delete the model, and a regulator then decides whether it may train again",
+         "The developer deletes the model, and a regulator then decides whether it may train again",
          "Only the failing developer pauses, while competitors carry on so the field keeps moving",
-         "The model goes only to government users until it passes a second, stricter test"
+         "The model is restricted to government users until it passes a second, stricter test"
         ],
         "a": 0,
         "ow": [
@@ -3197,7 +3220,8 @@
          "Capability triggers target general frontier models across all sectors.",
          "Domestic pause proposals bind US developers; critics worry that foreign labs would keep going."
         ]
-       }
+       },
+       "dup": "tu2l1#3"
       },
       {
        "t": "recall",
@@ -3305,8 +3329,8 @@
         "p": "Which of these is an objection raised to the Ban Artificial Superintelligence Act's ban on 'precursor' capabilities?",
         "o": [
          "Some precursors, like hacking, have legitimate defensive uses",
-         "The bill would legalize superintelligence research that is now banned",
-         "The bill's bans would cover only open-weight AI models, not closed ones",
+         "The bill would legalize superintelligence research that current law forbids",
+         "The bill would mainly restrict open-weight AI models, leaving closed ones alone",
          "The bill would hand enforcement of its bans over to the EU AI Office"
         ],
         "a": 0,
@@ -3316,7 +3340,8 @@
          "The bill's bans apply to developers generally.",
          "The bill would create a US cabinet-level Department of AI to enforce it."
         ]
-       }
+       },
+       "dup": "tu5l4#n368l43"
       },
       {
        "t": "mc",
@@ -3339,7 +3364,8 @@
        "keys": [
         "Broad scientific consensus it can be done safely and controllably",
         "Strong public buy-in"
-       ]
+       ],
+       "dup": "tu5l4#ngq9fh5"
       },
       {
        "t": "recall",
@@ -3366,7 +3392,8 @@
          "Chip sales are handled by federal export controls; local permits don't cover them.",
          "Copyright isn't a siting or permitting issue."
         ]
-       }
+       },
+       "dup": "tu5l6#nho5u3f"
       },
       {
        "t": "recall",
@@ -3395,7 +3422,8 @@
          "Moratoria pause new approvals or construction; they don't close existing facilities.",
          "Trade treaties don't govern local construction permits; critics focus on where data centers move and lost benefits."
         ]
-       }
+       },
+       "dup": "tu5l6#nf3hdnq"
       }
      ]
     }
@@ -3436,7 +3464,8 @@
          "That is the US Chamber of Commerce's objection to cloud know-your-customer rules.",
          "That is an objection to limits on releasing open-weight models."
         ]
-       }
+       },
+       "dup": "tu2l1#0"
       },
       {
        "id": "au6l0#n43kouu",
@@ -3465,7 +3494,8 @@
          "Advanced chipmaking tools come mainly from the US and its allies, which is why controls on them bite.",
          "The reverse: chipmaking tools are huge and few, while chips are small; the point is that China's own production depends on the tools."
         ]
-       }
+       },
+       "dup": "tu4l0#nzc161w"
       },
       {
        "t": "recall",
@@ -3545,7 +3575,8 @@
         "Case-by-case approval of H200 sales to China",
         "Conditions such as no reduced supply for US customers and third-party testing",
         "Paired with a 25% government cut announced by Trump"
-       ]
+       ],
+       "dup": "tu4l0#nv9wx0x"
       },
       {
        "t": "recall",
@@ -3666,7 +3697,8 @@
          "KYC verifies identities and reports risky customers; it sets no compute cap.",
          "Location pings are part of chip location verification, a different tool."
         ]
-       }
+       },
+       "dup": "tu4l2#nmy5weu"
       },
       {
        "t": "recall",
@@ -3759,8 +3791,8 @@
        "p": "Security standards for AI model weights are graded by the strongest attacker they can stop. Why is defending frontier weights against the most capable nation-state operations so hard?",
        "o": [
         "Top attackers pair elite hacking with spies, recruited insiders and physical break-ins",
-        "Nation-states can legally demand the weights from any lab under international law",
-        "Model weights are far too large to be encrypted with any technology that exists today",
+        "Nation-states can legally demand a lab's weights under international law",
+        "Model weights are too large to encrypt with today's technology",
         "Export rules bar AI labs from hiring any security staff who hold government clearances"
        ],
        "a": 0,
@@ -3833,7 +3865,8 @@
          "SB 53 does address weight security, through framework disclosure.",
          "No law requires SL5; its authors say it is far beyond current practice."
         ]
-       }
+       },
+       "dup": "tu4l4#nedq6pv"
       },
       {
        "t": "recall",
@@ -3862,7 +3895,8 @@
          "Water and energy use are local-impact issues; this proposal is about cyber and physical security of grid-facing systems.",
          "Foreign cloud access is the target of know-your-customer rules and remote-access export controls."
         ]
-       }
+       },
+       "dup": "tu4l3#nw0gzi5"
       }
      ]
     },
@@ -3925,7 +3959,8 @@
          "That is an argument for limits: once weights are out, safeguards can't be added back.",
          "Opponents say the extra risk is unproven; they don't claim open models can never be dangerous."
         ]
-       }
+       },
+       "dup": "tu2l1#1"
       },
       {
        "t": "recall",
@@ -3943,8 +3978,8 @@
         "p": "Which is a problem researchers have raised with DNA synthesis screening?",
         "o": [
          "AI-designed protein variants evaded several screening systems until they were patched",
-         "Screening requires providers to publish every customer's name online",
-         "Screening has been mandatory for all US providers since 2020, yet orders still slip through",
+         "Screening requires providers to publish their customers' names online",
+         "Screening has been required of US providers since 2020, yet orders still slip through",
          "Screening bans most legitimate research on pathogens"
         ],
         "a": 0,
@@ -3954,7 +3989,8 @@
          "Screening is still voluntary for most providers; only federally funded buyers face a requirement.",
          "Screening checks orders and customers; it does not ban research."
         ]
-       }
+       },
+       "dup": "tu4l6#n4xd0nn"
       }
      ]
     }
@@ -4045,7 +4081,8 @@
          "The bill limits DoD's own use; vendor terms were a separate Pentagon-Anthropic dispute.",
          "The standard covers autonomous weapons used to kill; nuclear launch is a separate rule."
         ]
-       }
+       },
+       "dup": "tu6l0#nx0w265"
       }
      ]
     },
@@ -4107,7 +4144,8 @@
          "That is an objection to remote-disable features in chips.",
          "That is an objection to public compute built on commercial clouds."
         ]
-       }
+       },
+       "dup": "tu6l1#nwd03m3"
       },
       {
        "t": "recall",
@@ -4163,7 +4201,8 @@
          "These limits target government agencies specifically.",
          "No federal ban exists; the bills to ban it for ICE and CBP have not left committee."
         ]
-       }
+       },
+       "dup": "tu6l2#nig9jpu"
       }
      ]
     },
@@ -4220,7 +4259,8 @@
          "No US law bars labs from owning cloud infrastructure; separation is only a proposal.",
          "The EU AI Act regulates model risks; it does not split up the AI stack."
         ]
-       }
+       },
+       "dup": "tu6l3#nhmiia4"
       },
       {
        "t": "recall",
@@ -4276,7 +4316,8 @@
          "Public compute adds an option; it bars no one from private clouds.",
          "Public compute supplements private development; it bans nothing."
         ]
-       }
+       },
+       "dup": "tu6l4#n0vsayb"
       },
       {
        "t": "match",
@@ -4418,7 +4459,8 @@
          "No binding agreement limits frontier AI development as of October 2026.",
          "Chinese labs still build frontier models; IFP estimates the US lead at about 8 months."
         ]
-       }
+       },
+       "dup": "tu6l6#nuh19lh"
       },
       {
        "t": "recall",
@@ -4463,8 +4505,8 @@
         "o": [
          "The payoff from cheating grows as an overhang builds, while attention fades",
          "Early in a cap no one has any reason to cheat, because all AI progress stops completely",
-         "Verification hardware can only be installed after a treaty has run for years",
-         "Courts can enforce a treaty only after its first review conference"
+         "Treaties bar installing verification hardware in their first years",
+         "Courts can't enforce a treaty until its first review conference"
         ],
         "a": 0,
         "ow": [
@@ -4503,19 +4545,20 @@
        "choice": {
         "p": "AI agents can find and exploit software vulnerabilities at scale, and similar models are expected abroad soon. Which policy is proposed to reduce the damage?",
         "o": [
-         "Investing in cyber defenses before such models spread abroad",
+         "Hardening key systems against AI-found flaws before rivals catch up",
          "Mandatory screening of DNA synthesis orders and customers",
-         "A public research compute resource for university researchers",
+         "Requiring AI chatbots to tell users they're talking to an AI",
          "Merger review of partnerships between labs and cloud providers"
         ],
         "a": 0,
         "ow": [
          "",
          "DNA screening targets bioweapons.",
-         "Public compute broadens research access; it does not harden systems against attack.",
+         "Chatbot disclosure rules address deception of consumers; they do nothing to harden systems against attack.",
          "Merger review addresses market concentration."
         ]
-       }
+       },
+       "dup": "tu0l0#1"
       },
       {
        "t": "recall",
@@ -4546,7 +4589,8 @@
          "Customer checks cover outside renters, not the lab's own internal use.",
          "Content labels apply to public outputs; the problem here is internal use."
         ]
-       }
+       },
+       "dup": "tu7l1#nuis5x6"
       },
       {
        "t": "recall",
@@ -4577,7 +4621,8 @@
          "Cloud KYC identifies who rents compute; it can't tell whose agent is acting or limit what it does.",
          "Merger review targets market concentration."
         ]
-       }
+       },
+       "dup": "tu7l1#n1xiz1a"
       },
       {
        "t": "recall",
@@ -4639,7 +4684,8 @@
          "DNA screening targets bioweapons.",
          "AI records rules check abuse of power at home."
         ]
-       }
+       },
+       "dup": "tu7l3#nhw703j"
       }
      ]
     }

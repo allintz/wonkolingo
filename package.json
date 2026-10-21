@@ -29,6 +29,7 @@
   },
   "private": true,
   "devDependencies": {
-    "@capacitor/cli": "^8.5.3"
+    "@capacitor/cli": "^8.5.3",
+    "playwright-core": "^1.56.1"
   }
 }

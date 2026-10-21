@@ -119,13 +119,13 @@ ${appeals.length ? `<accepted_on_appeal>${JSON.stringify(appeals)}</accepted_on_
 // Disputes use the same usage table under a separate key so they have their own caps.
 export async function takeDisputeQuota(env, playerId) {
   const day = new Date().toISOString().slice(0, 10), key = 'dispute:' + playerId;
+  // Count first, then check, in single statements, so parallel requests can't all slip under the cap.
   const [mine, all] = await env.DB.batch([
-    env.DB.prepare('SELECT n FROM grade_usage WHERE day = ? AND player_id = ?').bind(day, key),
+    env.DB.prepare('INSERT INTO grade_usage (day, player_id, n) VALUES (?, ?, 1) ON CONFLICT(day, player_id) DO UPDATE SET n = n + 1 RETURNING n').bind(day, key),
     env.DB.prepare("SELECT COALESCE(SUM(n), 0) AS n FROM grade_usage WHERE day = ? AND player_id LIKE 'dispute:%'").bind(day),
   ]);
-  if ((mine.results[0]?.n || 0) >= (String(playerId).startsWith('ip:') ? DISPUTE_LIMITS.perVisitorPerDay : DISPUTE_LIMITS.perPlayerPerDay)) return 'You’ve used today’s second opinions. Use “Grade it myself” for now.';
-  if ((all.results[0]?.n || 0) >= DISPUTE_LIMITS.globalPerDay) return 'Second opinions are paused for today. Use “Grade it myself” for now.';
-  await env.DB.prepare('INSERT INTO grade_usage (day, player_id, n) VALUES (?, ?, 1) ON CONFLICT(day, player_id) DO UPDATE SET n = n + 1').bind(day, key).run();
+  if ((mine.results[0]?.n || 0) > (String(playerId).startsWith('ip:') ? DISPUTE_LIMITS.perVisitorPerDay : DISPUTE_LIMITS.perPlayerPerDay)) return 'You’ve used today’s second opinions. Use “Grade it myself” for now.';
+  if ((all.results[0]?.n || 0) > DISPUTE_LIMITS.globalPerDay) return 'Second opinions are paused for today. Use “Grade it myself” for now.';
   return null;
 }
 
@@ -133,12 +133,11 @@ export async function takeDisputeQuota(env, playerId) {
 export async function takeGradeQuota(env, playerId) {
   const day = new Date().toISOString().slice(0, 10);
   const [mine, all] = await env.DB.batch([
-    env.DB.prepare('SELECT n FROM grade_usage WHERE day = ? AND player_id = ?').bind(day, playerId),
+    env.DB.prepare('INSERT INTO grade_usage (day, player_id, n) VALUES (?, ?, 1) ON CONFLICT(day, player_id) DO UPDATE SET n = n + 1 RETURNING n').bind(day, playerId),
     env.DB.prepare("SELECT COALESCE(SUM(n), 0) AS n FROM grade_usage WHERE day = ? AND player_id NOT LIKE 'dispute:%'").bind(day),
   ]);
-  if ((mine.results[0]?.n || 0) >= (String(playerId).startsWith('ip:') ? GRADE_LIMITS.perVisitorPerDay : GRADE_LIMITS.perPlayerPerDay)) return 'You’ve hit today’s limit for graded answers. Grade yourself for the rest of today.';
-  if ((all.results[0]?.n || 0) >= GRADE_LIMITS.globalPerDay) return 'Answer grading is paused for today. Grade yourself for now.';
-  await env.DB.prepare('INSERT INTO grade_usage (day, player_id, n) VALUES (?, ?, 1) ON CONFLICT(day, player_id) DO UPDATE SET n = n + 1').bind(day, playerId).run();
+  if ((mine.results[0]?.n || 0) > (String(playerId).startsWith('ip:') ? GRADE_LIMITS.perVisitorPerDay : GRADE_LIMITS.perPlayerPerDay)) return 'You’ve hit today’s limit for graded answers. Grade yourself for the rest of today.';
+  if ((all.results[0]?.n || 0) > GRADE_LIMITS.globalPerDay) return 'Answer grading is paused for today. Grade yourself for now.';
   return null;
 }
 

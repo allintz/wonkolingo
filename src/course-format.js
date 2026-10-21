@@ -129,13 +129,17 @@ function validateCourse(raw) {
 // Every STREAK_RULES.freezeEvery practice days earns a freeze (up to maxFreezes); a missed counting day uses one automatically.
 const STREAK_RULES = { freezeEvery: 5, maxFreezes: 3 };
 function computeStreak(days, settings, today) {
-  const ok = d => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d);
-  const set = new Set((days || []).filter(ok));
+  // Real calendar days only: a malformed one (2026-10-00) would otherwise throw partway through.
+  const ok = d => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d) && !isNaN(Date.parse(d + 'T12:00:00Z')) && new Date(d + 'T12:00:00Z').toISOString().slice(0, 10) === d;
+  if (!ok(today)) today = new Date().toISOString().slice(0, 10);
+  // Only the last three years count, and the schedule lists are capped, so the leaderboard stays fast whatever is synced.
+  const floor = (() => { const x = new Date(today + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() - 1100); return x.toISOString().slice(0, 10); })();
+  const set = new Set((Array.isArray(days) ? days : []).filter(d => ok(d) && d >= floor));
   const sched = settings && Array.isArray(settings.days) && settings.days.length === 7 && settings.days.some(Boolean) ? settings.days.map(Boolean) : [true, true, true, true, true, true, true];
   // settings.past: [{ until, days }] keeps the schedule that applied up to each change, so changing days never rewrites history.
-  const past = settings && Array.isArray(settings.past) ? settings.past.filter(p => p && ok(p.until) && Array.isArray(p.days) && p.days.length === 7 && p.days.some(Boolean)).sort((x, y) => x.until < y.until ? -1 : x.until > y.until ? 1 : 0) : [];
+  const past = settings && Array.isArray(settings.past) ? settings.past.slice(-50).filter(p => p && ok(p.until) && Array.isArray(p.days) && p.days.length === 7 && p.days.some(Boolean)).sort((x, y) => x.until < y.until ? -1 : x.until > y.until ? 1 : 0) : [];
   const schedFor = d => { const p = past.find(q => d <= q.until); return p ? p.days.map(Boolean) : sched; };
-  const pauses = settings && Array.isArray(settings.pauses) ? settings.pauses.filter(p => p && ok(p.from)) : [];
+  const pauses = settings && Array.isArray(settings.pauses) ? settings.pauses.slice(-50).filter(p => p && ok(p.from) && (!p.to || ok(p.to))) : [];
   const paused = d => pauses.some(p => d >= p.from && (!p.to || d <= p.to));
   const dow = d => new Date(d + 'T12:00:00Z').getUTCDay();
   const next = d => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() + 1); return x.toISOString().slice(0, 10); };

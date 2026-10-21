@@ -203,11 +203,22 @@ r = await call('/api/account', { body: { name: 'Other', username: uname, passwor
 r = await call('/api/me', { token: P.token }); ok(r.d.username === uname, 'me shows the username', r.d);
 r = await call('/api/password/login', { body: { username: uname, password: 'wrong password' } }); ok(r.s === 401, 'wrong password refused', r);
 r = await call('/api/password/login', { body: { username: '  ' + uname.toUpperCase() + ' ', password: 'correct horse 1' } }); ok(r.s === 200 && r.d.player.id === P.player.id && r.d.token && r.d.token !== P.token, 'password sign-in (any case) gives a new device token', r.d);
+const freshTok = r.d.token;
 r = await call('/api/me', { token: r.d.token }); ok(r.s === 200, 'password device token works', r.s);
 r = await call('/api/password', { token: S.token, body: { username: uname, password: 'mine now 123' } }); ok(r.s === 409, 'cannot take another account’s username', r);
-r = await call('/api/password', { token: P.token, body: { username: uname + 'x', password: 'new password 3' } }); ok(r.s === 200 && r.d.username === uname + 'x', 'change username and password', r.d);
+r = await call('/api/password', { token: P.token, body: { username: uname + 'x', password: 'new password 3' } }); ok(r.s === 403, 'changing a password needs the current one', r.d);
+r = await call('/api/password', { token: P.token, body: { username: uname + 'x', password: 'new password 3', current: 'not it at all' } }); ok(r.s === 403, 'wrong current password is refused', r.d);
+r = await call('/api/password', { token: P.token, body: { username: uname + 'x', password: 'new password 3', current: 'correct horse 1' } }); ok(r.s === 200 && r.d.username === uname + 'x', 'change username and password', r.d);
 r = await call('/api/password/login', { body: { username: uname, password: 'correct horse 1' } }); ok(r.s === 401, 'old username no longer works', r);
 r = await call('/api/password/login', { body: { username: uname + 'x', password: 'new password 3' } }); ok(r.s === 200, 'new username and password work', r);
+r = await call('/api/password', { token: freshTok, body: { username: uname + 'x', password: 'reset by fresh sign in' } }); ok(r.s === 200, 'a device signed in minutes ago can set a new password without the old one', r.d);
+r = await call('/api/password/login', { body: { username: uname + 'x', password: 'reset by fresh sign in' } }); ok(r.s === 200, 'the reset password works', r.s);
+// Sign out other devices: other sessions stop working, this one keeps working, the recovery code changes.
+r = await call('/api/account/signout-others', { token: freshTok, body: {} }); ok(r.s === 200 && r.d.recovery && !r.d.token, 'sign out other devices', r.d);
+const newRec = r.d.recovery;
+r = await call('/api/me', { token: P.token }); ok(r.s === 401, 'old recovery code stops working', r.s);
+r = await call('/api/me', { token: freshTok }); ok(r.s === 200, 'this device stays signed in', r.s);
+r = await call('/api/me', { token: newRec }); ok(r.s === 200, 'new recovery code works', r.s);
 r = await call('/api/password', { token: S.token, body: { username: 'solo' + randomBytes(3).toString('hex'), password: 'add one later' } }); ok(r.s === 200, 'existing account adds a password later', r);
 const ipPw = '10.252.' + randomBytes(1)[0] + '.' + randomBytes(1)[0];
 for (let i = 0; i < 11; i++) last = (await call('/api/password/login', { body: { username: 'nobody' + uname, password: 'guess ' + i }, ip: ipPw })).s;

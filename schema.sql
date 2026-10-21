@@ -144,3 +144,21 @@ CREATE TABLE IF NOT EXISTS passwords (
   hash TEXT NOT NULL,
   updated_at INTEGER NOT NULL
 );
+-- Optional email per account, for sign-in codes and password resets (2026-10-21). Unique once verified.
+CREATE TABLE IF NOT EXISTS emails (
+  player_id TEXT PRIMARY KEY,
+  email TEXT NOT NULL UNIQUE,
+  verified_at INTEGER NOT NULL
+);
+-- Six-digit codes sent by email, stored hashed. kind: 'verify' (adding an email) or 'signin' (signing in, e.g. after a
+-- forgotten password). A code dies after a few wrong tries.
+CREATE TABLE IF NOT EXISTS email_codes (
+  id TEXT PRIMARY KEY,
+  player_id TEXT NOT NULL,
+  email TEXT NOT NULL,
+  kind TEXT NOT NULL,
+  code_hash TEXT NOT NULL,
+  expires INTEGER NOT NULL,
+  tries INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_email_codes_player ON email_codes(player_id, kind);

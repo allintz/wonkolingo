@@ -19,7 +19,8 @@
        ],
        "a": 1,
        "x": "“Monitoring” is the standard holding phrase. It commits the office to nothing. If they were drafting something, they would usually say so, because offices want advocates to know they’re leading.",
-       "ask": "“Is the boss likely to take a position this Congress, or is this one you’re watching for now?”"
+       "ask": "“Is the boss likely to take a position this Congress, or is this one you’re watching for now?”",
+       "id": "u0l0#0"
       },
       {
        "t": "mc",
@@ -33,7 +34,8 @@
        ],
        "a": 1,
        "x": "Staff say this at the end of nearly every meeting. The real signal comes later: a follow-up email with specific questions means it went somewhere. Silence means it probably didn’t.",
-       "ask": "“What would be most useful for me to send before you brief her?”"
+       "ask": "“What would be most useful for me to send before you brief her?”",
+       "id": "u0l0#1"
       },
       {
        "t": "mc",
@@ -47,7 +49,8 @@
        ],
        "a": 1,
        "x": "Praising the “goals” separates the idea from the bill. It lets the office say nice things without signing on. For now, it usually means no cosponsorship.",
-       "ask": "“What would need to change in the text for her to sign on?”"
+       "ask": "“What would need to change in the text for her to sign on?”",
+       "id": "u0l0#2"
       },
       {
        "t": "mc",
@@ -61,7 +64,8 @@
        ],
        "a": 1,
        "x": "“Heavy lift” is usually a polite forecast that nothing will happen. Sometimes it’s an accurate read of the floor; sometimes it covers the office not wanting to try. Either way, don’t plan around passage.",
-       "ask": "“What would make it lighter: a different vehicle, a narrower version, or more Republicans on board?”"
+       "ask": "“What would make it lighter: a different vehicle, a narrower version, or more Republicans on board?”",
+       "id": "u0l0#3"
       }
      ]
     },
@@ -79,7 +83,8 @@
         "They want you to testify"
        ],
        "a": 1,
-       "x": "This is a goodbye. It keeps the relationship friendly without promising anything. A follow-up is fine, but don’t read this line as interest."
+       "x": "This is a goodbye. It keeps the relationship friendly without promising anything. A follow-up is fine, but don’t read this line as interest.",
+       "id": "u0l1#0"
       },
       {
        "t": "mc",
@@ -88,12 +93,13 @@
        "o": [
         "A polite brush-off, since they expect no one else will sign on",
         "A real condition: they want other offices to sign on first",
-        "They want your donor list",
+        "They want polling on how the bill plays in their state",
         "A firm yes"
        ],
        "a": 1,
        "x": "One of the more useful lines you’ll hear. Offices want political cover, especially from the other party or their own state delegation. It’s a request for information you can actually meet.",
-       "ask": "“Which offices’ support would matter most to the senator?”"
+       "ask": "“Which offices’ support would matter most to the senator?”",
+       "id": "u0l1#1"
       },
       {
        "t": "mc",
@@ -103,11 +109,12 @@
         "A firm no",
         "Real but unnamed objections, about policy or politics",
         "They want a bigger, more ambitious version before signing on",
-        "They didn’t read it"
+        "The boss already supports it and is just being careful"
        ],
        "a": 1,
        "x": "Concerns can mean a fixable drafting problem or an in-district company lobbying against the bill. The office often won’t say which unless you ask, so your job is to find out.",
-       "ask": "“Are the concerns about the policy itself, or about who’s opposing it?”"
+       "ask": "“Are the concerns about the policy itself, or about who’s opposing it?”",
+       "id": "u0l1#2"
       },
       {
        "t": "order",
@@ -123,7 +130,8 @@
         "“Can you send the text and the cosponsor list?”",
         "“Who should I talk to in the lead sponsor’s office?”"
        ],
-       "x": "Roughly: watching, then praising the idea, then naming a condition, then asking for materials, then asking how to join. Treat this as a rule of thumb. A particular staffer’s habits can reshuffle the middle."
+       "x": "Roughly: watching, then praising the idea, then naming a condition, then asking for materials, then asking how to join. Treat this as a rule of thumb. A particular staffer’s habits can reshuffle the middle.",
+       "id": "u0l1#3"
       }
      ]
     }
@@ -161,7 +169,8 @@
          "A letter one office sends to all offices, often seeking cosponsors"
         ]
        ],
-       "x": "These five come up in almost every legislative meeting."
+       "x": "These five come up in almost every legislative meeting.",
+       "id": "u1l0#0"
       },
       {
        "t": "mc",
@@ -175,7 +184,8 @@
         "They’re asking about the vote count from the committee markup"
        ],
        "a": 1,
-       "x": "Cost matters once a bill might actually move, so this question is usually a sign of real interest. If there’s no score yet, expect to hear the question again."
+       "x": "Cost matters once a bill might actually move, so this question is usually a sign of real interest. If there’s no score yet, expect to hear the question again.",
+       "id": "u1l0#1"
       },
       {
        "t": "mc",
@@ -189,7 +199,8 @@
        ],
        "a": 1,
        "x": "Most standalone bills never get floor time. Provisions often ride on bills that have to pass, like the NDAA (the annual defense authorization) or appropriations. A lot of AI policy has moved this way.",
-       "ask": "“Which vehicle looks realistic, and when does that text get locked?”"
+       "ask": "“Which vehicle looks realistic, and when does that text get locked?”",
+       "id": "u1l0#2"
       },
       {
        "t": "mc",
@@ -202,7 +213,8 @@
         "It should be attached to the budget and skip committee review"
        ],
        "a": 1,
-       "x": "“Regular order” means the textbook process: hearings, markup, then the floor. Hearing it from committee staff means you’ll work through them, and the timeline will be slower."
+       "x": "“Regular order” means the textbook process: hearings, markup, then the floor. Hearing it from committee staff means you’ll work through them, and the timeline will be slower.",
+       "id": "u1l0#3"
       }
      ]
     },
@@ -234,7 +246,8 @@
          "Leadership asks every Senate office whether it objects to passing something by UC"
         ]
        ],
-       "x": "All five are about speed: how a bill skips steps, and how one member can stop it."
+       "x": "All five are about speed: how a bill skips steps, and how one member can stop it.",
+       "id": "u1l1#0"
       },
       {
        "t": "mc",
@@ -243,11 +256,12 @@
        "o": [
         "Call the White House and ask it to weigh in on the bill",
         "Pass it quickly in the Senate if no office objects",
-        "Leak it to the press",
+        "Push it through committee without a hearing",
         "Move it to the House floor under suspension of the rules"
        ],
        "a": 1,
-       "x": "Hotlining works for noncontroversial bills. A single hold stops it, which is why staff will ask whether anyone is likely to object."
+       "x": "Hotlining works for noncontroversial bills. A single hold stops it, which is why staff will ask whether anyone is likely to object.",
+       "id": "u1l1#1"
       },
       {
        "t": "mc",
@@ -260,7 +274,8 @@
         "A bill that already passed by a quick voice vote"
        ],
        "a": 1,
-       "x": "Messaging bills stake out a position for the party or a campaign. Cosponsoring one is cheap, so it tells you less about how the member would vote on a real deal."
+       "x": "Messaging bills stake out a position for the party or a campaign. Cosponsoring one is cheap, so it tells you less about how the member would vote on a real deal.",
+       "id": "u1l1#2"
       },
       {
        "t": "mc",
@@ -273,7 +288,8 @@
         "It conflicts with a House rule on how bills are drafted"
        ],
        "a": 1,
-       "x": "Reconciliation bills pass the Senate with a simple majority, but the Byrd rule lets senators strike provisions that aren’t mainly about the budget. In 2025, the proposed moratorium on state AI laws was rewritten around broadband funding to survive it; the Senate then voted 99-1 to remove it anyway."
+       "x": "Reconciliation bills pass the Senate with a simple majority, but the Byrd rule lets senators strike provisions that aren’t mainly about the budget. In 2025, the proposed moratorium on state AI laws was rewritten around broadband funding to survive it; the Senate then voted 99-1 to remove it anyway.",
+       "id": "u1l1#3"
       }
      ]
     }
@@ -311,7 +327,8 @@
          "Professional Staff Member: committee staffer who works on text"
         ]
        ],
-       "x": "Personal offices have the LD, LAs and LCs. Committees have their own staff, who usually write the text."
+       "x": "Personal offices have the LD, LAs and LCs. Committees have their own staff, who usually write the text.",
+       "id": "u2l0#0"
       },
       {
        "t": "mc",
@@ -324,21 +341,23 @@
        ],
        "a": 1,
        "x": "Junior staff often take first meetings. Take them seriously: LCs write memos, get promoted, and remember who was useful.",
-       "ask": "“How does this usually get in front of the LA?”"
+       "ask": "“How does this usually get in front of the LA?”",
+       "id": "u2l0#1"
       },
       {
        "t": "mc",
        "who": "p",
        "q": "“That’s really a question for committee staff.”",
        "o": [
-        "Go away",
+        "The office opposes the bill but won’t say so directly",
         "The committee writes the text; this office won’t lead",
         "You should take this to the Rules Committee staff instead",
         "They want you to testify at an upcoming committee hearing"
        ],
        "a": 1,
        "x": "Offices whose member isn’t on the committee that handles the bill rarely shape its text. If they offer an introduction to committee staff, that’s a real step forward.",
-       "ask": "“Would you be willing to connect me with the right person on the committee?”"
+       "ask": "“Would you be willing to connect me with the right person on the committee?”",
+       "id": "u2l0#2"
       },
       {
        "t": "mc",
@@ -351,7 +370,8 @@
         "She’ll whip votes for it"
        ],
        "a": 1,
-       "x": "Members have limited bandwidth to lead. A “yes but won’t lead” office gives you a cosponsor, not a champion. You still need a champion somewhere else."
+       "x": "Members have limited bandwidth to lead. A “yes but won’t lead” office gives you a cosponsor, not a champion. You still need a champion somewhere else.",
+       "id": "u2l0#3"
       }
      ]
     },
@@ -368,7 +388,8 @@
         "Commerce, Science, and Transportation"
        ],
        "a": 1,
-       "x": "Senate Rules and Administration handles federal election law. In the House it’s the Committee on House Administration. The grant money itself runs through appropriations."
+       "x": "Senate Rules and Administration handles federal election law. In the House it’s the Committee on House Administration. The grant money itself runs through appropriations.",
+       "id": "u2l1#0"
       },
       {
        "t": "mc",
@@ -380,7 +401,8 @@
         "Agriculture"
        ],
        "a": 0,
-       "x": "Commerce handles most tech regulation, though AI bills can also land in Judiciary, Homeland Security or Armed Services depending on how they’re written. Drafting choices can steer a bill toward a friendlier committee."
+       "x": "Commerce handles most tech regulation, though AI bills can also land in Judiciary, Homeland Security or Armed Services depending on how they’re written. Drafting choices can steer a bill toward a friendlier committee.",
+       "id": "u2l1#1"
       },
       {
        "t": "mc",
@@ -393,7 +415,8 @@
         "Enter it into the Congressional Record during floor debate on the bill"
        ],
        "a": 1,
-       "x": "Report language isn’t binding law, but agencies usually follow it because the same committee funds them next year. It’s a much easier ask than a statute and a common win for advocates."
+       "x": "Report language isn’t binding law, but agencies usually follow it because the same committee funds them next year. It’s a much easier ask than a statute and a common win for advocates.",
+       "id": "u2l1#2"
       },
       {
        "t": "mc",
@@ -407,7 +430,8 @@
        ],
        "a": 1,
        "x": "Leadership controls the floor. Many offices won’t commit before they know where leadership stands, especially on anything that splits the caucus.",
-       "ask": "“Do you know who in leadership’s office is working on this?”"
+       "ask": "“Do you know who in leadership’s office is working on this?”",
+       "id": "u2l1#3"
       }
      ]
     }
@@ -422,15 +446,16 @@
      "items": [
       {
        "t": "mc",
-       "p": "Which of these is the strongest sign of real interest?",
+       "p": "In a meeting, what kind of remark from a staffer is the strongest sign of real interest in your bill?",
        "o": [
         "“Thanks so much for coming in.”",
-        "“This is really helpful context.”",
+        "“This is really helpful context for us to have.”",
         "“Can you send the bill text and who else has signed on?”",
-        "“We’ll keep it in mind.”"
+        "“We’ll keep it in mind as things move forward.”"
        ],
        "a": 2,
-       "x": "Requests for specific materials mean someone is preparing to brief the member or make a decision. Thanks and praise are just good manners."
+       "x": "Requests for specific materials mean someone is preparing to brief the member or make a decision. Thanks and praise are just good manners.",
+       "id": "u3l0#0"
       },
       {
        "t": "mc",
@@ -444,7 +469,8 @@
         "They’re testing your loyalty to the coalition behind the bill"
        ],
        "a": 1,
-       "x": "Staff who might recommend a yes need to know what the boss will be asked. Answer honestly. Spin here costs credibility fast."
+       "x": "Staff who might recommend a yes need to know what the boss will be asked. Answer honestly. Spin here costs credibility fast.",
+       "id": "u3l0#1"
       },
       {
        "t": "mc",
@@ -458,7 +484,8 @@
        ],
        "a": 1,
        "x": "Small offices rely on outside groups for help with text (staff call this technical assistance, or “TA”). If they want your language, your idea may be going into a bill, though maybe not the bill you came to pitch.",
-       "ask": "“Is this for something the boss is planning to introduce?”"
+       "ask": "“Is this for something the boss is planning to introduce?”",
+       "id": "u3l0#2"
       },
       {
        "t": "mc",
@@ -471,7 +498,8 @@
         "They want a longer memo"
        ],
        "a": 1,
-       "x": "Sometimes it’s how staff end a meeting. Sometimes they really need something to forward. If they asked pointed questions during the meeting, it’s probably real."
+       "x": "Sometimes it’s how staff end a meeting. Sometimes they really need something to forward. If they asked pointed questions during the meeting, it’s probably real.",
+       "id": "u3l0#3"
       }
      ]
     },
@@ -482,13 +510,14 @@
        "t": "mc",
        "p": "After the meeting, which follow-up from the office means the most?",
        "o": [
-        "An auto-reply",
+        "The staffer says they’ll pass your one-pager to the boss",
         "A thank-you note",
         "The staffer introduces you to committee staff on the issue",
         "You get added to the office newsletter and its event invitation list"
        ],
        "a": 2,
-       "x": "An introduction spends some of the staffer’s own credibility. When they make one, they’re betting your issue is worth the committee’s time."
+       "x": "An introduction spends some of the staffer’s own credibility. When they make one, they’re betting your issue is worth the committee’s time.",
+       "id": "u3l1#0"
       },
       {
        "t": "mc",
@@ -498,11 +527,12 @@
         "There’s broad support for it from many outside groups",
         "Other groups, often opponents, are lobbying too",
         "They want you to bring more groups into the coalition",
-        "They’re running a poll"
+        "They’ve already decided and are just being polite"
        ],
        "a": 1,
        "x": "This usually means industry or other groups are making the opposite case. It’s an opening to find out what they’re hearing.",
-       "ask": "“Who are you hearing from, and what are they saying?”"
+       "ask": "“Who are you hearing from, and what are they saying?”",
+       "id": "u3l1#1"
       },
       {
        "t": "order",
@@ -518,7 +548,8 @@
         "An introduction to the committee staffer on the issue",
         "A request for help drafting language"
        ],
-       "x": "Effort is the signal. The more work the staffer does after the meeting, the more the issue is moving. Treat the exact order as a rule of thumb."
+       "x": "Effort is the signal. The more work the staffer does after the meeting, the more the issue is moving. Treat the exact order as a rule of thumb.",
+       "id": "u3l1#2"
       }
      ]
     }
@@ -543,7 +574,8 @@
         "“Thanks for your time.”"
        ],
        "a": 1,
-       "x": "Members who want to lead on an issue rarely cosponsor a rival bill. If she’s drafting her own, the realistic win is getting your language into hers."
+       "x": "Members who want to lead on an issue rarely cosponsor a rival bill. If she’s drafting her own, the realistic win is getting your language into hers.",
+       "id": "u4l0#0"
       },
       {
        "t": "mc",
@@ -557,7 +589,8 @@
         "“Can I meet with the senator directly about it?”"
        ],
        "a": 1,
-       "x": "This turns a vague no into a list of specific obstacles, some of which you might be able to remove."
+       "x": "This turns a vague no into a list of specific obstacles, some of which you might be able to remove.",
+       "id": "u4l0#1"
       },
       {
        "t": "mc",
@@ -571,7 +604,8 @@
         "“Can we deal with those later, after the boss signs on?”"
        ],
        "a": 1,
-       "x": "“What are they?” is fine, but separating policy from politics gets you more. Drafting problems can be fixed with text. Political problems need validators or cover."
+       "x": "“What are they?” is fine, but separating policy from politics gets you more. Drafting problems can be fixed with text. Political problems need validators or cover.",
+       "id": "u4l0#2"
       }
      ]
     },
@@ -590,7 +624,8 @@
         "“I’ll just email your boss directly to follow up.”"
        ],
        "a": 1,
-       "x": "Get a time and a name. It’s polite, and it makes silence informative: if they haven’t answered by then, you’ve learned something."
+       "x": "Get a time and a name. It’s polite, and it makes silence informative: if they haven’t answered by then, you’ve learned something.",
+       "id": "u4l1#0"
       },
       {
        "t": "mc",
@@ -604,7 +639,8 @@
         "“OK, thanks. I’ll check back with you in a few weeks.”"
        ],
        "a": 1,
-       "x": "Get specific names. Same-state colleagues, committee members and offices from the other party tend to matter most, but each office has its own list."
+       "x": "Get specific names. Same-state colleagues, committee members and offices from the other party tend to matter most, but each office has its own list.",
+       "id": "u4l1#1"
       },
       {
        "t": "mc",
@@ -618,7 +654,8 @@
         "“That seems evasive.”"
        ],
        "a": 1,
-       "x": "Committee members often avoid public positions before markup to keep room to negotiate. Amendments are where they actually shape the bill, so ask about those."
+       "x": "Committee members often avoid public positions before markup to keep room to negotiate. Amendments are where they actually shape the bill, so ask about those.",
+       "id": "u4l1#2"
       }
      ]
     }

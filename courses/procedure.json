@@ -22,7 +22,8 @@
         "The committee reports it",
         "The full chamber considers it"
        ],
-       "x": "This is the textbook path, often called regular order. Many bills skip the hearing, and leadership sometimes skips committee entirely by bringing a bill straight to the floor."
+       "x": "This is the textbook path, often called regular order. Many bills skip the hearing, and leadership sometimes skips committee entirely by bringing a bill straight to the floor.",
+       "id": "pu0l0#0"
       },
       {
        "t": "mc",
@@ -34,7 +35,8 @@
         "Only committee chairs"
        ],
        "a": 0,
-       "x": "Only members can introduce bills. Agencies, the White House and outside groups often write the text, but a member has to put it in. In the House that means dropping it in the “hopper,” a box on the floor."
+       "x": "Only members can introduce bills. Agencies, the White House and outside groups often write the text, but a member has to put it in. In the House that means dropping it in the “hopper,” a box on the floor.",
+       "id": "pu0l0#1"
       },
       {
        "t": "mc",
@@ -46,7 +48,8 @@
         "Bills about elections"
        ],
        "a": 0,
-       "x": "The Origination Clause (Article I, Section 7) requires revenue bills to start in the House, and by custom appropriations bills do too. The Senate works around this by taking a House-passed bill and replacing its text. The Affordable Care Act moved on H.R. 3590, which began as a tax bill about homeownership for service members."
+       "x": "The Origination Clause (Article I, Section 7) requires revenue bills to start in the House, and by custom appropriations bills do too. The Senate works around this by taking a House-passed bill and replacing its text. The Affordable Care Act moved on H.R. 3590, which began as a tax bill about homeownership for service members.",
+       "id": "pu0l0#2"
       },
       {
        "t": "match",
@@ -73,7 +76,8 @@
          "The box on the House floor where new bills are dropped"
         ]
        ],
-       "x": "A long cosponsor list shows support, but it doesn’t move a bill. The committee does."
+       "x": "A long cosponsor list shows support, but it doesn’t move a bill. The committee does.",
+       "id": "pu0l0#3"
       }
      ]
     },
@@ -90,7 +94,8 @@
         "The chamber’s parliamentarian"
        ],
        "a": 0,
-       "x": "The chair controls the committee’s agenda. A bill the chair won’t schedule usually goes nowhere, whatever its cosponsor count."
+       "x": "The chair controls the committee’s agenda. A bill the chair won’t schedule usually goes nowhere, whatever its cosponsor count.",
+       "id": "pu0l1#0"
       },
       {
        "t": "mc",
@@ -102,7 +107,8 @@
         "The Clerk, who assigns new bills to committees by lottery"
        ],
        "a": 0,
-       "x": "Referral is formally the Speaker’s call, made in practice on the parliamentarian’s advice about jurisdiction. A bill can go to several committees, and each one becomes a place where it can stall."
+       "x": "Referral is formally the Speaker’s call, made in practice on the parliamentarian’s advice about jurisdiction. A bill can go to several committees, and each one becomes a place where it can stall.",
+       "id": "pu0l1#1"
       },
       {
        "t": "mc",
@@ -116,7 +122,8 @@
         "The bill skips markup and goes straight to the floor"
        ],
        "a": 0,
-       "x": "Committees often mark up an “amendment in the nature of a substitute,” which replaces the whole bill. The substitute is the text that matters from then on, so get a copy as soon as it circulates."
+       "x": "Committees often mark up an “amendment in the nature of a substitute,” which replaces the whole bill. The substitute is the text that matters from then on, so get a copy as soon as it circulates.",
+       "id": "pu0l1#2"
       },
       {
        "t": "mc",
@@ -128,7 +135,8 @@
         "Most of them"
        ],
        "a": 0,
-       "x": "Only a few percent of bills become law, and most never get a committee vote. Many are introduced to stake out a position, with no real plan to pass them."
+       "x": "Only a few percent of bills become law, and most never get a committee vote. Many are introduced to stake out a position, with no real plan to pass them.",
+       "id": "pu0l1#3"
       }
      ]
     }
@@ -151,7 +159,8 @@
         "Schedules committee hearings"
        ],
        "a": 0,
-       "x": "Most major bills reach the House floor under a special rule written for that bill. The House has to adopt the rule by majority vote before it can debate the bill."
+       "x": "Most major bills reach the House floor under a special rule written for that bill. The House has to adopt the rule by majority vote before it can debate the bill.",
+       "id": "pu1l0#0"
       },
       {
        "t": "match",
@@ -174,7 +183,8 @@
          "Adopting the rule automatically changes the bill’s text"
         ]
        ],
-       "x": "Open rules have become rare. Most major bills now come up under structured or closed rules, which lets the majority avoid amendment votes it doesn’t want."
+       "x": "Open rules have become rare. Most major bills now come up under structured or closed rules, which lets the majority avoid amendment votes it doesn’t want.",
+       "id": "pu1l0#1"
       },
       {
        "t": "mc",
@@ -186,7 +196,8 @@
         "It writes the Speaker’s floor schedule"
        ],
        "a": 0,
-       "x": "The 9 to 4 split and the Speaker’s control over majority appointments make Rules an arm of leadership. That control can slip: as part of his 2023 deal to become Speaker, Kevin McCarthy put hardliners on the committee who could block rules."
+       "x": "The 9 to 4 split and the Speaker’s control over majority appointments make Rules an arm of leadership. That control can slip: as part of his 2023 deal to become Speaker, Kevin McCarthy put hardliners on the committee who could block rules.",
+       "id": "pu1l0#2"
       },
       {
        "t": "mc",
@@ -202,7 +213,8 @@
         "The Speaker is removed and a new one must be elected"
        ],
        "a": 0,
-       "x": "Rule votes used to be party-line formalities. Since 2023, hardliners in the majority have sunk rules to protest leadership, which can stall a bill even when it has the votes to pass."
+       "x": "Rule votes used to be party-line formalities. Since 2023, hardliners in the majority have sunk rules to protest leadership, which can stall a bill even when it has the votes to pass.",
+       "id": "pu1l0#3"
       }
      ]
     },
@@ -219,7 +231,8 @@
         "Unanimous consent"
        ],
        "a": 0,
-       "x": "Most bills the House passes go through suspension, usually noncontroversial ones like naming post offices. It skips the Rules Committee entirely, at the cost of a two-thirds threshold."
+       "x": "Most bills the House passes go through suspension, usually noncontroversial ones like naming post offices. It skips the Rules Committee entirely, at the cost of a two-thirds threshold.",
+       "id": "pu1l1#0"
       },
       {
        "t": "mc",
@@ -235,7 +248,8 @@
         "It removes the committee chair who blocked the bill"
        ],
        "a": 0,
-       "x": "A discharge petition lets a majority of the House pull a bill out of committee. It rarely succeeds, because majority members don’t like to cross their own leaders. This one reached 218 when newly sworn-in Rep. Adelita Grijalva signed, after a delay in seating her that critics said was meant to stall the vote."
+       "x": "A discharge petition lets a majority of the House pull a bill out of committee. It rarely succeeds, because majority members don’t like to cross their own leaders. This one reached 218 when newly sworn-in Rep. Adelita Grijalva signed, after a delay in seating her that critics said was meant to stall the vote.",
+       "id": "pu1l1#1"
       },
       {
        "t": "mc",
@@ -247,7 +261,8 @@
         "A vote to override a veto"
        ],
        "a": 0,
-       "x": "It comes right before the final vote and almost always fails. Since 2021, House rules have barred attaching amendment instructions to it, which used to make it the minority’s favorite tool for forcing awkward votes."
+       "x": "It comes right before the final vote and almost always fails. Since 2021, House rules have barred attaching amendment instructions to it, which used to make it the minority’s favorite tool for forcing awkward votes.",
+       "id": "pu1l1#2"
       },
       {
        "t": "order",
@@ -264,7 +279,8 @@
         "Motion to recommit",
         "Final passage vote"
        ],
-       "x": "If the rule fails at the second step, nothing after it happens."
+       "x": "If the rule fails at the second step, nothing after it happens.",
+       "id": "pu1l1#3"
       }
      ]
     }
@@ -283,11 +299,12 @@
        "o": [
         "Debate is nearly unlimited, so consent is much faster",
         "The Constitution requires consent for most Senate business",
-        "The Vice President prefers it when presiding over the Senate",
+        "Senate rules bar roll-call votes on routine matters",
         "It makes votes easier to count"
        ],
        "a": 0,
-       "x": "Consent agreements set when votes happen, which amendments get votes and how long debate lasts. Any one senator can object, which is where individual senators get their power."
+       "x": "Consent agreements set when votes happen, which amendments get votes and how long debate lasts. Any one senator can object, which is where individual senators get their power.",
+       "id": "pu2l0#0"
       },
       {
        "t": "mc",
@@ -299,7 +316,8 @@
         "Send the nomination to the House for its approval instead"
        ],
        "a": 0,
-       "x": "A hold signals that the senator will object to fast-tracking. Leadership can get around it through cloture, but floor time is scarce, so holds on lower-priority items often work."
+       "x": "A hold signals that the senator will object to fast-tracking. Leadership can get around it through cloture, but floor time is scarce, so holds on lower-priority items often work.",
+       "id": "pu2l0#1"
       },
       {
        "t": "mc",
@@ -313,7 +331,8 @@
         "The motion to proceed is just a formality before the real debate"
        ],
        "a": 0,
-       "x": "The motion to start debating a bill is itself debatable. Opponents can force two cloture fights, one to begin debate and one to end it, and each one eats days of floor time."
+       "x": "The motion to start debating a bill is itself debatable. Opponents can force two cloture fights, one to begin debate and one to end it, and each one eats days of floor time.",
+       "id": "pu2l0#2"
       },
       {
        "t": "match",
@@ -340,7 +359,8 @@
          "Nonpartisan staff who advise on what the rules allow"
         ]
        ],
-       "x": "When C-SPAN shows a quorum call, the real work is usually happening off the floor."
+       "x": "When C-SPAN shows a quorum call, the real work is usually happening off the floor.",
+       "id": "pu2l0#3"
       }
      ]
     },
@@ -357,7 +377,8 @@
         "50 plus the Vice President to break a tie"
        ],
        "a": 0,
-       "x": "The rule is three-fifths of senators “duly chosen and sworn,” which is 60 when no seats are vacant. Ending debate on a change to the Senate’s rules takes two-thirds of those voting."
+       "x": "The rule is three-fifths of senators “duly chosen and sworn,” which is 60 when no seats are vacant. Ending debate on a change to the Senate’s rules takes two-thirds of those voting.",
+       "id": "pu2l1#0"
       },
       {
        "t": "mc",
@@ -369,7 +390,8 @@
         "Only on bills, not nominations"
        ],
        "a": 0,
-       "x": "The modern filibuster is the 60-vote threshold itself. Long speeches still happen, but they’re for attention and don’t decide the outcome."
+       "x": "The modern filibuster is the 60-vote threshold itself. Long speeches still happen, but they’re for attention and don’t decide the outcome.",
+       "id": "pu2l1#1"
       },
       {
        "t": "order",
@@ -385,7 +407,8 @@
         "Up to 30 more hours of debate",
         "Vote on the bill itself"
        ],
-       "x": "Each cloture fight takes days. That time cost, as much as the 60 votes, is why leaders can only push a handful of contested bills through each year."
+       "x": "Each cloture fight takes days. That time cost, as much as the 60 votes, is why leaders can only push a handful of contested bills through each year.",
+       "id": "pu2l1#2"
       },
       {
        "t": "mc",
@@ -401,7 +424,8 @@
         "The parliamentarian signed off on the new practice"
        ],
        "a": 0,
-       "x": "Changing the Senate’s written rules needs two-thirds to end debate, but a simple majority can set a new precedent by overruling the presiding officer. Democrats did this for most nominations in 2013, Republicans for Supreme Court nominees in 2017, and Republicans again in 2025 for batches of sub-Cabinet nominees. Cabinet and judicial nominees still go one at a time."
+       "x": "Changing the Senate’s written rules needs two-thirds to end debate, but a simple majority can set a new precedent by overruling the presiding officer. Democrats did this for most nominations in 2013, Republicans for Supreme Court nominees in 2017, and Republicans again in 2025 for batches of sub-Cabinet nominees. Cabinet and judicial nominees still go one at a time.",
+       "id": "pu2l1#3"
       }
      ]
     }
@@ -439,7 +463,8 @@
          "Funding a member directs to a specific project"
         ]
        ],
-       "x": "Authorizers write the rules for a program. Appropriators decide how much it gets each year. An authorized program with no appropriation has no money."
+       "x": "Authorizers write the rules for a program. Appropriators decide how much it gets each year. An authorized program with no appropriation has no money.",
+       "id": "pu3l0#0"
       },
       {
        "t": "mc",
@@ -451,7 +476,8 @@
         "24 or more bills"
        ],
        "a": 0,
-       "x": "There’s one for each pair of House and Senate appropriations subcommittees. Congress rarely passes all twelve on time, so it leans on continuing resolutions and omnibus packages."
+       "x": "There’s one for each pair of House and Senate appropriations subcommittees. Congress rarely passes all twelve on time, so it leans on continuing resolutions and omnibus packages.",
+       "id": "pu3l0#1"
       },
       {
        "t": "mc",
@@ -467,11 +493,12 @@
         "The Senate rejects the President’s budget director"
        ],
        "a": 0,
-       "x": "The fiscal year starts October 1. If neither the regular bills nor a continuing resolution is law by then, agencies without funding stop most work. Programs on mandatory spending, like Social Security payments, keep going."
+       "x": "The fiscal year starts October 1. If neither the regular bills nor a continuing resolution is law by then, agencies without funding stop most work. Programs on mandatory spending, like Social Security payments, keep going.",
+       "id": "pu3l0#2"
       },
       {
        "t": "mc",
-       "p": "Which of these is NOT funded through the annual appropriations bills?",
+       "p": "Name a major kind of federal spending that isn’t funded through the annual appropriations bills.",
        "o": [
         "Social Security benefits",
         "The military",
@@ -479,7 +506,8 @@
         "The FBI’s agents and field offices"
        ],
        "a": 0,
-       "x": "Social Security, Medicare and most of Medicaid are “mandatory” spending, set by permanent law. Annual appropriations cover “discretionary” spending, roughly a quarter of the federal budget."
+       "x": "Social Security, Medicare and most of Medicaid are “mandatory” spending, set by permanent law. Annual appropriations cover “discretionary” spending, roughly a quarter of the federal budget.",
+       "id": "pu3l0#3"
       }
      ]
     },
@@ -496,7 +524,8 @@
         "It allows amendments without votes"
        ],
        "a": 0,
-       "x": "Reconciliation is the main way a majority passes big tax and spending changes without 60 votes. The tradeoff is the Byrd rule, which limits it to provisions that are mainly budgetary."
+       "x": "Reconciliation is the main way a majority passes big tax and spending changes without 60 votes. The tradeoff is the Byrd rule, which limits it to provisions that are mainly budgetary.",
+       "id": "pu3l1#0"
       },
       {
        "t": "order",
@@ -513,7 +542,8 @@
         "Vote-a-rama on amendments",
         "Final passage"
        ],
-       "x": "The budget resolution comes first because it unlocks the process. Without one, there’s no reconciliation bill."
+       "x": "The budget resolution comes first because it unlocks the process. Without one, there’s no reconciliation bill.",
+       "id": "pu3l1#1"
       },
       {
        "t": "mc",
@@ -525,7 +555,8 @@
         "The House Rules Committee"
        ],
        "a": 0,
-       "x": "Staff run provisions past the parliamentarian in a process nicknamed the “Byrd bath.” A provision that fails can be struck unless 60 senators vote to waive the rule."
+       "x": "Staff run provisions past the parliamentarian in a process nicknamed the “Byrd bath.” A provision that fails can be struck unless 60 senators vote to waive the rule.",
+       "id": "pu3l1#2"
       },
       {
        "t": "mc",
@@ -541,7 +572,8 @@
         "It was a conference report"
        ],
        "a": 0,
-       "x": "Final passage came after a vote-a-rama, the long series of amendment votes that follows once debate time runs out. Debate is capped, but senators can keep offering amendments, so these often run through the night."
+       "x": "Final passage came after a vote-a-rama, the long series of amendment votes that follows once debate time runs out. Debate is capped, but senators can keep offering amendments, so these often run through the night.",
+       "id": "pu3l1#3"
       }
      ]
     }
@@ -564,7 +596,8 @@
         "The Senate’s version is final and goes to the President"
        ],
        "a": 0,
-       "x": "The text has to match word for word. Differences get resolved by passing the bill back and forth with amendments, or through a conference committee."
+       "x": "The text has to match word for word. Differences get resolved by passing the bill back and forth with amendments, or through a conference committee.",
+       "id": "pu4l0#0"
       },
       {
        "t": "match",
@@ -591,7 +624,8 @@
          "The final version, passed by both and sent to the President"
         ]
        ],
-       "x": "If you hear a bill is “enrolled,” Congress is done with it."
+       "x": "If you hear a bill is “enrolled,” Congress is done with it.",
+       "id": "pu4l0#1"
       },
       {
        "t": "mc",
@@ -603,7 +637,8 @@
         "The President must approve each one before it can meet"
        ],
        "a": 0,
-       "x": "Leaders now usually work out the deal privately and move it through ping-pong. That puts the final text in a few hands, which matters if you’re trying to get a provision in."
+       "x": "Leaders now usually work out the deal privately and move it through ping-pong. That puts the final text in a few hands, which matters if you’re trying to get a provision in.",
+       "id": "pu4l0#2"
       }
      ]
     },
@@ -622,7 +657,8 @@
         "They’ll wait for the next Congress and reintroduce the bill"
        ],
        "a": 0,
-       "x": "Starting from a bill the House already passed saves a step and satisfies the rule that revenue bills start in the House. The original bill may have nothing to do with the final law."
+       "x": "Starting from a bill the House already passed saves a step and satisfies the rule that revenue bills start in the House. The original bill may have nothing to do with the final law.",
+       "id": "pu4l1#0"
       },
       {
        "t": "mc",
@@ -634,7 +670,8 @@
         "They become resolutions for the next Congress"
        ],
        "a": 0,
-       "x": "Each Congress starts fresh. The 119th Congress ends January 3, 2027, so anything still pending then starts over in the 120th."
+       "x": "Each Congress starts fresh. The 119th Congress ends January 3, 2027, so anything still pending then starts over in the 120th.",
+       "id": "pu4l1#1"
       },
       {
        "t": "mc",
@@ -646,7 +683,8 @@
         "It’s exempt from committee review in both chambers"
        ],
        "a": 0,
-       "x": "The annual defense authorization almost always becomes law, so members attach whatever they can get germane to it, including many AI and tech measures."
+       "x": "The annual defense authorization almost always becomes law, so members attach whatever they can get germane to it, including many AI and tech measures.",
+       "id": "pu4l1#2"
       }
      ]
     }
@@ -669,7 +707,8 @@
         "48 hours"
        ],
        "a": 0,
-       "x": "If the President does nothing and Congress is in session, the bill becomes law without a signature after 10 days (Sundays excepted)."
+       "x": "If the President does nothing and Congress is in session, the bill becomes law without a signature after 10 days (Sundays excepted).",
+       "id": "pu5l0#0"
       },
       {
        "t": "mc",
@@ -681,7 +720,8 @@
         "A veto issued before the bill has passed both chambers"
        ],
        "a": 0,
-       "x": "A regular veto can be overridden. A pocket veto can’t, because Congress never gets the bill back to vote on. Which adjournments allow one has long been disputed between Congress and Presidents."
+       "x": "A regular veto can be overridden. A pocket veto can’t, because Congress never gets the bill back to vote on. Which adjournments allow one has long been disputed between Congress and Presidents.",
+       "id": "pu5l0#1"
       },
       {
        "t": "mc",
@@ -693,7 +733,8 @@
         "A majority plus the Vice President"
        ],
        "a": 0,
-       "x": "Overrides are rare. Congress has overridden only about 7 percent of regular vetoes in its history."
+       "x": "Overrides are rare. Congress has overridden only about 7 percent of regular vetoes in its history.",
+       "id": "pu5l0#2"
       },
       {
        "t": "mc",
@@ -702,10 +743,11 @@
         "No. The Supreme Court struck it down in 1998",
         "Yes, for individual line items in spending bills",
         "Yes, as long as a Senate majority consents to it",
-        "Only during wartime or a declared national emergency"
+        "Yes, but Congress can restore the cut items by majority vote"
        ],
        "a": 0,
-       "x": "In Clinton v. City of New York, the Court held that letting the President cancel parts of a signed law violated the Constitution’s process for making laws. A President who dislikes part of a bill has to veto all of it."
+       "x": "In Clinton v. City of New York, the Court held that letting the President cancel parts of a signed law violated the Constitution’s process for making laws. A President who dislikes part of a bill has to veto all of it.",
+       "id": "pu5l0#3"
       },
       {
        "t": "order",
@@ -721,7 +763,8 @@
         "The chamber where it started votes on override",
         "The other chamber votes on override"
        ],
-       "x": "The bill goes back to the chamber where it started. If that chamber fails to override, the other one never votes."
+       "x": "The bill goes back to the chamber where it started. If that chamber fails to override, the other one never votes.",
+       "id": "pu5l0#4"
       }
      ]
     },
@@ -738,19 +781,21 @@
         "Fire the agency heads responsible for unpopular rules"
        ],
        "a": 0,
-       "x": "The resolution still needs the President’s signature, so it mostly gets used right after a new President of the other party takes office, to undo the previous administration’s late rules."
+       "x": "The resolution still needs the President’s signature, so it mostly gets used right after a new President of the other party takes office, to undo the previous administration’s late rules.",
+       "id": "pu5l1#0"
       },
       {
        "t": "mc",
        "p": "A rule comes out in an outgoing administration’s final months. Why can the next Congress still overturn it?",
        "o": [
-        "The CRA’s lookback covers rules sent in roughly the last 60 days of session before",
+        "The CRA’s lookback covers rules sent in about the last 60 session days before adjournment",
         "New rules aren’t final until a full year after they’re published",
         "Courts automatically send late rules back for the next administration",
         "It can’t, because the rule is already final"
        ],
        "a": 0,
-       "x": "That’s why rules finished in an administration’s last months are the most exposed, and why agencies race to finalize rules earlier in an election year."
+       "x": "That’s why rules finished in an administration’s last months are the most exposed, and why agencies race to finalize rules earlier in an election year.",
+       "id": "pu5l1#1"
       },
       {
        "t": "mc",
@@ -762,7 +807,8 @@
         "Nothing changes, because the rule stays in effect exactly as written"
        ],
        "a": 0,
-       "x": "This is sometimes called “salting the earth,” and it’s why CRA votes matter more than they look. Nobody is sure how different a new rule has to be."
+       "x": "This is sometimes called “salting the earth,” and it’s why CRA votes matter more than they look. Nobody is sure how different a new rule has to be.",
+       "id": "pu5l1#2"
       },
       {
        "t": "mc",
@@ -771,10 +817,11 @@
         "Once",
         "Never",
         "About 50",
-        "Every year"
+        "About a dozen times"
        ],
        "a": 0,
-       "x": "It overturned a workplace ergonomics rule in 2001, and that was it until 2017, when Congress used it to repeal 16 Obama-era rules. It has been used again after later transitions."
+       "x": "It overturned a workplace ergonomics rule in 2001, and that was it until 2017 and 2018, when Congress used it to repeal 16 rules, most of them from the last months of the Obama administration. It has been used again after later transitions.",
+       "id": "pu5l1#3"
       }
      ]
     }

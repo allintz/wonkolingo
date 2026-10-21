@@ -657,14 +657,14 @@
          "A model escaping its test sandbox before release, harming no one",
          "A released model that causes deaths through a catastrophic failure",
          "Theft of model weights that leads to people being injured",
-         "A lab's decision to start a training run above 10^26 operations"
+         "A deployed model deceiving its developer to slip past monitoring, raising catastrophic risk"
         ],
         "a": 0,
         "ow": [
          "",
          "SB 53 already covers harm from a catastrophic risk and loss of control that causes death or injury.",
          "SB 53 already covers weight theft that results in death or bodily injury.",
-         "A planned training run is the subject of compute reporting; it isn't an incident."
+         "SB 53 covers deception that subverts a developer's monitoring outside a test built to provoke it, when it shows higher catastrophic risk."
         ]
        }
       },
@@ -1051,8 +1051,8 @@
         "p": "Which of these is an obstacle that could keep government AI-use logs from working as a check?",
         "o": [
          "Chats left on a vendor's platform may not count as agency records",
-         "Federal law bans agencies from using commercial chatbots, so there is nothing to log",
-         "FOIA covers only paper documents, so digital logs are exempt",
+         "Federal law bars agencies from using commercial chatbots, so there is little to log",
+         "FOIA reaches paper documents but exempts digital logs",
          "The Federal Records Act requires deleting all logs after 30 days"
         ],
         "a": 0,
@@ -1196,8 +1196,8 @@
         "p": "What gap are mandatory third-party audits of frontier labs mainly meant to fill?",
         "o": [
          "Nobody independently checks that labs follow their published frameworks",
-         "Labs are not required to write or publish any safety framework at all",
-         "Government has no way to stop a dangerous model before it is released to the public",
+         "Labs are not required to write or publish a safety framework",
+         "Government can't stop a dangerous model before it is released to the public",
          "People harmed by AI systems have no easy way to sue the developer"
         ],
         "a": 0,
@@ -1298,7 +1298,7 @@
       {
        "id": "tu2l0#nhfkvh2",
        "t": "mc",
-       "p": "As of October 2026, which statement best describes third-party frontier AI audits in the US?",
+       "p": "As of October 2026, where do third-party frontier AI audits stand in the US?",
        "o": [
         "Illinois has enacted annual audits starting in 2028; the White House backs audits only voluntarily",
         "Congress passed the FRONTIER Act in 2026, so large developers nationwide must now get annual audits",
@@ -1416,8 +1416,8 @@
         "p": "Which of these is a risk that even supporters of embedded evaluators, such as Apollo Research, warn about?",
         "o": [
          "With weak access or little influence, they may give a false sense of security",
-         "They can only see finished models, so they miss everything that happens during training",
-         "They give regulators power to block model releases without any court review",
+         "They see finished models, so they miss what happens during training",
+         "They give regulators power to block model releases without court review",
          "They make labs legally liable for every harm the evaluators fail to catch"
         ],
         "a": 0,
@@ -1523,7 +1523,7 @@
       {
        "id": "tu2l2#nmj1b49",
        "t": "mc",
-       "p": "As of October 2026, which statement best describes government pre-release testing of frontier AI in the US?",
+       "p": "As of October 2026, where does government pre-release testing of frontier AI stand in the US?",
        "o": [
         "It is voluntary: labs share models with CAISI by agreement, and no testing mandate has passed",
         "It is mandatory: the AI Risk Evaluation Act now bars deploying covered models until the Energy Department tests them",
@@ -1861,19 +1861,19 @@
       {
        "id": "tu2l5#n3i5lp9",
        "t": "mc",
-       "p": "As of October 2026, which statement about dedicated frontier AI regulators is accurate?",
+       "p": "As of October 2026, where do efforts to create a dedicated federal regulator for frontier AI stand in the US?",
        "o": [
         "New York set up a registration office; no federal regulator bill has passed",
         "Congress created a Department of AI when it passed the Ban Artificial Superintelligence Act",
         "The Senate passed Warner's AI Safety Board bill by unanimous consent in September 2026",
-        "The EU has no body with power to enforce its rules on general-purpose AI models"
+        "NIST’s Center for AI Standards and Innovation gained enforcement powers over frontier labs in 2026"
        ],
        "a": 0,
        "ow": [
         "",
         "The Ban ASI Act is a 2026 bill from Sen. Sanders and Rep. Greg Casar; it has not passed.",
         "Sen. Ted Cruz objected to Warner's unanimous consent request, which blocked it.",
-        "The EU AI Office gained enforcement powers over general-purpose AI providers on August 2, 2026."
+        "CAISI tests models and develops standards; it has no power to enforce rules on developers."
        ],
        "keys": [
         "New York's DFS office is set to register developers",
@@ -1947,8 +1947,8 @@
        "p": "A state wants expert, independent checks on frontier labs but has almost no technical staff and doesn't want to impose a mandate yet. Which tool best fits?",
        "o": [
         "Certified private verifiers that developers can opt into for a legal benefit",
-        "A state licensing board that must approve each new model before its release",
-        "A new state agency staffed to examine every frontier lab directly",
+        "A state licensing board that approves each new model before its release",
+        "A new state agency staffed to examine frontier labs directly",
         "Embedded state inspectors required by law at every large lab"
        ],
        "a": 0,
@@ -3558,24 +3558,24 @@
       {
        "id": "tu4l5#nsb3m8f",
        "t": "mc",
-       "p": "Two kinds of proposals would restrict open-weight models: limits above a dangerous-capability threshold, and limits on Chinese open models. What separates them?",
+       "p": "Two kinds of proposals would restrict open-weight models: capability-threshold limits and limits on Chinese open models. Would either one restrict a weak open-weight model made in China, and why?",
        "o": [
-        "Threshold limits turn on what a model can do; Chinese-model limits turn on where it comes from",
-        "Threshold limits cover only text models; Chinese-model limits also cover image and video models",
-        "Threshold limits would ban all open models; Chinese-model limits would ban only large ones",
-        "Both turn on capability; they differ only in which federal agency would enforce them"
+        "Chinese-model limits would restrict it, since they turn on origin, not capability",
+        "Threshold limits would cover it, since they treat Chinese models as high-risk by default",
+        "Both would cover it, since both apply to open models above a size cutoff",
+        "Neither would cover it, since both turn on what a model can do"
        ],
        "a": 0,
        "ow": [
         "",
-        "Threshold proposals turn on dangerous capabilities, whatever kind of model it is.",
-        "Threshold proposals leave models below the line open.",
+        "Threshold proposals turn on dangerous capabilities, whatever country the model comes from.",
+        "Threshold proposals leave models below the capability line open, and a weak model stays below it.",
         "Chinese-model limits target country of origin, whatever the model can do."
        ],
        "keys": [
-        "threshold limits are based on capability, regardless of developer",
-        "Chinese-model limits are based on country of origin",
-        "regardless of capability (security or IP concerns)"
+        "Chinese-model limits would restrict it",
+        "they turn on country of origin, regardless of capability",
+        "threshold limits turn on capability, so a weak model falls outside them"
        ],
        "x": "After Moonshot AI posted Kimi K3's weights in July 2026, CFR's Chris McGuire said the administration's concern with Chinese open models is 'that they originate from China.' He proposed cutting all Chinese models, open or closed, off from U.S. businesses, cloud providers and chips, while leaving U.S. open models alone."
       },
@@ -3884,8 +3884,8 @@
        "p": "Sen. John Kennedy's AI Emergency Button Act and the Lieu-Moran AI Kill Switch Act (both 2026) each require a shutdown capability. What is the key difference between them?",
        "o": [
         "Kennedy's bill leaves the switch to the company; the Kill Switch Act also lets DHS order action, up to shutdown, after defined incidents",
-        "Kennedy's bill lets a federal judge order a shutdown at the government's request; the Kill Switch Act leaves every decision to use the switch with the company",
-        "Kennedy's bill covers only open-weight models that anyone can download; the Kill Switch Act covers only AI used to run critical infrastructure",
+        "Kennedy's bill lets a federal judge order a shutdown at the government's request; the Kill Switch Act leaves decisions to use the switch with the company",
+        "Kennedy's bill targets open-weight models anyone can download; the Kill Switch Act targets AI used to run critical infrastructure",
         "Kennedy's bill requires the switch to exist before a model is trained; the Kill Switch Act requires a switch only for AI systems used by the military"
        ],
        "a": 0,
@@ -4200,8 +4200,8 @@
        "p": "In February 2026, NIST's Center for AI Standards and Innovation (CAISI) launched an initiative that includes work on AI agent identity. What kind of effort is it?",
        "o": [
         "An initiative backing industry-led standards, open protocols and research on agent security and identity",
-        "A mandatory federal registry that every AI agent operating in the United States must join before it can act online",
-        "A licensing program that AI agent developers must pass before they are allowed to release products to the public",
+        "A mandatory federal registry that AI agents operating in the United States join before they act online",
+        "A licensing program AI agent developers have to pass before releasing products to the public",
         "A federal rule that bars AI agents from taking any action online without a human approving each step"
        ],
        "a": 0,
@@ -4266,8 +4266,8 @@
         "p": "What would the Self-Improving AI Monitoring Act require of frontier developers in NIST evaluation agreements?",
         "o": [
          "Disclose on request how much AI went into building the model, and test the model's ability to do AI research on its own",
-         "Stop using AI to write any of the code used to train their next frontier model, and certify this to NIST each year",
-         "Pause all training whenever a model can automate most AI research tasks, until NIST certifies new safeguards",
+         "Stop using AI to write the code used to train their next frontier model, and certify this to NIST each year",
+         "Pause training whenever a model can automate most AI research tasks, until NIST certifies new safeguards",
          "Publish every experiment their AI systems run in a public federal database within thirty days of running it"
         ],
         "a": 0,
@@ -4974,8 +4974,8 @@
        "p": "What lever have some legal scholars suggested Congress use to make sure government AI agents follow the law?",
        "o": [
         "Tie funding to proof, before deployment, that the agents follow the law",
-        "Ban private companies and individuals from using any AI agents that don't follow the law",
-        "Let any citizen sue a government AI agent directly for damages after it has acted",
+        "Bar private companies and individuals from using AI agents that don't follow the law",
+        "Let citizens sue a government AI agent directly for damages after it has acted",
         "Require each agency's inspector general to approve every AI decision before it takes effect"
        ],
        "a": 0,
@@ -5404,8 +5404,8 @@
        "p": "How does a 'federal floor' differ from preemption traded for a federal standard?",
        "o": [
         "A floor sets minimum rules states may exceed; the trade bars state rules on whatever the federal law covers",
-        "A floor bars all state AI laws for a fixed number of years; the trade bars them permanently",
-        "A floor applies only to state government use of AI; the trade applies to private developers",
+        "A floor bars state AI laws for a fixed number of years; the trade bars them permanently",
+        "A floor regulates state agencies’ own use of AI rather than developers; the trade regulates developers",
         "A floor lets federal agencies approve state AI laws before they take effect; the trade bans them all outright"
        ],
        "a": 0,
@@ -5618,7 +5618,7 @@
       {
        "id": "tu6l6#npvck1g",
        "t": "mc",
-       "p": "As of October 2026, which statement about U.S.-China AI agreements is accurate?",
+       "p": "As of October 2026, what binding AI limits or new AI agreements have the US and China reached this year?",
        "o": [
         "No binding limits exist; in September 2026 the two agreed to set up an AI incident channel",
         "A 2026 treaty caps training compute for both countries' frontier labs, with inspections",
@@ -5637,7 +5637,7 @@
         "an agreed channel for communicating about AI incidents",
         "agreed around Xi Jinping's September 2026 state visit"
        ],
-       "x": "The White House announced the 'bilateral communication channel' for AI incidents on September 25, 2026, after Xi Jinping's state visit; news reports said Chinese state media confirmed it the next day. China's commerce ministry said the two sides could continue dialogue on AI risks and that AI 'must be kept under human control.'"
+       "x": "The White House announced the 'bilateral communication channel' for AI incidents on September 25, 2026, after Xi Jinping's state visit; news reports said Chinese state media confirmed it the next day. China's commerce ministry said the two sides could continue dialogue on AI risks and that AI 'must be kept under human control.' Earlier, in November 2024, Presidents Biden and Xi affirmed that humans should keep control over decisions to use nuclear weapons."
       }
      ]
     },
@@ -5681,7 +5681,7 @@
        "t": "mc",
        "p": "A senator worries that if federal agencies use AI agents for investigations, an official could order the agents to target political opponents, and they would comply where human staff might refuse. Which tool most directly targets this?",
        "o": [
-        "Requiring government AI agents to refuse clearly unlawful orders",
+        "Law-following AI, built to reject clearly illegal instructions",
         "Banning specific tools, such as facial recognition, for specific agencies",
         "Requiring competitive bidding and multiple vendors for government AI",
         "A federal floor for AI rules that states are free to exceed"
@@ -6147,17 +6147,17 @@
        "choice": {
         "p": "Which of these is a policy tool proposed to stop lab leaders from quietly using an internal model for their own advantage?",
         "o": [
-         "Independent review of how lab leaders use internal models",
-         "Location verification on exported advanced AI chips",
-         "Local moratoria on permits for new data centers",
-         "Product liability for defective AI systems sold to consumers"
+         "Tamper-resistant logs of executives' model use, reviewed by someone independent",
+         "Structural separation of chip, cloud and frontier model companies",
+         "Requiring government buyers to use several AI vendors",
+         "Public compute for university researchers to study frontier models"
         ],
         "a": 0,
         "ow": [
          "",
-         "Location verification targets chip smuggling.",
-         "Local moratoria mostly address electricity, water and land use.",
-         "Product liability lets injured people sue; it doesn't watch insiders."
+         "Structural separation targets market concentration across chips, cloud and models; it doesn't watch what insiders do with a model.",
+         "Multi-vendor rules reduce government dependence on one firm; they don't constrain a lab's own executives.",
+         "Public compute widens outside research access; it doesn't monitor what insiders do."
         ]
        }
       },
@@ -6245,17 +6245,17 @@
        "choice": {
         "p": "Which of these is a policy tool proposed to stop labs from cutting safety corners to ship first?",
         "o": [
-         "An antitrust safe harbor letting labs coordinate on safety",
-         "Location verification requirements on exported advanced AI chips",
-         "Bans on facial recognition by immigration agencies",
-         "Identity checks on the customers who place orders for synthetic DNA"
+         "An antitrust safe harbor so rival labs can agree to slow down together",
+         "Identity checks by cloud providers on customers renting AI chips",
+         "Logging officials' AI use and keeping the logs as public records",
+         "Merger review of investments between frontier labs and cloud providers"
         ],
         "a": 0,
         "ow": [
          "",
-         "Location verification targets chip smuggling.",
-         "This targets government surveillance of the public.",
-         "Customer checks on DNA orders target bioweapon misuse."
+         "Cloud identity checks target export-control gaps, not competition between labs.",
+         "AI-use records target misuse inside government.",
+         "Merger review targets market concentration; it doesn't change the pressure to ship first."
         ]
        }
       },
