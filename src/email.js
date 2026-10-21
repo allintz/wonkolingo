@@ -45,7 +45,7 @@ const codeOf = b => String(b.code || '').replace(/\D/g, '');
 // Routes that work signed out. Returns a Response, or null if the path isn't ours.
 export async function publicEmailApi(req, env, path, { json, fail, body }) {
   const m = req.method;
-  if (m === 'GET' && path === '/api/config') return json({ email: emailReady(env, req) });
+  if (m === 'GET' && path === '/api/config') return json({ email: emailReady(env, req), google: env.GOOGLE_CLIENT_ID || null });
   // Step 1 of signing in by email: always the same answer, so nobody can use it to find out who has an account.
   if (m === 'POST' && path === '/api/email/signin-request') {
     if (!emailReady(env, req)) return fail('Email isn’t set up yet.', 503);

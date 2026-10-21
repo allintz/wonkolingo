@@ -89,7 +89,8 @@ export async function accountInfo(env, p) {
   const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM passkeys WHERE player_id = ?').bind(p.id).first();
   const pw = await env.DB.prepare('SELECT username FROM passwords WHERE player_id = ?').bind(p.id).first();
   const em = await env.DB.prepare('SELECT email FROM emails WHERE player_id = ?').bind(p.id).first();
-  return { player: { id: p.id, name: p.name }, group: p.solo ? null : { code: p.group_code, groupName: p.group_name }, passkeys: n.n, username: pw ? pw.username : null, email: em ? em.email : null };
+  const gg = await env.DB.prepare('SELECT email FROM google_ids WHERE player_id = ?').bind(p.id).first();
+  return { player: { id: p.id, name: p.name }, group: p.solo ? null : { code: p.group_code, groupName: p.group_name }, passkeys: n.n, username: pw ? pw.username : null, email: em ? em.email : null, google: gg ? gg.email || 'connected' : null };
 }
 
 // Usernames and passwords. A forgotten password is reset by signing in another way (an emailed code, a passkey, a code
@@ -240,7 +241,7 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
       'DELETE FROM link_codes WHERE player_id = ?', 'DELETE FROM webauthn_challenges WHERE player_id = ?', 'DELETE FROM grade_usage WHERE player_id = ?',
       'DELETE FROM disputes WHERE who = ?', 'DELETE FROM card_feedback WHERE who = ?', 'DELETE FROM passwords WHERE player_id = ?']) stmts.push(env.DB.prepare(sql).bind(id));
     stmts.push(env.DB.prepare('DELETE FROM blocks WHERE player_id = ? OR blocked_id = ?').bind(id, id), env.DB.prepare('DELETE FROM grade_usage WHERE player_id = ?').bind('dispute:' + id),
-      env.DB.prepare('DELETE FROM rate_limits WHERE key = ?').bind('rm:' + id), env.DB.prepare('DELETE FROM emails WHERE player_id = ?').bind(id), env.DB.prepare('DELETE FROM email_codes WHERE player_id = ?').bind(id),
+      env.DB.prepare('DELETE FROM rate_limits WHERE key = ?').bind('rm:' + id), env.DB.prepare('DELETE FROM emails WHERE player_id = ?').bind(id), env.DB.prepare('DELETE FROM email_codes WHERE player_id = ?').bind(id), env.DB.prepare('DELETE FROM google_ids WHERE player_id = ?').bind(id),
       env.DB.prepare('DELETE FROM players WHERE id = ?').bind(id));
     if (me.solo) stmts.push(env.DB.prepare('DELETE FROM groups WHERE code = ? AND solo = 1').bind(me.group_code));
     await env.DB.batch(stmts);

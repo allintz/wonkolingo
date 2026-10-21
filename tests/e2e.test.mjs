@@ -45,9 +45,11 @@ async function clickable(p, sel) {
 const BAD_TEXT = /\bundefined\b|\bnull\b|\[object Object\]|NaN|&amp;|&lt;|&gt;|&quot;|&#\d+;|\$\{/;
 const badText = t => { const m = String(t).match(BAD_TEXT); return m ? m[0] + ' in: ' + String(t).slice(Math.max(0, m.index - 60), m.index + 60) : null; };
 
+// Opens the sign-up or sign-in screen's password form. With Google sign-in on, the form sits behind a link.
+async function openForm(p, sel) { await p.click(sel); if (await visible(p, '#gtPwOpen')) await p.click('#gtPwOpen'); }
 async function signUp(p, { name = 'Tester ' + rnd(), username = 'u' + rnd(), password = 'correct horse ' + rnd() } = {}) {
   await p.goto(BASE + '/');
-  await p.click('#gtNew');
+  await openForm(p, '#gtNew');
   await p.fill('#gtName', name); await p.fill('#gtUser', username); await p.fill('#gtPass', password);
   await p.click('#gtMake');
   await p.waitForSelector('#gate', { state: 'hidden', timeout: 15000 });
@@ -98,7 +100,7 @@ tests.coldStart = async () => {
     ok(await visible(p, '#gate'), `cold start ${r || '/'}: sign-up screen shows`);
     ok(await clickable(p, '#gtNew') === true, `cold start ${r || '/'}: Create an account is clickable`, await clickable(p, '#gtNew'));
     if (phone) {
-      await p.click('#gtHave'); ok(await visible(p, '#gtUser'), `${r || '/'}: sign-in form opens`);
+      await openForm(p, '#gtHave'); ok(await visible(p, '#gtUser'), `${r || '/'}: sign-in form opens`);
       ok(await clickable(p, '#gtBack') === true, `${r || '/'}: Back is clickable on sign-in`);
       await p.click('#gtBack'); ok(await visible(p, '#gtNew'), `${r || '/'}: Back returns to welcome`);
     }
@@ -110,7 +112,7 @@ tests.coldStart = async () => {
 // ---------- 2. Sign-up validation, then a full session, then sign-in elsewhere sees the same progress
 tests.accountAndSession = async () => {
   const c = await ctx(); const p = await page(c);
-  await p.goto(BASE + '/'); await p.click('#gtNew');
+  await p.goto(BASE + '/'); await openForm(p, '#gtNew');
   await p.click('#gtMake'); ok(/display name/i.test(await p.locator('.gerr').innerText().catch(() => '')), 'empty name is refused with a message');
   await p.fill('#gtName', 'Val'); await p.fill('#gtUser', 'ab'); await p.fill('#gtPass', 'longenough');
   await p.click('#gtMake'); ok(/3 characters/.test(await p.locator('.gerr').innerText().catch(() => '')), 'short username is refused');
@@ -129,7 +131,7 @@ tests.accountAndSession = async () => {
   ok(await visible(p1, '.welcome'), 'new player sees the welcome card');
   ok(await clickable(p1, '#wBrowse') === true, 'Pick a course is clickable', await clickable(p1, '#wBrowse'));
   // Taken username on a second sign-up
-  { const cx = await ctx(); const px = await page(cx); await px.goto(BASE + '/'); await px.click('#gtNew'); await px.fill('#gtName', 'Dup'); await px.fill('#gtUser', who.username.toUpperCase()); await px.fill('#gtPass', 'another password');
+  { const cx = await ctx(); const px = await page(cx); await px.goto(BASE + '/'); await openForm(px, '#gtNew'); await px.fill('#gtName', 'Dup'); await px.fill('#gtUser', who.username.toUpperCase()); await px.fill('#gtPass', 'another password');
     await px.click('#gtMake'); await px.waitForSelector('.gerr', { timeout: 8000 }).catch(() => {}); ok(/taken/i.test(await px.locator('.gerr').innerText().catch(() => '')), 'taken username (other case) is refused'); await cx.close(); }
 
   await p1.click('#wBrowse'); ok(await ev(p1, 'VIEW') === 'courses', 'Pick a course opens Courses');
@@ -157,7 +159,7 @@ tests.accountAndSession = async () => {
 
   // Another device: sign in with the password, see the same progress.
   const c2 = await ctx(); const p2 = await page(c2);
-  await p2.goto(BASE + '/'); await p2.click('#gtHave');
+  await p2.goto(BASE + '/'); await openForm(p2, '#gtHave');
   await p2.fill('#gtUser', who.username); await p2.fill('#gtPass', 'wrong password');
   await p2.click('#gtPwGo'); await p2.waitForSelector('.gerr', { timeout: 8000 }).catch(() => {});
   ok(/password|match|wrong/i.test(await p2.locator('.gerr').innerText().catch(() => '')), 'wrong password shows an error', await p2.locator('.gerr').innerText().catch(() => ''));
@@ -294,7 +296,7 @@ tests.network = async () => {
   { // Offline from the start: the sign-up screen must offer a way in.
     const c = await ctx(); const p = await page(c);
     await p.route('**/api/**', r => r.abort('internetdisconnected'));
-    await p.goto(BASE + '/'); await p.click('#gtNew');
+    await p.goto(BASE + '/'); await openForm(p, '#gtNew');
     await p.fill('#gtName', 'Offline'); await p.fill('#gtUser', 'off' + rnd()); await p.fill('#gtPass', 'password123');
     await p.click('#gtMake'); await p.waitForTimeout(800);
     ok(await visible(p, '.gerr'), 'offline sign-up shows an error');
@@ -321,7 +323,7 @@ tests.network = async () => {
     const c = await ctx(); const p = await page(c);
     let posts = 0;
     await p.route('**/api/account', async r => { posts++; await new Promise(res => setTimeout(res, 1500)); await r.continue(); });
-    await p.goto(BASE + '/'); await p.click('#gtNew');
+    await p.goto(BASE + '/'); await openForm(p, '#gtNew');
     await p.fill('#gtName', 'Slow'); await p.fill('#gtUser', 'slow' + rnd()); await p.fill('#gtPass', 'password123');
     await p.click('#gtMake'); await p.click('#gtMake', { force: true, timeout: 500 }).catch(() => {}); await p.press('#gtPass', 'Enter').catch(() => {});
     await p.waitForSelector('#gate', { state: 'hidden', timeout: 10000 }).catch(() => {});
@@ -384,7 +386,7 @@ tests.me = async () => {
   ok(/isn’t right/.test(await p.locator('#acctCard .gerr').innerText().catch(() => '')), 'a wrong current password is refused', await p.locator('#acctCard .gerr').innerText().catch(() => ''));
   await p.fill('#aPwCur', who.password); await p.fill('#aPwPass', np); await p.press('#aPwPass', 'Enter'); await p.waitForTimeout(1500);
   await ev(p, 'syncNow()'); await p.waitForTimeout(1500);
-  const c2 = await ctx(); const p2 = await page(c2); await p2.goto(BASE + '/'); await p2.click('#gtHave');
+  const c2 = await ctx(); const p2 = await page(c2); await p2.goto(BASE + '/'); await openForm(p2, '#gtHave');
   await p2.fill('#gtUser', who.username); await p2.fill('#gtPass', np); await p2.click('#gtPwGo');
   await p2.waitForSelector('#gate', { state: 'hidden', timeout: 10000 }).catch(() => {});
   ok(!await visible(p2, '#gate'), 'new password works on another device');
@@ -400,7 +402,7 @@ tests.fixes = async () => {
     for (const status of [429, 500]) {
       const c = await ctx(); const p = await page(c);
       await p.route('**/api/account', r => r.fulfill({ status, contentType: 'application/json', body: JSON.stringify({ error: 'Too many new accounts from this network today. Try again tomorrow.' }) }));
-      await p.goto(BASE + '/'); await p.click('#gtNew');
+      await p.goto(BASE + '/'); await openForm(p, '#gtNew');
       await p.fill('#gtName', 'Busy'); await p.fill('#gtUser', 'busy' + rnd()); await p.fill('#gtPass', 'password123'); await p.click('#gtMake');
       await p.waitForSelector('#gtOffline', { timeout: 5000 }).catch(() => {});
       ok(await visible(p, '#gtOffline'), `sign-up after a ${status} offers Continue offline`);
@@ -497,7 +499,7 @@ tests.email = async () => {
   if (!cfg.email) { console.log('  (email tests skipped: start wrangler dev with --var EMAIL_TEST_MODE:1)'); return; }
   const c = await ctx(); const p = await page(c);
   const tag = rnd(), email = `e2e.${tag}@example.com`, username = 'em' + tag;
-  await p.goto(BASE + '/'); await p.click('#gtNew');
+  await p.goto(BASE + '/'); await openForm(p, '#gtNew');
   await p.waitForSelector('#gtEmail', { timeout: 5000 }).catch(() => {});
   ok(await visible(p, '#gtEmail'), 'sign-up offers an optional email when the server can send mail');
   await p.fill('#gtName', 'Em'); await p.fill('#gtUser', username); await p.fill('#gtPass', 'first password 1'); await p.fill('#gtEmail', email);
@@ -511,7 +513,7 @@ tests.email = async () => {
   await ev(p, `go('me')`); ok((await p.locator('#acctCard').innerText()).includes(email), 'Me shows the email');
   await p.click('#aOut'); await p.click('#aOut'); await p.waitForTimeout(500);
   // Forgot the password: sign in by email, then set a new one without the old.
-  await p.click('#gtHave'); await p.click('#gtEmailMode'); await p.fill('#gtEmailIn', email.toUpperCase());
+  await openForm(p, '#gtHave'); await p.click('#gtEmailMode'); await p.fill('#gtEmailIn', email.toUpperCase());
   const req = p.waitForResponse(r => r.url().endsWith('/api/email/signin-request'));
   await p.press('#gtEmailIn', 'Enter'); const code2 = (await (await req).json()).devCode;
   await p.waitForSelector('#gtECode', { timeout: 8000 }).catch(() => {});
@@ -725,6 +727,7 @@ tests.trial = async () => {
   ok(await visible(p, '#gate') && /Save your progress/.test(await p.locator('#gateIn').innerText()), 'leaving the trial shows Save your progress');
   ok(!await visible(p, '#gtBack'), 'no back button on the save screen');
   await p.reload(); ok(await visible(p, '#gate') && /Save your progress/.test(await p.locator('#gateIn').innerText()), 'a reload still asks to save');
+  if (await visible(p, '#gtPwOpen')) await p.click('#gtPwOpen');
   await p.fill('#gtName', 'Trial ' + rnd()); await p.fill('#gtUser', 't' + rnd()); await p.fill('#gtPass', 'trial password ' + rnd());
   await p.click('#gtMake'); await p.waitForSelector('#gate', { state: 'hidden', timeout: 15000 });
   ok(await ev(p, `!!ACCT && Object.keys(state.srs).length`) === cards && cards > 0, 'the new account keeps the trial progress', cards);
@@ -738,6 +741,111 @@ tests.trial = async () => {
   ok(await visible(q, '#gate') && /Welcome/.test(await q.locator('#gateIn').innerText()), 'quitting before answering returns to the welcome');
   ok(p.errors.length === 0 && q.errors.length === 0, 'trial: no page errors', p.errors.concat(q.errors));
   await c.close(); await c2.close();
+};
+
+// Sign in with Google (only on a server started with the test Google key; see tests/README.md). Google's script is
+// replaced by a stub whose button hands the page a token signed with the test key.
+tests.google = async () => {
+  const cfg = await (await fetch(BASE + '/api/config')).json();
+  if (!cfg.google) { console.log('google: skipped (server has no GOOGLE_CLIENT_ID)'); return; }
+  const { createSign, createPrivateKey } = await import('node:crypto');
+  const KEY = JSON.parse((await import('node:fs')).readFileSync(new URL('./google-test-key.json', import.meta.url)));
+  const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url');
+  const tok = claims => { const now = Math.floor(Date.now() / 1000), h = b64({ alg: 'RS256', kid: 'wl-test' }), b = b64({ iss: 'https://accounts.google.com', aud: cfg.google, iat: now, exp: now + 3600, ...claims });
+    return h + '.' + b + '.' + createSign('RSA-SHA256').update(h + '.' + b).sign(createPrivateKey({ key: KEY.private, format: 'jwk' })).toString('base64url'); };
+  const stub = c => c.route('https://accounts.google.com/gsi/client', r => r.fulfill({ contentType: 'text/javascript', body: `window.google = { accounts: { id: {
+    initialize(o) { window.__gcb = o.callback; },
+    renderButton(el) { const b = document.createElement('button'); b.className = 'fakeG'; b.textContent = 'Continue with Google'; b.onclick = () => window.__gcb({ credential: window.__gtok }); el.appendChild(b); } } } };` }));
+  const sub = 'e2e' + rnd() + rnd();
+  const c = await ctx(); await stub(c); const p = await page(c);
+  await p.goto(BASE + '/'); await p.click('[data-try="lingo"]');
+  let n = 0; while (n++ < 20 && await answerOne(p)) {}
+  const cards = await ev(p, 'Object.keys(state.srs).length');
+  await p.click('#rHome');
+  await p.waitForSelector('#gateIn .fakeG', { timeout: 8000 });
+  ok(!await visible(p, '#gtForm') && await visible(p, '#gtPwOpen'), 'save screen leads with Google; the password form is behind a link');
+  await ev(p, `window.__gtok = ${JSON.stringify(tok({ sub, email: sub + '@example.com', email_verified: true, given_name: 'Greta' }))}`);
+  await p.click('#gateIn .fakeG'); await p.waitForSelector('#gate', { state: 'hidden', timeout: 15000 });
+  ok(await ev(p, `!!ACCT && ACCT.player.name === 'Greta' && ACCT.google === '${sub}@example.com'`), 'Google makes an account named from the profile');
+  ok(await ev(p, 'Object.keys(state.srs).length') === cards && cards > 0, 'and keeps the trial progress', cards);
+  await ev(p, `go('me')`); ok(/Google/.test(await p.locator('#acctCard').innerText()), 'Me shows the connected Google account');
+  await ev(p, 'syncNow()'); await p.waitForTimeout(800);
+  // Another device: sign-in screen leads with Google, other ways are tucked away.
+  const c2 = await ctx(); await stub(c2); const q = await page(c2);
+  await q.goto(BASE + '/'); await q.click('#gtHave'); await q.waitForSelector('#gateIn .fakeG', { timeout: 8000 });
+  ok(!await visible(q, '#gtForm') && !await visible(q, '#gtCodeMode') && await visible(q, '#gtMore'), 'sign-in shows Google first, the rest behind links');
+  await q.click('#gtMore'); ok(await visible(q, '#gtCodeMode') && await visible(q, '#gtRecMode'), 'Other ways shows codes');
+  await q.click('#gtPwOpen'); ok(await visible(q, '#gtUser'), 'the password form opens');
+  await ev(q, `window.__gtok = ${JSON.stringify(tok({ sub }))}`);
+  await q.click('#gateIn .fakeG'); await q.waitForSelector('#gate', { state: 'hidden', timeout: 15000 });
+  ok(await ev(q, 'ACCT && ACCT.player.name') === 'Greta', 'Google signs in to the same account on another device');
+  await q.waitForTimeout(1500);
+  ok(await ev(q, 'Object.keys(state.srs).length') === cards, 'with its progress', await ev(q, 'Object.keys(state.srs).length'));
+  // A password account connects Google from Me.
+  const c3 = await ctx(); await stub(c3); const r3 = await page(c3);
+  await signUp(r3); await ev(r3, `go('me')`); await r3.click('#aG'); await r3.waitForSelector('#acctCard .fakeG', { timeout: 8000 });
+  await ev(r3, `window.__gtok = ${JSON.stringify(tok({ sub: 'link' + rnd() + rnd(), email: 'linked@example.com', email_verified: true }))}`);
+  await r3.click('#acctCard .fakeG'); await r3.waitForFunction(() => ACCT.google, null, { timeout: 8000 });
+  ok(/linked@example\.com/.test(await r3.locator('#acctCard').innerText()), 'Me connects Google to a password account');
+  const errs = p.errors.concat(q.errors, r3.errors); ok(errs.length === 0, 'google: no page errors', errs);
+  await c.close(); await c2.close(); await c3.close();
+};
+
+// Regressions for the 10/21 bug hunt.
+tests.regressions = async () => {
+  const c = await ctx(), p = await page(c);
+  // A trial closed on its result screen asks to save on the next launch instead of opening the app with no account.
+  await p.goto(BASE + '/'); await p.click('[data-try="side"]');
+  let n = 0; while (n++ < 20 && await answerOne(p)) {}
+  ok(await visible(p, '#result'), 'trial finished');
+  await p.reload();
+  ok(await visible(p, '#gate') && /Save your progress/.test(await p.locator('#gateIn').innerText()), 'reloading on the result screen asks to save progress');
+  // Merging a trial device into an account adds the tried course to the account's mix; courses switched off stay off.
+  const m = await ev(p, `(() => { const a = { ...blankState(), mix: { lingo: { on: true, perDay: 5 } }, mixAt: 200 }, b = { ...blankState(), mix: { proc: { on: true, perDay: 5 }, policy: { on: false, perDay: 5 } }, mixAt: 100 };
+    const o = mergeStates(b, a); return { lingo: !!o.mix.lingo && o.mix.lingo.on, proc: !!o.mix.proc && o.mix.proc.on, policy: !!o.mix.policy && o.mix.policy.on }; })()`);
+  ok(m.lingo && m.proc && !m.policy, 'merged mix keeps both sides\' courses, and off stays off', m);
+  // Bad downloaded content is ignored rather than breaking the app.
+  const r = await ev(p, `(() => { const before = JSON.stringify(COURSES.side.units).length, at = contentAt;
+    const a = applyContent({ builtAt: at + 10, courses: { side: { name: 'X', pre: 's', units: [{ title: 'u', lessons: [{ title: 'l' }] }] }, neu: { name: 'New', pre: 'n', units: [{ title: 'u', lessons: [{ title: 'l', items: [{ t: 'mc', p: 'Q?', o: ['a', 'b'], a: 0 }] }] }] } }, glossary: [{ term: 'x' }] });
+    const kept = JSON.stringify(COURSES.side.units).length === before, neu = !!COURSES.neu && Array.isArray(COURSES.neu.caveat), gl = GLOSSARY.length > 50;
+    delete COURSES.neu; go('course', 'side'); go('today'); return { kept, neu, gl }; })()`);
+  ok(r.kept && r.neu && r.gl, 'malformed courses and glossary are skipped; a new course gets a caveat', r);
+  // A key term marked known after it was learned keeps its review schedule.
+  const k = await ev(p, `(() => { const id = 'au0l0#key-' + termSlug('alignment'); state.srs[id] = { s: 2, d: 5, last: dstr(new Date()), due: dstr(new Date()), reps: 1, lapses: 0, ok: 1, at: Date.now() };
+    state.keyTerms = { policy: { at: Date.now(), known: ['alignment', 'antitrust'] } };
+    const ids = courseCards('policy').map(c => c.id); return { learned: ids.includes(id), skipped: !ids.includes('au0l0#key-' + termSlug('antitrust')) }; })()`);
+  ok(k.learned && k.skipped, 'known-but-learned term stays in reviews; known unlearned term is skipped', k);
+  // One run counts one practice day.
+  const d = await ev(p, `(() => { let calls = 0; const real = bumpStreak; bumpStreak = () => { calls++; }; run = newRun({ mode: 'session', total: 1, queue: [] });
+    bumpRunDay(); bumpRunDay(); bumpRunDay(); run = null; bumpStreak = real; return calls; })()`);
+  ok(d === 1, 'a run bumps the practice day once', d);
+  ok(p.errors.length === 0, 'regressions: no page errors', p.errors);
+  await c.close();
+};
+
+// Keyboard and screen readers: an open overlay takes focus, the page behind is inert, Escape closes sheets.
+tests.a11y = async () => {
+  const c = await ctx(), p = await page(c);
+  await p.goto(BASE + '/'); await p.waitForTimeout(300);
+  ok(await ev(p, `document.querySelector('.app').inert && $('#gateIn').contains(document.activeElement)`), 'sign-up screen: page behind is inert and focus is inside');
+  await p.click('[data-try="lingo"]'); await p.waitForTimeout(300);
+  ok(await ev(p, `document.querySelector('.app').inert && $('#lesson').contains(document.activeElement)`), 'lesson: focus moves into the lesson', await ev(p, 'document.activeElement.outerHTML.slice(0, 80)'));
+  ok(await ev(p, `!!document.activeElement.closest('.prompt') || document.activeElement.matches('.prompt')`), 'lesson: the question has focus, so a screen reader reads it');
+  await p.keyboard.press('Tab'); ok(await ev(p, `$('#lesson').contains(document.activeElement)`), 'Tab stays inside the lesson');
+  await answerOne(p); await p.waitForTimeout(200);
+  ok(await ev(p, `$('#lesson').contains(document.activeElement)`), 'next card keeps focus in the lesson');
+  await ev(p, 'quitRun(true)'); await p.waitForTimeout(300);
+  // Make an account so the app itself is reachable, then open and close a sheet with the keyboard.
+  if (await visible(p, '#gtPwOpen')) await p.click('#gtPwOpen');
+  await p.fill('#gtName', 'Key ' + rnd()); await p.fill('#gtUser', 'k' + rnd()); await p.fill('#gtPass', 'keyboard ' + rnd());
+  await p.click('#gtMake'); await p.waitForSelector('#gate', { state: 'hidden', timeout: 15000 }); await p.waitForTimeout(200);
+  ok(await ev(p, `!document.querySelector('.app').inert`), 'with no overlay open the app is not inert');
+  await ev(p, `go('me')`); await p.focus('#streakSet'); await p.keyboard.press('Enter'); await p.waitForTimeout(300);
+  ok(await visible(p, '#streakSheet') && await ev(p, `$('#streakSheet').contains(document.activeElement)`), 'a sheet opened from the keyboard gets focus');
+  await p.keyboard.press('Escape'); await p.waitForTimeout(300);
+  ok(!await visible(p, '#streakSheet') && await ev(p, `document.activeElement && document.activeElement.id === 'streakSet'`), 'Escape closes the sheet and focus returns to its button', await ev(p, 'document.activeElement.id'));
+  ok(p.errors.length === 0, 'a11y: no page errors', p.errors);
+  await c.close();
 };
 
 for (const [name, fn] of Object.entries(tests)) {

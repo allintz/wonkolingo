@@ -152,7 +152,7 @@ svg { display: block; }
 .setpanel { padding: 14px; display: grid; gap: 10px; }
 .setpanel h4 { margin: 0; font-size: 15px; }
 .acct-more { justify-self: start; }
-.setrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 0 8px; font-weight: 700; }
+.sndrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 0 8px; font-weight: 700; }
 #advBody { margin-top: 6px; }
 .acct-out { justify-self: start; }
 .pwwrap { position: relative; display: block; }
@@ -584,6 +584,11 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .gate-back[hidden] { display: none; }
 .gate-back { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 10px); left: 12px; display: flex; align-items: center; gap: 2px; background: none; border: 0; padding: 8px 10px 8px 4px; color: var(--brass); font-weight: 700; font-size: 16px; z-index: 31; }
 .gate-back svg { width: 22px; height: 22px; }
+[tabindex="-1"]:focus { outline: none; }
+.gate-g { width: 100%; max-width: 340px; display: grid; justify-items: center; min-height: 44px; }
+.gate-g .btn { width: 100%; }
+.gate-or { color: var(--muted); font-size: 14px; margin: 4px 0 -4px; }
+.gate-more { justify-content: center; }
 .trylist { display: grid; gap: 10px; width: 100%; max-width: 380px; }
 .trybtn { display: grid; gap: 2px; text-align: left; background: var(--surface-2); border: 1px solid var(--line-deep); border-radius: 14px; padding: 12px 16px; color: var(--fg); }
 .trybtn:hover, .trybtn:focus-visible { border-color: var(--brass); }
@@ -723,8 +728,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-21-310c10f';
-  window.WL_BUILT_AT = +'1792597512000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-21-23598e8';
+  window.WL_BUILT_AT = +'1792599048000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -14865,13 +14870,19 @@ const IN_APP = !!(window.Capacitor && window.Capacitor.isNativePlatform && windo
 let contentAt = window.WL_BUILT_AT || 0, pendingContent = null;
 function applyContent(d) {
   if (!d || !(d.builtAt > contentAt) || !d.courses || typeof d.courses !== 'object') return false;
+  const okCard = it => isObj(it) && typeof it.t === 'string' && (typeof it.p === 'string' || typeof it.q === 'string');
+  const okUnits = u => Array.isArray(u) && u.length && u.every(x => isObj(x) && typeof x.title === 'string' && Array.isArray(x.lessons) && x.lessons.length
+    && x.lessons.every(l => isObj(l) && typeof l.title === 'string' && Array.isArray(l.items) && l.items.length && l.items.every(okCard)));
   for (const [k, c] of Object.entries(d.courses)) {
-    if (!c || !Array.isArray(c.units) || !c.units.length || typeof c.name !== 'string' || typeof c.pre !== 'string') continue;
-    if (COURSES[k] && COURSES[k].group) continue;
-    COURSES[k] = { ...(COURSES[k] || {}), ...c };
+    if (!isObj(c) || !okUnits(c.units) || typeof c.name !== 'string' || typeof c.pre !== 'string' || !/^[a-z]?$/.test(c.pre)) continue;
+    if (COURSES[k] && COURSES[k].group || k.startsWith('c:') || k === 'terms') continue;
+    const base = COURSES[k] || { caveat: [], meta: '' };
+    COURSES[k] = { ...base, ...c, caveat: Array.isArray(c.caveat) && c.caveat.every(x => typeof x === 'string') ? c.caveat : base.caveat || [], meta: typeof c.meta === 'string' ? c.meta : base.meta || '',
+      keyTerms: Array.isArray(c.keyTerms) ? c.keyTerms.filter(x => typeof x === 'string') : base.keyTerms };
   }
-  if (Array.isArray(d.glossary) && d.glossary.length) { GLOSSARY.length = 0; GLOSSARY.push(...d.glossary); GL_RE = buildGlRe(); }
-  if (d.sources && typeof d.sources === 'object') Object.assign(CARD_SOURCES, d.sources);
+  const okTerm = g => isObj(g) && typeof g.term === 'string' && g.term && typeof g.def === 'string' && (g.match === undefined || Array.isArray(g.match) && g.match.every(m => typeof m === 'string' && m));
+  if (Array.isArray(d.glossary) && d.glossary.length && d.glossary.every(okTerm)) { GLOSSARY.length = 0; GLOSSARY.push(...d.glossary); GL_RE = buildGlRe(); }
+  if (isObj(d.sources)) Object.entries(d.sources).forEach(([id, v]) => { if (Array.isArray(v) && v.every(u => typeof u === 'string' && /^https?:\/\//.test(u))) CARD_SOURCES[id] = v; });
   contentAt = d.builtAt;
   return true;
 }
@@ -15040,7 +15051,8 @@ const keyTermsAnswered = k => !!(state.keyTerms || {})[k];
 function keyTermCards(k) {
   const C = COURSES[k]; if (!C) return [];
   const known = new Set(((state.keyTerms || {})[k] || {}).known || []);
-  return keyTermList(k).filter(t => !known.has(t)).map(t => {
+  // A term marked known is skipped, unless it's already in reviews (learned before it was marked): it keeps its schedule.
+  return keyTermList(k).filter(t => !known.has(t) || state.srs[C.pre + 'u0l0#key-' + termSlug(t)]).map(t => {
     const gi = GLOSSARY.findIndex(g => g.term === t);
     return { ...termCard(GLOSSARY[gi], gi), id: C.pre + 'u0l0#key-' + termSlug(t), x: 'One of this course’s key terms. Tap an underlined term in any card to see its definition again.' };
   });
@@ -15120,7 +15132,7 @@ $('#installCard').addEventListener('click', async e => {
 function renderStyleCard() {
   const st = answerStyle();
   $('#styleCard').innerHTML = `<h3>Sessions</h3>
-    <div class="setrow"><span>Sounds</span><button class="switch" id="soundSw" aria-pressed="${soundOn()}" aria-label="Sounds"></button></div>
+    <div class="sndrow"><span>Sounds</span><button class="switch" id="soundSw" aria-pressed="${soundOn()}" aria-label="Sounds"></button></div>
     <button class="linkbtn acct-more" id="advBtn" aria-expanded="${advOpen}">${advOpen ? 'Hide advanced' : 'Advanced'}</button>
     <div id="advBody"${advOpen ? '' : ' hidden'}>
     <p class="meta">Default answer style</p>
@@ -15274,7 +15286,7 @@ function srsRecord(it, g) {
   if (!it._card || run.graded.has(it._card)) return;
   run.graded.add(it._card);
   // The practice day counts from the first answer, so closing the app mid-session (or finishing after midnight) keeps it.
-  if (run.graded.size === 1) bumpStreak();
+  if (run.graded.size === 1) bumpRunDay();
   const today = dstr(new Date()), prev = state.srs[it._card];
   state.srs[it._card] = fsrsNext(prev, g, today);
   state.srs[it._card].ok = g >= 3 ? okOf(prev) + 1 : g === 1 ? 0 : okOf(prev);
@@ -15371,7 +15383,7 @@ function bankRun() {
   if (!run) return;
   const n = run.xp - (run.bankedXp || 0);
   if (n > 0) { addXP(n); run.bankedXp = run.xp; }
-  if (run.graded.size) bumpStreak();
+  if (run.graded.size) bumpRunDay();
   save();
 }
 addEventListener('pagehide', () => { if (run && run.graded.size && $('#result').hidden) bankRun(); saveRun(); });
@@ -15436,6 +15448,8 @@ function nextItem() {
   if (mode === 'typed') renderTyped(it); else if (mode === 'reveal') renderReveal(it); else if (it.t === 'mc' || it._asMC) renderMC(it); else if (it.t === 'match') renderMatch(it); else renderOrder(it);
   if (run.mode === 'session') $('#stage').insertAdjacentHTML('afterbegin', cardTag(it));
   $('#stageWrap').scrollTop = 0;
+  // Each new card moves focus to its question, so screen readers read it out and Tab starts from the top of the card.
+  const pq = $('#stage .prompt'); if (pq && !$('#lesson').hidden && !$('#stage').contains(document.activeElement)) { pq.setAttribute('tabindex', '-1'); pq.focus({ preventScroll: true }); }
 }
 
 /* ---------- answer styles ----------
@@ -15807,6 +15821,8 @@ $('#checkBtn').onclick = () => {
   else if (run.phase === 'answer') check();
 };
 
+// A lesson or session counts once, on the day it started, even if it ends after midnight.
+function bumpRunDay() { if (run && run.dayCounted) return; bumpStreak(); if (run) run.dayCounted = true; }
 function bumpStreak() {
   const today = dstr(new Date());
   if (!state.activeDays.includes(today)) state.activeDays.push(today);
@@ -15814,7 +15830,7 @@ function bumpStreak() {
 }
 function streakInfo() { return computeStreak(state.activeDays, state.settings, dstr(new Date())); }
 function finish() {
-  bumpStreak(); clearRun(); sfx('done');
+  bumpRunDay(); clearRun(); sfx('done');
   if (run.mode === 'session') return finishSession();
   const L = LESSONS[run.idx];
   state.done[L.id] = true;
@@ -15825,7 +15841,7 @@ function finish() {
   const acc = Math.round(firstTry / run.total * 100);
   const posting = !run.wasDone && state.course !== 'terms' ? groupPost(L, run.xp, acc) : null;
   const nextL = LESSONS[run.idx + 1];
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc, posting)}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT ? 'Continue' : 'Save my progress'}</button></div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc, posting)}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT || gateOffline ? 'Continue' : 'Save my progress'}</button></div>`;
   show('#result');
   $('#rHome').onclick = () => goHome(); $('#rHome').focus();
   postLine(posting);
@@ -15842,7 +15858,7 @@ function finishSession() {
   const parts = [];
   if (run.reviewed) parts.push(`You remembered ${run.remembered} of ${run.reviewed} review${run.reviewed === 1 ? '' : 's'}`);
   if (run.newSeen) parts.push(`learned ${run.newSeen} new card${run.newSeen === 1 ? '' : 's'}`);
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${left ? `${left} card${left === 1 ? '' : 's'} left today.` : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${posting && G ? `<p class="meta" id="postLine">Posting to ${esc(G.groupName)}…</p>` : ''}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT ? 'Done' : 'Save my progress'}</button>${(left || canLearn) && ACCT ? `<button class="btn ghost" id="rMore">${left ? `Next ${nextN}` : 'Learn more'}</button>` : ''}</div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${left ? `${left} card${left === 1 ? '' : 's'} left today.` : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${posting && G ? `<p class="meta" id="postLine">Posting to ${esc(G.groupName)}…</p>` : ''}${remAskHTML()}${styleTipHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT || gateOffline ? 'Done' : 'Save my progress'}</button>${(left || canLearn) && (ACCT || gateOffline) ? `<button class="btn ghost" id="rMore">${left ? `Next ${nextN}` : 'Learn more'}</button>` : ''}</div>`;
   show('#result');
   $('#rHome').onclick = () => goHome(); $('#rHome').focus();
   if ($('#rMore')) $('#rMore').onclick = () => startSession(left ? false : true);
@@ -16063,7 +16079,7 @@ $('#resultIn').addEventListener('click', async e => {
 const API_WAIT = { '/api/grade': 45000, '/api/dispute': 90000 };
 async function apiCall(path, bodyObj, token) {
   const headers = { 'Content-Type': 'application/json' };
-  const tok = token || (ACCT && ACCT.token);
+  const tok = token === '-' ? null : token || (ACCT && ACCT.token);
   if (tok) headers.Authorization = 'Bearer ' + tok;
   const ctl = typeof AbortController === 'function' ? new AbortController() : null;
   const timer = ctl && setTimeout(() => ctl.abort(), API_WAIT[path] || 20000);
@@ -16114,7 +16130,7 @@ async function refreshAccount() {
   if (!ACCT) return;
   try {
     const d = await apiCall('/api/me');
-    ACCT.player = d.player; ACCT.passkeys = d.passkeys; ACCT.username = d.username || null; ACCT.email = d.email || null; saveA();
+    ACCT.player = d.player; ACCT.passkeys = d.passkeys; ACCT.username = d.username || null; ACCT.email = d.email || null; ACCT.google = d.google || null; saveA();
     const was = G ? G.code : null, now = d.group ? d.group.code : null;
     if (was !== now) {
       G = d.group ? { code: d.group.code, groupName: d.group.groupName, player: d.player } : null; saveG(); board = null;
@@ -16193,7 +16209,7 @@ function completeSignIn(d, keepLocal) {
   if (!keepLocal && state.owner !== d.player.id) state = { ...blankState(), course: state.course };
   state.owner = d.player.id; save(true);
   // signedIn: when this device signed in, so a fresh sign-in can set a new password without the old one.
-  ACCT = { token: d.token, player: d.player, passkeys: d.passkeys || 0, username: d.username || null, email: d.email || null, signedIn: Date.now() }; saveA();
+  ACCT = { token: d.token, player: d.player, passkeys: d.passkeys || 0, username: d.username || null, email: d.email || null, google: d.google || null, signedIn: Date.now() }; saveA();
   G = d.group ? { code: d.group.code, groupName: d.group.groupName, player: d.player } : null; saveG();
   board = null; try { localStorage.removeItem(CKEY); } catch (e) {}
   Object.assign(acctUI, { mode: '', merge: null, link: null, recShown: false, outArmed: false, err: '' });
@@ -16218,6 +16234,50 @@ let gateUI = { step: 'welcome', busy: false, err: '' };
 // Set only when the server can't be reached to make an account, so the app stays usable offline; asked again next launch.
 let gateOffline = false;
 let EMAIL_OK = false; // set from /api/config: email sign-in and confirmation exist only once the server can send mail
+/* ---------- Sign in with Google (Google Identity Services) ----------
+   /api/config names the Google client id when the server has one. The button then leads the sign-in and sign-up
+   screens; the page posts Google's ID token to /api/google. Not in the iPhone app, where Google blocks web sign-in. */
+let GOOGLE_ID = null, gisState = ''; // gisState: '', 'loading', 'ready' or 'failed'
+const googleOn = () => !!GOOGLE_ID && !NATIVE && gisState !== 'failed';
+function loadGoogle() {
+  if (!GOOGLE_ID || NATIVE || gisState) return;
+  gisState = 'loading';
+  const sc = document.createElement('script'); sc.src = 'https://accounts.google.com/gsi/client'; sc.async = true;
+  sc.onload = () => {
+    try { google.accounts.id.initialize({ client_id: GOOGLE_ID, callback: r => googleCredential(r.credential), ux_mode: 'popup', use_fedcm_for_button: true }); gisState = 'ready'; }
+    catch (e) { gisState = 'failed'; }
+    if (!$('#gate').hidden) renderGate(); else if (VIEW === 'me' && !run) renderAcctCard();
+  };
+  sc.onerror = () => { gisState = 'failed'; if (!$('#gate').hidden) renderGate(); else if (VIEW === 'me' && !run) renderAcctCard(); };
+  document.head.appendChild(sc);
+}
+// Google draws its own button into each .gbtn placeholder; until its script loads, the placeholder holds a plain one.
+function gbtnHTML(text) { return `<div class="gbtn" data-text="${text}"><button class="btn ghost" disabled>Loading Google…</button></div>`; }
+function renderGoogleBtns() {
+  if (gisState !== 'ready') return;
+  document.querySelectorAll('.gbtn:not([data-done])').forEach(el => {
+    el.dataset.done = '1'; el.innerHTML = '';
+    try { google.accounts.id.renderButton(el, { theme: 'filled_black', size: 'large', shape: 'pill', text: el.dataset.text || 'continue_with', width: Math.min(340, Math.max(200, el.clientWidth || 300)) }); } catch (e) {}
+  });
+}
+// From the sign-up screen: sign in, or make an account (which keeps this device's progress, as with a password).
+// From Me while signed in: connect Google to the account.
+async function googleCredential(cred) {
+  if (ACCT && $('#gate').hidden) {
+    acctUI.busy = true; acctUI.err = ''; renderAcctCard();
+    try { const r = await apiCall('/api/google', { credential: cred }); ACCT.google = r.google; saveA(); toast('Google connected. You can sign in with it from now on.'); }
+    catch (err) { acctUI.err = acctErr(err); }
+    acctUI.busy = false; renderAcctCard(); return;
+  }
+  gateStep(async () => {
+    // '-' sends no account token, so switching accounts signs in rather than connecting Google to the current one.
+    const d = await apiCall('/api/google', { credential: cred }, '-');
+    if (!d.created) { gateSignedIn(d); return; }
+    ACCT = { token: d.token, player: d.player, passkeys: 0, username: null, google: d.google, signedIn: Date.now() }; saveA();
+    state.owner = d.player.id; save(true); renderGroup(); syncNow();
+    toast('Account created. Welcome, ' + d.player.name + '.'); hideGate();
+  });
+}
 // New players try a short session before making an account: picking a course on the welcome screen starts one
 // (localStorage 'wl-trial' = 'on'), and leaving that session ('done') brings the screen back to save their progress.
 function trialState() { try { return localStorage.getItem('wl-trial') || ''; } catch (e) { return ''; } }
@@ -16234,7 +16294,7 @@ function startTrial(k) {
   startSession(false);
 }
 function showGate(step) {
-  gateUI.step = step || 'welcome'; gateUI.busy = false; gateUI.pk = false;
+  gateUI.step = step || 'welcome'; gateUI.busy = false; gateUI.pk = false; gateUI.pwOpen = false; gateUI.more = false;
   // Opened to switch accounts from a signed-in device: backing out just closes it.
   gateUI.switching = !!ACCT;
   $('#gate').hidden = false; document.body.classList.add('in-lesson'); renderGate();
@@ -16273,15 +16333,17 @@ function renderGate() {
     const n = Object.keys(state.srs || {}).length;
     h = g.step === 'save' ? `${owl('cheer')}<h2>Save your progress</h2><p>${n ? `You’ve learned ${n} card${n === 1 ? '' : 's'}.` : 'Nice start.'} Make an account to keep ${n === 1 ? 'it' : 'them'}, get reviews at the right time, and pick up on any device.</p>`
       : `${owl('think')}<h2>Create your account</h2><p>${g.pk ? 'Friends in your groups see your display name. Next, Face ID or Touch ID saves a passkey, so there’s no password to remember.' : 'Friends in your groups see your display name. You sign in with your username and password, and your phone or browser can save them for you.'}</p>`;
-    h += `
+    const gg = googleOn(), showForm = !gg || g.pwOpen;
+    if (gg) h += `<div class="gate-g">${gbtnHTML('continue_with')}</div>${showForm ? '<p class="gate-or">or with a username and password</p>' : '<button class="linkbtn" id="gtPwOpen">Use a username and password instead</button>'}`;
+    if (showForm) h += `
       <form class="gate-form" id="gtForm" autocomplete="on">
         ${fld('gtName', 'Display name', 'name="nickname" maxlength="24" autocomplete="nickname" autocapitalize="words" spellcheck="false"')}
         ${g.pk ? '' : fld('gtUser', 'Username', 'name="username" maxlength="40" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"') + fld('gtPass', 'Password (8 or more characters)', 'name="password" type="password" minlength="8" autocomplete="new-password"')}
         ${EMAIL_OK ? fld('gtEmail', 'Email (optional, to reset a forgotten password)', 'name="email" type="email" maxlength="254" autocomplete="email" autocapitalize="none" spellcheck="false"') : ''}
-        <div class="rbtns"><button class="btn" type="submit" id="gtMake"${dis}>${g.pk ? 'Continue' : 'Create account'}</button></div>
+        <div class="rbtns"><button class="btn${gg ? ' ghost' : ''}" type="submit" id="gtMake"${dis}>${g.pk ? 'Continue' : 'Create account'}</button></div>
       </form>
-      ${PASSKEY_OK ? `<button class="linkbtn" id="gtPkMode">${g.pk ? 'Use a username and password instead' : 'Use a passkey instead of a password'}</button>` : ''}
-      ${g.step === 'save' ? '<button class="linkbtn" id="gtHave">I already have an account</button>' : ''}`;
+      ${PASSKEY_OK ? `<button class="linkbtn" id="gtPkMode">${g.pk ? 'Use a username and password instead' : 'Use a passkey instead of a password'}</button>` : ''}`;
+    if (g.step === 'save') h += '<button class="linkbtn" id="gtHave">I already have an account</button>';
   } else if (g.step === 'passkey') {
     h = `${owl('cheer')}<h2>Save a passkey</h2><p>Then you can sign in on your other devices with Face ID, Touch ID or your device PIN. There’s nothing to remember.</p>
       <div class="rbtns"><button class="btn" id="gtPk"${dis}>Save a passkey</button></div>`;
@@ -16312,22 +16374,28 @@ function renderGate() {
       <form class="gate-form" id="gtForm">${fld('gtRec', 'Recovery code', 'autocomplete="off" autocapitalize="off" spellcheck="false"')}
       <div class="rbtns"><button class="btn" type="submit" id="gtRecGo"${dis}>Sign in</button></div></form>`;
   } else {
-    h = `${owl('read')}<h2>Sign in</h2>
+    const gg = googleOn(), showForm = !gg || g.pwOpen;
+    h = `${owl('read')}<h2>Sign in</h2>`;
+    if (gg) h += `<div class="gate-g">${gbtnHTML('signin_with')}</div>${showForm ? '' : '<button class="linkbtn" id="gtPwOpen">Sign in with a username and password</button>'}`;
+    if (showForm) h += `
       <form class="gate-form" id="gtForm" autocomplete="on">
         ${fld('gtUser', 'Username', 'name="username" maxlength="40" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"')}
         ${fld('gtPass', 'Password', 'name="password" type="password" autocomplete="current-password"')}
-        <div class="rbtns"><button class="btn" type="submit" id="gtPwGo"${dis}>Sign in</button></div>
+        <div class="rbtns"><button class="btn${gg ? ' ghost' : ''}" type="submit" id="gtPwGo"${dis}>Sign in</button></div>
       </form>
-      ${PASSKEY_OK ? `<div class="rbtns"><button class="btn ghost" id="gtPkIn"${dis}>Sign in with a passkey</button></div>` : ''}
-      <div class="glinks"><button class="linkbtn" id="gtCodeMode">Use a code from another device</button><button class="linkbtn" id="gtRecMode">Use a recovery code</button></div>
       <p class="meta">Forgot your password? ${EMAIL_OK ? '<button class="linkbtn" id="gtEmailMode">Email me a sign-in code</button>, or sign in another way,' : 'Sign in another way,'} then set a new one in Me.</p>`;
+    // Ways most people won't need, behind one link.
+    h += `<button class="linkbtn" id="gtMore" aria-expanded="${!!g.more}">${g.more ? 'Fewer options' : 'Other ways to sign in'}</button>`;
+    if (g.more) h += `<div class="glinks gate-more">${PASSKEY_OK ? `<button class="linkbtn" id="gtPkIn"${dis}>Passkey (Face ID or Touch ID)</button>` : ''}<button class="linkbtn" id="gtCodeMode">Code from another device</button><button class="linkbtn" id="gtRecMode">Recovery code</button>${EMAIL_OK && !showForm ? '<button class="linkbtn" id="gtEmailMode">Email me a code</button>' : ''}</div>`;
   }
   if (g.err) h += `<p class="gerr">${g.err}</p>`;
   if (g.err && g.step === 'passkey') h += `<button class="linkbtn" id="gtLater">Do this later in Me</button>`;
   if (g.offerOffline) h += `<button class="linkbtn" id="gtOffline">Continue offline for now</button>`;
   el.innerHTML = h;
+  renderGoogleBtns();
   Object.entries(keep).forEach(([id, v]) => { const x = document.getElementById(id); if (x) x.value = v; });
   const f = el.querySelector('input'); if (f && !g.busy && !('ontouchstart' in window) && !f.value) f.focus();
+  if (!$('#gate').hidden && typeof ovFocus === 'function') ovFocus($('#gate')); // a re-render mustn't drop keyboard focus
 }
 function gateSignedIn(d) { beginSignIn(d); if (acctUI.merge) gateUI.step = 'merge'; else hideGate(); }
 async function gateStep(fn) {
@@ -16404,6 +16472,8 @@ $('#gate').addEventListener('click', e => {
     g.step = g.step === 'code' || g.step === 'recovery' || g.step === 'email' ? 'signin' : g.step === 'emailcode' ? 'email' : gateStart(); renderGate(); return;
   }
   if (t.id === 'gtPkMode') { g.pk = !g.pk; renderGate(); return; }
+  if (t.id === 'gtPwOpen') { g.pwOpen = true; renderGate(); return; }
+  if (t.id === 'gtMore') { g.more = !g.more; renderGate(); return; }
   if (t.id === 'gtCodeMode') { g.step = 'code'; renderGate(); return; }
   if (t.id === 'gtRecMode') { g.step = 'recovery'; renderGate(); return; }
   if (t.id === 'gtEmailMode') { g.step = 'email'; renderGate(); return; }
@@ -16441,6 +16511,8 @@ function renderAcctCard() {
     const still = (label, value) => `<li><div class="setrow still"><span class="sl">${label}</span><span class="sv">${value}</span></div></li>`;
     const panel = inner => `<li class="setpanel">${inner}</li>`;
     h += `<p class="acct-who">Signed in as <b>${esc(ACCT.username || ACCT.player.name)}</b></p><ul class="setlist">`;
+    if (ACCT.google) h += still('Google', `<span class="trunc">${esc(ACCT.google === 'connected' ? 'Connected' : ACCT.google)}</span>`);
+    else if (googleOn()) h += a.gOpen ? panel(`<p>Connect a Google account, then sign in with it on any device.</p>${gbtnHTML('continue_with')}<div class="row"><button class="linkbtn" id="aGCancel">Cancel</button></div>`) : row('aG', 'Sign in with Google', 'Connect');
     h += a.pwForm ? panel(`<form class="acct-pw" id="aPwForm" autocomplete="on"><h4>${ACCT.username ? 'Change password' : 'Set a password'}</h4><label class="fld"><span>Username</span><input id="aPwUser" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="40" value="${esc(ACCT.username || '')}"></label>${ACCT.username && !freshSignIn() ? pwFld('aPwCur', 'Current password', 'name="current-password" autocomplete="current-password"') : ''}${pwFld('aPwPass', (ACCT.username ? 'New password' : 'Password') + ' (8 or more characters)', 'name="password" minlength="8" autocomplete="new-password"')}<div class="row"><button class="btn sm" type="submit"${dis}>Save</button><button class="linkbtn" type="button" id="aPwCancel">Cancel</button></div></form>`)
       : row('aPwEdit', 'Password', ACCT.username ? 'Change' : 'Set up');
     if (ACCT.email) h += a.emailOpen ? panel(`<p><b>${esc(ACCT.email)}</b> is confirmed. You can use it to sign in if you forget your password.</p><div class="row"><button class="btn ghost sm" id="aEmailRm"${dis}>Remove email</button><button class="linkbtn" id="aEmailOpen">Done</button></div>`) : row('aEmailOpen', 'Email', `<span class="trunc">${esc(ACCT.email)}</span>`);
@@ -16463,10 +16535,11 @@ function renderAcctCard() {
       if (a.delArmed) h += `<p class="gerr">Deleting removes your account, progress, lesson results and any courses you wrote, on every device. It can’t be undone.</p>`;
     }
     h += `<button class="btn ghost sm acct-out" id="aOut"${dis}>${a.outArmed ? 'Tap again to sign out' : 'Sign out'}</button>`;
-    if (a.outArmed && !a.outForce) h += `<p class="gerr">Signing out clears this device. ${ACCT.username || pk ? 'Sign back in with your password, passkey or recovery code.' : 'Without a password or passkey, you’ll need your recovery code to get back in.'}</p>`;
+    if (a.outArmed && !a.outForce) h += `<p class="gerr">Signing out clears this device. ${ACCT.username || pk || ACCT.google ? 'Sign back in with Google, your password, passkey or recovery code.' : 'Without Google, a password or a passkey, you’ll need your recovery code to get back in.'}</p>`;
   } else h += `<div class="row"><button class="btn sm" id="aGate">Create an account or sign in</button></div>`;
   if (a.err) h += `<p class="gerr">${a.err}</p>`;
   el.innerHTML = h;
+  renderGoogleBtns();
   Object.entries(keep).forEach(([id, v]) => { const x = document.getElementById(id); if (x) x.value = v; });
 }
 $('#acctCard').addEventListener('click', async e => {
@@ -16477,6 +16550,7 @@ $('#acctCard').addEventListener('click', async e => {
   if (t.id === 'aPwEdit') { a.pwForm = true; renderAcctCard(); const x = $('#aPwPass'); if (x) x.focus(); return; }
   if (t.id === 'aPwCancel') { a.pwForm = false; renderAcctCard(); return; }
   if (t.id === 'aMore') { a.more = !a.more; renderAcctCard(); return; }
+  if (t.id === 'aG' || t.id === 'aGCancel') { a.gOpen = t.id === 'aG'; renderAcctCard(); return; }
   if (t.id === 'aEmailOpen') { a.emailOpen = !a.emailOpen; renderAcctCard(); return; }
   if (t.id === 'aEmailAdd') { a.emailForm = true; renderAcctCard(); const x = $('#aEmail'); if (x) x.focus(); return; }
   if (t.id === 'aEmailCancel') { a.emailForm = !!a.emailSent; a.emailSent = ''; renderAcctCard(); return; }
@@ -17088,7 +17162,7 @@ function renderCourseView() {
   const curUnit = nextU >= 0 ? LESSONS[nextU].unit : -1;
   // The Key terms lesson sits above the units: it's the first lesson, but nothing else waits for it.
   const ki = LESSONS.findIndex(l => l.unit === -1);
-  const keyBlock = ki < 0 ? '' : (() => { const L = LESSONS[ki], d = state.done[L.id], left = L.items.filter(it => !state.srs[it.id]).length;
+  const keyBlock = ki < 0 ? '' : (() => { const L = LESSONS[ki], d = state.done[L.id], left = L.items.filter(it => !state.srs[it.id] && !isRemoved(it.id)).length;
     return `<section class="ublock open keyblock${d ? ' done' : ''}"><div class="lessons"><button class="lrow${d ? ' done' : ''}${ki === next ? ' next' : ''}" data-idx="${ki}"><span class="ld">${d ? ICON.check : ''}</span><span class="lt">Key terms</span><span class="ls">${d ? 'In reviews' : `${left} term${left === 1 ? '' : 's'}${ki === next ? ' · Start here' : ''}`}</span></button></div></section>`; })();
   $('#path').innerHTML = keyBlock + C.units.map((u, ui) => {
     const ls = LESSONS.map((l, i) => [l, i]).filter(([l]) => l.unit === ui);
@@ -17230,6 +17304,10 @@ function mergeStates(a, b) {
     Object.entries(b.newCounts || {}).forEach(([k, n]) => out.newCounts[k] = Math.max(out.newCounts[k] || 0, n));
   }
   if ((b.mixAt || 0) > (a.mixAt || 0) && b.mix) { out.mix = b.mix; out.mixAt = b.mixAt; }
+  // The newest mix wins, but a course only the other copy has an entry for is kept: signing in after a trial adds the
+  // tried course to the account's mix instead of replacing it. A course switched off has an entry, so it stays off.
+  { const other = out.mix === b.mix ? a.mix : b.mix, extra = Object.entries(other || {}).filter(([k]) => !(out.mix || {})[k]);
+    if (extra.length) out.mix = { ...(out.mix || {}), ...Object.fromEntries(extra) }; }
   if ((b.prefsAt || 0) > (a.prefsAt || 0) && b.prefs) { out.prefs = b.prefs; out.prefsAt = b.prefsAt; }
   // Saved terms: the newest save or removal of each term wins.
   out.myTerms = { ...(b.myTerms || {}) };
@@ -17279,9 +17357,49 @@ function scheduleSync() {
 }
 document.addEventListener('visibilitychange', () => { if (document.hidden) { if (ACCT) syncNow(); } else refreshAccount(); });
 
+/* ---------- keyboard and screen readers: an open overlay holds focus ----------
+   Whichever overlay is on top (sign-up, a lesson, results, a sheet) gets focus when it opens; the page behind it and any
+   overlay underneath are inert, so Tab and screen readers stay in the one on top; focus goes back where it was when it
+   closes. Escape closes a sheet. Watches the overlays' hidden attribute, so every way of opening one is covered. */
+const OVERLAYS = [...document.querySelectorAll('.overlay')], ovStack = [], ovReturn = new Map();
+function ovFocus(o) {
+  if (o.hidden || o.contains(document.activeElement)) return;
+  const t = o.querySelector('.prompt, h1, h2, h3') || o.querySelector('button:not([disabled]), input, textarea, [href]');
+  if (!t) return;
+  if (!t.matches('button, input, textarea, [href]')) t.setAttribute('tabindex', '-1');
+  t.focus({ preventScroll: true });
+}
+function ovSync() {
+  const top = ovStack[ovStack.length - 1] || null;
+  [document.querySelector('header.top'), document.querySelector('.app')].forEach(el => { if (el) el.inert = !!top; });
+  OVERLAYS.forEach(o => { o.inert = !o.hidden && o !== top; });
+}
+const ovWatch = new MutationObserver(muts => {
+  for (const m of muts) {
+    const o = m.target, i = ovStack.indexOf(o);
+    if (o.hidden && i >= 0) {
+      ovStack.splice(i, 1); ovSync();
+      const back = ovReturn.get(o); ovReturn.delete(o);
+      const top = ovStack[ovStack.length - 1];
+      if (top) ovFocus(top); else if (back && back.isConnected && !back.closest('[inert], [hidden]')) back.focus({ preventScroll: true });
+    } else if (!o.hidden && i < 0) {
+      ovReturn.set(o, document.activeElement); ovStack.push(o); ovSync();
+      requestAnimationFrame(() => ovFocus(o));
+    }
+  }
+});
+OVERLAYS.forEach(o => ovWatch.observe(o, { attributes: true, attributeFilter: ['hidden'] }));
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  const top = ovStack[ovStack.length - 1];
+  if (top && top.classList.contains('sheet')) { const x = top.querySelector('[data-close]'); if (x) { e.preventDefault(); x.click(); } }
+});
+
 if (API) $('#privLink').href = SITE + '/privacy.html';
-if (needGate()) showGate(gateStart()); else resumeRun();
-apiCall('/api/config').then(d => { EMAIL_OK = !!d.email; if (!$('#gate').hidden && !gateUI.busy) renderGate(); if (VIEW === 'me' && !run) renderAcctCard(); }).catch(() => {});
+// A trial still 'on' at startup with no session to pick up (closed on the result screen, or over an hour ago) is over.
+if (!ACCT && trialState() === 'on' && !resumeRun()) setTrial('done');
+if (needGate()) showGate(gateStart()); else if (!run) resumeRun();
+apiCall('/api/config').then(d => { EMAIL_OK = !!d.email; GOOGLE_ID = typeof d.google === 'string' && d.google ? d.google : null; loadGoogle(); if (!$('#gate').hidden && !gateUI.busy) renderGate(); if (VIEW === 'me' && !run) renderAcctCard(); }).catch(() => {});
 refreshAccount();
 refreshBoard();
 loadCourses();

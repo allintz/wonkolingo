@@ -61,7 +61,7 @@ const SECTIONS = [
     ${d.reply ? `<pre>${esc(d.reply)}</pre>` : ''}
     <div class="lab">Model answer</div><p>${esc(d.answer)}</p>`],
   ['removals', 'removal', 'Removed questions', 'Questions players took out of their reviews, most-removed first. Several “trivia” or “wrong” removals mean rewrite or cut the card.', d => `
-    <div class="top"><div><b>${esc(d.question)}</b><div class="meta">${esc(d.course)} · ${esc(d.card)} · last ${when(d.at)}</div></div><button class="done" data-k="removal" data-id="${esc(d.card)}">Done</button></div>
+    <div class="top"><div><b>${esc(d.question)}</b><div class="meta">${esc(d.course)} · ${esc(d.card)} · last ${when(d.at)}</div></div><button class="done" data-k="removal" data-id="${esc(d.course + '|' + d.card)}">Done</button></div>
     <p><b>${d.removed}</b> removal${d.removed === 1 ? '' : 's'}${d.restored ? `, ${d.restored} restored` : ''}: ${esc(String(d.reasons || '').split(',').map(r => REASON[r] || r).join(', '))}</p>`],
   ['bugs', 'bug', 'Crash reports', 'Errors the app caught and sent in. Fix, then mark done.', d => `
     <div class="top"><div><b>${esc(d.message)}</b><div class="meta">${d.app ? 'iPhone app' : 'Web'} · build ${esc(d.build)} · at ${esc(d.place || 'Today')} · ${when(d.at)}</div></div><button class="done" data-k="bug" data-id="${d.id}">Done</button></div>
@@ -93,7 +93,7 @@ document.addEventListener('click', async e => {
   const b = e.target.closest('.done');
   if (b) {
     b.disabled = true; b.textContent = '…';
-    try { await call('/api/admin/resolve', { kind: b.dataset.k, id: b.dataset.id }); const sec = SECTIONS.find(s => s[1] === b.dataset.k)[0]; data[sec] = data[sec].filter(d => String(b.dataset.k === 'removal' ? d.card : d.id) !== b.dataset.id); render(); }
+    try { await call('/api/admin/resolve', { kind: b.dataset.k, id: b.dataset.id }); const sec = SECTIONS.find(s => s[1] === b.dataset.k)[0]; data[sec] = data[sec].filter(d => String(b.dataset.k === 'removal' ? d.course + '|' + d.card : d.id) !== b.dataset.id); render(); }
     catch (err) { b.disabled = false; b.textContent = 'Retry'; }
   }
   if (e.target.id === 'copy') { try { await navigator.clipboard.writeText(asText()); e.target.textContent = 'Copied'; } catch (err) { e.target.textContent = 'Copy failed'; } }

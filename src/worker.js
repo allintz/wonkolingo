@@ -7,6 +7,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor, defineTerm } from './grade.js';
 import { publicEmailApi, emailApi } from './email.js';
 import { adminApi } from './admin.js';
+import { googleApi } from './google.js';
 import { randomString, sha256, accountInfo, publicAccountApi, accountApi, takeRate, netId, ipKey, screen, screenFail, takeNewAccount, ACCOUNT_LIMITS } from './accounts.js';
 const REMOVE_REASONS = ['trivia', 'wrong', 'unclear', 'known', 'other', 'restored'];
 
@@ -156,6 +157,7 @@ async function api(req, env, path) {
     return json({ code, groupName: g.name, player: { id: p.id, name: pname }, token: p.token });
   }
 
+  if (path === '/api/google') return await googleApi(req, env, path, await auth(req, env), { json, fail, body, cleanName }) || fail('Not found.', 404);
   const acct = await publicAccountApi(req, env, path, { json, fail, body, cleanName }) || await publicEmailApi(req, env, path, { json, fail, body });
   if (acct) return acct;
 
