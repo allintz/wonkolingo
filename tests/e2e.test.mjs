@@ -647,7 +647,7 @@ tests.extras = async () => {
     ok(await ev(p, 'run.total') <= 5, 'a round has at most 5 cards', await ev(p, 'run.total'));
     let n = 0; while (n++ < 30 && await answerOne(p)) {}
     ok(/^Next \d/.test(await p.locator('#rMore').innerText().catch(() => '')), 'result screen offers the next round', await p.locator('#rMore').innerText().catch(() => ''));
-    await ev(p, `state.prefs.sessionSize = 12; save(); goHome()`);
+    await ev(p, `delete state.prefs.sessionSize; save(); goHome()`);
   }
   { // Course dates near the top of the course page.
     await ev(p, `go('course', 'policy')`);

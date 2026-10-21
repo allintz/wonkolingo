@@ -716,7 +716,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-21-7b24c11';
+  window.WL_BUILD = '2026-10-21-3be0ae3';
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -15395,7 +15395,8 @@ const styleFor = k => ((state.prefs && state.prefs.courseStyle) || {})[k] || ans
 const STYLE_OPTS = [['mixed', 'Mixed'], ['short', 'Short answers'], ['typed', 'Type everything']];
 const STYLE_BLURB = { mixed: 'New cards are multiple choice; once you know one, you recall it in your head.', short: 'Short-answer cards are always typed and graded by AI.', typed: 'Every card is typed and graded by AI.' };
 // Cards per session (reviews first, then new); 0 means no limit. Short sessions make a daily habit easier.
-const sessionSize = () => { const n = state.prefs && state.prefs.sessionSize; return n === undefined ? 12 : n; };
+// Default 5 cards a round (since 10/21; was 12). A size the player picked in Me is kept.
+const sessionSize = () => { const n = state.prefs && state.prefs.sessionSize; return n === undefined ? 5 : n; };
 const hasChoice = it => it.t === 'mc' || !!(it.t === 'recall' && it.choice && Array.isArray(it.choice.o) && it.choice.o.length >= 2);
 function askMode(it) {
   if (it.t === 'match' || it.t === 'order') return 'native';
