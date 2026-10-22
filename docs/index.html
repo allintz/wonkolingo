@@ -671,6 +671,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .feed .hi5[disabled] { color: var(--muted); cursor: default; }
 .stats .chip { white-space: nowrap; }
 @media (max-width: 400px) { .brand { font-size: 19px; letter-spacing: .03em; } .stats { gap: 4px; } .stats .chip { padding: 5px 8px; } }
+.pushask { display: grid; gap: 8px; margin-bottom: 12px; }
+.pushask p { margin: 0; }
 .chip.bell { position: relative; display: inline-flex; align-items: center; color: var(--muted); border: 0; font-family: inherit; cursor: pointer; padding: 5px 9px; }
 .chip.bell[hidden] { display: none; }
 .chip.bell svg { width: 18px; height: 18px; }
@@ -827,8 +829,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-22-98db718';
-  window.WL_BUILT_AT = +'1792698975000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-22-84ab5e5';
+  window.WL_BUILT_AT = +'1792701311000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -20083,6 +20085,8 @@ async function socialCall(path, to, extra) {
   try { const r = await apiCall(path, { to, today: dstr(new Date()), ...(extra || {}) }); return r; }
   catch (e) { toast(e instanceof TypeError ? 'Can’t reach the server right now.' : e.message); return null; }
 }
+// A friend streak is when push matters most, so the phone's own prompt comes then, if it has never been answered.
+function maybeAskPush() { if (!Native) return; Native.notes.checkPermissions().then(p => { if (/^prompt/.test(p.display)) setTimeout(askPush, 1200); }, () => {}); }
 // Buttons for friend streaks, nudges and high-fives, wherever they appear (Today, Group, Notifications).
 function socialClick(t) {
   const d = t.dataset, after = async () => { await refreshBoard(); renderHome(); if (!$('#inboxSheet').hidden) renderInbox(); };
@@ -20096,8 +20100,8 @@ function socialClick(t) {
     socialCall('/api/kudos', d.kudos, { ref: d.ref }).then(r => { if (r) { remember('wl-hi5', d.kudos + '|' + d.ref, 1); sfx('tap'); } else { t.disabled = false; t.textContent = 'High five'; } });
     return true;
   }
-  if (d.fsreq) { t.disabled = true; socialCall('/api/friend/request', d.fsreq).then(r => { if (r) toast('Asked. The friend streak starts when they accept.'); gSel = null; after(); }); return true; }
-  if (d.fsacc) { t.disabled = true; socialCall('/api/friend/accept', d.fsacc).then(r => { if (r) { toast('Friend streak on. Practice today, both of you.'); sfx('streak'); } after(); }); return true; }
+  if (d.fsreq) { t.disabled = true; socialCall('/api/friend/request', d.fsreq).then(r => { if (r) { toast('Asked. The friend streak starts when they accept.'); maybeAskPush(); } gSel = null; after(); }); return true; }
+  if (d.fsacc) { t.disabled = true; socialCall('/api/friend/accept', d.fsacc).then(r => { if (r) { toast('Friend streak on. Practice today, both of you.'); sfx('streak'); maybeAskPush(); } after(); }); return true; }
   if (d.fsend) {
     const f = board && (board.friends || []).find(x => x.id === d.fsend);
     if (f && f.status === 'active' && fsEndArmed !== d.fsend) { fsEndArmed = d.fsend; renderGroup(); setTimeout(() => { if (fsEndArmed === d.fsend) { fsEndArmed = null; renderGroup(); } }, 4000); return true; }
@@ -20358,6 +20362,7 @@ function renderHome() {
   document.querySelectorAll('#tabs .tabb').forEach(b => { const on = b.dataset.tab === (VIEW === 'course' ? 'courses' : VIEW); b.classList.toggle('on', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
   renderBell();
   if (VIEW === 'today') { renderToday(); renderStrip(); renderMix(); renderGroupLine(); renderPotd(); }
+  if (VIEW === 'group' && Native && !pushPerm) pushPermRefresh();
   if (VIEW === 'courses') renderCourses();
   if (VIEW === 'course') renderCourseView();
   if (VIEW === 'me') { renderAcctCard(); renderStreakCard(); renderRemCard(); renderInstallCard(); renderStyleCard(); renderProgress(); }
@@ -21202,7 +21207,7 @@ if (NATIVE) {
   Native.push.addListener('registration', t => pushRegistered(t && t.value));
   Native.push.addListener('pushNotificationReceived', () => { if (!run && G) refreshBoard(); });
   Native.push.addListener('pushNotificationActionPerformed', () => { if (run) return; if (G) { go('today'); refreshBoard().then(() => openInbox()); } else go('today'); });
-  Native.app.addListener('appStateChange', s => { if (!s.isActive) return; remPerm = ''; if (!run) renderHome(); nativeSync(); });
+  Native.app.addListener('appStateChange', s => { if (!s.isActive) return; remPerm = ''; pushPerm = ''; if (!run) renderHome(); nativeSync(); });
   Native.app.addListener('appUrlOpen', e => { if (!run && /today/.test(e.url || '')) go('today'); });
   Native.notes.addListener('localNotificationActionPerformed', () => { if (!run) go('today'); });
 }
@@ -21334,6 +21339,28 @@ function nativeSync() { pushWidget(); scheduleReminders(); pushSetup(); }
 /* ---------- push from friends (iPhone app): register with Apple once notifications are allowed ---------- */
 var pushAsked = false;
 function pushOn() { return !(state.prefs && state.prefs.pushFriends === false); }
+// Asking for notifications for friends' pushes, separately from reminders: a card on the Group page, and the iPhone's
+// own prompt right after you start or accept a friend streak. pushPerm caches the phone's answer ('' = not checked yet).
+var pushPerm = '';
+function pushPermRefresh() { if (!Native) return; Native.notes.checkPermissions().then(p => { const v = p.display; if (v !== pushPerm) { pushPerm = v; renderGroup(); } }, () => {}); }
+async function askPush() {
+  if (!Native) return;
+  let p = 'denied'; try { p = (await Native.notes.requestPermissions()).display; } catch (e) {}
+  pushPerm = p; remPerm = '';
+  state.prefs = { ...(state.prefs || {}), pushAskAt: Date.now() }; state.prefsAt = Date.now(); save();
+  if (p === 'granted') { toast('Notifications on. Friends can nudge you now.'); pushAsked = false; pushSetup(); }
+  else toast('Notifications are off for WonkoLingo. You can turn them on in Settings.');
+  renderGroup();
+}
+function pushCardHTML() {
+  if (!Native || !G) return '';
+  if (!pushPerm) { pushPermRefresh(); return ''; }
+  if (pushPerm === 'granted') return '';
+  if (pushPerm === 'denied') return `<div class="note pushask"><p>Notifications are off for WonkoLingo, so nudges from friends can’t reach you.</p><div class="row"><button class="btn ghost sm" id="pushSettings">Open Settings</button></div></div>`;
+  const asked = (state.prefs || {}).pushAskAt || 0;
+  if (Date.now() - asked < 14 * 864e5) return '';
+  return `<div class="note pushask"><p>Get a buzz when a friend nudges or high-fives you, or when it’s your turn on a friend streak.</p><div class="row"><button class="btn sm" id="pushAskOn">Turn on notifications</button><button class="linkbtn" id="pushAskNo">Not now</button></div></div>`;
+}
 async function pushSetup() {
   if (!Native || !ACCT || pushAsked) return;
   try { if ((await Native.notes.checkPermissions()).display !== 'granted') return; pushAsked = true; await Native.push.register(); } catch (e) {}
@@ -21436,12 +21463,15 @@ async function renderRemCard() {
   const r = remPrefs();
   el.hidden = false;
   if (remPerm === 'denied') { el.innerHTML = `<h3>Reminders</h3><p>Notifications are turned off for WonkoLingo. Turn them on in Settings to get reminders.</p><div class="row"><button class="btn ghost sm" id="remSettings">Open Settings</button></div>`; return; }
-  if (!r.on || remPerm !== 'granted') { el.innerHTML = `<h3>Reminders</h3><p>A nudge to keep your streak going. Reminders skip days you’ve already practiced, off days and pauses.</p><div class="row"><button class="btn sm" id="remOn">Turn on reminders</button></div>`; return; }
+  if (!r.on || remPerm !== 'granted') { el.innerHTML = `<h3>Reminders</h3><p>A nudge to keep your streak going. Reminders skip days you’ve already practiced, off days and pauses.</p><div class="row"><button class="btn sm" id="remOn">Turn on reminders</button></div>${remPerm === 'granted' ? pushRowHTML() : ''}`; return; }
   const row = (k, tk, label) => `<div class="kv"><span>${label}</span><span class="remctl"><input type="time" id="${tk}" value="${esc(r[tk === 'remDailyT' ? 'daily' : 'risk'])}"${r[k] ? '' : ' disabled'}><button class="switch" data-rem="${k}" aria-pressed="${r[k]}" aria-label="${label}"></button></span></div>`;
   el.innerHTML = `<div class="ghead"><h3>Reminders</h3><button class="linkbtn" id="remOff">Turn off</button></div>
     ${row('dailyOn', 'remDailyT', 'Daily reminder')}${row('riskOn', 'remRiskT', 'Streak at risk')}
     <p class="meta">Skipped on days you’ve already practiced, off days and pauses. The streak nudge only comes while you have a streak going.</p>
-    <div class="sndrow"><span>Notifications from friends</span><button class="switch" id="pushSw" aria-pressed="${pushOn()}" aria-label="Notifications from friends"></button></div>
+    ${pushRowHTML()}`;
+}
+function pushRowHTML() {
+  return `<div class="sndrow"><span>Notifications from friends</span><button class="switch" id="pushSw" aria-pressed="${pushOn()}" aria-label="Notifications from friends"></button></div>
     <p class="meta">Nudges, high-fives, friend streak requests, and a heads-up when a friend streak partner has practiced and it’s your turn. At most 8 a day.</p>`;
 }
 $('#remCard').addEventListener('click', e => {
@@ -22099,6 +22129,7 @@ function renderGroup() {
   }
   let h = `<div class="ghead"><h3>${esc(G.groupName)}</h3><button class="linkbtn" id="gInvite">Copy invite link</button></div><div class="meta">Code ${esc(G.code)} · You’re ${esc(G.player.name)}</div>`;
   if (gOffline) h += `<p class="gerr">Can’t reach the group server right now. Lessons you finish still count on this device.</p>`;
+  h += pushCardHTML();
   if (board) {
     h += questHTML() + friendsHTML(true);
     const key = gTab === 'week' ? 'week' : 'total';
@@ -22154,6 +22185,9 @@ $('#group').addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
   if (t.dataset.block || t.dataset.unblock) { setBlock(t.dataset.block || t.dataset.unblock, !!t.dataset.block, t.dataset.name); return; }
   if (socialClick(t)) return;
+  if (t.id === 'pushAskOn') { askPush(); return; }
+  if (t.id === 'pushAskNo') { state.prefs = { ...(state.prefs || {}), pushAskAt: Date.now() }; state.prefsAt = Date.now(); save(); renderGroup(); return; }
+  if (t.id === 'pushSettings') { Native.wonko.openSettings().catch(() => {}); return; }
   if (t.dataset.gmode) { gMode = t.dataset.gmode; gErr = ''; renderGroupKeep(); return; }
   if (t.dataset.gtab) { gTab = t.dataset.gtab; renderGroup(); return; }
   if (t.id === 'gGo') { groupSubmit(); return; }

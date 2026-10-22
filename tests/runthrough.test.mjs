@@ -437,6 +437,37 @@ tests.pushClient = async () => {
   noErrors(p, 'push client');
 };
 
+tests.pushAsk = async () => {
+  const a = await player('Ola'), b = await player('Tam');
+  await group(a, [b]);
+  const bid = await ev(b, 'ACCT.player.id');
+  // A phone that hasn't been asked yet; asking says yes.
+  const stub = perm => `(() => { window.__asked = 0; window.__reg = 0; window.__perm = '${perm}';
+    Native = { notes: { checkPermissions: async () => ({ display: window.__perm }), requestPermissions: async () => { window.__asked++; window.__perm = 'granted'; return { display: 'granted' }; }, getPending: async () => ({ notifications: [] }), cancel: async () => {} },
+      push: { register: async () => { window.__reg++; } }, wonko: { apsEnvironment: async () => ({ sandbox: false }), openSettings: async () => { window.__settings = 1; }, setWidgetData: async () => {} }, haptics: { impact: async () => {}, notification: async () => {} } };
+    pushPerm = ''; pushAsked = false; })()`;
+  await ev(a, stub('prompt')); await ev(a, `go('group')`); await a.waitForTimeout(400);
+  ok(await vis(a, '#pushAskOn'), 'Group asks to turn on notifications', await ev(a, `({ perm: pushPerm, view: VIEW, G: !!G, html: $('#group').innerHTML.slice(0, 200), N: typeof Native.notes.checkPermissions })`));
+  await a.click('#pushAskNo'); await a.waitForTimeout(200);
+  ok(!(await vis(a, '#pushAskOn')), '"Not now" hides the card');
+  ok(await ev(a, `Date.now() - state.prefs.pushAskAt < 5000`), '...for 14 days (time saved)');
+  // starting a friend streak brings up the phone's own prompt once
+  await a.click(`li[data-pid="${bid}"]`); await a.click(`[data-fsreq="${bid}"]`); await a.waitForTimeout(2200);
+  ok(await ev(a, 'window.__asked') === 1 && await ev(a, 'window.__reg') === 1, 'friend streak request asks for notifications, then registers', [await ev(a, 'window.__asked'), await ev(a, 'window.__reg')]);
+  // a second player who taps the card
+  await ev(b, stub('prompt')); await ev(b, `go('group')`); await b.waitForTimeout(400);
+  await b.click('#pushAskOn'); await b.waitForTimeout(400);
+  ok(await ev(b, 'window.__asked') === 1 && await ev(b, 'window.__reg') === 1 && !(await vis(b, '#pushAskOn')), 'Turn on notifications asks, registers, and the card goes', [await ev(b, 'window.__asked'), await ev(b, 'window.__reg')]);
+  // turned off in Settings: the card offers Settings instead
+  await ev(b, stub('denied')); await ev(b, `renderGroup()`); await b.waitForTimeout(400);
+  ok(await vis(b, '#pushSettings'), 'denied: card offers Open Settings');
+  await b.click('#pushSettings'); ok(await ev(b, 'window.__settings') === 1, 'Open Settings works');
+  // Me: friends switch shows with reminders off once notifications are allowed
+  await ev(b, `window.__perm = 'granted'; remPerm = 'granted'; state.prefs = { ...(state.prefs || {}), rem: { ...remPrefs(), on: false } }; go('me'); renderRemCard()`); await b.waitForTimeout(300);
+  ok(await vis(b, '#remOn') && await vis(b, '#pushSw'), 'Me: friends switch shows even with reminders off');
+  for (const x of [a, b]) { await ev(x, 'Native = null'); noErrors(x, 'push ask'); }
+};
+
 for (const [name, fn] of Object.entries(tests)) {
   if (ONLY && !ONLY.has(name)) continue;
   const t0 = Date.now(), f0 = failN;
