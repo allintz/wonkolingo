@@ -1,10 +1,12 @@
 // Friend streaks, nudges, high-fives and notifications against a LOCAL wrangler dev. Run: node tests/social.test.mjs http://127.0.0.1:8799
 // Nudge emails need a server in email test mode (--var EMAIL_TEST_MODE:1); without it the email checks are skipped.
 const BASE = process.argv[2] || 'http://127.0.0.1:8799';
+// Each run looks like its own network, so the per-network account cap doesn't fill up across runs.
+const RUN_IP = `10.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}.1`;
 let pass = 0, failN = 0; const fails = [];
 const ok = (cond, name, extra) => { if (cond) pass++; else { failN++; fails.push(name + (extra !== undefined ? ' :: ' + JSON.stringify(extra).slice(0, 300) : '')); } };
-async function call(path, { body, token } = {}) {
-  const h = {}; if (body !== undefined) h['Content-Type'] = 'application/json'; if (token) h.Authorization = 'Bearer ' + token;
+async function call(path, { body, token, ip } = {}) {
+  const h = { 'CF-Connecting-IP': ip || RUN_IP }; if (body !== undefined) h['Content-Type'] = 'application/json'; if (token) h.Authorization = 'Bearer ' + token;
   const r = await fetch(BASE + path, { method: body !== undefined ? 'POST' : 'GET', headers: h, body: body !== undefined ? JSON.stringify(body) : undefined });
   let d = null; const t = await r.text(); try { d = JSON.parse(t); } catch { d = t; }
   return { s: r.status, d };
@@ -49,6 +51,9 @@ r = await call('/api/inbox/seen', { token: A.token, body: {} }); ok(r.s === 200,
 r = await call('/api/board?today=' + day(0), { token: A.token }); ok(r.d.unseen === 0, 'unseen cleared', r.d.unseen);
 
 // high-fives
+// high-fives: only for something actually in the feed
+r = await call('/api/kudos', { token: B.token, body: { to: A.player.id, ref: 'review-999' } }); ok(r.s === 400, 'high-five for something not in the feed refused', r);
+await call('/api/complete', { token: A.token, body: { lessonId: 'review-123', reviewed: 3, xp: 30, acc: 100, day: day(0) } });
 r = await call('/api/kudos', { token: B.token, body: { to: A.player.id, ref: 'review-123' } }); ok(r.s === 200, 'high-five', r);
 r = await call('/api/kudos', { token: B.token, body: { to: A.player.id, ref: 'review-123' } }); ok(r.s === 200, 'repeat high-five ok');
 r = await call('/api/kudos', { token: B.token, body: { to: A.player.id, ref: '<script>' } }); ok(r.s === 400, 'bad high-five ref refused', r);
@@ -63,7 +68,21 @@ await call('/api/unblock', { token: A.token, body: { playerId: B.player.id } });
 
 // limit and end
 r = await call('/api/friend/end', { token: B.token, body: { to: A.player.id } }); ok(r.s === 200, 'end friend streak', r);
-r = await call('/api/board?today=' + day(0), { token: A.token }); ok(r.d.friends.length === 0, 'ended friend streak gone', r.d.friends);
+// a friend streak with someone who left can still be ended, and leaving ends yours
+await call('/api/friend/request', { token: A.token, body: { to: B.player.id } });
+await call('/api/leave', { token: B.token, body: {} });
+r = await call('/api/board?today=' + day(0), { token: A.token }); ok(r.d.friends.length === 0, 'leaving the group ends friend streaks', r.d.friends);
+// limits: requests you sent count, requests sent to you don't
+const pals = [];
+for (let i = 0; i < 6; i++) pals.push((await call('/api/join', { body: { code, name: 'Pal' + i + tag }, ip: `10.77.${i}.${Math.floor(Math.random() * 250)}` })).d);
+for (const x of pals.slice(0, 5)) await call('/api/friend/request', { token: x.token, body: { to: A.player.id } });
+r = await call('/api/friend/request', { token: A.token, body: { to: pals[5].player.id } }); ok(r.s === 200, 'five incoming requests don’t block asking someone', r);
+for (const x of pals.slice(0, 4)) await call('/api/friend/accept', { token: A.token, body: { to: x.player.id } });
+r = await call('/api/friend/accept', { token: A.token, body: { to: pals[4].player.id } }); ok(r.s === 400 && /up to 5/.test(r.d.error), 'accepting a sixth is refused (4 active + 1 sent)', r);
+// asking and cancelling repeatedly sends one request note a day
+for (let i = 0; i < 3; i++) { await call('/api/friend/end', { token: pals[5].token, body: { to: C.player.id } }); await call('/api/friend/request', { token: pals[5].token, body: { to: C.player.id } }); }
+r = await call('/api/inbox', { token: C.token }); ok(r.d.notes.filter(n => n.kind === 'fs_request' && n.from === pals[5].player.id).length === 1, 'one request note a day per pair', r.d.notes);
+r = await call('/api/board?today=' + day(0), { token: A.token }); ok(!r.d.friends.some(x => x.id === B.player.id), 'ended friend streak gone', r.d.friends);
 
 // bought freezes and repairs survive sync with junk removed
 r = await call('/api/state', { token: C.token, body: { state: { srs: {}, activeDays: [day(-1)], settings: { days: [true, true, true, true, true, true, true], pauses: [], bought: [day(-1), 'junk', '2099-01-01'], repaired: [day(-3), 5] } } } });

@@ -371,9 +371,9 @@ tests.me = async () => {
   await answerOne(p); if (await ev(p, `run.phase`) === 'selfgrade') await answerOne(p);
   const rm = await visible(p, '#rmBtn');
   if (rm) {
-    await p.click('#rmBtn'); await p.click('[data-rm="trivia"]'); await p.waitForTimeout(300);
-    ok(await visible(p, '#rmUndo'), 'removing shows Undo');
-    ok(await ev(p, `isRemoved(${JSON.stringify(card)})`), 'Remove this question marks the card removed', card);
+    await p.click('#rmBtn'); await p.waitForTimeout(200);
+    ok(await ev(p, `isRemoved(${JSON.stringify(card)})`), 'Remove this question removes the card in one tap', card);
+    ok(await visible(p, '#rmUndo') && !await visible(p, '.chipbtn'), 'removing shows Undo and asks no reason');
   } else ok(false, 'Remove this question button visible after answering');
   await ev(p, 'quitRun(true)'); await ev(p, `go('me')`);
   ok(await ev(p, `document.querySelector('#home').innerText.includes('Removed') || document.querySelector('#home').innerText.includes('removed')`), 'Me lists removed questions');
@@ -663,11 +663,28 @@ tests.extras = async () => {
     await p.click(await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
     const before = await ev(p, `({ id: run.cur._card, total: run.total })`);
     ok(await visible(p, '#rmPre'), 'an unanswered card shows Remove this question');
-    await p.click('#rmPre'); await p.click('[data-rmpre="trivia"]');
+    await p.click('#rmPre');
     const after = await ev(p, `({ id: run && run.cur && run.cur._card, total: run && run.total })`);
+    ok(!await visible(p, '#stage .chipbtn'), 'removing asks nothing and goes to the next card');
     ok(await ev(p, `!!state.removed[${JSON.stringify(before.id)}] && !state.srs[${JSON.stringify(before.id)}]`), 'removing before answering marks it removed without a grade');
     ok(before.total === 1 ? !after.id : (after.id !== before.id && after.total === before.total - 1), 'the next card comes up and the round is one shorter', { before, after });
     await ev(p, `restoreCard(${JSON.stringify(before.id)}); if (run) quitRun(true); setMix('policy', false)`);
+  }
+  { // Skip for now: the card leaves the round ungraded, isn't removed, and stays out of rounds until reload.
+    await ev(p, `if (run) quitRun(true); setMix('policy', true); go('today')`);
+    await p.click(await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
+    const before = await ev(p, `({ id: run.cur._card, total: run.total })`);
+    ok(await visible(p, '#skipBtn'), 'an unanswered card shows Skip for now');
+    await p.click('#skipBtn');
+    const after = await ev(p, `({ id: run && run.cur && run.cur._card, total: run && run.total })`);
+    ok(await ev(p, `!isRemoved(${JSON.stringify(before.id)}) && !state.srs[${JSON.stringify(before.id)}] && SKIPPED.has(${JSON.stringify(before.id)})`), 'skipping leaves the card unremoved and ungraded');
+    ok(before.total === 1 ? !after.id : (after.id !== before.id && after.total === before.total - 1), 'skipping brings up the next card', { before, after });
+    ok(await ev(p, `!newCardsAvailable('policy').some(c => c.id === ${JSON.stringify(before.id)})`), 'a skipped card stays out of new cards until reload');
+    await ev(p, `SKIPPED.clear(); if (run) quitRun(true); setMix('policy', false)`);
+    await ev(p, `go('course', 'proc')`);
+    ok(await ev(p, `document.querySelector('#courseHead .clevel') && document.querySelector('#courseHead .clevel').innerText.includes('Beginner')`), 'the course page shows its level');
+    await ev(p, `go('courses')`);
+    ok(await ev(p, `document.querySelector('#coursesBody').innerText.includes('Advanced')`), 'the Courses list shows levels');
   }
   { // Sessions card in Me: Sounds switch, the rest under Advanced.
     await ev(p, `go('me')`);

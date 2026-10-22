@@ -11,7 +11,7 @@ import { socialApi, friendRows } from './social.js';
 import { sendNudgeEmail } from './email.js';
 import { idpApi } from './idp.js';
 import { randomString, sha256, accountInfo, publicAccountApi, accountApi, takeRate, netId, ipKey, screen, screenFail, takeNewAccount, ACCOUNT_LIMITS } from './accounts.js';
-const REMOVE_REASONS = ['trivia', 'wrong', 'unclear', 'known', 'other', 'restored'];
+const REMOVE_REASONS = ['trivia', 'wrong', 'unclear', 'known', 'other', 'none', 'restored'];
 
 // Only WonkoLingo's own pages may call the API from a browser: the site, its GitHub Pages copy, the iPhone app and local
 // development. Other websites can't use visitors' browsers to spend the AI grading quota.
@@ -97,6 +97,8 @@ async function createPlayer(env, code, name) {
 // Coming from a home group, lesson results move too and the home group is removed.
 async function moveToGroup(env, me, code, name) {
   const stmts = [env.DB.prepare('UPDATE players SET group_code = ?, name = ? WHERE id = ?').bind(code, name, me.id)];
+  // Friend streaks are within a group, so they end when a player moves to another one.
+  if (code !== me.group_code) stmts.push(env.DB.prepare('DELETE FROM friend_streaks WHERE a = ? OR b = ?').bind(me.id, me.id));
   // Courses come along only while the group has room (50).
   const room = me.solo ? Math.max(0, 50 - (await env.DB.prepare('SELECT COUNT(*) AS n FROM courses WHERE group_code = ?').bind(code).first()).n) : 0;
   if (me.solo) stmts.push(
@@ -339,7 +341,7 @@ async function api(req, env, path) {
       env.DB.prepare('SELECT c.player_id, p.name, c.lesson_id, c.title, c.acc, c.xp, c.created_at FROM completions c JOIN players p ON p.id = c.player_id WHERE c.group_code = ? ORDER BY c.created_at DESC LIMIT 12').bind(g),
       env.DB.prepare("SELECT s.player_id, json_extract(s.json, '$.activeDays') AS ad, json_extract(s.json, '$.settings') AS st FROM player_state s JOIN players p ON p.id = s.player_id WHERE p.group_code = ?").bind(g),
       env.DB.prepare('SELECT b.blocked_id AS id, p.name FROM blocks b LEFT JOIN players p ON p.id = b.blocked_id WHERE b.player_id = ?').bind(me.id),
-      env.DB.prepare('SELECT COUNT(*) AS n FROM notes WHERE player_id = ? AND seen = 0').bind(me.id)
+      env.DB.prepare('SELECT COUNT(*) AS n FROM notes WHERE player_id = ? AND seen = 0 AND from_id NOT IN (SELECT blocked_id FROM blocks WHERE player_id = ?)').bind(me.id, me.id)
     ]);
     // People this player blocked disappear from their board and feed.
     const hide = new Set(blocked.results.map(b => b.id));

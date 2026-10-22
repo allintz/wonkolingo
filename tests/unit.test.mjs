@@ -20,6 +20,7 @@ const mk = items => ({ format: 'wonkolingo-course/1', id: 'vt', title: 'V', unit
 const rc = extra => ({ t: 'recall', p: 'q', answer: 'a', x: 'x', ...extra });
 t(validateCourse(mk([rc({ id: 'q-1', choice: { p: 'mc?', o: ['a', 'b', 'c'], a: 1, ow: ['x', '', 'y'] } }), rc({ id: 'q-2' })])).ok, 'ids and choice accepted');
 t(validateCourse(mk([rc({ id: 'q-1', choice: { o: ['a', 'b'], a: 0 } }), rc({})])).course.units[0].lessons[0].items[0].choice.o.length === 2, 'choice kept in output');
+t(validateCourse({ ...mk([rc({}), rc({})]), level: 'advanced' }).course.level === 'advanced' && !validateCourse({ ...mk([rc({}), rc({})]), level: 'expertish' }).ok, 'course level kept, unknown level rejected');
 t(!validateCourse(mk([rc({ id: 'same' }), rc({ id: 'same' })])).ok, 'duplicate ids rejected');
 t(!validateCourse(mk([rc({ id: 'Bad ID' }), rc({})])).ok, 'bad id rejected');
 t(!validateCourse(mk([rc({ choice: { o: ['a', 'b'], a: 5 } }), rc({})])).ok, 'choice.a out of range rejected');
@@ -56,4 +57,15 @@ ps = pairStreak(A, B3, '2026-10-06', '2026-10-12'); t(ps.count === 4 && ps.best 
 // B's weekend off day holds the friend streak without adding
 const B4 = P(run_('2026-10-05', '2026-10-12', ['2026-10-10', '2026-10-11']), { days: wk }, '2026-10-12');
 ps = pairStreak(A, B4, '2026-10-05', '2026-10-12'); t(ps.count === 6, 'off days hold a friend streak', ps);
+// Review fixes (10/22): a freeze never covers a day with no streak; earn-back counts counting days and ends at the next practice.
+const zf = computeStreak(four.concat('2026-10-12'), { days: all, bought: ['2026-10-12', '2026-10-12'] }, '2026-10-14');
+t(zf.frozen.join() === '2026-10-13' && zf.streak === 1 && zf.freezes === 2, 'a freeze bought at streak 1 protects it', zf);
+const lapsed = computeStreak(four, { days: all, bought: ['2026-10-12'] }, '2026-10-14');
+t(!lapsed.frozen.includes('2026-10-13'), 'a freeze bought after a lapse is not spent on a zero streak', lapsed);
+// weekdays: Mon 10/12 to Thu 10/15 practiced, Fri 10/16 missed, Mon 10/19 today: one counting day missed
+const wkb = computeStreak(['2026-10-12', '2026-10-13', '2026-10-14', '2026-10-15'], { days: wk }, '2026-10-19');
+t(wkb.repair && wkb.repair.days.join() === '2026-10-16', 'weekday earn-back spans the weekend', wkb);
+// practiced again after the break: no earn-back for an older lapse
+const old = computeStreak(four.concat('2026-10-12', '2026-10-13'), { days: all }, '2026-10-14');
+t(!old.repair, 'no earn-back once practice resumed on an earlier day', old);
 console.log(f ? f + ' failures' : 'unit tests pass');

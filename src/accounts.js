@@ -257,7 +257,10 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
     // Only people you can see: someone in your group (blocking also hides them if they come back after leaving).
     const p = await env.DB.prepare('SELECT id FROM players WHERE id = ? AND group_code = ?').bind(other, me.group_code).first();
     if (!p) return fail('You can only block people in your group.', 404);
-    await env.DB.prepare('INSERT OR IGNORE INTO blocks (player_id, blocked_id, created_at) VALUES (?, ?, ?)').bind(me.id, other, Date.now()).run();
+    await env.DB.batch([
+      env.DB.prepare('INSERT OR IGNORE INTO blocks (player_id, blocked_id, created_at) VALUES (?, ?, ?)').bind(me.id, other, Date.now()),
+      // Blocking someone ends any friend streak or request between you, so it doesn't keep using one of the 5 places.
+      env.DB.prepare('DELETE FROM friend_streaks WHERE (a = ? AND b = ?) OR (a = ? AND b = ?)').bind(me.id, other, other, me.id)]);
     return json({ ok: true });
   }
   // Set or change this account's username and password.
@@ -289,7 +292,8 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
   if (m === 'POST' && path === '/api/leave') {
     if (me.solo) return json({ ok: true });
     const code = await createHomeGroup(env);
-    await env.DB.prepare('UPDATE players SET group_code = ? WHERE id = ?').bind(code, me.id).run();
+    await env.DB.batch([env.DB.prepare('UPDATE players SET group_code = ? WHERE id = ?').bind(code, me.id),
+      env.DB.prepare('DELETE FROM friend_streaks WHERE a = ? OR b = ?').bind(me.id, me.id)]);
     return json({ ok: true });
   }
   if (m === 'POST' && path === '/api/passkey/register-options') {

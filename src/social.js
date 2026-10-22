@@ -64,6 +64,14 @@ export async function socialApi(req, env, path, me, { json, fail, body, today, d
   const b = await body(req);
   // A friend streak starts on the player's own date (sent by the app), if it's within a day of the server's.
   if (dayOk(b.today)) today = b.today;
+  // Ending (or declining, or cancelling) needs no checks: removing your own pair is always allowed, even with someone
+  // who has since left the group or been blocked.
+  if (path === '/api/friend/end') {
+    if (typeof b.to !== 'string' || !b.to) return fail('Pick a friend streak to end.');
+    const [a, z] = pairKey(me.id, b.to);
+    await env.DB.prepare('DELETE FROM friend_streaks WHERE a = ? AND b = ?').bind(a, z).run();
+    return json({ ok: true });
+  }
   const p = await peer(env, me, b.to);
   if (!p) return fail('That player isn’t in your group.');
   if (!await takeRate(env, 'social:' + me.id, 60, 'hour')) return fail('That’s a lot of notifications. Try again later.', 429);
@@ -79,6 +87,9 @@ export async function socialApi(req, env, path, me, { json, fail, body, today, d
   if (path === '/api/kudos') {
     const ref = typeof b.ref === 'string' && /^[A-Za-z0-9:#._-]{1,90}$/.test(b.ref) ? b.ref : '';
     if (!ref) return fail('Bad high-five.');
+    // Only for something they actually finished in this group.
+    const real = await env.DB.prepare('SELECT 1 FROM completions WHERE player_id = ? AND lesson_id = ? AND group_code = ?').bind(p.id, ref, me.group_code).first();
+    if (!real) return fail('That isn’t in the group feed.');
     const dup = await env.DB.prepare("SELECT 1 FROM notes WHERE player_id = ? AND from_id = ? AND kind = 'kudos' AND ref = ?").bind(p.id, me.id, ref).first();
     if (!dup) await note(env, p.id, me.id, 'kudos', ref);
     return json({ ok: true });
@@ -87,23 +98,29 @@ export async function socialApi(req, env, path, me, { json, fail, body, today, d
   const row = await env.DB.prepare('SELECT status, requested_by FROM friend_streaks WHERE a = ? AND b = ?').bind(a, z).first();
   if (path === '/api/friend/request') {
     if (row) return row.status === 'active' ? fail(`You already have a friend streak with ${p.name}.`) : row.requested_by === me.id ? json({ ok: true, status: 'pending' }) : fail(`${p.name} already asked you. Accept it instead.`);
-    const n = await env.DB.prepare("SELECT COUNT(*) AS n FROM friend_streaks WHERE (a = ? OR b = ?)").bind(me.id, me.id).first();
-    if (n.n >= SOCIAL_LIMITS.friendStreaks) return fail(`You can have up to ${SOCIAL_LIMITS.friendStreaks} friend streaks.`);
-    await env.DB.prepare("INSERT INTO friend_streaks (a, b, status, requested_by, started, created_at) VALUES (?, ?, 'pending', ?, ?, ?)").bind(a, z, me.id, today, Date.now()).run();
-    await note(env, p.id, me.id, 'fs_request');
+    // Active streaks plus requests you've sent count toward the 5; requests others sent you don't.
+    if (await used(env, me.id) >= SOCIAL_LIMITS.friendStreaks) return fail(`You can have up to ${SOCIAL_LIMITS.friendStreaks} friend streaks.`);
+    // Two players asking each other at the same moment: the second insert finds the row and is told what happened.
+    const ins = await env.DB.prepare("INSERT OR IGNORE INTO friend_streaks (a, b, status, requested_by, started, created_at) VALUES (?, ?, 'pending', ?, ?, ?)").bind(a, z, me.id, today, Date.now()).run();
+    if (!ins.meta || !ins.meta.changes) return fail(`${p.name} already asked you. Accept it instead.`);
+    // One request note a day per pair, so asking and cancelling over and over can't flood their notifications.
+    const sent = await env.DB.prepare("SELECT 1 FROM notes WHERE player_id = ? AND from_id = ? AND kind = 'fs_request' AND created_at > ?").bind(p.id, me.id, Date.now() - 864e5).first();
+    if (!sent) await note(env, p.id, me.id, 'fs_request');
     return json({ ok: true, status: 'pending' });
   }
   if (path === '/api/friend/accept') {
     if (!row || row.status !== 'pending' || row.requested_by === me.id) return fail('There’s no request to accept.');
-    const n = await env.DB.prepare("SELECT COUNT(*) AS n FROM friend_streaks WHERE (a = ? OR b = ?) AND status = 'active'").bind(me.id, me.id).first();
-    if (n.n >= SOCIAL_LIMITS.friendStreaks) return fail(`You can have up to ${SOCIAL_LIMITS.friendStreaks} friend streaks.`);
-    await env.DB.prepare("UPDATE friend_streaks SET status = 'active', started = ? WHERE a = ? AND b = ?").bind(today, a, z).run();
+    if (await used(env, me.id) >= SOCIAL_LIMITS.friendStreaks) return fail(`You can have up to ${SOCIAL_LIMITS.friendStreaks} friend streaks.`);
+    // The requester's own request is already counted on their side, so it can't take them past 5.
+    const upd = await env.DB.prepare("UPDATE friend_streaks SET status = 'active', started = ? WHERE a = ? AND b = ? AND status = 'pending'").bind(today, a, z).run();
+    if (!upd.meta || !upd.meta.changes) return fail('There’s no request to accept.');
     await note(env, p.id, me.id, 'fs_accept');
     return json({ ok: true, status: 'active' });
   }
-  if (path === '/api/friend/end') {
-    await env.DB.prepare('DELETE FROM friend_streaks WHERE a = ? AND b = ?').bind(a, z).run();
-    return json({ ok: true });
-  }
+}
+// Friend streak places a player is using: active ones and requests they sent.
+async function used(env, id) {
+  const r = await env.DB.prepare("SELECT COUNT(*) AS n FROM friend_streaks WHERE (a = ? OR b = ?) AND (status = 'active' OR requested_by = ?)").bind(id, id, id).first();
+  return r ? r.n : 0;
 }
 export { NOTE_KINDS };

@@ -160,7 +160,7 @@ function computeStreak(days, settings, today) {
       buy(d);
       if (set.has(d)) { practice(); kept.push(d); }
       else if (paused(d) || !schedFor(d)[dow(d)] || repaired.has(d)) kept.push(d);
-      else if (bank > 0) { bank--; frozen.push(d); kept.push(d); }
+      else if (bank > 0 && streak > 0) { bank--; frozen.push(d); kept.push(d); }
       else { if (streak > 0) lastBreak = { day: d, lost: streak }; streak = 0; }
       best = Math.max(best, streak);
     }
@@ -174,9 +174,13 @@ function computeStreak(days, settings, today) {
   let repair = null;
   if (lastBreak) {
     const miss = [];
-    for (let d = lastBreak.day; d < today && miss.length <= STREAK_RULES.repairWindow; d = next(d)) if (!set.has(d) && !paused(d) && schedFor(d)[dow(d)] && !repaired.has(d) && !frozen.includes(d)) miss.push(d);
-    const age = (Date.parse(today) - Date.parse(lastBreak.day)) / 864e5;
-    if (age <= STREAK_RULES.repairWindow && miss.length && miss.length <= STREAK_RULES.repairWindow) repair = { days: miss, lost: lastBreak.lost, cost: miss.length * STREAK_RULES.repairPrice };
+    // Only until the first practice after the break (today's counts): later, the streak has simply started again.
+    let since = false;
+    for (let d = lastBreak.day; d < today && miss.length <= STREAK_RULES.repairWindow; d = next(d)) {
+      if (set.has(d)) { since = true; break; }
+      if (!paused(d) && schedFor(d)[dow(d)] && !repaired.has(d) && !frozen.includes(d)) miss.push(d);
+    }
+    if (!since && miss.length && miss.length <= STREAK_RULES.repairWindow) repair = { days: miss, lost: lastBreak.lost, cost: miss.length * STREAK_RULES.repairPrice };
   }
   const spent = boughtList.length * STREAK_RULES.freezePrice + repaired.size * STREAK_RULES.repairPrice;
   return { streak, best, freezes: bank, progress, toNextFreeze: bank >= STREAK_RULES.maxFreezes ? 0 : STREAK_RULES.freezeEvery - progress, frozen, kept, repair, spent, doneToday, offToday, pausedNow, atRisk: streak > 0 && !doneToday && !offToday };
