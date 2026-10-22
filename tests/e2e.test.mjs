@@ -18,6 +18,8 @@ const browser = await chromium.launch({ executablePath: CHROME, headless: true }
 // Each context looks like its own network, so per-IP limits don't pile up across tests and runs.
 async function ctx(opts = {}) {
   const c = await browser.newContext({ ...(opts.phone === false ? { viewport: { width: 1280, height: 900 } } : PHONE), extraHTTPHeaders: { 'CF-Connecting-IP': `10.${randomBytes(1)[0]}.${randomBytes(1)[0]}.${randomBytes(1)[0]}` } });
+  // Real Google traffic is blocked (it can take 30 s from here); the Google test registers its own stub, which takes precedence.
+  await c.route('https://accounts.google.com/**', r => r.abort());
   if (opts.storage) await c.addInitScript(s => { if (!sessionStorage.getItem('seeded')) { sessionStorage.setItem('seeded', '1'); Object.entries(s).forEach(([k, v]) => v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v)); } }, opts.storage);
   return c;
 }
@@ -800,6 +802,9 @@ tests.google = async () => {
   const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url');
   const tok = claims => { const now = Math.floor(Date.now() / 1000), h = b64({ alg: 'RS256', kid: 'wl-test' }), b = b64({ iss: 'https://accounts.google.com', aud: cfg.google, iat: now, exp: now + 3600, ...claims });
     return h + '.' + b + '.' + createSign('RSA-SHA256').update(h + '.' + b).sign(createPrivateKey({ key: KEY.private, format: 'jwk' })).toString('base64url'); };
+  // wrangler.toml sets a real Google client id, so every server reports Google on; only one started with the test key accepts our tokens.
+  const probe = await fetch(BASE + '/api/google', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ credential: tok({ sub: 'probe' + rnd() }) }) });
+  if (!probe.ok) { console.log('google: skipped (server lacks the test key; start it as in tests/README.md)'); return; }
   const stub = c => c.route('https://accounts.google.com/gsi/client', r => r.fulfill({ contentType: 'text/javascript', body: `window.google = { accounts: { id: {
     initialize(o) { window.__gcb = o.callback; },
     renderButton(el) { const b = document.createElement('button'); b.className = 'fakeG'; b.textContent = 'Continue with Google'; b.onclick = () => window.__gcb({ credential: window.__gtok }); el.appendChild(b); } } } };` }));
