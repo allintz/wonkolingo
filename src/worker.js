@@ -7,6 +7,8 @@ import Anthropic from '@anthropic-ai/sdk';
 import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor, defineTerm } from './grade.js';
 import { publicEmailApi, emailApi } from './email.js';
 import { adminApi } from './admin.js';
+import { socialApi, friendRows } from './social.js';
+import { sendNudgeEmail } from './email.js';
 import { idpApi } from './idp.js';
 import { randomString, sha256, accountInfo, publicAccountApi, accountApi, takeRate, netId, ipKey, screen, screenFail, takeNewAccount, ACCOUNT_LIMITS } from './accounts.js';
 const REMOVE_REASONS = ['trivia', 'wrong', 'unclear', 'known', 'other', 'restored'];
@@ -296,7 +298,8 @@ async function api(req, env, path) {
     const info = await accountInfo(env, me);
     return json({ ...info, code: info.group ? info.group.code : null, groupName: info.group ? info.group.groupName : null });
   }
-  const mine = await accountApi(req, env, path, me, { json, fail, body }) || await emailApi(req, env, path, me, { json, fail, body });
+  const mine = await accountApi(req, env, path, me, { json, fail, body }) || await emailApi(req, env, path, me, { json, fail, body })
+    || await socialApi(req, env, path, me, { json, fail, body, today: utcDay(), dayOk: d => realDay(d) && d >= utcDay(-1) && d <= utcDay(1), sendNudgeEmail: (to, from) => sendNudgeEmail(env, req, to, from) });
   if (mine) return mine;
 
   if (m === 'POST' && path === '/api/complete') {
@@ -329,13 +332,14 @@ async function api(req, env, path) {
     const today = realDay(t) && t >= utcDay(-1) && t <= utcDay(1) ? t : utcDay();
     const ws = weekStart();
     const g = me.group_code;
-    const [players, totals, days, feed, states, blocked] = await env.DB.batch([
+    const [players, totals, days, feed, states, blocked, unseen] = await env.DB.batch([
       env.DB.prepare('SELECT id, name FROM players WHERE group_code = ?').bind(g),
       env.DB.prepare('SELECT player_id, SUM(xp) AS total, SUM(CASE WHEN created_at >= ? THEN xp ELSE 0 END) AS week, COUNT(*) AS lessons FROM completions WHERE group_code = ? GROUP BY player_id').bind(ws, g),
       env.DB.prepare('SELECT DISTINCT player_id, day FROM completions WHERE group_code = ? AND day >= ?').bind(g, shiftDay(today, -400)),
       env.DB.prepare('SELECT c.player_id, p.name, c.lesson_id, c.title, c.acc, c.xp, c.created_at FROM completions c JOIN players p ON p.id = c.player_id WHERE c.group_code = ? ORDER BY c.created_at DESC LIMIT 12').bind(g),
       env.DB.prepare("SELECT s.player_id, json_extract(s.json, '$.activeDays') AS ad, json_extract(s.json, '$.settings') AS st FROM player_state s JOIN players p ON p.id = s.player_id WHERE p.group_code = ?").bind(g),
-      env.DB.prepare('SELECT b.blocked_id AS id, p.name FROM blocks b LEFT JOIN players p ON p.id = b.blocked_id WHERE b.player_id = ?').bind(me.id)
+      env.DB.prepare('SELECT b.blocked_id AS id, p.name FROM blocks b LEFT JOIN players p ON p.id = b.blocked_id WHERE b.player_id = ?').bind(me.id),
+      env.DB.prepare('SELECT COUNT(*) AS n FROM notes WHERE player_id = ? AND seen = 0').bind(me.id)
     ]);
     // People this player blocked disappear from their board and feed.
     const hide = new Set(blocked.results.map(b => b.id));
@@ -343,6 +347,8 @@ async function api(req, env, path) {
     const tot = new Map(totals.results.map(r => [r.player_id, r]));
     const dayMap = new Map();
     for (const r of days.results) { if (!dayMap.has(r.player_id)) dayMap.set(r.player_id, []); dayMap.get(r.player_id).push(r.day); }
+    // Practice and kept days per player, for friend streaks.
+    const per = new Map();
     const rows = players.results.filter(p => !hide.has(p.id)).map(p => {
       const t = tot.get(p.id) || {};
       // Prefer the player's synced practice days and streak settings; fall back to days with posted results.
@@ -350,9 +356,12 @@ async function api(req, env, path) {
       const daysFor = Array.isArray(sy.ad) ? sy.ad.concat(dayMap.get(p.id) || []) : (dayMap.get(p.id) || []);
       let st = { streak: 0, atRisk: false, freezes: 0, offToday: false };
       try { st = computeStreak(daysFor, sy.st, today); } catch (e) { /* one player's odd data never breaks the board for the rest */ }
-      return { id: p.id, name: p.name, week: t.week || 0, total: t.total || 0, lessons: t.lessons || 0, streak: st.streak, atRisk: st.atRisk, freezes: st.freezes, offToday: st.offToday };
+      per.set(p.id, { name: p.name, practiced: new Set(daysFor), kept: new Set(st.kept || []) });
+      return { id: p.id, name: p.name, week: t.week || 0, total: t.total || 0, lessons: t.lessons || 0, streak: st.streak, atRisk: st.atRisk, freezes: st.freezes, offToday: st.offToday, doneToday: !!st.doneToday };
     });
-    return json({ code: g, groupName: me.group_name, me: me.id, weekStart: ws, players: rows, blocked: blocked.results.map(b => ({ id: b.id, name: b.name || 'Former player' })), feed: feed.results.filter(f => !hide.has(f.player_id)).map(f => ({ id: f.player_id, name: f.name, lessonId: f.lesson_id, title: f.title, acc: f.acc, xp: f.xp, at: f.created_at })) });
+    let friends = [];
+    try { friends = await friendRows(env, me, per, today, hide); } catch (e) { console.log('friend streaks failed', String(e)); }
+    return json({ code: g, groupName: me.group_name, me: me.id, weekStart: ws, players: rows, friends, unseen: (unseen.results[0] || {}).n || 0, blocked: blocked.results.map(b => ({ id: b.id, name: b.name || 'Former player' })), feed: feed.results.filter(f => !hide.has(f.player_id)).map(f => ({ id: f.player_id, name: f.name, lessonId: f.lesson_id, title: f.title, acc: f.acc, xp: f.xp, at: f.created_at })) });
   }
 
   // ---- synced progress (review schedule, practice days, streak settings) ----
@@ -371,6 +380,8 @@ async function api(req, env, path) {
     // Practice days: real dates only, not in the future. Streak settings: lists capped, so the board stays fast.
     if (st.activeDays) st.activeDays = st.activeDays.filter(d => realDay(d) && d <= utcDay(1)).slice(-2000);
     if (obj(st.settings)) ['pauses', 'past'].forEach(k => { if (st.settings[k] !== undefined) st.settings[k] = Array.isArray(st.settings[k]) ? st.settings[k].slice(-50) : []; });
+    // Bought freezes and repaired days: real dates, not in the future, capped.
+    if (obj(st.settings)) ['bought', 'repaired'].forEach(k => { if (st.settings[k] !== undefined) st.settings[k] = Array.isArray(st.settings[k]) ? st.settings[k].filter(d => realDay(d) && d <= utcDay(1)).slice(-400) : []; });
     await env.DB.prepare('INSERT INTO player_state (player_id, json, updated_at) VALUES (?, ?, ?) ON CONFLICT(player_id) DO UPDATE SET json = excluded.json, updated_at = excluded.updated_at').bind(me.id, JSON.stringify(st), Date.now()).run();
     return json({ ok: true });
   }

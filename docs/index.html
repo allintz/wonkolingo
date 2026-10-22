@@ -635,6 +635,59 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .gate-form { display: grid; gap: 12px; justify-items: center; width: 100%; max-width: 340px; }
 .gate-form .gate-fld { max-width: none; }
 .acct-pw { display: grid; gap: 10px; }
+
+/* Retention (2026-10-21): streak strip on Today, daily goal, friend streaks, group goal, notifications, celebrations. */
+.strip { background: var(--surface); border-radius: 18px; padding: 14px 16px; display: grid; gap: 12px; }
+.strip-top { display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap; }
+.strip .sk { display: flex; align-items: center; gap: 6px; color: var(--brass); font: inherit; font-weight: 800; font-size: 22px; background: none; border: 0; padding: 0; cursor: pointer; }
+.strip .sk small { font-size: 13px; font-weight: 700; color: var(--muted); }
+.strip .sk.risk { color: var(--bad); } .strip .sk.zero { color: var(--locked-fg); }
+.strip .sk svg { width: 26px; height: 26px; }
+.strip .fz { display: flex; gap: 2px; }
+.strip .fz .flake, .strip .fz .flake svg { width: 18px; height: 18px; }
+.strip .note-line { margin: 0; font-size: 14px; color: var(--muted); font-weight: 600; }
+.goal { flex: 1 1 180px; display: grid; gap: 4px; min-width: 0; }
+.goal .gk { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.gbar { height: 10px; border-radius: 99px; background: var(--line-deep); overflow: hidden; }
+.gbar i { display: block; height: 100%; background: var(--fill); border-radius: 99px; transition: width .5s; }
+.goal.met .gbar i, .quest.met .gbar i { background: var(--good); }
+.fsl { display: grid; gap: 8px; }
+.fsl h4 { margin: 0; font-family: var(--f-label); font-size: 14px; letter-spacing: .06em; color: var(--muted); }
+.fsr { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 800; min-height: 34px; }
+.fsr .fsn { display: flex; align-items: center; gap: 3px; color: var(--brass); min-width: 46px; font-variant-numeric: tabular-nums; }
+.fsr .fsn.zero { color: var(--locked-fg); }
+.fsr .fsn svg { width: 17px; height: 17px; }
+.fsr .fst { color: var(--muted); font-weight: 600; font-size: 14px; flex: 1; min-width: 0; }
+.fsr .fst b { color: var(--fg); }
+.fsr .btn.sm, .repair .btn.sm { padding: 6px 12px; font-size: 13px; }
+.repair { display: flex; align-items: center; gap: 10px; justify-content: space-between; flex-wrap: wrap; background: var(--bad-bg); border-radius: 12px; padding: 10px 12px; font-size: 14px; font-weight: 700; }
+.quest { display: grid; gap: 6px; margin: 4px 0 14px; }
+.quest .gk { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.quest .gk span:last-child { color: var(--muted); }
+.lbact .btn.sm { padding: 5px 11px; font-size: 13px; }
+.lb .nudge { font: inherit; font-size: 12px; font-weight: 800; color: var(--primary); background: none; border: 1px solid var(--line-deep); border-radius: 99px; padding: 2px 8px; cursor: pointer; }
+.feed .hi5 { font: inherit; font-size: 12px; font-weight: 800; color: var(--primary); background: none; border: 0; padding: 0 0 0 8px; cursor: pointer; }
+.feed .hi5[disabled] { color: var(--muted); cursor: default; }
+.stats .chip { white-space: nowrap; }
+@media (max-width: 400px) { .brand { font-size: 19px; letter-spacing: .03em; } .stats { gap: 4px; } .stats .chip { padding: 5px 8px; } }
+.chip.bell { position: relative; display: inline-flex; align-items: center; color: var(--muted); border: 0; font-family: inherit; cursor: pointer; padding: 5px 9px; }
+.chip.bell[hidden] { display: none; }
+.chip.bell svg { width: 18px; height: 18px; }
+.chip.bell .badge { position: absolute; top: -3px; right: -3px; min-width: 17px; height: 17px; border-radius: 99px; background: var(--bad); color: #fff; font-size: 11px; font-weight: 800; display: grid; place-items: center; padding: 0 4px; }
+.chip.bell .badge[hidden] { display: none; }
+.notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.notes li { background: var(--surface); border-radius: 14px; padding: 12px 14px; display: grid; gap: 6px; font-weight: 600; }
+.notes li.new { box-shadow: inset 3px 0 0 var(--fill); }
+.notes .when { font-size: 12px; color: var(--muted); }
+.notes .row { display: flex; gap: 8px; flex-wrap: wrap; }
+.cele { display: grid; gap: 4px; justify-items: center; text-align: center; animation: celePop .55s cubic-bezier(.2, 1.4, .4, 1) both; }
+.cele .big { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 900; color: var(--brass); }
+.cele .big svg { width: 30px; height: 30px; }
+.cele.goal .big { color: var(--good); }
+.cele p { margin: 0; color: var(--muted); font-size: 14px; }
+@keyframes celePop { 0% { transform: scale(.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.spk { flex-wrap: wrap; }
+@media (prefers-reduced-motion: reduce) { .cele { animation: none; } .gbar i { transition: none; } }
 </style>
 
 <header class="top">
@@ -643,6 +696,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
     <div class="stats">
       <div class="chip streak" title="Day streak"><span id="streak">0</span> day<span id="streakS">s</span></div>
       <div class="chip xp" title="Total XP"><span id="xp">0</span> XP</div>
+      <button class="chip bell" id="bellBtn" aria-label="Notifications" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg><span class="badge" id="bellN" hidden></span></button>
       <button class="chip sv" id="saved" data-go="me" hidden></button>
     </div>
   </div>
@@ -658,6 +712,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   <main class="views" id="home">
     <section class="view" id="v-today">
       <div id="todayWrap"></div>
+      <section class="strip" id="streakStrip" hidden></section>
       <div id="mixWrap"></div>
       <div id="groupLine"></div>
       <section class="card" id="potd" hidden></section>
@@ -723,6 +778,11 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   <div class="stage"><div class="stage-in" id="addBody"></div></div>
 </section>
 
+<section class="overlay sheet" role="dialog" aria-modal="true" id="inboxSheet" aria-label="Notifications" hidden>
+  <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Notifications</h2></div>
+  <div class="stage"><div class="stage-in" id="inboxBody"></div></div>
+</section>
+
 <section class="overlay sheet" role="dialog" aria-modal="true" id="pick" hidden>
   <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Courses</h2></div>
   <div class="stage"><div class="stage-in" id="pickBody"></div></div>
@@ -766,8 +826,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-21-db08e27';
-  window.WL_BUILT_AT = +'1792639718000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-21-511adf4';
+  window.WL_BUILT_AT = +'1792640805000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -19673,7 +19733,10 @@ function validateCourse(raw) {
 // days: list of YYYY-MM-DD days with practice. settings.days: 7 booleans, Sunday first, for days that count.
 // settings.pauses: [{ from, to }] (to null = still paused). Off days and paused days never break a streak.
 // Every STREAK_RULES.freezeEvery practice days earns a freeze (up to maxFreezes); a missed counting day uses one automatically.
-const STREAK_RULES = { freezeEvery: 5, maxFreezes: 3 };
+// settings.bought: days a freeze was bought with XP (each adds one that day, within the cap), so spent XP is derived.
+// settings.repaired: missed days earned back after a break (practice within repairWindow days restores the streak for
+// free; Duolingo-style earn-back, since paying to undo a break feels like buying a badge). They count like off days.
+const STREAK_RULES = { freezeEvery: 5, maxFreezes: 3, freezePrice: 100, repairPrice: 0, repairWindow: 2 };
 function computeStreak(days, settings, today) {
   // Real calendar days only: a malformed one (2026-10-00) would otherwise throw partway through.
   const ok = d => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d) && !isNaN(Date.parse(d + 'T12:00:00Z')) && new Date(d + 'T12:00:00Z').toISOString().slice(0, 10) === d;
@@ -19690,22 +19753,39 @@ function computeStreak(days, settings, today) {
   const dow = d => new Date(d + 'T12:00:00Z').getUTCDay();
   const next = d => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() + 1); return x.toISOString().slice(0, 10); };
   const sorted = [...set].filter(d => d <= today).sort();
-  let streak = 0, bank = 0, progress = 0, best = 0;
-  const frozen = [];
+  const list = k => new Set(settings && Array.isArray(settings[k]) ? settings[k].slice(-400).filter(ok) : []);
+  const repaired = list('repaired'), boughtList = settings && Array.isArray(settings.bought) ? settings.bought.slice(-400).filter(ok) : [];
+  const boughtOn = new Map(); boughtList.forEach(d => boughtOn.set(d, (boughtOn.get(d) || 0) + 1));
+  let streak = 0, bank = 0, progress = 0, best = 0, lastBreak = null;
+  // frozen: days a freeze covered. kept: days the streak survived (practice, off, paused, frozen or repaired), for friend streaks.
+  const frozen = [], kept = [];
   const practice = () => { streak++; if (++progress >= STREAK_RULES.freezeEvery) { progress = 0; bank = Math.min(STREAK_RULES.maxFreezes, bank + 1); } };
+  const buy = d => { if (boughtOn.has(d)) bank = Math.min(STREAK_RULES.maxFreezes, bank + boughtOn.get(d)); };
   if (sorted.length) {
     for (let d = sorted[0]; d < today; d = next(d)) {
-      if (set.has(d)) practice();
-      else if (paused(d) || !schedFor(d)[dow(d)]) { /* off day: no change */ }
-      else if (bank > 0) { bank--; frozen.push(d); }
-      else streak = 0;
+      buy(d);
+      if (set.has(d)) { practice(); kept.push(d); }
+      else if (paused(d) || !schedFor(d)[dow(d)] || repaired.has(d)) kept.push(d);
+      else if (bank > 0) { bank--; frozen.push(d); kept.push(d); }
+      else { if (streak > 0) lastBreak = { day: d, lost: streak }; streak = 0; }
       best = Math.max(best, streak);
     }
   }
+  buy(today);
   const doneToday = set.has(today);
   if (doneToday) { practice(); best = Math.max(best, streak); }
   const pausedNow = paused(today), offToday = pausedNow || !sched[dow(today)];
-  return { streak, best, freezes: bank, progress, toNextFreeze: bank >= STREAK_RULES.maxFreezes ? 0 : STREAK_RULES.freezeEvery - progress, frozen, doneToday, offToday, pausedNow, atRisk: streak > 0 && !doneToday && !offToday };
+  if (doneToday || offToday) kept.push(today);
+  // A break can be bought back for a short while: the missed counting days since the break, if there are few enough.
+  let repair = null;
+  if (lastBreak) {
+    const miss = [];
+    for (let d = lastBreak.day; d < today && miss.length <= STREAK_RULES.repairWindow; d = next(d)) if (!set.has(d) && !paused(d) && schedFor(d)[dow(d)] && !repaired.has(d) && !frozen.includes(d)) miss.push(d);
+    const age = (Date.parse(today) - Date.parse(lastBreak.day)) / 864e5;
+    if (age <= STREAK_RULES.repairWindow && miss.length && miss.length <= STREAK_RULES.repairWindow) repair = { days: miss, lost: lastBreak.lost, cost: miss.length * STREAK_RULES.repairPrice };
+  }
+  const spent = boughtList.length * STREAK_RULES.freezePrice + repaired.size * STREAK_RULES.repairPrice;
+  return { streak, best, freezes: bank, progress, toNextFreeze: bank >= STREAK_RULES.maxFreezes ? 0 : STREAK_RULES.freezeEvery - progress, frozen, kept, repair, spent, doneToday, offToday, pausedNow, atRisk: streak > 0 && !doneToday && !offToday };
 }
 /* COURSE-FORMAT END */
 
@@ -19901,6 +19981,183 @@ const OFFS = [0, 52, 78, 52, 0, -52, -78, -52];
 const PRAISE = ['Nicely decoded.', 'Correct.', 'You read that right.', 'Exactly.'];
 
 const $ = s => document.querySelector(s);
+
+/* ---------- retention (2026-10-21): daily goal, spending XP on freezes and repairs, friend streaks, nudges, high-fives,
+   notifications, weekly group goal and celebrations. Function declarations and var only: renderHome calls these at startup. ---------- */
+var GOALS = [[20, 'Light', 'one round'], [50, 'Regular', 'two or three rounds'], [100, 'Serious', 'five rounds']];
+var MILESTONES = [3, 7, 14, 30, 50, 100, 150, 200, 250, 300, 365, 500, 1000];
+var QUEST_PER_PLAYER = 200, lastUnseen = null, fsEndArmed = null;
+function dailyGoal() { const g = state.prefs && state.prefs.goal; return g === 0 ? 0 : (GOALS.find(x => x[0] === g) || GOALS[0])[0]; }
+function xpToday() { return (isObj(state.xpDays) && state.xpDays[dstr(new Date())]) || 0; }
+// XP to spend: everything earned minus freezes and repairs bought. The leaderboard keeps counting the full total.
+function xpSpendable() { return Math.max(0, xpTotal(state) - streakInfo().spent); }
+function mailNudgeOn() { return !(state.prefs && state.prefs.mailNudge === false); }
+function buyFreeze() {
+  const si = streakInfo();
+  if (si.freezes >= STREAK_RULES.maxFreezes) { toast('Your freezes are full.'); return; }
+  if (xpSpendable() < STREAK_RULES.freezePrice) { toast(`A freeze costs ${STREAK_RULES.freezePrice} XP. You have ${xpSpendable()} to spend.`); return; }
+  state.settings.bought = (state.settings.bought || []).concat(dstr(new Date())); state.settingsAt = Date.now();
+  save(); sfx('freeze'); toast('Streak freeze added.'); renderHome();
+}
+// Earn-back: the first round after a recent break restores the streak (called when a round finishes). Returns the restored length.
+function earnBack() {
+  const si = streakInfo(); if (!si.repair || !si.doneToday) return 0;
+  state.settings.repaired = (state.settings.repaired || []).concat(si.repair.days); state.settingsAt = Date.now();
+  state.streak = streakInfo().streak; save(); return state.streak;
+}
+function repairHTML(si) {
+  if (!si.repair || si.doneToday) return '';
+  const y = addDays(dstr(new Date()), -1), d = si.repair.days[0];
+  const when = d === y ? 'yesterday' : 'on ' + ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(d + 'T12:00:00').getDay()];
+  return `<div class="repair"><span>Your ${si.repair.lost}-day streak lapsed ${when}. Finish a round today and it comes back.</span></div>`;
+}
+function renderStrip() {
+  const el = $('#streakStrip'); if (!el) return;
+  if (!state.activeDays.length && !Object.keys(state.srs).length && !(G && board && (board.friends || []).length)) { el.hidden = true; return; }
+  el.hidden = false;
+  if (earnBack()) toast('You earned your streak back.');
+  const si = streakInfo(), goal = dailyGoal(), xt = xpToday(), pct = goal ? Math.min(100, Math.round(xt / goal * 100)) : 0;
+  const cls = si.streak === 0 ? 'zero' : si.atRisk ? 'risk' : '';
+  const sub = si.doneToday ? 'done today' : si.offToday ? 'off today' : si.streak ? 'practice today to keep it' : 'finish a round to start one';
+  const flakes = Array.from({ length: STREAK_RULES.maxFreezes }, (_, i) => `<span class="flake${i < si.freezes ? ' on' : ''}">${snowSVG()}</span>`).join('');
+  let h = `<div class="strip-top"><button class="sk ${cls}" data-go="me" aria-label="${si.streak}-day streak, ${sub}. Open streak details">${flameSVG()}<span>${si.streak}</span><small>${sub}</small></button><span class="fz" title="${si.freezes} streak freeze${si.freezes === 1 ? '' : 's'} saved">${flakes}</span>`;
+  if (goal) h += `<div class="goal${xt >= goal ? ' met' : ''}"><div class="gk"><span>${xt >= goal ? 'Daily goal reached' : 'Daily goal'}</span><span>${Math.min(xt, goal)} / ${goal} XP</span></div><div class="gbar" role="progressbar" aria-label="Daily goal" aria-valuemin="0" aria-valuemax="${goal}" aria-valuenow="${Math.min(xt, goal)}"><i style="width:${Math.max(pct, 3)}%"></i></div></div>`;
+  h += `</div>`;
+  if (si.frozen.includes(addDays(dstr(new Date()), -1))) h += `<p class="note-line">A streak freeze covered yesterday, so your streak is safe.</p>`;
+  h += repairHTML(si) + friendsHTML(false);
+  el.innerHTML = h;
+  // A freeze that saved the streak gets its sound once per day it happened.
+  const fz = si.frozen[si.frozen.length - 1];
+  if (fz && fz >= addDays(dstr(new Date()), -2)) { let seen = ''; try { seen = localStorage.getItem('wl-fz-seen') || ''; } catch (e) {} if (seen < fz) { try { localStorage.setItem('wl-fz-seen', fz); } catch (e) {} toast('A streak freeze saved your streak.'); sfx('freeze'); } }
+}
+$('#streakStrip').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  socialClick(t);
+});
+// Friend streaks: on Today only the active ones and requests waiting for you; the Group page also lists your own requests.
+function friendsHTML(inGroup) {
+  if (!board || !G) return '';
+  const fr = board.friends || [], act = fr.filter(f => f.status === 'active').sort((a, b) => (b.count || 0) - (a.count || 0));
+  const inc = fr.filter(f => f.status === 'pending' && !f.mine), out = fr.filter(f => f.status === 'pending' && f.mine);
+  if (!act.length && !inc.length && !(inGroup && out.length)) return inGroup ? `<div class="fsl"><h4>Friend streaks</h4><p class="meta">Keep a streak going with a friend: a day counts when you both practice. Tap a name on the board to start one (up to 5).</p></div>` : '';
+  const rows = act.map(f => {
+    let st, btn = '';
+    if (f.meDone && f.themDone) st = 'you both practiced today.';
+    else if (f.meDone) { st = 'you’re done, waiting on them.'; btn = nudgedToday(f.id) ? '<span class="meta">Nudged</span>' : `<button class="btn ghost sm" data-nudge="${esc(f.id)}" data-name="${esc(f.name)}">Nudge</button>`; }
+    else if (f.themDone) st = 'they’re done. Your turn.';
+    else st = f.count ? 'neither of you yet today.' : 'starts the first day you both practice.';
+    if (inGroup) btn += `<button class="linkbtn" data-fsend="${esc(f.id)}">${fsEndArmed === f.id ? 'Tap again to end' : 'End'}</button>`;
+    return `<div class="fsr"><span class="fsn${f.count ? '' : ' zero'}" title="${f.count}-day friend streak${f.best > f.count ? `, best ${f.best}` : ''}">${flameSVG()}${f.count}</span><span class="fst"><b>${esc(f.name)}</b>: ${st}</span>${btn}</div>`;
+  });
+  inc.forEach(f => rows.push(`<div class="fsr"><span class="fst"><b>${esc(f.name)}</b> wants a friend streak with you.</span><button class="btn sm" data-fsacc="${esc(f.id)}">Accept</button><button class="linkbtn" data-fsend="${esc(f.id)}">No thanks</button></div>`));
+  if (inGroup) out.forEach(f => rows.push(`<div class="fsr"><span class="fst">Asked <b>${esc(f.name)}</b> for a friend streak.</span><button class="linkbtn" data-fsend="${esc(f.id)}">Cancel</button></div>`));
+  return `<div class="fsl"><h4>Friend streaks</h4>${rows.join('')}</div>`;
+}
+function questHTML() {
+  if (!board) return '';
+  const ps = board.players, target = QUEST_PER_PLAYER * Math.max(2, ps.length), done = ps.reduce((a, p) => a + (p.week || 0), 0);
+  const pct = Math.min(100, Math.round(done / target * 100));
+  return `<div class="quest${done >= target ? ' met' : ''}"><div class="gk"><span>Group goal this week</span><span>${Math.min(done, target)} / ${target} XP</span></div><div class="gbar" role="progressbar" aria-label="Group goal this week" aria-valuemin="0" aria-valuemax="${target}" aria-valuenow="${Math.min(done, target)}"><i style="width:${Math.max(pct, 2)}%"></i></div><p class="meta">${done >= target ? 'Reached. Nice work, everyone.' : `Everyone’s XP counts, ${QUEST_PER_PLAYER} per member. Resets Monday.`}</p></div>`;
+}
+// The longest friend streak still waiting on this player today, for reminders.
+function friendWaiting() {
+  if (!board || !board.friends) return null;
+  return board.friends.filter(f => f.status === 'active' && f.count > 0 && !f.meDone).sort((a, b) => b.count - a.count)[0] || null;
+}
+function localMap(key) { try { const v = JSON.parse(localStorage.getItem(key) || '{}'); return isObj(v) ? v : {}; } catch (e) { return {}; } }
+function nudgedToday(id) { return localMap('wl-nudged')[id] === dstr(new Date()); }
+function highFived(ref) { return !!localMap('wl-hi5')[ref]; }
+function remember(key, k, v) { const m = localMap(key); m[k] = v; const ks = Object.keys(m); ks.slice(0, Math.max(0, ks.length - 300)).forEach(x => delete m[x]); try { localStorage.setItem(key, JSON.stringify(m)); } catch (e) {} }
+async function socialCall(path, to, extra) {
+  try { const r = await apiCall(path, { to, today: dstr(new Date()), ...(extra || {}) }); return r; }
+  catch (e) { toast(e instanceof TypeError ? 'Can’t reach the server right now.' : e.message); return null; }
+}
+// Buttons for friend streaks, nudges and high-fives, wherever they appear (Today, Group, Notifications).
+function socialClick(t) {
+  const d = t.dataset, after = async () => { await refreshBoard(); renderHome(); if (!$('#inboxSheet').hidden) renderInbox(); };
+  if (d.nudge) {
+    t.disabled = true;
+    socialCall('/api/nudge', d.nudge).then(r => { if (!r) { t.disabled = false; return; } remember('wl-nudged', d.nudge, dstr(new Date())); toast(`Nudged ${d.name || 'them'}${r.emailed ? ' (by email too)' : ''}.`); after(); });
+    return true;
+  }
+  if (d.kudos) {
+    t.disabled = true; t.textContent = 'High-fived';
+    socialCall('/api/kudos', d.kudos, { ref: d.ref }).then(r => { if (r) { remember('wl-hi5', d.ref, 1); sfx('tap'); } else { t.disabled = false; t.textContent = 'High five'; } });
+    return true;
+  }
+  if (d.fsreq) { t.disabled = true; socialCall('/api/friend/request', d.fsreq).then(r => { if (r) toast('Asked. The friend streak starts when they accept.'); gSel = null; after(); }); return true; }
+  if (d.fsacc) { t.disabled = true; socialCall('/api/friend/accept', d.fsacc).then(r => { if (r) { toast('Friend streak on. Practice today, both of you.'); sfx('streak'); } after(); }); return true; }
+  if (d.fsend) {
+    const f = board && (board.friends || []).find(x => x.id === d.fsend);
+    if (f && f.status === 'active' && fsEndArmed !== d.fsend) { fsEndArmed = d.fsend; renderGroup(); setTimeout(() => { if (fsEndArmed === d.fsend) { fsEndArmed = null; renderGroup(); } }, 4000); return true; }
+    fsEndArmed = null; t.disabled = true; socialCall('/api/friend/end', d.fsend).then(after); return true;
+  }
+  if (d.start) { closeSheet('#inboxSheet'); go('today'); startSession(false); return true; }
+  return false;
+}
+/* Notifications: the bell in the header (players in a group), a sheet listing nudges, high-fives and friend-streak news. */
+function renderBell() {
+  const b = $('#bellBtn'); if (!b) return;
+  b.hidden = !G;
+  const n = board && G ? board.unseen || 0 : 0, badge = $('#bellN');
+  badge.hidden = !n; badge.textContent = n > 9 ? '9+' : String(n);
+  b.setAttribute('aria-label', n ? `Notifications, ${n} new` : 'Notifications');
+}
+// A new notification while the app is open gets a sound and a toast; on opening the app, only a toast.
+function noticeNotes() {
+  if (!board || !G) return;
+  const n = board.unseen || 0;
+  if (lastUnseen !== null && n > lastUnseen && !run) { sfx('nudge'); toast('New notification from your group.'); }
+  else if (lastUnseen === null && n) toast(`${n} new notification${n === 1 ? '' : 's'}. Tap the bell.`);
+  lastUnseen = n; renderBell();
+}
+var inboxNotes = null;
+async function openInbox() {
+  inboxNotes = null; renderInbox(); openSheet('#inboxSheet');
+  try {
+    const r = await apiCall('/api/inbox');
+    inboxNotes = r.notes || []; renderInbox();
+    if (inboxNotes.some(x => !x.seen)) { apiCall('/api/inbox/seen', {}).catch(() => {}); if (board) board.unseen = 0; lastUnseen = 0; renderBell(); }
+  } catch (e) { inboxNotes = []; $('#inboxBody').innerHTML = `<p class="gerr">${e instanceof TypeError ? 'Can’t reach the server right now.' : esc(e.message)}</p>`; }
+}
+function renderInbox() {
+  const el = $('#inboxBody');
+  if (!inboxNotes) { el.innerHTML = '<p>Loading…</p>'; return; }
+  if (!inboxNotes.length) { el.innerHTML = '<p>Nothing yet. Nudges, high-fives and friend streak requests from your group show up here.</p>'; return; }
+  const pend = id => board && (board.friends || []).some(f => f.id === id && f.status === 'pending' && !f.mine);
+  el.innerHTML = `<ul class="notes">${inboxNotes.map(n => {
+    const who = `<b>${esc(n.name)}</b>`;
+    let txt = '', act = '';
+    if (n.kind === 'nudge') { txt = `${who} nudged you. Time for a round?`; act = `<button class="btn sm" data-start="1">Start a round</button>`; }
+    else if (n.kind === 'kudos') txt = `${who} high-fived your ${String(n.ref).startsWith('review-') ? 'review session' : 'lesson'}.`;
+    else if (n.kind === 'fs_request') { txt = `${who} wants to start a friend streak with you.`; if (pend(n.from)) act = `<button class="btn sm" data-fsacc="${esc(n.from)}">Accept</button><button class="btn ghost sm" data-fsend="${esc(n.from)}">No thanks</button>`; }
+    else if (n.kind === 'fs_accept') txt = `${who} accepted your friend streak. A day counts when you both practice.`;
+    else return '';
+    return `<li class="${n.seen ? '' : 'new'}"><span>${txt}</span><span class="when">${ago(n.at)}</span>${act ? `<div class="row">${act}</div>` : ''}</li>`;
+  }).join('')}</ul>`;
+}
+$('#bellBtn').addEventListener('click', openInbox);
+$('#inboxBody').addEventListener('click', e => { const t = e.target.closest('button'); if (t) socialClick(t); });
+/* Celebrations on the result screen: the first round of the day extends the streak, milestones get a bigger moment,
+   and so does reaching the daily goal or keeping a friend streak alive. Sounds follow the "done" chime. */
+function milestoneLine(n) { return ({ 3: 'Three days in a row. A habit is forming.', 7: 'A full week.', 14: 'Two weeks straight.', 30: 'A month of practice.', 50: 'Fifty days.', 100: 'One hundred days.', 365: 'A whole year.' })[n] || `${n} days in a row.`; }
+function celebrate() {
+  const c = run && run.celeFrom; if (!c) return;
+  const back = earnBack();
+  const s1 = streakInfo(), goal = dailyGoal(), x1 = xpToday();
+  const extended = !c.s0.doneToday && s1.doneToday && s1.streak > 0, mile = extended && MILESTONES.includes(s1.streak);
+  const goalMet = !!goal && c.x0 < goal && x1 >= goal;
+  const pals = extended && board ? (board.friends || []).filter(f => f.status === 'active' && f.themDone && !f.meDone) : [];
+  let h = '';
+  if (extended) h += `<div class="cele"><div class="big">${flameSVG()}${s1.streak}-day streak${mile ? '!' : ''}</div><p>${back ? 'You earned your streak back.' : mile ? milestoneLine(s1.streak) : s1.streak === 1 ? 'Day one. Come back tomorrow for day two.' : 'Extended for today.'}</p></div>`;
+  pals.forEach(f => h += `<div class="cele"><p>You and <b>${esc(f.name)}</b> kept your friend streak: ${f.count + 1} day${f.count ? 's' : ''}.</p></div>`);
+  if (goalMet) h += `<div class="cele goal"><div class="big">Daily goal reached</div><p>${x1} XP today.</p></div>`;
+  const tiles = $('#resultIn .rtiles'); if (tiles && h) tiles.insertAdjacentHTML('afterend', h);
+  let at = 800;
+  if (extended) { setTimeout(() => sfx(mile ? 'milestone' : 'streak'), at); at += mile ? 2000 : 1100; }
+  if (goalMet) setTimeout(() => sfx('goal'), at);
+  run.celeFrom = null;
+}
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function dstr(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
@@ -19939,7 +20196,7 @@ function isObj(v) { return !!v && typeof v === 'object' && !Array.isArray(v); }
 // A function declaration, so load() can use it at startup (a const here isn't defined yet when load() runs).
 function isDayStr(d) { return typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d); }
 function dropBadTypes(s) {
-  ['done', 'srs', 'hints', 'mix', 'xpBy', 'newCounts', 'removed', 'myTerms', 'keyTerms', 'accepted', 'prefs', 'settings'].forEach(k => { if (s[k] !== undefined && !isObj(s[k])) delete s[k]; });
+  ['done', 'srs', 'hints', 'mix', 'xpBy', 'xpDays', 'newCounts', 'removed', 'myTerms', 'keyTerms', 'accepted', 'prefs', 'settings'].forEach(k => { if (s[k] !== undefined && !isObj(s[k])) delete s[k]; });
   ['activeDays', 'jumped'].forEach(k => { if (s[k] !== undefined && !Array.isArray(s[k])) delete s[k]; });
   ['xp', 'xpBase', 'streak', 'newCount', 'resetAt', 'prefsAt', 'mixAt', 'settingsAt'].forEach(k => { if (s[k] !== undefined && !Number.isFinite(s[k])) delete s[k]; });
   if (s.course != null && typeof s.course !== 'string') delete s.course;
@@ -19949,6 +20206,7 @@ function dropBadTypes(s) {
     if (!Array.isArray(s.settings.days) || s.settings.days.length !== 7) s.settings.days = defaultStreakSettings().days;
     if (!Array.isArray(s.settings.pauses)) s.settings.pauses = [];
     if (s.settings.past !== undefined && !Array.isArray(s.settings.past)) delete s.settings.past;
+    ['bought', 'repaired'].forEach(k => { if (s.settings[k] !== undefined) s.settings[k] = Array.isArray(s.settings[k]) ? s.settings[k].filter(isDayStr) : []; });
   }
   if (s.prefs) ['courseStyle', 'rem'].forEach(k => { if (s.prefs[k] !== undefined && !isObj(s.prefs[k])) delete s.prefs[k]; });
   ['mix', 'removed', 'keyTerms'].forEach(k => { if (s[k]) for (const [id, v] of Object.entries(s[k])) if (!isObj(v)) delete s[k][id]; });
@@ -19967,7 +20225,9 @@ function defaultStreakSettings() { return { days: [true, true, true, true, true,
 // XP is stored as a legacy base plus a running total per device, so merging two devices adds their earnings.
 const DEV = (() => { try { let d = localStorage.getItem('wl-device'); if (!d) { d = Math.random().toString(36).slice(2, 10); localStorage.setItem('wl-device', d); } return d; } catch (e) { return 'nodevice'; } })();
 const xpTotal = s => (s.xpBase || 0) + Object.values(s.xpBy || {}).reduce((a, b) => a + (+b || 0), 0);
-function addXP(n) { state.xpBy = state.xpBy || {}; state.xpBy[DEV] = (state.xpBy[DEV] || 0) + n; state.xp = xpTotal(state); }
+function addXP(n) { state.xpBy = state.xpBy || {}; state.xpBy[DEV] = (state.xpBy[DEV] || 0) + n; state.xp = xpTotal(state); noteDayXP(n); }
+// XP earned per day (last three weeks), for the daily goal. Merging two devices keeps the larger count for each day.
+function noteDayXP(n) { const d = dstr(new Date()); state.xpDays = isObj(state.xpDays) ? state.xpDays : {}; state.xpDays[d] = (state.xpDays[d] || 0) + n; Object.keys(state.xpDays).sort().slice(0, -21).forEach(k => delete state.xpDays[k]); }
 function save(noSync) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} if (!noSync && typeof scheduleSync === 'function') scheduleSync(); nativeSoon(); }
 // Another tab on this device saved: fold its progress in, so two open tabs don't overwrite each other. A sign-in or
 // sign-out in another tab reloads this one.
@@ -20083,7 +20343,8 @@ function renderHome() {
   renderSaved();
   ['today', 'courses', 'course', 'group', 'me'].forEach(v => $('#v-' + v).hidden = v !== VIEW);
   document.querySelectorAll('#tabs .tabb').forEach(b => { const on = b.dataset.tab === (VIEW === 'course' ? 'courses' : VIEW); b.classList.toggle('on', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
-  if (VIEW === 'today') { renderToday(); renderMix(); renderGroupLine(); renderPotd(); }
+  renderBell();
+  if (VIEW === 'today') { renderToday(); renderStrip(); renderMix(); renderGroupLine(); renderPotd(); }
   if (VIEW === 'courses') renderCourses();
   if (VIEW === 'course') renderCourseView();
   if (VIEW === 'me') { renderAcctCard(); renderStreakCard(); renderRemCard(); renderInstallCard(); renderStyleCard(); renderProgress(); }
@@ -20111,6 +20372,8 @@ function renderStyleCard() {
   const st = answerStyle();
   $('#styleCard').innerHTML = `<h3>Sessions</h3>
     <div class="sndrow"><span>Sounds</span><button class="switch" id="soundSw" aria-pressed="${soundOn()}" aria-label="Sounds"></button></div>
+    ${soundOn() ? `<div class="seg spk" role="group" aria-label="Sound pack">${SOUND_PACK_KEYS.map(k => `<button data-spack="${k}" class="${k === soundPack() ? 'on' : ''}" aria-pressed="${k === soundPack()}">${SOUND_PACKS[k].name}</button>`).join('')}</div><p class="meta">${esc(SOUND_PACKS[soundPack()].blurb)} Tap a pack to hear it.</p>` : ''}
+    ${G && EMAIL_OK && ACCT && ACCT.email ? `<div class="sndrow"><span>Email me when a friend nudges me</span><button class="switch" id="mailNudgeSw" aria-pressed="${mailNudgeOn()}" aria-label="Email me when a friend nudges me"></button></div>` : ''}
     <div class="sndrow"><span>Tester mode</span><button class="switch" id="testerSw" aria-pressed="${testerOn()}" aria-label="Tester mode"></button></div>
     ${testerOn() ? '<p class="meta">After each answer, rate how useful the question is and whether it’s pitched at the right level. Ratings go to the course makers.</p>' : ''}
     <button class="linkbtn acct-more" id="advBtn" aria-expanded="${advOpen}">${advOpen ? 'Hide advanced' : 'Advanced'}</button>
@@ -20127,6 +20390,9 @@ $('#styleCard').addEventListener('click', e => {
   if (e.target.closest('#advBtn')) { advOpen = !advOpen; renderStyleCard(); return; }
   if (e.target.closest('#testerSw')) { state.prefs = { ...(state.prefs || {}), tester: !testerOn() }; state.prefsAt = Date.now(); save(); renderStyleCard(); return; }
   if (e.target.closest('#soundSw')) { const on = !soundOn(); state.prefs = { ...(state.prefs || {}), sound: on }; state.prefsAt = Date.now(); save(); renderStyleCard(); if (on) sfx('good'); return; }
+  const sp = e.target.closest('[data-spack]');
+  if (sp) { state.prefs = { ...(state.prefs || {}), soundPack: sp.dataset.spack }; state.prefsAt = Date.now(); save(); renderStyleCard(); sfx('correct'); setTimeout(() => sfx('streak'), 700); return; }
+  if (e.target.closest('#mailNudgeSw')) { state.prefs = { ...(state.prefs || {}), mailNudge: !mailNudgeOn() }; state.prefsAt = Date.now(); save(); renderStyleCard(); return; }
   const b = e.target.closest('[data-style], [data-size]'); if (!b) return;
   state.prefs = { ...(state.prefs || {}), ...(b.dataset.style ? { style: b.dataset.style } : { sessionSize: +b.dataset.size }) }; state.prefsAt = Date.now(); save(); renderStyleCard();
 });
@@ -20294,7 +20560,8 @@ function show(id) {
   ['#lesson', '#result'].forEach(s => $(s).hidden = s !== id);
   document.body.classList.toggle('in-lesson', id !== null);
 }
-function newRun(extra) { return { graded: new Set(), xp: 0, reviewed: 0, remembered: 0, newSeen: 0, correct: 0, wrong: new Set(), cur: null, sel: null, phase: 'answer', ...extra }; }
+// cele0: the streak and the day's XP before this run, for the result screen's celebrations.
+function newRun(extra) { return { cele0: { s0: streakInfo(), x0: xpToday() }, graded: new Set(), xp: 0, reviewed: 0, remembered: 0, newSeen: 0, correct: 0, wrong: new Set(), cur: null, sel: null, phase: 'answer', ...extra }; }
 function startLesson(i, challenge) {
   const L = LESSONS[i];
   // The key terms lesson asks first which terms the player already knows, so those are skipped.
@@ -20839,7 +21106,9 @@ function bumpStreak() {
 }
 function streakInfo() { return computeStreak(state.activeDays, state.settings, dstr(new Date())); }
 function finish() {
+  const c0 = run.cele0 || { s0: streakInfo(), x0: xpToday() };
   bumpRunDay(); clearRun(); sfx('done');
+  run.celeFrom = c0;
   if (run.mode === 'session') return finishSession();
   const L = LESSONS[run.idx];
   state.done[L.id] = true;
@@ -20852,6 +21121,7 @@ function finish() {
   const nextL = LESSONS[run.idx + 1];
   $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/cheer.webp" alt=""><h2>${acc === 100 ? 'Clean sweep.' : 'Lesson complete.'}</h2><p>${esc(L.title)}${nextL ? '. Up next: ' + esc(nextL.title) + '.' : '. That was the last lesson on the path.'} These questions will come back in your daily reviews.</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">First try</span><span class="v">${acc}%</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${groupLine(acc, posting)}${remAskHTML()}${styleTipHTML()}${testerNoteHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT || gateOffline ? 'Continue' : 'Save my progress'}</button></div>`;
   show('#result');
+  celebrate();
   $('#rHome').onclick = () => goHome(); $('#rHome').focus();
   postLine(posting);
 }
@@ -20869,6 +21139,7 @@ function finishSession() {
   if (run.newSeen) parts.push(`learned ${run.newSeen} new card${run.newSeen === 1 ? '' : 's'}`);
   $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${left ? `${left} card${left === 1 ? '' : 's'} left today.` : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${posting && G ? `<p class="meta" id="postLine">Posting to ${esc(G.groupName)}…</p>` : ''}${remAskHTML()}${styleTipHTML()}${testerNoteHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT || gateOffline ? 'Done' : 'Save my progress'}</button>${(left || canLearn) && (ACCT || gateOffline) ? `<button class="btn ghost" id="rMore">${left ? `Next ${nextN}` : 'Learn more'}</button>` : ''}</div>`;
   show('#result');
+  celebrate();
   $('#rHome').onclick = () => goHome(); $('#rHome').focus();
   if ($('#rMore')) $('#rMore').onclick = () => startSession(left ? false : true);
   postLine(posting);
@@ -20932,26 +21203,115 @@ function audioCtx() {
   return AC;
 }
 addEventListener('pointerdown', () => { if (soundOn()) audioCtx(); }, { passive: true, capture: true });
-// [frequency in Hz, start, length] per note. Right: a quick rising chime. Wrong: a soft falling pair. Done: a little fanfare.
-const SFX = {
-  good: { notes: [[987.8, 0, 0.12], [1318.5, 0.075, 0.32]], wave: 'sine', vol: 0.2, bell: 0.35 },
-  bad: { notes: [[349.2, 0, 0.16], [261.6, 0.13, 0.3]], wave: 'triangle', vol: 0.16, bell: 0 },
-  done: { notes: [[523.3, 0, 0.14], [659.3, 0.11, 0.14], [784, 0.22, 0.14], [1046.5, 0.33, 0.55]], wave: 'sine', vol: 0.2, bell: 0.3 }
+/* SOUNDS START */
+// Sound packs, all synthesized with Web Audio (no audio files). A sound is a list of voices:
+// { f: Hz, to: glide end Hz, at: start s, len: s, w: wave, a: level, h: [[multiple, level], ...] extra partials,
+//   atk: attack s, n: 1 for a filtered noise burst (f = band centre), q: filter Q, lp: lowpass Hz }.
+const N = { C3: 130.8, E3: 164.8, G3: 196, A3: 220, C4: 261.6, D4: 293.7, E4: 329.6, F4: 349.2, G4: 392, A4: 440, B4: 493.9, C5: 523.3, D5: 587.3, E5: 659.3, F5: 698.5, G5: 784, A5: 880, B5: 987.8, C6: 1046.5, D6: 1174.7, E6: 1318.5, G6: 1568, A6: 1760, C7: 2093, E7: 2637 };
+const SOUND_EVENTS = [
+  ['tap', 'Pick an answer'], ['correct', 'Right answer'], ['wrong', 'Wrong answer'], ['done', 'Session finished'],
+  ['goal', 'Daily goal reached'], ['streak', 'Streak extended'], ['milestone', 'Streak milestone'], ['freeze', 'Streak freeze used'], ['nudge', 'A friend nudged you']
+];
+const bell = (f, at, len, a = 0.3) => ({ f, at, len, a, w: 'sine', h: [[2, 0.35], [3.01, 0.08]] });
+const mar = (f, at, len = 0.32, a = 0.34) => ({ f, at, len, a, w: 'sine', atk: 0.003, h: [[3.98, 0.22], [9.9, 0.04]] });
+const sq = (f, at, len, a = 0.12, to) => ({ f, to, at, len, a, w: 'square', atk: 0.002 });
+const brass = (f, at, len, a = 0.16) => ({ f, at, len, a, w: 'sawtooth', atk: 0.04, lp: 1700, h: [[1.005, 0.6]] });
+const knock = (at, a = 0.5) => [{ f: 900, at, len: 0.07, a, n: 1, q: 1.4 }, { f: 150, to: 90, at, len: 0.12, a: a * 0.9, w: 'sine', atk: 0.002 }];
+const ding = (f, at, len = 1.1, a = 0.22) => ({ f, at, len, a, w: 'sine', atk: 0.002, h: [[2.76, 0.3], [5.4, 0.1]] });
+const bowl = (f, at, len = 2.2, a = 0.22) => ({ f, at, len, a, w: 'sine', atk: 0.06, h: [[2.71, 0.25], [5.15, 0.07]] });
+const pluck = (f, at, len = 0.6, a = 0.26) => ({ f, at, len, a, w: 'sine', atk: 0.004, h: [[3, 0.12], [5.04, 0.03]] });
+const SOUND_PACKS = {
+  chime: { name: 'Chime', blurb: 'Clean bells. The current sound.', vol: 0.75, verb: 0.12, s: {
+    tap: [{ f: N.A6, at: 0, len: 0.05, a: 0.08, w: 'sine' }],
+    correct: [bell(N.B5, 0, 0.12, 0.3), bell(N.E6, 0.075, 0.32, 0.3)],
+    wrong: [{ f: N.F4, at: 0, len: 0.16, a: 0.24, w: 'triangle' }, { f: N.C4, at: 0.13, len: 0.3, a: 0.24, w: 'triangle' }],
+    done: [bell(N.C5, 0, 0.14), bell(N.E5, 0.11, 0.14), bell(N.G5, 0.22, 0.14), bell(N.C6, 0.33, 0.55)],
+    goal: [bell(N.C6, 0, 0.5, 0.24), bell(N.G6, 0.12, 0.7, 0.2)],
+    streak: [bell(N.G5, 0, 0.1), bell(N.C6, 0.08, 0.1), bell(N.E6, 0.16, 0.1), bell(N.G6, 0.24, 0.6)],
+    milestone: [N.C5, N.E5, N.G5, N.C6, N.E6, N.G6].map((f, i) => bell(f, i * 0.08, 0.2, 0.22)).concat([bell(N.C6, 0.5, 1.2, 0.2), bell(N.E6, 0.5, 1.2, 0.16), bell(N.G6, 0.5, 1.2, 0.14)]),
+    freeze: [bell(N.E7, 0, 0.3, 0.1), bell(N.C7, 0.09, 0.3, 0.1), bell(N.A6, 0.18, 0.3, 0.1), bell(N.E6, 0.27, 0.8, 0.12)],
+    nudge: [bell(N.E6, 0, 0.35, 0.22), bell(N.C6, 0.2, 0.6, 0.22)]
+  } },
+  marimba: { name: 'Marimba', blurb: 'Warm wooden mallets, bouncy and playful.', vol: 0.85, verb: 0.08, s: {
+    tap: [mar(N.G5, 0, 0.1, 0.16)],
+    correct: [mar(N.E5, 0, 0.2), mar(N.A5, 0.07, 0.25), mar(N.C6, 0.14, 0.4)],
+    wrong: [mar(N.D4, 0, 0.3, 0.3), mar(N.A3, 0.14, 0.4, 0.3)],
+    done: [N.C5, N.E5, N.G5, N.C6, N.E6].map((f, i) => mar(f, i * 0.085, 0.3)).concat([mar(N.C5, 0.48, 0.7, 0.24), mar(N.G5, 0.48, 0.7, 0.24), mar(N.E6, 0.48, 0.8, 0.24)]),
+    goal: [mar(N.G5, 0, 0.2), mar(N.C6, 0.1, 0.2), mar(N.G5, 0.2, 0.2), mar(N.E6, 0.3, 0.5)],
+    streak: [mar(N.C5, 0, 0.15), mar(N.G5, 0.06, 0.15), mar(N.C6, 0.12, 0.15), mar(N.E6, 0.18, 0.15), mar(N.G6, 0.24, 0.5)],
+    milestone: [N.C5, N.E5, N.G5, N.C6, N.G5, N.C6, N.E6, N.G6].map((f, i) => mar(f, i * 0.075, 0.25, 0.3)).concat([mar(N.C6, 0.66, 1, 0.26), mar(N.E6, 0.66, 1, 0.22), mar(N.G6, 0.66, 1, 0.2)]),
+    freeze: [mar(N.E6, 0, 0.2, 0.18), mar(N.B5, 0.1, 0.2, 0.18), mar(N.G5, 0.2, 0.2, 0.18), mar(N.E5, 0.3, 0.5, 0.2)],
+    nudge: [mar(N.C6, 0, 0.15, 0.26), mar(N.C6, 0.14, 0.15, 0.26), mar(N.G5, 0.3, 0.4, 0.26)]
+  } },
+  arcade: { name: 'Arcade', blurb: 'Eight-bit blips, coins and power-ups.', vol: 0.6, verb: 0, s: {
+    tap: [sq(N.C6, 0, 0.03, 0.07)],
+    correct: [sq(N.B5, 0, 0.07), sq(N.E6, 0.07, 0.28)],
+    wrong: [{ f: 220, to: 110, at: 0, len: 0.35, a: 0.11, w: 'sawtooth', atk: 0.002, lp: 1400 }],
+    done: [sq(N.C5, 0, 0.1), sq(N.E5, 0.1, 0.1), sq(N.G5, 0.2, 0.1), sq(N.C6, 0.3, 0.1), sq(N.G5, 0.4, 0.1), sq(N.C6, 0.5, 0.45)],
+    goal: [sq(N.G5, 0, 0.08), sq(N.G6, 0.08, 0.3)],
+    streak: [sq(300, 0, 0.45, 0.1, 1300), sq(N.C6, 0.45, 0.1), sq(N.E6, 0.55, 0.3)],
+    milestone: [N.E5, N.G5, N.E6, N.C6, N.D6, N.G6].map((f, i) => sq(f, i * 0.1, 0.1)).concat([sq(N.C6, 0.62, 0.6, 0.09), sq(N.G6, 0.62, 0.6, 0.07)]),
+    freeze: [{ f: 2400, to: 600, at: 0, len: 0.5, a: 0.07, w: 'triangle', atk: 0.002 }, { f: 3000, to: 900, at: 0.1, len: 0.45, a: 0.05, w: 'triangle', atk: 0.002 }],
+    nudge: [sq(N.A5, 0, 0.06), sq(N.A5, 0.12, 0.06), sq(N.E6, 0.24, 0.12)]
+  } },
+  capitol: { name: 'Capitol', blurb: 'Typewriter bell, gavel knocks and a brass fanfare.', vol: 0.8, verb: 0.2, s: {
+    tap: [{ f: 3500, at: 0, len: 0.025, a: 0.18, n: 1, q: 0.8 }],
+    correct: [{ f: 3200, at: 0, len: 0.03, a: 0.14, n: 1, q: 0.8 }, ding(N.E7, 0.03, 1.0, 0.18)],
+    wrong: [...knock(0, 0.35), { f: 233, to: 196, at: 0.06, len: 0.4, a: 0.1, w: 'sawtooth', atk: 0.05, lp: 900 }],
+    done: [brass(N.C4, 0, 0.16), brass(N.E4, 0.15, 0.16), brass(N.G4, 0.3, 0.16), brass(N.C5, 0.45, 0.9), brass(N.E4, 0.45, 0.9, 0.1), brass(N.G4, 0.45, 0.9, 0.1)],
+    goal: [...knock(0, 0.4), ding(N.C7, 0.12, 1.1, 0.16)],
+    streak: [...knock(0, 0.45), ...knock(0.2, 0.45), ding(N.E7, 0.42, 1.2, 0.16)],
+    milestone: [brass(N.G4, 0, 0.12), brass(N.G4, 0.13, 0.12), brass(N.G4, 0.26, 0.12), brass(N.C5, 0.4, 0.5), brass(N.E5, 0.4, 0.5, 0.1), brass(N.G4, 0.95, 0.12), brass(N.C5, 1.08, 1.0), brass(N.E5, 1.08, 1.0, 0.11), brass(N.G5, 1.08, 1.0, 0.09), ding(N.C7, 1.08, 1.4, 0.12)],
+    freeze: [ding(N.A6, 0, 0.9, 0.12), ding(N.E6, 0.16, 1.2, 0.12)],
+    nudge: [ding(2350, 0, 1.2, 0.2), ding(2350, 0.22, 1.2, 0.16)]
+  } },
+  zen: { name: 'Zen', blurb: 'Quiet kalimba plucks and a singing bowl. Never jarring.', vol: 0.8, verb: 0.3, s: {
+    tap: [pluck(N.G5, 0, 0.15, 0.1)],
+    correct: [pluck(N.E5, 0, 0.5), pluck(N.A5, 0.1, 0.8)],
+    wrong: [pluck(N.D4, 0, 0.9, 0.2)],
+    done: [bowl(N.C4, 0, 2.6, 0.24), pluck(N.G5, 0.05, 0.7, 0.14), pluck(N.C6, 0.2, 0.9, 0.12)],
+    goal: [pluck(N.C5, 0, 0.5), pluck(N.G5, 0.12, 0.5), pluck(N.D6, 0.24, 1, 0.2)],
+    streak: [pluck(N.D5, 0, 0.5), pluck(N.E5, 0.1, 0.5), pluck(N.G5, 0.2, 0.5), pluck(N.A5, 0.3, 1)],
+    milestone: [bowl(N.A3, 0, 3, 0.24), ...[N.A4, N.C5, N.D5, N.E5, N.G5, N.A5].map((f, i) => pluck(f, 0.2 + i * 0.13, 0.9, 0.18))],
+    freeze: [pluck(N.E6, 0, 0.8, 0.12), pluck(N.B5, 0.18, 0.8, 0.12), bowl(N.E4, 0.3, 1.8, 0.12)],
+    nudge: [pluck(N.A5, 0, 0.6, 0.2), pluck(N.E5, 0.18, 0.9, 0.2)]
+  } }
 };
-function sfx(kind) {
-  const S = SFX[kind]; if (!S || !soundOn()) return;
-  const ac = audioCtx(); if (!ac) return;
-  try {
-    const t0 = ac.currentTime + 0.01, out = ac.createGain(); out.gain.value = S.vol; out.connect(ac.destination);
-    S.notes.forEach(([f, at, len]) => [[f, 1], [f * 2, S.bell]].forEach(([hz, amp]) => {
-      if (!amp) return;
-      const o = ac.createOscillator(), g = ac.createGain(), t = t0 + at;
-      o.type = S.wave; o.frequency.value = hz;
-      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(amp, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + len);
-      o.connect(g); g.connect(out); o.start(t); o.stop(t + len + 0.03);
-    }));
-  } catch (e) {}
+const SOUND_PACK_KEYS = Object.keys(SOUND_PACKS);
+let _noiseBuf = null, _verbs = new WeakMap();
+function soundVerb(ac) {
+  let v = _verbs.get(ac); if (v) return v;
+  const len = Math.round(ac.sampleRate * 1.4), buf = ac.createBuffer(2, len, ac.sampleRate);
+  for (let c = 0; c < 2; c++) { const d = buf.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+  v = ac.createConvolver(); v.buffer = buf; v.connect(ac.destination); _verbs.set(ac, v); return v;
 }
+function playSound(ac, pack, kind, level) {
+  const P = SOUND_PACKS[pack] || SOUND_PACKS.chime, voices = P.s[kind]; if (!voices || !ac) return;
+  const t0 = ac.currentTime + 0.01, out = ac.createGain(); out.gain.value = P.vol * (level === undefined ? 1 : level); out.connect(ac.destination);
+  if (P.verb) { const send = ac.createGain(); send.gain.value = P.verb; out.connect(send); send.connect(soundVerb(ac)); }
+  voices.forEach(v => {
+    const t = t0 + (v.at || 0), atk = v.atk || 0.012, end = t + v.len;
+    const env = ac.createGain(); env.gain.setValueAtTime(0.0001, t); env.gain.exponentialRampToValueAtTime(v.a, t + atk); env.gain.exponentialRampToValueAtTime(0.0001, end);
+    let dest = env;
+    if (v.lp) { const f = ac.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = v.lp; f.connect(env); dest = f; }
+    env.connect(out);
+    if (v.n) {
+      if (!_noiseBuf || _noiseBuf.sampleRate !== ac.sampleRate) { _noiseBuf = ac.createBuffer(1, ac.sampleRate, ac.sampleRate); const d = _noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+      const src = ac.createBufferSource(), bp = ac.createBiquadFilter(); src.buffer = _noiseBuf; bp.type = 'bandpass'; bp.frequency.value = v.f; bp.Q.value = v.q || 1;
+      src.connect(bp); bp.connect(dest); src.start(t); src.stop(end + 0.02); return;
+    }
+    [[1, 1]].concat(v.h || []).forEach(([m, amp]) => {
+      const o = ac.createOscillator(), g = ac.createGain(); o.type = v.w || 'sine';
+      o.frequency.setValueAtTime(v.f * m, t); if (v.to) o.frequency.exponentialRampToValueAtTime(v.to * m, end);
+      g.gain.value = amp; o.connect(g); g.connect(dest); o.start(t); o.stop(end + 0.03);
+    });
+  });
+}
+/* SOUNDS END */
+// The old names (good, bad) still work. Each player picks a pack in Me (state.prefs.soundPack).
+const SFX_ALIAS = { good: 'correct', bad: 'wrong' };
+function soundPack() { const k = state.prefs && state.prefs.soundPack; return SOUND_PACKS[k] ? k : 'chime'; }
+function sfx(kind, pack) { if (!soundOn()) return; try { playSound(audioCtx(), pack || soundPack(), SFX_ALIAS[kind] || kind); } catch (e) {} }
 function nativeSoon() { if (!Native) return; clearTimeout(nativeTimer); nativeTimer = setTimeout(nativeSync, 1200); }
 function nativeSync() { pushWidget(); scheduleReminders(); }
 // How the streak stands on each of the next n days if no more practice happens, by the same rules as the streak card.
@@ -21016,7 +21376,8 @@ async function scheduleRemindersNow() {
       list.push({ id: 100 + i, title: 'WonkoLingo', body, schedule: { on: on(daily), allowWhileIdle: true }, extra: { go: 'today' } });
     }
     if (risk && risk > now + 60000) {
-      const body = i === 0 && p.streak > 1 ? `Your ${p.streak}-day streak would love a quick visit tonight.` : p.freezes ? 'A freeze would cover today, but a quick round saves it for later.' : pick(REM_RISK, p.d);
+      const fr = i === 0 ? friendWaiting() : null;
+      const body = fr ? `Your ${fr.count}-day friend streak with ${fr.name} needs you today.` : i === 0 && p.streak > 1 ? `Your ${p.streak}-day streak would love a quick visit tonight.` : p.freezes ? 'A freeze would cover today, but a quick round saves it for later.' : pick(REM_RISK, p.d);
       list.push({ id: 200 + i, title: 'Keep your streak going', body, schedule: { on: on(risk), allowWhileIdle: true }, extra: { go: 'today' } });
     }
   });
@@ -21682,7 +22043,8 @@ async function refreshBoard() {
   if (!G) return renderGroup();
   try { board = await apiCall('/api/board?today=' + dstr(new Date())); gOffline = false; G.groupName = board.groupName; saveG(); }
   catch (e) { if (e.status === 401) acctLost(); else gOffline = true; }
-  renderGroup();  if (VIEW === 'today') renderGroupLine();
+  renderGroup();  if (VIEW === 'today') { renderGroupLine(); renderStrip(); }
+  noticeNotes();
 }
 
 function renderGroup() {
@@ -21700,18 +22062,20 @@ function renderGroup() {
   let h = `<div class="ghead"><h3>${esc(G.groupName)}</h3><button class="linkbtn" id="gInvite">Copy invite link</button></div><div class="meta">Code ${esc(G.code)} · You’re ${esc(G.player.name)}</div>`;
   if (gOffline) h += `<p class="gerr">Can’t reach the group server right now. Lessons you finish still count on this device.</p>`;
   if (board) {
+    h += questHTML() + friendsHTML(true);
     const key = gTab === 'week' ? 'week' : 'total';
     const rows = board.players.slice().sort((a, b) => b[key] - a[key] || b.streak - a.streak || a.name.localeCompare(b.name));
     h += `<div class="seg"><button data-gtab="week" class="${gTab === 'week' ? 'on' : ''}">This week</button><button data-gtab="all" class="${gTab === 'all' ? 'on' : ''}">All time</button></div>`;
     h += `<ol class="lb">${rows.map((r, i) => {
       const fl = r.streak === 0 ? 'zero' : r.atRisk ? 'risk' : '';
       const tip = r.streak === 0 ? 'No current streak' : r.atRisk ? `${r.streak}-day streak, needs practice today` + (r.freezes ? ` (${r.freezes} freeze${r.freezes === 1 ? '' : 's'} saved)` : '') : `${r.streak}-day streak` + (r.offToday ? ', off today' : '');
-      const act = gSel === r.id && r.id !== board.me ? `<li class="lbact"><button class="linkbtn" data-block="${esc(r.id)}" data-name="${esc(r.name)}">Block ${esc(r.name)}</button><span class="meta">You won’t see their courses, scores or activity.</span></li>` : '';
-      return `<li class="${r.id === board.me ? 'me' : 'other'}" data-pid="${esc(r.id)}"><span class="rk">${i + 1}</span><span class="nm">${esc(r.name)}</span><span class="fl ${fl}" title="${esc(tip)}">${FLAME}${r.streak}</span><span class="pts">${r[key]} XP</span></li>${act}`;
+      const fs = (board.friends || []).find(f => f.id === r.id);
+      const act = gSel === r.id && r.id !== board.me ? `<li class="lbact">${fs ? '' : `<button class="btn sm" data-fsreq="${esc(r.id)}">Start a friend streak</button>`}${!r.doneToday ? `<button class="btn ghost sm" data-nudge="${esc(r.id)}" data-name="${esc(r.name)}"${nudgedToday(r.id) ? ' disabled' : ''}>${nudgedToday(r.id) ? 'Nudged' : 'Nudge'}</button>` : ''}<button class="linkbtn" data-block="${esc(r.id)}" data-name="${esc(r.name)}">Block ${esc(r.name)}</button><span class="meta">Blocking hides their courses, scores and activity.</span></li>` : '';
+      return `<li class="${r.id === board.me ? 'me' : 'other'}" data-pid="${esc(r.id)}"><span class="rk">${i + 1}</span><span class="nm">${esc(r.name)}${r.id !== board.me && r.atRisk && !nudgedToday(r.id) ? ` <button class="nudge" data-nudge="${esc(r.id)}" data-name="${esc(r.name)}" aria-label="Nudge ${esc(r.name)}">Nudge</button>` : ''}</span><span class="fl ${fl}" title="${esc(tip)}">${FLAME}${r.streak}</span><span class="pts">${r[key]} XP</span></li>${act}`;
     }).join('')}</ol>`;
-    if (gTab === 'week') h += `<p class="meta">Weekly XP resets Monday 00:00 UTC. Tap someone to block them.</p>`;
+    if (gTab === 'week') h += `<p class="meta">Weekly XP resets Monday 00:00 UTC. Tap someone to start a friend streak, nudge or block them.</p>`;
     if ((board.blocked || []).length) h += `<p class="meta">Blocked: ${board.blocked.map(b => `${esc(b.name)} <button class="linkbtn" data-unblock="${esc(b.id)}">Unblock</button>`).join(' · ')}</p>`;
-    if (board.feed.length) h += `<h4 class="gsub">Recent</h4><ul class="feed">${board.feed.slice(0, 8).map(f => `<li><b>${esc(f.name)}</b> finished ${esc(feedTitle(f))} · ${f.acc}% · ${ago(f.at)}${f.id !== board.me && !/^(review-|gu\d)/.test(String(f.lessonId)) ? `<button class="beat" data-beat="${esc(f.lessonId)}" data-who="${esc(f.name)}" data-acc="${f.acc}">Beat it</button>` : ''}</li>`).join('')}</ul>`;
+    if (board.feed.length) h += `<h4 class="gsub">Recent</h4><ul class="feed">${board.feed.slice(0, 8).map(f => `<li><b>${esc(f.name)}</b> finished ${esc(feedTitle(f))} · ${f.acc}% · ${ago(f.at)}${f.id !== board.me && !/^(review-|gu\d)/.test(String(f.lessonId)) ? `<button class="beat" data-beat="${esc(f.lessonId)}" data-who="${esc(f.name)}" data-acc="${f.acc}">Beat it</button>` : ''}${f.id !== board.me ? `<button class="hi5" data-kudos="${esc(f.id)}" data-ref="${esc(f.lessonId)}"${highFived(f.lessonId) ? ' disabled>High-fived' : '>High five'}</button>` : ''}</li>`).join('')}</ul>`;
     else h += `<p>No lessons finished yet. Be the first.</p>`;
   } else if (!gOffline) h += `<p>Loading…</p>`;
   h += `<div class="glinks"><button class="linkbtn" id="gLeave"${gBusy ? ' disabled' : ''}>${leaveArmed ? 'Click again to leave' : 'Leave group'}</button></div>`;
@@ -21751,6 +22115,7 @@ $('#group').addEventListener('click', e => {
   if (row && !e.target.closest('button')) { const id = row.dataset.pid; if (board && id !== board.me) { gSel = gSel === id ? null : id; renderGroup(); } return; }
   const t = e.target.closest('button'); if (!t) return;
   if (t.dataset.block || t.dataset.unblock) { setBlock(t.dataset.block || t.dataset.unblock, !!t.dataset.block, t.dataset.name); return; }
+  if (socialClick(t)) return;
   if (t.dataset.gmode) { gMode = t.dataset.gmode; gErr = ''; renderGroupKeep(); return; }
   if (t.dataset.gtab) { gTab = t.dataset.gtab; renderGroup(); return; }
   if (t.id === 'gGo') { groupSubmit(); return; }
@@ -22312,7 +22677,12 @@ function renderStreakCard() {
     <div class="sk-row${si.atRisk ? ' risk' : ''}">${flameSVG('sk-f')}<span class="sk-n">${si.streak}</span><span class="sk-d">day${si.streak === 1 ? '' : 's'}</span></div>
     <p>${esc(status)}</p>
     <div class="kv"><span>Streak freezes</span><span class="flakes" title="${si.freezes} of ${STREAK_RULES.maxFreezes}">${flakes}</span></div>
-    <p class="meta">${si.freezes >= STREAK_RULES.maxFreezes ? 'Freezes full.' : `Next freeze after ${si.toNextFreeze} more practice day${si.toNextFreeze === 1 ? '' : 's'}.`} Counts ${schedText(state.settings.days)}${si.pausedNow ? ', paused now' : ''}. Best: ${si.best}.</p>`;
+    <p class="meta">${si.freezes >= STREAK_RULES.maxFreezes ? 'Freezes full.' : `Next free freeze after ${si.toNextFreeze} more practice day${si.toNextFreeze === 1 ? '' : 's'}.`} Counts ${schedText(state.settings.days)}${si.pausedNow ? ', paused now' : ''}. Best: ${si.best}.</p>
+    ${si.freezes < STREAK_RULES.maxFreezes ? `<div class="row"><button class="btn ghost sm" id="buyFreeze"${xpSpendable() < STREAK_RULES.freezePrice ? ' disabled' : ''}>Get a freeze for ${STREAK_RULES.freezePrice} XP</button><span class="meta">You have ${xpSpendable()} XP to spend. Spending doesn’t lower your score on the leaderboard.</span></div>` : ''}
+    ${repairHTML(si)}
+    <p class="kicker">Daily goal</p>
+    <div class="seg" id="goalSeg">${[[0, 'Off']].concat(GOALS).map(([n, t]) => `<button data-goal="${n}" class="${dailyGoal() === n ? 'on' : ''}">${t}${n ? ` · ${n} XP` : ''}</button>`).join('')}</div>
+    <p class="meta">${dailyGoal() ? `About ${GOALS.find(g => g[0] === dailyGoal())[2]} a day. It’s a target to aim for; your streak only needs one round.` : 'No daily XP target. Your streak still needs one round a day.'}</p>`;
 }
 function renderStreakSheet() {
   const st = state.settings, today = dstr(new Date()), pz = currentPause(today);
@@ -22335,7 +22705,11 @@ function setStreakSettings(mutate) {
   } state.settingsAt = Date.now(); state.streak = streakInfo().streak;
   save(); renderStreakSheet(); renderHome();
 }
-$('#streakCard').addEventListener('click', e => { if (e.target.closest('#streakSet')) { renderStreakSheet(); openSheet('#streakSheet'); } });
+$('#streakCard').addEventListener('click', e => {
+  if (e.target.closest('#streakSet')) { renderStreakSheet(); openSheet('#streakSheet'); return; }
+  if (e.target.closest('#buyFreeze')) { buyFreeze(); return; }
+  const g = e.target.closest('[data-goal]'); if (g) { state.prefs = { ...(state.prefs || {}), goal: +g.dataset.goal }; state.prefsAt = Date.now(); save(); renderStreakCard(); }
+});
 $('#streakBody').addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
   const today = dstr(new Date());
@@ -22358,7 +22732,7 @@ $('#streakBody').addEventListener('click', e => {
 
 /* ---------- sync progress to the server ---------- */
 let syncTimer = null, syncBusy = false, syncAgain = false;
-function syncPayload() { const { srs, done, jumped, activeDays, xp, xpBase, xpBy, resetAt, prefs, prefsAt, myTerms, removed, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt } = state; return { v: 1, srs, done, jumped, activeDays, xp, xpBase, xpBy, resetAt, prefs, prefsAt, myTerms, removed, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt }; }
+function syncPayload() { const { srs, done, jumped, activeDays, xp, xpBase, xpBy, resetAt, prefs, prefsAt, myTerms, removed, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt, xpDays } = state; return { v: 1, srs, done, jumped, activeDays, xp, xpBase, xpBy, resetAt, prefs, prefsAt, myTerms, removed, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt, xpDays }; }
 // Merges another device's progress into this one: the most-reviewed copy of each card wins, practice days are combined.
 function mergeStates(a, b) {
   // A reset on either device wipes the other copy's progress from before that reset.
@@ -22401,6 +22775,8 @@ function mergeStates(a, b) {
   // Key-term answers: the newest answer for each course wins.
   out.keyTerms = { ...(b.keyTerms || {}) };
   Object.entries(a.keyTerms || {}).forEach(([k, v]) => { if (!out.keyTerms[k] || (v.at || 0) >= (out.keyTerms[k].at || 0)) out.keyTerms[k] = v; });
+  out.xpDays = { ...(b.xpDays || {}) };
+  Object.entries(a.xpDays || {}).forEach(([d, n]) => { out.xpDays[d] = Math.max(out.xpDays[d] || 0, +n || 0); });
   out.hints = { ...(b.hints || {}), ...(a.hints || {}) };
   out.accepted = { ...(b.accepted || {}), ...(a.accepted || {}) };
   return out;

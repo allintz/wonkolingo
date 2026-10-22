@@ -220,3 +220,26 @@ CREATE TABLE IF NOT EXISTS session_feedback (
   created_at INTEGER NOT NULL,
   done INTEGER NOT NULL DEFAULT 0
 );
+
+-- Friend streaks between two players in the same group (a < b). Pending until the other accepts; counts from 'started'.
+CREATE TABLE IF NOT EXISTS friend_streaks (
+  a TEXT NOT NULL,
+  b TEXT NOT NULL,
+  status TEXT NOT NULL,
+  requested_by TEXT NOT NULL,
+  started TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  PRIMARY KEY (a, b)
+);
+CREATE INDEX IF NOT EXISTS idx_fs_b ON friend_streaks(b);
+-- Notifications for one player: nudges, high-fives, friend-streak requests and accepts. Kept 30 days.
+CREATE TABLE IF NOT EXISTS notes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  player_id TEXT NOT NULL,
+  from_id TEXT NOT NULL,
+  kind TEXT NOT NULL,
+  ref TEXT NOT NULL DEFAULT '',
+  created_at INTEGER NOT NULL,
+  seen INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_notes_player ON notes(player_id, created_at);

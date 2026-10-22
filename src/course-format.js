@@ -127,7 +127,10 @@ function validateCourse(raw) {
 // days: list of YYYY-MM-DD days with practice. settings.days: 7 booleans, Sunday first, for days that count.
 // settings.pauses: [{ from, to }] (to null = still paused). Off days and paused days never break a streak.
 // Every STREAK_RULES.freezeEvery practice days earns a freeze (up to maxFreezes); a missed counting day uses one automatically.
-const STREAK_RULES = { freezeEvery: 5, maxFreezes: 3 };
+// settings.bought: days a freeze was bought with XP (each adds one that day, within the cap), so spent XP is derived.
+// settings.repaired: missed days earned back after a break (practice within repairWindow days restores the streak for
+// free; Duolingo-style earn-back, since paying to undo a break feels like buying a badge). They count like off days.
+const STREAK_RULES = { freezeEvery: 5, maxFreezes: 3, freezePrice: 100, repairPrice: 0, repairWindow: 2 };
 function computeStreak(days, settings, today) {
   // Real calendar days only: a malformed one (2026-10-00) would otherwise throw partway through.
   const ok = d => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d) && !isNaN(Date.parse(d + 'T12:00:00Z')) && new Date(d + 'T12:00:00Z').toISOString().slice(0, 10) === d;
@@ -144,22 +147,39 @@ function computeStreak(days, settings, today) {
   const dow = d => new Date(d + 'T12:00:00Z').getUTCDay();
   const next = d => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() + 1); return x.toISOString().slice(0, 10); };
   const sorted = [...set].filter(d => d <= today).sort();
-  let streak = 0, bank = 0, progress = 0, best = 0;
-  const frozen = [];
+  const list = k => new Set(settings && Array.isArray(settings[k]) ? settings[k].slice(-400).filter(ok) : []);
+  const repaired = list('repaired'), boughtList = settings && Array.isArray(settings.bought) ? settings.bought.slice(-400).filter(ok) : [];
+  const boughtOn = new Map(); boughtList.forEach(d => boughtOn.set(d, (boughtOn.get(d) || 0) + 1));
+  let streak = 0, bank = 0, progress = 0, best = 0, lastBreak = null;
+  // frozen: days a freeze covered. kept: days the streak survived (practice, off, paused, frozen or repaired), for friend streaks.
+  const frozen = [], kept = [];
   const practice = () => { streak++; if (++progress >= STREAK_RULES.freezeEvery) { progress = 0; bank = Math.min(STREAK_RULES.maxFreezes, bank + 1); } };
+  const buy = d => { if (boughtOn.has(d)) bank = Math.min(STREAK_RULES.maxFreezes, bank + boughtOn.get(d)); };
   if (sorted.length) {
     for (let d = sorted[0]; d < today; d = next(d)) {
-      if (set.has(d)) practice();
-      else if (paused(d) || !schedFor(d)[dow(d)]) { /* off day: no change */ }
-      else if (bank > 0) { bank--; frozen.push(d); }
-      else streak = 0;
+      buy(d);
+      if (set.has(d)) { practice(); kept.push(d); }
+      else if (paused(d) || !schedFor(d)[dow(d)] || repaired.has(d)) kept.push(d);
+      else if (bank > 0) { bank--; frozen.push(d); kept.push(d); }
+      else { if (streak > 0) lastBreak = { day: d, lost: streak }; streak = 0; }
       best = Math.max(best, streak);
     }
   }
+  buy(today);
   const doneToday = set.has(today);
   if (doneToday) { practice(); best = Math.max(best, streak); }
   const pausedNow = paused(today), offToday = pausedNow || !sched[dow(today)];
-  return { streak, best, freezes: bank, progress, toNextFreeze: bank >= STREAK_RULES.maxFreezes ? 0 : STREAK_RULES.freezeEvery - progress, frozen, doneToday, offToday, pausedNow, atRisk: streak > 0 && !doneToday && !offToday };
+  if (doneToday || offToday) kept.push(today);
+  // A break can be bought back for a short while: the missed counting days since the break, if there are few enough.
+  let repair = null;
+  if (lastBreak) {
+    const miss = [];
+    for (let d = lastBreak.day; d < today && miss.length <= STREAK_RULES.repairWindow; d = next(d)) if (!set.has(d) && !paused(d) && schedFor(d)[dow(d)] && !repaired.has(d) && !frozen.includes(d)) miss.push(d);
+    const age = (Date.parse(today) - Date.parse(lastBreak.day)) / 864e5;
+    if (age <= STREAK_RULES.repairWindow && miss.length && miss.length <= STREAK_RULES.repairWindow) repair = { days: miss, lost: lastBreak.lost, cost: miss.length * STREAK_RULES.repairPrice };
+  }
+  const spent = boughtList.length * STREAK_RULES.freezePrice + repaired.size * STREAK_RULES.repairPrice;
+  return { streak, best, freezes: bank, progress, toNextFreeze: bank >= STREAK_RULES.maxFreezes ? 0 : STREAK_RULES.freezeEvery - progress, frozen, kept, repair, spent, doneToday, offToday, pausedNow, atRisk: streak > 0 && !doneToday && !offToday };
 }
 /* COURSE-FORMAT END */
 export { validateCourse, COURSE_FORMAT, COURSE_LIMITS, computeStreak, STREAK_RULES };

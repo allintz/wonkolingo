@@ -905,6 +905,72 @@ tests.a11y = async () => {
   await c.close();
 };
 
+// ---------- Retention (10/21): sound packs, daily goal, freezes bought with XP, repair, friend streaks, nudges, notifications
+tests.retention = async () => {
+  const ca = await ctx(); const a = await page(ca); await signUp(a, { name: 'Rae ' + rnd() });
+  // Sound packs: Me lists five, picking one saves it and plays without errors (headless audio is silent).
+  await ev(a, `go('me')`);
+  ok(await ev(a, `document.querySelectorAll('[data-spack]').length`) === 5, 'Me lists five sound packs');
+  await a.click('[data-spack="marimba"]'); ok(await ev(a, `state.prefs.soundPack`) === 'marimba', 'sound pack saved');
+  ok(await ev(a, `(() => { for (const k of SOUND_PACK_KEYS) for (const [e] of SOUND_EVENTS) sfx(e, k); return true; })()`), 'every sound in every pack plays');
+  // Daily goal and buying a freeze with XP; spending doesn't lower the score.
+  await ev(a, `state.activeDays = [addDays(dstr(new Date()), -1)]; state.xpBy[DEV] = 250; state.xp = xpTotal(state); save(); renderHome()`);
+  await ev(a, `go('me')`);
+  await a.click('[data-goal="50"]'); ok(await ev(a, `dailyGoal()`) === 50, 'daily goal set to 50');
+  ok(await visible(a, '#buyFreeze'), 'freeze can be bought');
+  const f0 = await ev(a, `streakInfo().freezes`);
+  await a.click('#buyFreeze');
+  ok(await ev(a, `streakInfo().freezes`) === f0 + 1 && await ev(a, `xpSpendable()`) === 150 && await ev(a, `state.xp`) === 250, 'freeze bought: one more freeze, 100 XP spent, total XP unchanged');
+  // Earn-back: a 4-day streak that lapsed yesterday comes back when a round is finished today.
+  await ev(a, `state.activeDays = [-5, -4, -3, -2].map(n => addDays(dstr(new Date()), n)); state.settings.bought = []; save(); renderHome(); go('today')`);
+  ok(await visible(a, '#streakStrip') && /comes back/.test(await a.locator('#streakStrip .repair').innerText().catch(() => '')), 'Today shows the streak strip and the earn-back offer');
+  // A finished session celebrates the streak and the daily goal.
+  await ev(a, `state.prefs.goal = 20; save()`); await addToMix(a, 'policy'); await ev(a, `go('today')`);
+  await clickGo(a, '#todayGo'); for (let i = 0; i < 40 && await answerOne(a); i++);
+  await a.waitForSelector('#result', { timeout: 8000 });
+  ok(await ev(a, `document.querySelectorAll('#resultIn .cele').length`) >= 1 && /5-day streak/.test(await a.locator('#resultIn').innerText()) && /earned your streak back/.test(await a.locator('#resultIn').innerText()), 'result screen celebrates the earned-back streak', await a.locator('#resultIn').innerText());
+  ok(await ev(a, `xpToday()`) > 0, 'XP today is counted', await ev(a, 'state.xpDays'));
+  await a.click('#rHome');
+  // Group with a friend streak, a nudge and notifications.
+  await ev(a, `go('group')`);
+  const startBtn = await ev(a, `(() => { const b = [...document.querySelectorAll('#group button')].find(b => /start/i.test(b.textContent)); if (b) b.id = b.id || 'tStart'; return b ? '#' + b.id : null; })()`);
+  if (startBtn) await a.click(startBtn);
+  if (await visible(a, '#gGroup')) await a.fill('#gGroup', 'Streakers ' + rnd());
+  await a.click('#gGo'); await a.waitForFunction(() => G && G.code, null, { timeout: 8000 }).catch(() => {});
+  const code = await ev(a, 'G && G.code');
+  const cb = await ctx(); const b = await page(cb); await signUp(b, { name: 'Sol ' + rnd() });
+  await b.goto(BASE + '/?join=' + code); await b.waitForTimeout(500); await ev(b, `go('group')`);
+  if (await visible(b, '#gCode')) { const v = await b.inputValue('#gCode'); if (!v) await b.fill('#gCode', code); }
+  await b.click('#gGo'); await b.waitForFunction(() => G && G.code, null, { timeout: 8000 }).catch(() => {});
+  await ev(a, 'refreshBoard()'); await a.waitForFunction(() => board && board.players.length === 2, null, { timeout: 8000 }).catch(() => {});
+  ok(await visible(a, '.quest'), 'Group shows the weekly group goal');
+  ok(await visible(a, '#bellBtn'), 'bell shows for players in a group');
+  const bid = await ev(b, 'ACCT.player.id');
+  await a.click(`li[data-pid="${bid}"]`); await a.click(`[data-fsreq="${bid}"]`);
+  await a.waitForFunction(() => board && board.friends && board.friends.length === 1, null, { timeout: 8000 }).catch(() => {});
+  ok(await ev(a, `board.friends[0].status`) === 'pending', 'friend streak requested');
+  await ev(b, 'refreshBoard()'); await b.waitForFunction(() => board && board.unseen === 1, null, { timeout: 8000 }).catch(() => {});
+  ok(await ev(b, `$('#bellN').textContent`) === '1', 'Sol’s bell shows one new notification', await ev(b, `$('#bellN').textContent`));
+  await b.click('#bellBtn'); await b.waitForSelector('#inboxBody .notes', { timeout: 8000 }).catch(() => {});
+  ok(/wants to start a friend streak/.test(await b.locator('#inboxBody').innerText()), 'notification lists the request');
+  await b.click('#inboxBody [data-fsacc]'); await b.waitForFunction(() => board && board.friends[0] && board.friends[0].status === 'active', null, { timeout: 8000 }).catch(() => {});
+  ok(await ev(b, `board.friends[0].status`) === 'active', 'friend streak accepted from the notification');
+  await b.click('#inboxSheet [data-close]');
+  await ev(b, `go('today')`); ok(/Rae/.test(await b.locator('#streakStrip').innerText()), 'Today lists the friend streak', await b.locator('#streakStrip').innerText());
+  await ev(b, `go('today')`);
+  const nudge = await ev(b, `!!document.querySelector('#streakStrip [data-nudge]')`);
+  ok(!nudge, 'no nudge offered while Sol hasn’t practiced (Rae is done, so it’s Sol’s turn)');
+  ok(/Your turn/.test(await b.locator('#streakStrip').innerText()), 'Today says it’s Sol’s turn');
+  // Rae nudges Sol from the board.
+  await ev(a, 'refreshBoard()'); await a.waitForTimeout(800); await ev(a, `gSel = null; go('group')`);
+  await a.click(`li[data-pid="${bid}"]`); await a.click(`.lbact [data-nudge="${bid}"]`); await a.waitForTimeout(1200);
+  ok(await ev(a, `nudgedToday('${bid}')`), 'nudge sent and remembered for today');
+  await ev(b, 'refreshBoard()'); await b.waitForTimeout(1200);
+  ok(await ev(b, 'board.unseen') === 1, 'Sol has the nudge', await ev(b, 'board.unseen'));
+  for (const [x, nm] of [[a, 'Rae'], [b, 'Sol']]) { ok(!badText(await x.locator('#home').innerText()), `${nm}: retention text is clean`, badText(await x.locator('#home').innerText())); ok(x.errors.length === 0, `${nm}: retention: no page errors`, x.errors); }
+  await ca.close(); await cb.close();
+};
+
 for (const [name, fn] of Object.entries(tests)) {
   if (ONLY && !ONLY.has(name)) continue;
   const t0 = Date.now();
