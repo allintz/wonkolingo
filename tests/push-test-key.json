@@ -1,0 +1,6 @@
+{
+  "note": "Test-only APNs signing key for tests/push.test.mjs; not used anywhere real.",
+  "keyId": "TESTKEY123",
+  "pkcs8": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg5eGGWtNcb+VopORBq5fnuRuXPkblSFhHJ4FzAkEx/l+hRANCAAQd95mXJ7arPKJCJcPcVxIlvvMkB1hg6VmUmGrkAuT0VbNFzpIFlhA4RS5EaZybzZ4LHSQDpAX+9CtDpnVnTPrl",
+  "publicPem": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEHfeZlye2qzyiQiXD3FcSJb7zJAdY\nYOlZlJhq5ALk9FWzRc6SBZYQOEUuRGmcm82eCx0kA6QF/vQrQ6Z1Z0z65Q==\n-----END PUBLIC KEY-----\n"
+}

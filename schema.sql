@@ -243,3 +243,12 @@ CREATE TABLE IF NOT EXISTS notes (
   seen INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_notes_player ON notes(player_id, created_at);
+
+-- iPhone push: one row per phone (APNs device token). sandbox = 1 for development builds installed from Xcode.
+CREATE TABLE IF NOT EXISTS push_tokens (
+  token TEXT PRIMARY KEY,
+  player_id TEXT NOT NULL,
+  sandbox INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_push_player ON push_tokens(player_id);

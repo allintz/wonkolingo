@@ -17,8 +17,21 @@ public class WonkoNativePlugin: CAPPlugin, CAPBridgedPlugin, ASAuthorizationCont
         CAPPluginMethod(name: "passkeyCreate", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "passkeyGet", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "appleSignIn", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "googleSignIn", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "googleSignIn", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "apsEnvironment", returnType: CAPPluginReturnPromise)
     ]
+
+    // Which Apple push service this build talks to: builds installed from Xcode carry a provisioning profile that says
+    // "development" (sandbox); TestFlight and App Store builds have none and use production.
+    @objc func apsEnvironment(_ call: CAPPluginCall) {
+        var sandbox = false
+        if let path = Bundle.main.path(forResource: "embedded", ofType: "mobileprovision"),
+           let data = FileManager.default.contents(atPath: path) {
+            let text = String(decoding: data, as: UTF8.self)
+            sandbox = text.range(of: "<key>aps-environment</key>\\s*<string>development</string>", options: .regularExpression) != nil
+        }
+        call.resolve(["sandbox": sandbox])
+    }
 
     // The web app sends one JSON entry per day for the next two weeks (see pushWidget in wonkolingo.html).
     @objc func setWidgetData(_ call: CAPPluginCall) {

@@ -7,7 +7,8 @@ import Anthropic from '@anthropic-ai/sdk';
 import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor, defineTerm } from './grade.js';
 import { publicEmailApi, emailApi } from './email.js';
 import { adminApi } from './admin.js';
-import { socialApi, friendRows } from './social.js';
+import { socialApi, friendRows, friendTurnPushes } from './social.js';
+import { pushApi } from './push.js';
 import { sendNudgeEmail } from './email.js';
 import { idpApi } from './idp.js';
 import { randomString, sha256, accountInfo, publicAccountApi, accountApi, takeRate, netId, ipKey, screen, screenFail, takeNewAccount, ACCOUNT_LIMITS } from './accounts.js';
@@ -301,6 +302,7 @@ async function api(req, env, path) {
     return json({ ...info, code: info.group ? info.group.code : null, groupName: info.group ? info.group.groupName : null });
   }
   const mine = await accountApi(req, env, path, me, { json, fail, body }) || await emailApi(req, env, path, me, { json, fail, body })
+    || await pushApi(req, env, path, me, { json, fail, body })
     || await socialApi(req, env, path, me, { json, fail, body, today: utcDay(), dayOk: d => realDay(d) && d >= utcDay(-1) && d <= utcDay(1), sendNudgeEmail: (to, from) => sendNudgeEmail(env, req, to, from) });
   if (mine) return mine;
 
@@ -324,6 +326,7 @@ async function api(req, env, path) {
     // At most one completion of the same lesson per minute, to blunt double-submits.
     const dup = await env.DB.prepare('SELECT 1 FROM completions WHERE player_id = ? AND lesson_id = ? AND created_at > ?').bind(me.id, lessonId, Date.now() - 60000).first();
     if (!dup) await env.DB.prepare('INSERT INTO completions (player_id, group_code, lesson_id, title, xp, acc, day, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)').bind(me.id, me.group_code, lessonId, title, xp, acc, b.day, Date.now()).run();
+    if (!dup) await friendTurnPushes(env, me, b.day);
     return json({ ok: true, xp });
   }
 

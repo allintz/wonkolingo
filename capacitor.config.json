@@ -9,6 +9,11 @@
     "scheme": "WonkoLingo"
   },
   "plugins": {
-    "LocalNotifications": { "iconColor": "#e3b65e" }
+    "LocalNotifications": {
+      "iconColor": "#e3b65e"
+    },
+    "PushNotifications": {
+      "presentationOptions": []
+    }
   }
 }

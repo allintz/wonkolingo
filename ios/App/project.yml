@@ -11,7 +11,7 @@ settings:
   base:
     SWIFT_VERSION: "5.0"
     MARKETING_VERSION: "1.0"
-    CURRENT_PROJECT_VERSION: "4"
+    CURRENT_PROJECT_VERSION: "5"
     CODE_SIGN_STYLE: Automatic
     # Alex's Apple developer team (individual).
     DEVELOPMENT_TEAM: 29B8GL5NYV
@@ -43,6 +43,8 @@ targets:
         # Sign in with Apple (WonkoNativePlugin.appleSignIn).
         com.apple.developer.applesignin:
           - Default
+        # Push notifications from friends (src/push.js). Xcode switches this to production when exporting for TestFlight.
+        aps-environment: development
     settings:
       base:
         TARGETED_DEVICE_FAMILY: "1" # iPhone only; with iPad, App Store Connect requires all four orientations

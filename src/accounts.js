@@ -242,7 +242,7 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
       'DELETE FROM link_codes WHERE player_id = ?', 'DELETE FROM webauthn_challenges WHERE player_id = ?', 'DELETE FROM grade_usage WHERE player_id = ?',
       'DELETE FROM disputes WHERE who = ?', 'DELETE FROM card_feedback WHERE who = ?', 'DELETE FROM passwords WHERE player_id = ?',
       'DELETE FROM card_ratings WHERE who = ?', 'DELETE FROM session_feedback WHERE who = ?', 'DELETE FROM notes WHERE player_id = ? OR from_id = ?',
-      'DELETE FROM friend_streaks WHERE a = ? OR b = ?']) stmts.push(env.DB.prepare(sql).bind(...Array(sql.split('?').length - 1).fill(id)));
+      'DELETE FROM friend_streaks WHERE a = ? OR b = ?', 'DELETE FROM push_tokens WHERE player_id = ?']) stmts.push(env.DB.prepare(sql).bind(...Array(sql.split('?').length - 1).fill(id)));
     stmts.push(env.DB.prepare('DELETE FROM blocks WHERE player_id = ? OR blocked_id = ?').bind(id, id), env.DB.prepare('DELETE FROM grade_usage WHERE player_id = ?').bind('dispute:' + id),
       env.DB.prepare('DELETE FROM rate_limits WHERE key = ?').bind('rm:' + id), env.DB.prepare('DELETE FROM emails WHERE player_id = ?').bind(id), env.DB.prepare('DELETE FROM email_codes WHERE player_id = ?').bind(id), env.DB.prepare('DELETE FROM sign_in_ids WHERE player_id = ?').bind(id),
       env.DB.prepare('DELETE FROM players WHERE id = ?').bind(id));
@@ -284,6 +284,8 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
     await env.DB.batch([
       env.DB.prepare('DELETE FROM sessions WHERE player_id = ? AND key_hash != ?').bind(me.id, me.via === 'session' ? me.keyHash : ''),
       env.DB.prepare('DELETE FROM link_codes WHERE player_id = ?').bind(me.id),
+      // Other phones' push addresses go too; this phone registers again the next time the app opens.
+      env.DB.prepare('DELETE FROM push_tokens WHERE player_id = ?').bind(me.id),
       env.DB.prepare('UPDATE players SET key_hash = ? WHERE id = ?').bind(await sha256(secret), me.id)]);
     // This device keeps working: with its own session, or with the new recovery code if it was using the old one.
     return json({ ok: true, recovery: me.id + '.' + secret, token: me.via === 'primary' ? me.id + '.' + secret : null });

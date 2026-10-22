@@ -416,6 +416,27 @@ tests.syncAndReset = async () => {
   noErrors(p, 'sync and reset');
 };
 
+tests.pushClient = async () => {
+  // Stands in for the iPhone: notifications allowed, Apple hands back a token, sign-out forgets it.
+  const p = await player('Pia');
+  const reqs = []; p.on('request', r => { if (/\/api\/push\//.test(r.url())) reqs.push([r.url().split('/api/')[1], r.postData()]); });
+  await ev(p, `(async () => {
+    Native = { notes: { checkPermissions: async () => ({ display: 'granted' }), getPending: async () => ({ notifications: [] }), cancel: async () => {} },
+      push: { register: async () => { setTimeout(() => pushRegistered('ab'.repeat(32)), 10); } },
+      wonko: { apsEnvironment: async () => ({ sandbox: true }) } };
+    pushAsked = false; await pushSetup(); await new Promise(r => setTimeout(r, 600));
+  })()`);
+  ok(reqs.some(([u, b]) => u === 'push/register' && /"token":"(ab){32}"/.test(b) && /"sandbox":true/.test(b)), 'phone registers its token with the server', reqs);
+  ok(await ev(p, `localStorage.getItem('wl-push-token')`) === 'ab'.repeat(32), 'token remembered on the phone');
+  await ev(p, `go('me')`); await ev(p, `remPerm = 'granted'; state.prefs = { ...(state.prefs || {}), rem: { ...remPrefs(), on: true } }; renderRemCard()`); await p.waitForTimeout(300);
+  ok(await vis(p, '#pushSw'), 'Me shows "Notifications from friends"');
+  await p.click('#pushSw'); ok(await ev(p, 'state.prefs.pushFriends') === false, 'switch turns friend notifications off');
+  await ev(p, `signOut()`); await p.waitForTimeout(600);
+  ok(reqs.some(([u]) => u === 'push/unregister'), 'signing out forgets the phone on the server', reqs);
+  await ev(p, `Native = null`);
+  noErrors(p, 'push client');
+};
+
 for (const [name, fn] of Object.entries(tests)) {
   if (ONLY && !ONLY.has(name)) continue;
   const t0 = Date.now(), f0 = failN;

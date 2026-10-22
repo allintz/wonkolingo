@@ -827,8 +827,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-22-1ead897';
-  window.WL_BUILT_AT = +'1792697168000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-22-98db718';
+  window.WL_BUILT_AT = +'1792698975000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -21197,7 +21197,11 @@ var Native = null, nativeTimer = null, widgetSig = '', remSig = '', remPerm = ''
 if (NATIVE) {
   // The page isn't bundled with @capacitor/core, so plugins are called through the native bridge directly.
   const P = name => new Proxy({}, { get: (_, m) => m === 'addListener' ? (ev, cb) => window.Capacitor.addListener(name, ev, cb) : o => window.Capacitor.nativePromise(name, m, o || {}) });
-  Native = { notes: P('LocalNotifications'), haptics: P('Haptics'), app: P('App'), wonko: P('WonkoNative') };
+  Native = { notes: P('LocalNotifications'), haptics: P('Haptics'), app: P('App'), wonko: P('WonkoNative'), push: P('PushNotifications') };
+  // Push (friends' nudges and the like): the phone's address goes to the server under the signed-in account.
+  Native.push.addListener('registration', t => pushRegistered(t && t.value));
+  Native.push.addListener('pushNotificationReceived', () => { if (!run && G) refreshBoard(); });
+  Native.push.addListener('pushNotificationActionPerformed', () => { if (run) return; if (G) { go('today'); refreshBoard().then(() => openInbox()); } else go('today'); });
   Native.app.addListener('appStateChange', s => { if (!s.isActive) return; remPerm = ''; if (!run) renderHome(); nativeSync(); });
   Native.app.addListener('appUrlOpen', e => { if (!run && /today/.test(e.url || '')) go('today'); });
   Native.notes.addListener('localNotificationActionPerformed', () => { if (!run) go('today'); });
@@ -21326,7 +21330,24 @@ const SFX_ALIAS = { good: 'correct', bad: 'wrong' };
 function soundPack() { const k = state.prefs && state.prefs.soundPack; return SOUND_PACKS[k] ? k : 'zen'; }
 function sfx(kind, pack) { if (!soundOn()) return; try { playSound(audioCtx(), pack || soundPack(), SFX_ALIAS[kind] || kind); } catch (e) {} }
 function nativeSoon() { if (!Native) return; clearTimeout(nativeTimer); nativeTimer = setTimeout(nativeSync, 1200); }
-function nativeSync() { pushWidget(); scheduleReminders(); }
+function nativeSync() { pushWidget(); scheduleReminders(); pushSetup(); }
+/* ---------- push from friends (iPhone app): register with Apple once notifications are allowed ---------- */
+var pushAsked = false;
+function pushOn() { return !(state.prefs && state.prefs.pushFriends === false); }
+async function pushSetup() {
+  if (!Native || !ACCT || pushAsked) return;
+  try { if ((await Native.notes.checkPermissions()).display !== 'granted') return; pushAsked = true; await Native.push.register(); } catch (e) {}
+}
+async function pushRegistered(token) {
+  if (!token || !ACCT) return;
+  let sandbox = false; try { sandbox = !!(await Native.wonko.apsEnvironment()).sandbox; } catch (e) {}
+  try { await apiCall('/api/push/register', { token, sandbox }); localStorage.setItem('wl-push-token', token); } catch (e) { pushAsked = false; }
+}
+function pushForget(acctToken) {
+  let t = null; try { t = localStorage.getItem('wl-push-token'); localStorage.removeItem('wl-push-token'); } catch (e) {}
+  if (t && acctToken) apiCall('/api/push/unregister', { token: t }, acctToken).catch(() => {});
+  pushAsked = false;
+}
 // How the streak stands on each of the next n days if no more practice happens, by the same rules as the streak card.
 function dayPlan(n) {
   const today = dstr(new Date());
@@ -21405,7 +21426,7 @@ async function scheduleRemindersNow() {
 }
 async function enableReminders() {
   remPerm = await remPermission(true);
-  if (remPerm === 'granted') { setRem({ on: true, asked: true }); toast('Reminders on.'); }
+  if (remPerm === 'granted') { setRem({ on: true, asked: true }); toast('Reminders on.'); pushSetup(); }
   else { setRem({ asked: true }); toast('Notifications are off for WonkoLingo. You can turn them on in Settings.'); }
 }
 async function renderRemCard() {
@@ -21419,7 +21440,9 @@ async function renderRemCard() {
   const row = (k, tk, label) => `<div class="kv"><span>${label}</span><span class="remctl"><input type="time" id="${tk}" value="${esc(r[tk === 'remDailyT' ? 'daily' : 'risk'])}"${r[k] ? '' : ' disabled'}><button class="switch" data-rem="${k}" aria-pressed="${r[k]}" aria-label="${label}"></button></span></div>`;
   el.innerHTML = `<div class="ghead"><h3>Reminders</h3><button class="linkbtn" id="remOff">Turn off</button></div>
     ${row('dailyOn', 'remDailyT', 'Daily reminder')}${row('riskOn', 'remRiskT', 'Streak at risk')}
-    <p class="meta">Skipped on days you’ve already practiced, off days and pauses. The streak nudge only comes while you have a streak going.</p>`;
+    <p class="meta">Skipped on days you’ve already practiced, off days and pauses. The streak nudge only comes while you have a streak going.</p>
+    <div class="sndrow"><span>Notifications from friends</span><button class="switch" id="pushSw" aria-pressed="${pushOn()}" aria-label="Notifications from friends"></button></div>
+    <p class="meta">Nudges, high-fives, friend streak requests, and a heads-up when a friend streak partner has practiced and it’s your turn. At most 8 a day.</p>`;
 }
 $('#remCard').addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
@@ -21427,6 +21450,7 @@ $('#remCard').addEventListener('click', e => {
   else if (t.id === 'remOff') setRem({ on: false });
   else if (t.id === 'remSettings') Native.wonko.openSettings().catch(() => {});
   else if (t.dataset.rem) setRem({ [t.dataset.rem]: !remPrefs()[t.dataset.rem] });
+  else if (t.id === 'pushSw') { state.prefs = { ...(state.prefs || {}), pushFriends: !pushOn() }; state.prefsAt = Date.now(); save(); renderRemCard(); }
 });
 $('#remCard').addEventListener('change', e => {
   if (e.target.id === 'remDailyT' && e.target.value) setRem({ daily: e.target.value });
@@ -21602,6 +21626,7 @@ function completeSignIn(d, keepLocal) {
 }
 function signOut(msg) {
   clearTimeout(syncTimer); syncAgain = false;
+  if (ACCT) pushForget(ACCT.token);
   ACCT = null; G = null; board = null; saveA(); saveG();
   try { localStorage.removeItem(CKEY); } catch (e) {}
   state = blankState(); save(true); setSync('saved');
