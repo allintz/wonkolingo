@@ -40,6 +40,7 @@ The app shuffles answer options, match pairs and ordering steps itself, so write
   "id": "state-ai-bills",
   "title": "State AI Bills",
   "description": "What the biggest state AI laws require and who they cover.",
+  "level": "intermediate",
   "caveat": "Facts current as of October 2026. Simplified; check the statute before relying on details.",
   "speakers": {
     "s": { "n": "Sam", "r": "State legislative staffer" }
@@ -63,6 +64,7 @@ The app shuffles answer options, match pairs and ordering steps itself, so write
 | `title` | Required, up to 40 characters. Shown as a tab, so keep it short. |
 | `description` | Optional, up to 200 characters. |
 | `caveat` | Optional, up to 400 characters. Shown beside the course. |
+| `level` | Optional: `"beginner"` (no background needed), `"intermediate"` (assumes the basics of the field) or `"advanced"` (for people who already work on it). Shown on the course. Intermediate and advanced courses can skip intro material: don't spend cards defining terms the level assumes. |
 | `speakers` | Optional. Up to 8 characters who "say" quotes. Keys are 1 to 8 lowercase letters. `n` is a name (up to 30 characters), `r` is a role (up to 60). Use fictional people, never real ones. |
 | `units` | 1 to 12 units. Each has `title` (up to 60 characters), optional `desc` (up to 200) and `lessons`. |
 | `lessons` | 1 to 8 per unit. Each has `title` (up to 60 characters) and `items`. |

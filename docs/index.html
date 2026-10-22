@@ -827,8 +827,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-22-113f4b5';
-  window.WL_BUILT_AT = +'1792691140000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-22-bb6f56e';
+  window.WL_BUILT_AT = +'1792695981000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -19633,6 +19633,11 @@ function validateCourse(raw) {
   c.title = str(raw.title, 'title', 40);
   c.description = str(raw.description, 'description', 200, false) || '';
   c.caveat = str(raw.caveat, 'caveat', 400, false) || '';
+  // Optional: how much a player should know going in.
+  if (raw.level !== undefined && raw.level !== '') {
+    if (!['beginner', 'intermediate', 'advanced'].includes(raw.level)) err('level', 'must be "beginner", "intermediate" or "advanced"');
+    else c.level = raw.level;
+  }
   c.speakers = {};
   if (raw.speakers !== undefined) {
     if (!raw.speakers || typeof raw.speakers !== 'object' || Array.isArray(raw.speakers)) err('speakers', 'must be an object');

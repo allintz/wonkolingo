@@ -26,6 +26,11 @@ function validateCourse(raw) {
   c.title = str(raw.title, 'title', 40);
   c.description = str(raw.description, 'description', 200, false) || '';
   c.caveat = str(raw.caveat, 'caveat', 400, false) || '';
+  // Optional: how much a player should know going in.
+  if (raw.level !== undefined && raw.level !== '') {
+    if (!['beginner', 'intermediate', 'advanced'].includes(raw.level)) err('level', 'must be "beginner", "intermediate" or "advanced"');
+    else c.level = raw.level;
+  }
   c.speakers = {};
   if (raw.speakers !== undefined) {
     if (!raw.speakers || typeof raw.speakers !== 'object' || Array.isArray(raw.speakers)) err('speakers', 'must be an object');
