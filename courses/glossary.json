@@ -1,5 +1,57 @@
 [
  {
+  "term": "501(c)(3)",
+  "match": [
+   "501(c)(3)",
+   "501(c)(3)s"
+  ],
+  "def": "The tax-code category for charities: exempt from income tax and able to receive tax-deductible gifts, but barred from supporting or opposing candidates and limited in how much it can lobby.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/501",
+  "cat": "law"
+ },
+ {
+  "term": "501(c)(4)",
+  "match": [
+   "501(c)(4)",
+   "501(c)(4)s"
+  ],
+  "def": "The tax-code category for social welfare groups: exempt from income tax and free to lobby on issues tied to its mission and do some election work, as long as elections aren't its primary activity. Gifts to it aren't tax-deductible.",
+  "src": "https://www.irs.gov/charities-non-profits/other-non-profits/social-welfare-organizations",
+  "cat": "law"
+ },
+ {
+  "term": "501(h) election",
+  "match": [
+   "501(h) election",
+   "501(h) expenditure test",
+   "expenditure test"
+  ],
+  "def": "An optional filing (Form 5768) that lets a public charity measure lobbying by a dollar limit tied to its spending, capped at $1 million a year, instead of the vague substantial part test. Churches and private foundations can't elect it.",
+  "src": "https://www.irs.gov/charities-non-profits/measuring-lobbying-activity-expenditure-test",
+  "cat": "law"
+ },
+ {
+  "term": "527 organization",
+  "match": [
+   "527 organization",
+   "527 organizations",
+   "527 political organization"
+  ],
+  "def": "The tax-code label for a group organized mainly to influence who is elected or appointed to public office, at any level. Federal PACs are 527s, and so are many political groups active only in state races.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/527",
+  "cat": "law"
+ },
+ {
+  "term": "527(f) tax",
+  "match": [
+   "527(f) tax",
+   "section 527(f)"
+  ],
+  "def": "A tax on 501(c) groups that spend on elections: the lesser of their political spending or net investment income is taxed at the 21% corporate rate. Groups with no investment income owe nothing.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/527",
+  "cat": "law"
+ },
+ {
   "term": "6(b) authority",
   "match": [
    "Section 6(b) authority",
@@ -29,6 +81,54 @@
   "cat": "law"
  },
  {
+  "term": "activation steering",
+  "match": [
+   "activation steering",
+   "steering vector",
+   "steering vectors"
+  ],
+  "def": "Changing a model's behavior by adding or subtracting a direction in its internal activity while it runs, rather than through the prompt or retraining. Anthropic's 'Golden Gate Claude' demo is a well-known example.",
+  "src": "https://www.anthropic.com/news/golden-gate-claude",
+  "cat": "tech"
+ },
+ {
+  "term": "activations",
+  "match": [
+   "activations",
+   "internal activations"
+  ],
+  "def": "Numbers computed inside a model as it processes an input. Interpretability tools study these changing internal states; weights are the learned parameters used in that computation.",
+  "src": "https://www.anthropic.com/research/mapping-mind-language-model",
+  "cat": "tech"
+ },
+ {
+  "term": "Additional Protocol",
+  "match": [
+   "Additional Protocol"
+  ],
+  "def": "A 1997 add-on to IAEA safeguards agreements that lets inspectors look for undeclared nuclear material and activities, not just check the facilities a state has declared.",
+  "src": "https://www.iaea.org/topics/additional-protocol",
+  "cat": "law"
+ },
+ {
+  "term": "Administrative Procedure Act",
+  "match": [
+   "Administrative Procedure Act"
+  ],
+  "def": "The 1946 law that sets how federal agencies make rules and decide cases, and lets courts set aside agency actions that are arbitrary or unlawful.",
+  "src": "https://www.law.cornell.edu/wex/administrative_procedure_act",
+  "cat": "law"
+ },
+ {
+  "term": "advanced packaging",
+  "match": [
+   "advanced packaging"
+  ],
+  "def": "Methods for connecting separate semiconductor dies in a package. AI products can combine processor dies and HBM using technologies such as CoWoS. Packaging is a separate capacity constraint from wafer fabrication.",
+  "src": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+  "cat": "tech"
+ },
+ {
   "term": "affirmative defense",
   "match": [
    "affirmative defense"
@@ -45,6 +145,47 @@
   "def": "Artificial general intelligence: a hypothetical AI system that matches or exceeds human ability across most cognitive tasks. Definitions vary and there is no agreed test.",
   "src": "https://en.wikipedia.org/wiki/Artificial_general_intelligence",
   "cat": "tech"
+ },
+ {
+  "term": "AI control",
+  "match": [
+   "AI control",
+   "control protocol",
+   "control protocols"
+  ],
+  "def": "Safeguards intended to reduce harm even when an AI deliberately tries to subvert them. Control evaluations challenge a deployment protocol with adversarial behavior while measuring useful task performance.",
+  "src": "https://arxiv.org/html/2312.06942v5",
+  "cat": "tech"
+ },
+ {
+  "term": "AI henchman",
+  "match": [
+   "AI henchman",
+   "AI henchmen",
+   "henchmen"
+  ],
+  "def": "An agent that primarily advances its user's interests and treats avoiding detection or punishment as instrumental. This can differ from respecting legal duties owed to others.",
+  "src": "https://fordhamlawreview.org/wp-content/uploads/2025/09/Vol-94_Issue-1_2_OKeefe-et-al.-57-129.pdf",
+  "cat": "law"
+ },
+ {
+  "term": "AI-enabled coup",
+  "match": [
+   "AI-enabled coup",
+   "AI-enabled coups"
+  ],
+  "def": "A hypothetical seizure of state power by a small group using advanced AI capabilities. Proposed mechanisms include reducing dependence on large numbers of cooperating personnel; feasibility depends on capabilities, institutions and control.",
+  "src": "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power",
+  "cat": "policy"
+ },
+ {
+  "term": "algorithm registry",
+  "match": [
+   "algorithm registry"
+  ],
+  "def": "China's filing system for covered algorithms. Article 17 of the generative AI Interim Measures requires filing for services with public-opinion attributes or social-mobilization capacity.",
+  "src": "https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm",
+  "cat": "policy"
  },
  {
   "term": "algorithmic efficiency",
@@ -66,6 +207,16 @@
   "cat": "tech"
  },
  {
+  "term": "always/never dilemma",
+  "match": [
+   "always/never dilemma",
+   "always/never"
+  ],
+  "def": "The command-and-control challenge of ensuring authorized use while preventing unauthorized use. In nuclear systems these goals can create design trade-offs; their application to AI is an analogy.",
+  "src": "https://warontherocks.com/pressing-the-button-how-nuclear-armed-countries-plan-to-launch-armageddon-and-what-to-do-about-the-u-s/",
+  "cat": "policy"
+ },
+ {
   "term": "antitrust",
   "match": [
    "antitrust"
@@ -81,6 +232,17 @@
   ],
   "def": "Legislation that provides money for federal agencies and programs. Congress separately passes authorizing laws that create programs; a program can be authorized yet receive no appropriated funds.",
   "src": "https://www.everycrsreport.com/reports/R46497.html",
+  "cat": "congress"
+ },
+ {
+  "term": "appropriations rider",
+  "match": [
+   "appropriations rider",
+   "spending-bill rider",
+   "policy rider"
+  ],
+  "def": "A provision in a spending law that limits how agencies may use their funds, often to block a policy. One such rider, enacted in December 2015 and again for fiscal 2026, bars the IRS from issuing new guidance on 501(c)(4) political activity.",
+  "src": "https://www.congress.gov/119/bills/hr7148/BILLS-119hr7148enr.htm",
   "cat": "congress"
  },
  {
@@ -104,6 +266,16 @@
   "cat": "law"
  },
  {
+  "term": "asynchronous monitoring",
+  "match": [
+   "asynchronous monitoring",
+   "asynchronous monitor"
+  ],
+  "def": "Reviewing an agent's activity after the action runs. It can support investigation and remediation, but cannot prevent irreversible harm from an action that already succeeded.",
+  "src": "https://deepmind.google/blog/securing-the-future-of-ai-agents/",
+  "cat": "tech"
+ },
+ {
   "term": "attestation",
   "match": [
    "attestation"
@@ -111,6 +283,34 @@
   "def": "A cryptographically verifiable statement from hardware or software about its own state or activity, such as what a chip was used for.",
   "src": "https://csrc.nist.gov/glossary/term/attestation",
   "cat": "tech"
+ },
+ {
+  "term": "Australia Group",
+  "match": [
+   "Australia Group"
+  ],
+  "def": "An informal arrangement coordinating national export-control measures for chemical and biological weapons proliferation risks. Participants implement controls through national measures; the arrangement itself is not a treaty.",
+  "src": "https://www.dfat.gov.au/publications/minisite/theaustraliagroupnet/site/en/activities.html",
+  "cat": "policy"
+ },
+ {
+  "term": "Automated Coder",
+  "match": [
+   "Automated Coder",
+   "automated coder"
+  ],
+  "def": "An AI Futures Project milestone: coding AI valuable enough that a leading AI company would prefer losing its human software engineers to losing AI coding access. It is a forecasting target, rather than an agreed industry standard.",
+  "src": "https://blog.aifutures.org/p/q25-2026-timelines-update-uplift",
+  "cat": "tech"
+ },
+ {
+  "term": "automatic revocation",
+  "match": [
+   "automatic revocation"
+  ],
+  "def": "Loss of tax-exempt status that happens by law when a group fails to file its required annual return or notice for three consecutive years. The group must apply to be reinstated.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/6033",
+  "cat": "law"
  },
  {
   "term": "automatic stay",
@@ -140,6 +340,83 @@
   "cat": "law"
  },
  {
+  "term": "backdoor",
+  "match": [
+   "backdoor",
+   "backdoors",
+   "backdoored"
+  ],
+  "def": "An intentionally planted behavior that causes a model to respond as an attacker intends under selected conditions. Simple examples use a fixed trigger and response; more contextual variants also exist.",
+  "src": "https://arxiv.org/abs/2510.07192",
+  "cat": "tech"
+ },
+ {
+  "term": "base rate",
+  "match": [
+   "base rate",
+   "base rates"
+  ],
+  "def": "The frequency of an event in a relevant comparison group, used as a starting point for a forecast. Choosing an informative comparison group and updating for case-specific evidence both require judgment.",
+  "src": "https://knightcolumbia.org/content/ai-as-normal-technology",
+  "cat": "policy"
+ },
+ {
+  "term": "benchmark",
+  "match": [
+   "benchmarks",
+   "benchmark score",
+   "benchmark scores",
+   "coding benchmark",
+   "cyber benchmark"
+  ],
+  "def": "A fixed set of test questions or tasks, usually scored automatically, used to compare AI models' performance.",
+  "src": "https://epoch.ai/benchmarks",
+  "cat": "tech"
+ },
+ {
+  "term": "benchtop synthesizer",
+  "match": [
+   "benchtop synthesizer",
+   "benchtop synthesizers",
+   "benchtop nucleic acid synthesis"
+  ],
+  "def": "A device for producing nucleic acids such as DNA or RNA within a laboratory. HHS recommends sequence and customer checks by manufacturers, since production can occur without an external synthesis order.",
+  "src": "https://www.aspr.gov/s3/synthetic-nucleic-acid-screening",
+  "cat": "policy"
+ },
+ {
+  "term": "biological design tool",
+  "match": [
+   "biological design tool",
+   "biological design tools",
+   "biodesign tool",
+   "biodesign tools"
+  ],
+  "def": "Software that proposes or predicts properties of biological molecules or systems, including genetic sequences and proteins. Designs still require physical production and evaluation to establish their real-world effects.",
+  "src": "https://www.everycrsreport.com/reports/IF13269.html",
+  "cat": "tech"
+ },
+ {
+  "term": "Biological Weapons Convention",
+  "match": [
+   "Biological Weapons Convention",
+   "BWC"
+  ],
+  "def": "A treaty prohibiting biological and toxin weapons, in force since 1975. It provides consultation and Security Council complaint mechanisms, alongside national implementation, without a standing international inspectorate.",
+  "src": "https://legal.un.org/avl/HA/cpdpsbbtwd/cpdpsbbtwd.html",
+  "cat": "law"
+ },
+ {
+  "term": "BIS",
+  "match": [
+   "BIS",
+   "Bureau of Industry and Security"
+  ],
+  "def": "The Commerce Department's Bureau of Industry and Security, which administers the Export Administration Regulations, including controls relevant to advanced computing chips and semiconductor-manufacturing equipment.",
+  "src": "https://www.govinfo.gov/content/pkg/FR-2026-01-15/html/2026-00789.htm",
+  "cat": "policy"
+ },
+ {
   "term": "black-box access",
   "match": [
    "black-box",
@@ -147,6 +424,69 @@
   ],
   "def": "Access to an AI model limited to sending inputs and seeing outputs, with no view of its internals such as weights, activations or training data.",
   "src": "https://arxiv.org/abs/2401.14446",
+  "cat": "tech"
+ },
+ {
+  "term": "Brier score",
+  "match": [
+   "Brier score",
+   "Brier scores"
+  ],
+  "def": "A probability-forecast loss. For a binary event, a common convention is (probability minus outcome)^2, with outcome 1 or 0. Lower is better. Some platforms sum over both outcomes and use twice this value.",
+  "src": "https://www.gjopen.com/faq",
+  "cat": "policy"
+ },
+ {
+  "term": "CAISI",
+  "match": [
+   "CAISI",
+   "Center for AI Standards and Innovation"
+  ],
+  "def": "The Center for AI Standards and Innovation at the Commerce Department's NIST, which tests frontier AI models, including Chinese models such as DeepSeek V4 Pro and GLM-5.3.",
+  "src": "https://www.nist.gov/news-events/news/2026/09/caisis-assessment-zais-glm-53-cyber-capabilities",
+  "cat": "policy"
+ },
+ {
+  "term": "calibration",
+  "match": [
+   "calibration",
+   "well calibrated",
+   "calibrated"
+  ],
+  "def": "Agreement between forecast probabilities and outcome frequencies across comparable cases. Among events forecast at 70%, roughly 70% should occur. Small or correlated samples limit what calibration estimates establish.",
+  "src": "https://goodjudgment.com/wp-content/uploads/2021/10/Superforecasters-A-Decade-of-Stochastic-Dominance.pdf",
+  "cat": "policy"
+ },
+ {
+  "term": "call to action",
+  "match": [
+   "call to action",
+   "calls to action"
+  ],
+  "def": "In the 501(h) rules, what turns a public message about a bill into grassroots lobbying: telling readers to contact legislators, giving their contact details, supplying a petition or postcard, or naming undecided or opposed legislators.",
+  "src": "https://www.law.cornell.edu/cfr/text/26/56.4911-2",
+  "cat": "law"
+ },
+ {
+  "term": "campaign intervention",
+  "match": [
+   "campaign intervention",
+   "political campaign intervention",
+   "intervene in a campaign",
+   "intervening in a campaign"
+  ],
+  "def": "Supporting or opposing a candidate for public office, by statement, money or other help. 501(c)(3)s are barred from it entirely; (c)(4)s may do some if it isn't their primary activity. The IRS judges close cases on all the facts and circumstances.",
+  "src": "https://www.irs.gov/charities-non-profits/charitable-organizations/the-restriction-of-political-campaign-intervention-by-section-501c3-tax-exempt-organizations",
+  "cat": "law"
+ },
+ {
+  "term": "capture the flag",
+  "match": [
+   "capture-the-flag",
+   "capture the flag"
+  ],
+  "def": "A hacking-competition format in which players break into deliberately vulnerable systems to find hidden 'flags'; widely used to test AI cyber skills.",
+  "src": "https://arxiv.org/abs/2408.08926",
   "cat": "tech"
  },
  {
@@ -179,11 +519,33 @@
  {
   "term": "chain-of-thought",
   "match": [
-   "chain-of-thought"
+   "chain-of-thought",
+   "chain of thought",
+   "chains of thought"
   ],
   "def": "The step-by-step written reasoning a language model produces before giving its final answer.",
   "src": "https://developers.google.com/machine-learning/glossary#chain-of-thought-prompting",
   "cat": "tech"
+ },
+ {
+  "term": "challenge inspection",
+  "match": [
+   "challenge inspection",
+   "challenge inspections"
+  ],
+  "def": "Under the Chemical Weapons Convention, a requested inspection to clarify possible noncompliance, subject to treaty procedures and protections for unrelated confidential information.",
+  "src": "https://www.opcw.org/chemical-weapons-convention/articles/article-ix-consultations-cooperation-and-fact-finding",
+  "cat": "law"
+ },
+ {
+  "term": "Chevron deference",
+  "match": [
+   "Chevron deference",
+   "Chevron"
+  ],
+  "def": "The former doctrine directing courts, under specified conditions, to accept a reasonable agency interpretation of an ambiguous statute it administers. Loper Bright overruled it in 2024; statutory delegations of discretion remain possible.",
+  "src": "https://www.supremecourt.gov/opinions/23pdf/22-451_7m58.pdf",
+  "cat": "law"
  },
  {
   "term": "chokepoint",
@@ -195,6 +557,17 @@
   "cat": "policy"
  },
  {
+  "term": "circuit tracing",
+  "match": [
+   "circuit tracing",
+   "attribution graph",
+   "attribution graphs"
+  ],
+  "def": "An interpretability method that builds approximate graphs of how internal features contribute to a computation. Interventions can test proposed connections; the resulting graph captures only part of the model.",
+  "src": "https://transformer-circuits.pub/2025/attribution-graphs/biology.html",
+  "cat": "tech"
+ },
+ {
   "term": "civil penalty",
   "match": [
    "civil penalty",
@@ -203,6 +576,16 @@
   "def": "A fine that a government agency or court imposes for breaking a law or regulation, enforced through a civil case without criminal punishment.",
   "src": "https://www.law.cornell.edu/wex/penalty",
   "cat": "law"
+ },
+ {
+  "term": "classifier",
+  "match": [
+   "classifier",
+   "classifiers"
+  ],
+  "def": "In AI safeguards, a separate model that screens what goes into or comes out of a main model and blocks content in forbidden categories.",
+  "src": "https://www.anthropic.com/research/constitutional-classifiers",
+  "cat": "tech"
  },
  {
   "term": "clear and convincing evidence",
@@ -273,6 +656,34 @@
   "cat": "congress"
  },
  {
+  "term": "Competitive authoritarianism",
+  "match": [
+   "competitive authoritarianism"
+  ],
+  "src": "https://levitsky.scholars.harvard.edu/sites/g/files/omnuum7971/files/levitsky/files/SL_elections.pdf",
+  "cat": "policy",
+  "def": "A regime in which opposition parties meaningfully contest elections while incumbent abuses of state power make competition systematically unfair."
+ },
+ {
+  "term": "compute accounting",
+  "match": [
+   "compute accounting"
+  ],
+  "def": "Keeping verifiable records of how AI chips are used, so a verifier can confirm that declared uses add up and that no large block of chip time is left over for a hidden violation.",
+  "src": "https://arxiv.org/abs/2507.15916",
+  "cat": "tech"
+ },
+ {
+  "term": "compute bottleneck",
+  "match": [
+   "compute bottleneck",
+   "compute bottlenecks"
+  ],
+  "def": "A constraint from limited computing resources. In AI research, experiments may consume scarce compute, limiting how much additional research labor can increase progress. The effect depends on substitutability and efficiency improvements.",
+  "src": "https://arxiv.org/html/2507.23181v2",
+  "cat": "tech"
+ },
+ {
   "term": "conference committee",
   "match": [
    "dropped in conference",
@@ -282,6 +693,91 @@
   "def": "A temporary panel of House and Senate members that negotiates a single version of a bill when the two chambers have passed different versions. Provisions are often dropped there.",
   "src": "https://www.everycrsreport.com/reports/98-696GOV.html",
   "cat": "congress"
+ },
+ {
+  "term": "Confidential Computing",
+  "match": [
+   "Confidential Computing",
+   "confidential computing",
+   "secure enclave",
+   "secure enclaves"
+  ],
+  "def": "Hardware-supported protection for data in use, proposed for confidential model evaluations. Security depends on implementation and threat assumptions; it does not by itself prove which model is deployed.",
+  "src": "https://arxiv.org/abs/2506.15867",
+  "cat": "tech"
+ },
+ {
+  "term": "conflict preemption",
+  "match": [
+   "conflict preemption",
+   "obstacle preemption",
+   "impossibility preemption"
+  ],
+  "def": "Implied preemption of a state law because complying with both it and federal law is impossible, or because it stands as an obstacle to Congress's goals, such as a federal ceiling on regulation.",
+  "src": "https://www.congress.gov/crs_external_products/R/PDF/R45825/R45825.3.pdf",
+  "cat": "law"
+ },
+ {
+  "term": "conforming amendment",
+  "match": [
+   "conforming amendment",
+   "conforming amendments"
+  ],
+  "def": "A change to other parts of existing law, or to a statute's table of contents, made so they stay consistent with a bill's main change, for example by updating cross-references to a renamed section.",
+  "src": "https://legcounsel.house.gov/about/our-services",
+  "cat": "congress"
+ },
+ {
+  "term": "contamination",
+  "match": [
+   "data contamination",
+   "benchmark contamination",
+   "contamination risk",
+   "contaminated benchmark"
+  ],
+  "def": "When a benchmark's test questions, or close copies of them, appear in a model's training data, inflating its score.",
+  "src": "https://arxiv.org/abs/2405.00332",
+  "cat": "tech"
+ },
+ {
+  "term": "contemporaneous written acknowledgment",
+  "match": [
+   "contemporaneous written acknowledgment",
+   "written acknowledgment"
+  ],
+  "def": "The receipt a donor needs from a charity to deduct any single gift of $250 or more. It states the amount and whether the donor got anything in return, and must be in hand by the earlier of the filing date or the return's due date.",
+  "src": "https://www.irs.gov/pub/irs-pdf/p1771.pdf",
+  "cat": "law"
+ },
+ {
+  "term": "control evaluation",
+  "match": [
+   "control evaluation",
+   "control evaluations"
+  ],
+  "def": "An adversarial test of a deployment protocol, where a red team attempts harmful actions through the AI system. Conclusions depend on attacker strength, task coverage and assumptions about trusted checks.",
+  "src": "https://arxiv.org/html/2312.06942v5",
+  "cat": "tech"
+ },
+ {
+  "term": "controlled grant",
+  "match": [
+   "controlled grant",
+   "controlled grants"
+  ],
+  "def": "A grant from a charity that has made the 501(h) election to a non-charity, such as a 501(c)(4), limited to a specific non-lobbying project serving the charity's purposes, with records showing that use. It doesn't count against the charity's lobbying limits.",
+  "src": "https://www.law.cornell.edu/cfr/text/26/56.4911-4",
+  "cat": "law"
+ },
+ {
+  "term": "coordinated communication",
+  "match": [
+   "coordinated communication",
+   "coordinated communications"
+  ],
+  "def": "Under FEC rules, an ad paid for by someone other than a campaign that meets a content test and a conduct test, such as being made at the campaign's request or after a substantial discussion with it. It counts as an in-kind contribution to that campaign.",
+  "src": "https://www.law.cornell.edu/cfr/text/11/109.21",
+  "cat": "law"
  },
  {
   "term": "cosponsor",
@@ -294,6 +790,28 @@
   "def": "A member of Congress who formally signs on to support a bill introduced by its sponsor. Original cosponsors are those listed when the bill is first introduced.",
   "src": "https://www.everycrsreport.com/reports/RS22477.html",
   "cat": "congress"
+ },
+ {
+  "term": "cost estimate",
+  "match": [
+   "cost estimate",
+   "cost estimates",
+   "CBO score"
+  ],
+  "def": "CBO's estimate of how a bill would change federal spending and revenue, required once a committee orders a bill reported. It also flags mandates on governments and companies.",
+  "src": "https://www.cbo.gov/cost-estimates/faqs",
+  "cat": "congress"
+ },
+ {
+  "term": "coup-proofing",
+  "match": [
+   "coup-proofing",
+   "coup-proof",
+   "coup-proofed"
+  ],
+  "def": "Measures intended to prevent a ruler's removal by military or security insiders. Rival agencies and parallel forces can provide internal checks while imposing coordination and military-effectiveness costs.",
+  "src": "https://www.rand.org/pubs/reprints/RP844.html",
+  "cat": "policy"
  },
  {
   "term": "curtailable load",
@@ -317,6 +835,78 @@
   "cat": "policy"
  },
  {
+  "term": "Cyberspace Administration of China",
+  "match": [
+   "Cyberspace Administration of China"
+  ],
+  "def": "China's internet regulator (CAC). It leads the country's binding AI rules, including the 2023 generative AI measures, the algorithm registry and the 2025 rules on labeling AI-made content.",
+  "src": "https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm",
+  "cat": "policy"
+ },
+ {
+  "term": "data poisoning",
+  "match": [
+   "data poisoning",
+   "poisoned training data",
+   "poisoning attack",
+   "poisoning attacks"
+  ],
+  "def": "Deliberately altering training data to change a model's behavior, including by inserting examples designed to induce a backdoor. The amount needed depends on the attack, data, training process and model.",
+  "src": "https://arxiv.org/abs/2510.07192",
+  "cat": "tech"
+ },
+ {
+  "term": "de minimis rule",
+  "match": [
+   "de minimis rule",
+   "de minimis"
+  ],
+  "def": "Rules assessing when controlled US-origin content makes a foreign-made item subject to the EAR. Applicable percentages and exceptions depend on the item and destination. This differs from an FDP rule's production relationship.",
+  "src": "https://www.law.cornell.edu/cfr/text/15/734.4",
+  "cat": "law"
+ },
+ {
+  "term": "declaratory judgment",
+  "match": [
+   "declaratory judgment",
+   "declaratory judgments",
+   "section 7428"
+  ],
+  "def": "A court ruling that settles a legal question without awarding damages. Under section 7428, a group can ask a court to rule on its tax-exempt status once it has exhausted IRS appeals, within 90 days of a final revocation letter.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/7428",
+  "cat": "law"
+ },
+ {
+  "term": "deemed export",
+  "match": [
+   "deemed export",
+   "deemed exports",
+   "deemed-export"
+  ],
+  "def": "Releasing technology or source code to a foreign person inside the United States, which US export rules treat as an export to that person's most recent country of citizenship or permanent residence.",
+  "src": "https://www.ecfr.gov/current/title-15/subtitle-B/chapter-VII/subchapter-C/part-734/section-734.13",
+  "cat": "law"
+ },
+ {
+  "term": "Defense Production Act",
+  "match": [
+   "Defense Production Act"
+  ],
+  "def": "A 1950 law letting the government make companies put its orders first, fund domestic production, collect industry information and approve industry agreements. Most of its powers expire unless Congress renews them.",
+  "src": "https://www.congress.gov/crs-report/R43767",
+  "cat": "law"
+ },
+ {
+  "term": "Democratic backsliding",
+  "match": [
+   "democratic backsliding",
+   "backsliding"
+  ],
+  "src": "https://www.journalofdemocracy.org/articles/on-democratic-backsliding/",
+  "cat": "policy",
+  "def": "State-led weakening or dismantling of institutions that sustain an existing democracy. It can occur gradually through elected governments and lawful procedures."
+ },
+ {
   "term": "deployer",
   "match": [
    "deployer",
@@ -333,6 +923,26 @@
   ],
   "def": "A product-liability claim that a product is unreasonably dangerous because of how it was designed, so every unit carries the flaw.",
   "src": "https://www.law.cornell.edu/wex/design_defect",
+  "cat": "law"
+ },
+ {
+  "term": "determination letter",
+  "match": [
+   "determination letter",
+   "determination letters"
+  ],
+  "def": "The IRS letter recognizing an organization's tax-exempt status after it applies, for a charity on Form 1023 or 1023-EZ. A 501(c)(4) may seek one but doesn't have to.",
+  "src": "https://www.irs.gov/charities-non-profits/automatic-revocation-of-exemption",
+  "cat": "law"
+ },
+ {
+  "term": "direct lobbying",
+  "match": [
+   "direct lobbying",
+   "direct lobbying communication"
+  ],
+  "def": "Under the 501(h) rules, a communication to a legislator or legislative staff that refers to specific legislation and states a view on it. Messages to voters about a ballot measure also count, because the voters are the legislature.",
+  "src": "https://www.law.cornell.edu/cfr/text/26/56.4911-2",
   "cat": "law"
  },
  {
@@ -354,6 +964,16 @@
   "cat": "congress"
  },
  {
+  "term": "disqualified person",
+  "match": [
+   "disqualified person",
+   "disqualified persons"
+  ],
+  "def": "An insider under the excess benefit and private foundation rules. For public charities: anyone with substantial influence over the group in the past five years. For private foundations: managers, substantial contributors and certain 20% owners. Family members and entities they control count too.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/4958",
+  "cat": "law"
+ },
+ {
   "term": "distillation",
   "match": [
    "distillation",
@@ -373,13 +993,77 @@
   "cat": "tech"
  },
  {
+  "term": "donor-advised fund",
+  "match": [
+   "donor-advised fund",
+   "donor-advised funds",
+   "donor advised fund",
+   "donor advised funds",
+   "DAF",
+   "DAFs"
+  ],
+  "def": "An account at a public charity (the sponsor) that a donor funds for an immediate tax deduction and then advises on grants. The sponsor has legal control, and grants may not give the donor more than an incidental benefit.",
+  "src": "https://www.irs.gov/charities-non-profits/charitable-organizations/donor-advised-funds",
+  "cat": "law"
+ },
+ {
+  "term": "doubling time",
+  "match": [
+   "doubling time",
+   "doubling times"
+  ],
+  "def": "The time a growing quantity takes to double. With constant exponential growth, growth over a duration t is 2^(t/doubling time). A historical doubling time need not persist.",
+  "src": "https://metr.org/blog/2026-01-29-time-horizon-1-1/",
+  "cat": "tech"
+ },
+ {
   "term": "duty of care",
   "match": [
    "statutory duty of care",
    "duty of care"
   ],
-  "def": "A legal obligation to take reasonable care to avoid foreseeable harm to others. A statutory duty of care is one written into a statute instead of developed by courts.",
+  "def": "A legal obligation to take reasonable care to avoid foreseeable harm to others; a statutory duty of care is written into a statute. For nonprofit and corporate directors, the fiduciary duty to stay informed and act with the care of an ordinarily prudent person.",
   "src": "https://www.law.cornell.edu/wex/duty_of_care",
+  "cat": "law"
+ },
+ {
+  "term": "ECCN",
+  "match": [
+   "ECCN",
+   "ECCNs",
+   "Export Control Classification Number"
+  ],
+  "def": "Export Control Classification Number: a technical entry on the Commerce Control List. Classification helps determine controls, alongside jurisdiction, destination, end user, end use and authorization. EAR99 is a designation for EAR-subject items not specified on that list.",
+  "src": "https://www.govinfo.gov/content/pkg/FR-2023-10-25/html/2023-23055.htm",
+  "cat": "law"
+ },
+ {
+  "term": "effective compute",
+  "match": [
+   "effective compute"
+  ],
+  "def": "Training compute adjusted for algorithmic efficiency relative to a baseline method. In a simple model it equals physical compute times the efficiency gain, with limits on comparisons across scales and tasks.",
+  "src": "https://epoch.ai/gradient-updates/the-least-understood-driver-of-ai-progress",
+  "cat": "tech"
+ },
+ {
+  "term": "effective date",
+  "match": [
+   "effective date",
+   "effective dates"
+  ],
+  "def": "When a law or provision starts to bind. Unless a bill says otherwise it takes effect on enactment; drafters delay or stagger dates to give agencies and companies time to prepare.",
+  "src": "https://legcounsel.house.gov/sites/evo-subsites/legcounsel.house.gov/files/evo-media-document/Intro_to_Drafting_1_13_25.pdf",
+  "cat": "law"
+ },
+ {
+  "term": "electioneering communication",
+  "match": [
+   "electioneering communication",
+   "electioneering communications"
+  ],
+  "def": "A broadcast, cable or satellite ad that names a federal candidate, runs within 60 days before a general election or 30 days before a primary, and can reach 50,000 or more of the candidate's voters. Spending over $10,000 a year on them is reported to the FEC within 24 hours.",
+  "src": "https://www.law.cornell.edu/cfr/text/11/100.29",
   "cat": "law"
  },
  {
@@ -392,6 +1076,112 @@
   "cat": "tech"
  },
  {
+  "term": "emergency docket",
+  "match": [
+   "emergency docket",
+   "interim docket"
+  ],
+  "def": "Supreme Court proceedings on requests for interim relief, such as pausing a lower-court order while litigation continues. An interim decision need not finally decide the underlying legal dispute.",
+  "src": "https://www.supremecourt.gov/opinions/25pdf/609us2r63_e2pg.pdf",
+  "cat": "law"
+ },
+ {
+  "term": "emergent misalignment",
+  "match": [
+   "emergent misalignment"
+  ],
+  "def": "Broad misbehavior that appears after training a model on a narrow bad behavior, such as writing insecure code, which then shows up as harmful views or advice on unrelated topics.",
+  "src": "https://arxiv.org/abs/2502.17424",
+  "cat": "tech"
+ },
+ {
+  "term": "end-use check",
+  "match": [
+   "end-use check",
+   "end-use checks"
+  ],
+  "def": "An export-compliance check of a recipient, location or use of items. On-site observations and records provide evidence but can be deceived, so one successful inspection does not establish the entire later chain of custody.",
+  "src": "https://www.justice.gov/usao-sdny/pr/three-charged-conspiring-unlawfully-divert-us-artificial-intelligence-technology-china",
+  "cat": "policy"
+ },
+ {
+  "term": "Entity List",
+  "match": [
+   "Entity List"
+  ],
+  "def": "A Commerce Department list of foreign companies, organizations and people to whom exporters need a special license to send items covered by US export rules.",
+  "src": "https://www.bis.gov/entity-list",
+  "cat": "policy"
+ },
+ {
+  "term": "Epoch Capabilities Index",
+  "match": [
+   "Epoch Capabilities Index",
+   "ECI"
+  ],
+  "def": "Epoch AI's measure combining model evaluation results onto a shared capability scale. It helps track progress across individual tests, while relying on assumptions about test selection and how scores relate.",
+  "src": "https://epoch.ai/benchmarks/eci",
+  "cat": "tech"
+ },
+ {
+  "term": "EUV",
+  "match": [
+   "EUV",
+   "extreme ultraviolet"
+  ],
+  "def": "Extreme ultraviolet lithography, which uses 13.5-nanometer light to print intricate circuit layers. ASML supplies these systems. EUV can simplify advanced patterning, while some advanced chips can be made through more complex DUV processes.",
+  "src": "https://www.asml.com/en/products/euv-lithography-systems",
+  "cat": "tech"
+ },
+ {
+  "term": "evaluation awareness",
+  "match": [
+   "evaluation awareness"
+  ],
+  "def": "An AI model noticing, or saying, that it is probably being tested, which can make its behavior in tests unrepresentative of real use.",
+  "src": "https://arxiv.org/abs/2505.23836",
+  "cat": "tech"
+ },
+ {
+  "term": "exacting scrutiny",
+  "match": [
+   "exacting scrutiny"
+  ],
+  "def": "The test courts apply to government demands for donor or member information: the demand must serve an important government interest and be narrowly tailored to it. The Supreme Court used it in AFP v. Bonta (2021) to strike down California's donor-list rule.",
+  "src": "https://www.supremecourt.gov/opinions/20pdf/19-251_p86b.pdf",
+  "cat": "law"
+ },
+ {
+  "term": "excess benefit transaction",
+  "match": [
+   "excess benefit transaction",
+   "excess benefit transactions",
+   "intermediate sanctions"
+  ],
+  "def": "A deal in which a public charity or 501(c)(4) gives an insider more than it gets back, such as excessive pay. The insider owes a 25% excise tax (200% if not corrected), and managers who knowingly approved owe 10%.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/4958",
+  "cat": "law"
+ },
+ {
+  "term": "Executive aggrandizement",
+  "match": [
+   "executive aggrandizement"
+  ],
+  "src": "https://www.journalofdemocracy.org/articles/on-democratic-backsliding/",
+  "cat": "policy",
+  "def": "Incremental concentration of executive power by weakening institutional checks, often through legislatures, courts or changes presented as legal reforms."
+ },
+ {
+  "term": "executive order",
+  "match": [
+   "executive order",
+   "executive orders"
+  ],
+  "def": "A written directive from the President, usually to federal agencies, and published in the Federal Register. It must rest on a power the Constitution or a law gives the President; it can't create new legal authority on its own.",
+  "src": "https://www.congress.gov/crs-report/R46738",
+  "cat": "policy"
+ },
+ {
   "term": "exfiltration",
   "match": [
    "exfiltrate",
@@ -400,6 +1190,15 @@
   "def": "Unauthorized copying or transfer of data out of a system. For AI, the main concern is model weights being copied out of a lab by thieves or insiders, or possibly in future by the model itself.",
   "src": "https://csrc.nist.gov/glossary/term/exfiltration",
   "cat": "tech"
+ },
+ {
+  "term": "expenditure responsibility",
+  "match": [
+   "expenditure responsibility"
+  ],
+  "def": "Steps a private foundation (or donor-advised fund sponsor) must take when granting to a group that isn't a public charity, such as a 501(c)(4): a pre-grant inquiry, a written agreement limiting use to charitable purposes, reports from the grantee, and reporting to the IRS.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/4945",
+  "cat": "law"
  },
  {
   "term": "export controls",
@@ -411,12 +1210,81 @@
   "cat": "policy"
  },
  {
+  "term": "express delegation",
+  "match": [
+   "express delegation",
+   "expressly delegate",
+   "expressly delegates"
+  ],
+  "def": "Statutory language expressly authorizing an agency to exercise specified discretion, such as defining a term by regulation. Courts independently identify its boundaries and review whether the agency acted within them.",
+  "src": "https://www.supremecourt.gov/opinions/23pdf/22-451_7m58.pdf",
+  "cat": "law"
+ },
+ {
+  "term": "express preemption",
+  "match": [
+   "express preemption",
+   "expressly preempt",
+   "expressly preempts"
+  ],
+  "def": "Preemption stated in a statute's own text, which says which state laws are displaced. It contrasts with implied preemption (field or conflict), which courts infer from a law's structure and purpose.",
+  "src": "https://www.congress.gov/crs_external_products/R/PDF/R45825/R45825.3.pdf",
+  "cat": "law"
+ },
+ {
+  "term": "fabless",
+  "match": [
+   "fabless"
+  ],
+  "def": "A semiconductor business model centered on chip design while contracting out fabrication. Nvidia describes using outside suppliers for wafer fabrication, assembly, testing and packaging.",
+  "src": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+  "cat": "tech"
+ },
+ {
   "term": "failure to warn",
   "match": [
    "failure to warn"
   ],
   "def": "A product-liability claim that a maker did not give adequate warnings or instructions about a product's non-obvious dangers.",
   "src": "https://www.law.cornell.edu/wex/products_liability",
+  "cat": "law"
+ },
+ {
+  "term": "FARA",
+  "match": [
+   "FARA",
+   "Foreign Agents Registration Act"
+  ],
+  "def": "The Foreign Agents Registration Act (1938). Anyone who does US political work at the order, request, direction or control of a foreign principal (a foreign government, party, group, company or person) must register with the Justice Department, unless an exemption applies.",
+  "src": "https://www.justice.gov/nsd-fara/frequently-asked-questions",
+  "cat": "law"
+ },
+ {
+  "term": "Federal Register",
+  "match": [
+   "Federal Register"
+  ],
+  "def": "The federal government's daily official publication for agency rules, proposed rules, notices and presidential documents such as executive orders.",
+  "src": "https://www.federalregister.gov/reader-aids/using-federalregister-gov/understanding-the-federal-register",
+  "cat": "policy"
+ },
+ {
+  "term": "fiduciary duty",
+  "match": [
+   "fiduciary duty",
+   "fiduciary duties"
+  ],
+  "def": "A board member's legal obligations to the organization under state law, usually described as the duties of care (stay informed, act prudently), loyalty (put the group first) and obedience (follow its mission, documents and the law).",
+  "src": "https://www.ag.state.mn.us/consumer/Publications/FiduciaryDuties.asp",
+  "cat": "law"
+ },
+ {
+  "term": "field preemption",
+  "match": [
+   "field preemption"
+  ],
+  "def": "Implied displacement of state regulation in a field because the federal scheme is pervasive or the federal interest is dominant. The boundaries of the occupied field require interpretation.",
+  "src": "https://www.congress.gov/crs_external_products/R/PDF/R45825/R45825.3.pdf",
   "cat": "law"
  },
  {
@@ -429,6 +1297,18 @@
   "def": "Further training of an already-trained model on additional data to adapt its behavior. It can also be used to remove a model's safety training.",
   "src": "https://developers.google.com/machine-learning/glossary#fine-tuning",
   "cat": "tech"
+ },
+ {
+  "term": "fiscal sponsor",
+  "match": [
+   "fiscal sponsor",
+   "fiscal sponsors",
+   "fiscal sponsorship",
+   "fiscally sponsored"
+  ],
+  "def": "An existing 501(c)(3) that receives tax-deductible gifts for a project without its own exemption, keeping legal control of the money and either running the project itself or regranting to it.",
+  "src": "https://adlercolvin.com/wp-content/uploads/2017/12/Fiscal-Sponorship-Six-Ways-To-Do-It-Right-A-Synopsis.pdf",
+  "cat": "law"
  },
  {
   "term": "fissile material",
@@ -447,6 +1327,47 @@
   "def": "Floating-point operation: one arithmetic step, such as an addition or multiplication, on numbers stored in floating-point format. The total FLOP used to train a model is a common measure of its scale, e.g. 10^26.",
   "src": "https://en.wikipedia.org/wiki/Floating_point_operations_per_second",
   "cat": "tech"
+ },
+ {
+  "term": "for-cause removal",
+  "match": [
+   "for-cause removal",
+   "for cause removal"
+  ],
+  "def": "A rule restricting removal from office to specified grounds rather than presidential preference alone. Whether such protection is valid depends on the office and constitutional doctrine.",
+  "src": "https://www.supremecourt.gov/opinions/25pdf/25-322_new_4gcj.pdf",
+  "cat": "law"
+ },
+ {
+  "term": "foreign direct product rule",
+  "match": [
+   "foreign direct product rule",
+   "foreign direct product rules",
+   "FDP rule",
+   "FDPR"
+  ],
+  "def": "A rule bringing specified foreign-produced items under the EAR through qualifying relationships to covered technology, software or production equipment. Product and destination or end-user conditions must also be met; US equipment use alone does not settle coverage.",
+  "src": "https://www.law.cornell.edu/cfr/text/15/734.9",
+  "cat": "law"
+ },
+ {
+  "term": "foreign terrorist organization",
+  "match": [
+   "foreign terrorist organization",
+   "foreign terrorist organizations"
+  ],
+  "def": "A foreign group designated by the Secretary of State under section 219 of the Immigration and Nationality Act. Knowingly giving one material support is a federal crime, and a designated group's tax exemption is suspended.",
+  "src": "https://www.law.cornell.edu/uscode/text/18/2339B",
+  "cat": "law"
+ },
+ {
+  "term": "Form 990",
+  "match": [
+   "Form 990"
+  ],
+  "def": "The annual information return most tax-exempt groups file with the IRS, covering finances, governance and top pay. It is public. Smaller groups file the 990-EZ or 990-N, and private foundations file the 990-PF.",
+  "src": "https://www.irs.gov/charities-non-profits/form-990-series-which-forms-do-exempt-organizations-file-filing-phase-in",
+  "cat": "law"
  },
  {
   "term": "foundation model",
@@ -506,6 +1427,35 @@
   "cat": "tech"
  },
  {
+  "term": "goal misgeneralization",
+  "match": [
+   "goal misgeneralization",
+   "goal misgeneralisation"
+  ],
+  "def": "A model competently pursuing an unintended goal in new situations even though its training signal was correct, because training couldn't tell the intended goal apart from a look-alike.",
+  "src": "https://arxiv.org/abs/2210.01790",
+  "cat": "tech"
+ },
+ {
+  "term": "gradual disempowerment",
+  "match": [
+   "gradual disempowerment"
+  ],
+  "def": "A proposed risk in which incremental AI adoption weakens people's effective influence over economic, cultural and political institutions. The argument does not require a deliberate coup, and its likelihood is contested.",
+  "src": "https://arxiv.org/html/2501.16946v2",
+  "cat": "policy"
+ },
+ {
+  "term": "grassroots lobbying",
+  "match": [
+   "grassroots lobbying",
+   "grass roots lobbying"
+  ],
+  "def": "Under the 501(h) rules, a message to the public that refers to specific legislation, states a view on it, and includes a call to action. It has its own limit: a quarter of the charity's total lobbying limit.",
+  "src": "https://www.law.cornell.edu/cfr/text/26/56.4911-2",
+  "cat": "law"
+ },
+ {
   "term": "grid interconnection",
   "match": [
    "grid interconnection"
@@ -515,6 +1465,60 @@
   "cat": "policy"
  },
  {
+  "term": "H100-equivalent",
+  "match": [
+   "H100-equivalent",
+   "H100-equivalents",
+   "H100e",
+   "H100-eq"
+  ],
+  "def": "A normalized computing-capacity unit relative to Nvidia's H100. The result depends on the comparison metric and assumptions; it is not a physical chip count or a guarantee of equal performance on every workload.",
+  "src": "https://epoch.ai/publications/huaweis-roadmap-to-2031",
+  "cat": "tech"
+ },
+ {
+  "term": "hardware-enabled mechanism",
+  "match": [
+   "hardware-enabled mechanism",
+   "hardware-enabled mechanisms",
+   "on-chip mechanism",
+   "on-chip mechanisms"
+  ],
+  "def": "A security feature built into AI chips, or a device attached to them, that can help verify where the chips are or how they are used, such as location checks or tamper-resistant activity logs.",
+  "src": "https://arxiv.org/abs/2507.15916",
+  "cat": "tech"
+ },
+ {
+  "term": "high-bandwidth memory",
+  "match": [
+   "high-bandwidth memory",
+   "high bandwidth memory",
+   "HBM"
+  ],
+  "def": "Stacked DRAM designed to move data at high bandwidth through wide connections. Many high-end AI accelerators use it, but other AI chips use different memory with workload-dependent tradeoffs.",
+  "src": "https://www.micron.com/products/memory/hbm",
+  "cat": "tech"
+ },
+ {
+  "term": "hybrid PAC",
+  "match": [
+   "hybrid PAC",
+   "hybrid PACs"
+  ],
+  "def": "A federal PAC with two separate bank accounts: one taking capped contributions for giving to candidates, and one taking unlimited contributions for independent spending.",
+  "src": "https://www.fec.gov/help-candidates-and-committees/registering-pac/types-nonconnected-pacs/",
+  "cat": "law"
+ },
+ {
+  "term": "IEEPA",
+  "match": [
+   "IEEPA"
+  ],
+  "def": "The International Emergency Economic Powers Act (1977), the main US sanctions law. After declaring a national emergency over a threat from abroad, the President can block or regulate transactions involving foreign interests.",
+  "src": "https://www.law.cornell.edu/uscode/text/50/1701",
+  "cat": "law"
+ },
+ {
   "term": "immunity",
   "match": [
    "immunity",
@@ -522,6 +1526,56 @@
   ],
   "def": "Legal protection that shields a person or organization from being sued or held liable for certain acts.",
   "src": "https://www.law.cornell.edu/wex/immunity",
+  "cat": "law"
+ },
+ {
+  "term": "Impeachment",
+  "match": [
+   "impeachment",
+   "impeached"
+  ],
+  "def": "The House’s formal accusation of impeachable misconduct. Removal of a sitting official requires a separate Senate conviction by two thirds of senators present.",
+  "src": "https://www.senate.gov/about/powers-procedures/impeachment.htm",
+  "cat": "congress"
+ },
+ {
+  "term": "Impoundment",
+  "match": [
+   "impoundment",
+   "impound"
+  ],
+  "def": "Executive withholding of the obligation or expenditure of appropriated funds. The Impoundment Control Act limits withholding and provides procedures to propose cancellation or defer spending.",
+  "src": "https://www.gao.gov/legal/appropriations-law/impoundment-control-act",
+  "cat": "law"
+ },
+ {
+  "term": "in-kind contribution",
+  "match": [
+   "in-kind contribution",
+   "in-kind contributions"
+  ],
+  "def": "Goods or services given to a campaign or political committee free or below the usual price, such as staff time, office space or a mailing list. It counts against contribution limits and source bans the same way cash does.",
+  "src": "https://www.law.cornell.edu/cfr/text/11/100.52",
+  "cat": "law"
+ },
+ {
+  "term": "incident channel",
+  "match": [
+   "incident channel",
+   "incident channels"
+  ],
+  "def": "A pre-agreed line between governments for quickly notifying each other about AI incidents, so an accident isn't mistaken for an attack. The US and China agreed to set one up in September 2026.",
+  "src": "https://www.whitehouse.gov/fact-sheets/2026/09/fact-sheet-president-donald-j-trump-advances-a-fair-and-reciprocal-relationship-with-china-while-hosting-historic-state-visit/",
+  "cat": "policy"
+ },
+ {
+  "term": "independent expenditure",
+  "match": [
+   "independent expenditure",
+   "independent expenditures"
+  ],
+  "def": "Spending on a communication that expressly urges the election or defeat of a clearly identified candidate, made without cooperation or consultation with the candidate or party. Most groups may spend unlimited amounts this way, but must report it to the FEC.",
+  "src": "https://www.fec.gov/help-candidates-and-committees/making-independent-expenditures/",
   "cat": "law"
  },
  {
@@ -544,6 +1598,25 @@
   "cat": "tech"
  },
  {
+  "term": "injunction",
+  "match": [
+   "injunction",
+   "injunctions"
+  ],
+  "def": "A court order requiring a party to do or stop doing something. A preliminary injunction does this temporarily while a case is decided.",
+  "src": "https://www.law.cornell.edu/wex/injunction",
+  "cat": "law"
+ },
+ {
+  "term": "inner alignment",
+  "match": [
+   "inner alignment"
+  ],
+  "def": "In its original formulation, aligning the objective of a learned optimizer with the objective used to train it. This is a specific concern within the broader problem of getting intended goals to generalize.",
+  "src": "https://arxiv.org/abs/1906.01820",
+  "cat": "tech"
+ },
+ {
   "term": "insider threat",
   "match": [
    "insider-threat",
@@ -554,6 +1627,77 @@
   "cat": "tech"
  },
  {
+  "term": "Institutional forbearance",
+  "match": [
+   "institutional forbearance",
+   "forbearance"
+  ],
+  "src": "https://www.aft.org/hc/fall2020/levitsky_ziblatt",
+  "cat": "policy",
+  "def": "Restraint in using legal powers in ways that would undermine democratic competition, in Levitsky and Ziblatt’s framework."
+ },
+ {
+  "term": "intelligence curse",
+  "match": [
+   "intelligence curse"
+  ],
+  "def": "A hypothesis that AI could reduce rulers' dependence on human labor and cooperation, weakening incentives to invest in or respond to the population. It is a proposed mechanism rather than an established prediction.",
+  "src": "https://intelligence-curse.ai/defining/",
+  "cat": "policy"
+ },
+ {
+  "term": "intelligible principle",
+  "match": [
+   "intelligible principle",
+   "intelligible-principle"
+  ],
+  "def": "The guiding policy and boundaries Congress supplies when delegating authority. Under the Supreme Court's nondelegation test, these must sufficiently guide the agency; the required detail depends on the scope of the power.",
+  "src": "https://www.law.cornell.edu/supremecourt/text/24-354",
+  "cat": "law"
+ },
+ {
+  "term": "interpretability",
+  "match": [
+   "interpretability",
+   "mechanistic interpretability"
+  ],
+  "def": "The study of what happens inside an AI model: which internal patterns stand for which concepts and how they combine into outputs. 'Mechanistic' interpretability tries to reverse-engineer that computation piece by piece.",
+  "src": "https://www.anthropic.com/research/mapping-mind-language-model",
+  "cat": "tech"
+ },
+ {
+  "term": "issue advocacy",
+  "match": [
+   "issue advocacy",
+   "issue ad",
+   "issue ads"
+  ],
+  "def": "Taking public positions on policy issues. Charities may do it, but an ad that names a candidate close to an election on an issue dividing the candidates can count as campaign intervention under the IRS's facts-and-circumstances test.",
+  "src": "https://www.irs.gov/irb/2007-25_IRB",
+  "cat": "policy"
+ },
+ {
+  "term": "jailbreak",
+  "match": [
+   "jailbreak",
+   "jailbreaks",
+   "jailbreaking",
+   "jailbroken"
+  ],
+  "def": "A prompt or trick that gets an AI model to produce content its safety training is meant to make it refuse.",
+  "src": "https://arxiv.org/abs/2307.15043",
+  "cat": "tech"
+ },
+ {
+  "term": "Johnson Amendment",
+  "match": [
+   "Johnson Amendment"
+  ],
+  "def": "Nickname for the ban in section 501(c)(3) on charities participating or intervening in campaigns for or against candidates, named for then-Senator Lyndon Johnson, who added it as a floor amendment.",
+  "src": "https://www.congress.gov/crs_external_products/LSB/PDF/LSB11447/LSB11447.2.pdf",
+  "cat": "law"
+ },
+ {
   "term": "joint resolution",
   "match": [
    "joint resolution"
@@ -561,6 +1705,33 @@
   "def": "A legislative measure that, like a bill, must pass both chambers and be signed by the President (or pass over a veto) to become law. Used for continuing appropriations and to approve or block executive actions.",
   "src": "https://www.senate.gov/legislative/common/briefing/leg_laws_acts.htm",
   "cat": "congress"
+ },
+ {
+  "term": "judicial review",
+  "match": [
+   "judicial review"
+  ],
+  "def": "Courts' authority to determine whether legislation or executive action conflicts with the Constitution and to deny effect to unconstitutional action in cases before them.",
+  "src": "https://www.supremecourt.gov/about/constitutional.aspx",
+  "cat": "law"
+ },
+ {
+  "term": "jurisdiction",
+  "match": [
+   "jurisdiction"
+  ],
+  "def": "A court's legal authority to hear and decide a particular kind of dispute. Having a valid legal claim does not by itself give every court jurisdiction.",
+  "src": "https://www.archives.gov/milestone-documents/marbury-v-madison",
+  "cat": "law"
+ },
+ {
+  "term": "just compensation",
+  "match": [
+   "just compensation"
+  ],
+  "def": "The payment the Fifth Amendment requires when the government takes private property for public use, generally the property's fair market value.",
+  "src": "https://www.law.cornell.edu/wex/just_compensation",
+  "cat": "law"
  },
  {
   "term": "know-your-customer",
@@ -583,6 +1754,38 @@
   "cat": "congress"
  },
  {
+  "term": "law-following AI",
+  "match": [
+   "law-following AI",
+   "law-following AIs",
+   "LFAI",
+   "LFAIs"
+  ],
+  "def": "A proposed design and governance goal for agents to respect legal constraints rather than comply only when punishment seems likely. Handling legal uncertainty, conflicting jurisdictions and unjust laws remains difficult.",
+  "src": "https://fordhamlawreview.org/wp-content/uploads/2025/09/Vol-94_Issue-1_2_OKeefe-et-al.-57-129.pdf",
+  "cat": "law"
+ },
+ {
+  "term": "Legislative Counsel",
+  "match": [
+   "Legislative Counsel",
+   "Office of the Legislative Counsel"
+  ],
+  "def": "The House Office of the Legislative Counsel provides nonpartisan, impartial and confidential drafting services to House members and committees, translating their policy preferences into legally effective text.",
+  "src": "https://legcounsel.house.gov/",
+  "cat": "congress"
+ },
+ {
+  "term": "linear probe",
+  "match": [
+   "linear probe",
+   "linear probes"
+  ],
+  "def": "A simple linear classifier trained on activations to detect a specified property. Probes can be cheap screening tools, but need validation on deployment inputs and attempts to evade them.",
+  "src": "https://arxiv.org/abs/2601.11516",
+  "cat": "tech"
+ },
+ {
   "term": "lithography",
   "match": [
    "lithography",
@@ -591,6 +1794,26 @@
   "def": "The chipmaking step that uses light to print circuit patterns onto silicon wafers. Deep-ultraviolet (DUV) tools are the older generation, still essential for making advanced chips.",
   "src": "https://www.asml.com/en/products/duv-lithography-systems",
   "cat": "tech"
+ },
+ {
+  "term": "Lobbying Disclosure Act",
+  "match": [
+   "Lobbying Disclosure Act",
+   "LDA"
+  ],
+  "def": "The federal law requiring paid lobbyists' employers and firms to register with the House Clerk and Senate Secretary and file quarterly reports. It covers contacts with members of Congress, their staff and senior executive branch officials.",
+  "src": "https://lobbyingdisclosure.house.gov/ldaguidance.pdf",
+  "cat": "congress"
+ },
+ {
+  "term": "lock-in",
+  "match": [
+   "lock-in",
+   "locked in"
+  ],
+  "def": "A situation in which an arrangement becomes unusually difficult to reverse. AI might contribute through persistent institutional goals or reduced dependence on human cooperation, but permanence is not guaranteed.",
+  "src": "https://forum.effectivealtruism.org/posts/KqCybin8rtfP3qztq/agi-and-lock-in",
+  "cat": "policy"
  },
  {
   "term": "major questions doctrine",
@@ -621,6 +1844,16 @@
   "cat": "congress"
  },
  {
+  "term": "material support",
+  "match": [
+   "material support",
+   "material-support"
+  ],
+  "def": "Under federal terrorism law, any property or service given to terrorists or to a designated foreign terrorist organization, including training, expert advice and personnel. Only medicine and religious materials are excluded; independent advocacy is not covered.",
+  "src": "https://www.law.cornell.edu/supremecourt/text/08-1498",
+  "cat": "law"
+ },
+ {
   "term": "merger review",
   "match": [
    "merger review"
@@ -642,11 +1875,20 @@
   "term": "model card",
   "match": [
    "model card",
-   "model cards",
-   "system card"
+   "model cards"
   ],
   "def": "A document published with an AI model describing its intended uses, how it was evaluated, its limitations and safety test results. A system card covers a model plus its surrounding product.",
   "src": "https://arxiv.org/abs/1810.03993",
+  "cat": "tech"
+ },
+ {
+  "term": "model organism",
+  "match": [
+   "model organism",
+   "model organisms"
+  ],
+  "def": "An AI model deliberately trained to have a known problem, such as a hidden goal or backdoor, so researchers can test whether their detection and auditing methods find it.",
+  "src": "https://www.anthropic.com/research/auditing-hidden-objectives",
   "cat": "tech"
  },
  {
@@ -660,6 +1902,44 @@
   "cat": "tech"
  },
  {
+  "term": "multipatterning",
+  "match": [
+   "multipatterning",
+   "multi-patterning"
+  ],
+  "def": "Using multiple patterning steps to create features beyond what a single exposure can resolve. Extra steps can add complexity, processing and defect opportunities; the actual cost and yield effects depend on the process.",
+  "src": "https://www.techinsights.com/blog/smic-n3-confirmed-kirin-9030-analysis-reveals-how-close-smic-5nm",
+  "cat": "tech"
+ },
+ {
+  "term": "Mutual toleration",
+  "match": [
+   "mutual toleration"
+  ],
+  "src": "https://www.aft.org/hc/fall2020/levitsky_ziblatt",
+  "cat": "policy",
+  "def": "The democratic norm of recognizing that political rivals who follow democratic rules have a legitimate right to compete and govern if elected."
+ },
+ {
+  "term": "national emergency",
+  "match": [
+   "national emergency",
+   "national emergencies"
+  ],
+  "def": "A declaration by the President under the National Emergencies Act (1976). It grants no power by itself; it activates specific emergency powers in other laws, which the President must name.",
+  "src": "https://www.law.cornell.edu/uscode/text/50/1631",
+  "cat": "law"
+ },
+ {
+  "term": "national technical means",
+  "match": [
+   "national technical means"
+  ],
+  "def": "Ways a country can check another's compliance with an agreement on its own, without permission, such as satellite and thermal imaging, signals intelligence, power-grid data and trade records.",
+  "src": "https://arxiv.org/abs/2408.16074",
+  "cat": "policy"
+ },
+ {
   "term": "negligence",
   "match": [
    "negligence",
@@ -670,12 +1950,72 @@
   "cat": "law"
  },
  {
+  "term": "nonpartisan analysis",
+  "match": [
+   "nonpartisan analysis",
+   "nonpartisan analysis, study or research"
+  ],
+  "def": "A lobbying exception for research that gives a full and fair exposition of the facts. It may take a position, but it can't directly urge readers to contact legislators, or it becomes lobbying.",
+  "src": "https://www.law.cornell.edu/cfr/text/26/56.4911-2",
+  "cat": "law"
+ },
+ {
+  "term": "nonseverability clause",
+  "match": [
+   "nonseverability clause",
+   "nonseverability clauses",
+   "nonseverability"
+  ],
+  "def": "A clause linking provisions so that invalidation of specified provisions causes linked provisions to lose effect too. Careful drafting identifies which invalidity triggers the link and which parts it affects.",
+  "src": "https://www.law.cornell.edu/supremecourt/text/19-631",
+  "cat": "law"
+ },
+ {
+  "term": "notice and comment",
+  "match": [
+   "notice and comment",
+   "notice-and-comment",
+   "public comment"
+  ],
+  "def": "The standard way federal agencies make rules under the Administrative Procedure Act: publish a proposed rule, take public comments, then issue a final rule that responds to them.",
+  "src": "https://www.law.cornell.edu/wex/informal_rulemaking",
+  "cat": "law"
+ },
+ {
+  "term": "on-site inspection",
+  "match": [
+   "on-site inspection",
+   "on-site inspections"
+  ],
+  "def": "A visit by inspectors to a facility under a treaty, to check compliance first-hand, for example by counting declared weapons. New START allowed 18 short-notice on-site inspections a year.",
+  "src": "https://www.armscontrol.org/factsheets/new-start-glance",
+  "cat": "policy"
+ },
+ {
   "term": "open-weight",
   "match": [
    "open-weight"
   ],
   "def": "Describes an AI model whose trained weights are published for anyone to download, run and modify.",
   "src": "https://www.ntia.gov/issues/artificial-intelligence/open-model-weights-report",
+  "cat": "tech"
+ },
+ {
+  "term": "organizational test",
+  "match": [
+   "organizational test"
+  ],
+  "def": "The IRS rule that a 501(c)(3)'s founding document must limit its purposes to exempt ones, not authorize substantial other activity, and dedicate its assets to exempt purposes, including if it dissolves.",
+  "src": "https://www.law.cornell.edu/cfr/text/26/1.501(c)(3)-1",
+  "cat": "law"
+ },
+ {
+  "term": "outer alignment",
+  "match": [
+   "outer alignment"
+  ],
+  "def": "Aligning the objective used to train a model with the intended goal. A feedback signal that rewards approval at the expense of truth illustrates a possible objective-design problem.",
+  "src": "https://arxiv.org/abs/1906.01820",
   "cat": "tech"
  },
  {
@@ -690,6 +2030,17 @@
   "cat": "tech"
  },
  {
+  "term": "parameter",
+  "match": [
+   "billion parameters",
+   "parameter count",
+   "number of parameters"
+  ],
+  "def": "One of the numbers inside a model that training adjusts. 'Parameters' and 'weights' usually mean the same thing, and large models have hundreds of billions.",
+  "src": "https://www.ntia.gov/sites/default/files/publications/ntia-ai-open-model-report.pdf",
+  "cat": "tech"
+ },
+ {
   "term": "per se",
   "match": [
    "per se"
@@ -697,6 +2048,45 @@
   "def": "Latin for 'by itself.' In antitrust, a per se violation is conduct (such as price-fixing) treated as automatically illegal, with no weighing of its actual effects on competition.",
   "src": "https://www.law.cornell.edu/wex/per_se",
   "cat": "law"
+ },
+ {
+  "term": "Posse Comitatus Act",
+  "match": [
+   "Posse Comitatus Act",
+   "Posse Comitatus"
+  ],
+  "def": "Federal law generally prohibiting use of covered armed forces to execute civilian laws unless the Constitution or Congress expressly authorizes it.",
+  "src": "https://www.law.cornell.edu/uscode/text/18/1385",
+  "cat": "law"
+ },
+ {
+  "term": "post-training",
+  "match": [
+   "post-training",
+   "post-trained"
+  ],
+  "def": "Training after pretraining that shapes a model's behavior and can add skills such as reasoning, for example fine-tuning on example answers, RLHF and reinforcement learning on math and coding tasks.",
+  "src": "https://arxiv.org/abs/2203.02155",
+  "cat": "tech"
+ },
+ {
+  "term": "Preclearance",
+  "match": [
+   "preclearance"
+  ],
+  "def": "Advance federal approval of voting changes under Section 5 of the Voting Rights Act. Shelby County invalidated the old coverage formula that triggered this requirement.",
+  "src": "https://www.justice.gov/crt/about-section-5-voting-rights-act",
+  "cat": "law"
+ },
+ {
+  "term": "prediction market",
+  "match": [
+   "prediction market",
+   "prediction markets"
+  ],
+  "def": "A market for contracts whose payouts depend on specified outcomes. Prices can inform probability estimates while reflecting trading constraints, risk preferences, liquidity and the written resolution rules.",
+  "src": "https://docs.polymarket.com/polymarket-101",
+  "cat": "policy"
  },
  {
   "term": "preemption",
@@ -711,12 +2101,91 @@
   "cat": "law"
  },
  {
+  "term": "presumption of denial",
+  "match": [
+   "presumption of denial"
+  ],
+  "def": "A license-review policy generally favoring denial of covered applications. It differs from the underlying license requirement and from case-by-case review. The relevant entry and transaction determine which policy applies.",
+  "src": "https://www.govinfo.gov/content/pkg/FR-2026-01-15/html/2026-00789.htm",
+  "cat": "law"
+ },
+ {
+  "term": "pretraining",
+  "match": [
+   "pretraining",
+   "pre-training",
+   "pretrained"
+  ],
+  "def": "The first stage of training a language model, usually the most compute-intensive, in which it learns to predict the next token across huge amounts of text.",
+  "src": "https://arxiv.org/abs/2303.08774",
+  "cat": "tech"
+ },
+ {
   "term": "price-fixing",
   "match": [
    "price-fixing"
   ],
   "def": "An agreement among competitors to raise, lower or stabilize prices instead of setting them independently. It is illegal per se under US antitrust law.",
   "src": "https://www.law.cornell.edu/wex/price_fixing",
+  "cat": "law"
+ },
+ {
+  "term": "primary activity",
+  "match": [
+   "primary activity",
+   "primary purpose test"
+  ],
+  "def": "The test for a 501(c)(4): it must be primarily engaged in promoting social welfare, so election work can't be its main activity. No regulation sets a percentage, and in 2025 a court found the IRS's test too vague as applied to one group.",
+  "src": "https://www.law.cornell.edu/cfr/text/26/1.501(c)(4)-1",
+  "cat": "law"
+ },
+ {
+  "term": "prior restraint",
+  "match": [
+   "prior restraint",
+   "prior restraints"
+  ],
+  "def": "Government action that blocks speech or publication before it happens. Courts treat it as one of the most serious kinds of First Amendment violation.",
+  "src": "https://www.law.cornell.edu/wex/prior_restraint",
+  "cat": "law"
+ },
+ {
+  "term": "private benefit",
+  "match": [
+   "private benefit"
+  ],
+  "def": "Benefit that a 501(c)(3)'s activities give to private interests, whether insiders or outsiders. It is allowed only when incidental to the group's public purpose.",
+  "src": "https://www.everycrsreport.com/reports/R48873.html",
+  "cat": "law"
+ },
+ {
+  "term": "private foundation",
+  "match": [
+   "private foundation",
+   "private foundations"
+  ],
+  "def": "A 501(c)(3) without broad public support, typically funded by a single major source. It faces extra rules, including a tax on investment income, a yearly payout of about 5% of investment assets, a self-dealing ban and taxes on its own lobbying.",
+  "src": "https://www.irs.gov/charities-non-profits/private-foundations/private-foundation-excise-taxes",
+  "cat": "law"
+ },
+ {
+  "term": "private inurement",
+  "match": [
+   "private inurement",
+   "inurement"
+  ],
+  "def": "A 501(c)(3)'s earnings or assets flowing to insiders, such as founders or directors, beyond fair value. The IRS has said any amount is grounds for revoking exemption.",
+  "src": "https://www.everycrsreport.com/reports/R48873.html",
+  "cat": "law"
+ },
+ {
+  "term": "private right of action",
+  "match": [
+   "private right of action",
+   "private rights of action"
+  ],
+  "def": "A legal right allowing eligible private parties to bring a claim in court. The statute and applicable law determine the claim, defendants, procedures and remedies; private enforcement does not automatically guarantee damages or a class action.",
+  "src": "https://www.govinfo.gov/content/pkg/BILLS-119s2937is/html/BILLS-119s2937is.htm",
   "cat": "law"
  },
  {
@@ -730,6 +2199,25 @@
   "cat": "law"
  },
  {
+  "term": "proper scoring rule",
+  "match": [
+   "proper scoring rule",
+   "proper scoring rules"
+  ],
+  "def": "A rule under which honest probabilities optimize the expected score or loss. For binary Brier loss, reporting the true probability minimizes expected loss; this is an expectation, rather than a guarantee on any one event.",
+  "src": "https://www.gjopen.com/faq",
+  "cat": "policy"
+ },
+ {
+  "term": "proxy tax",
+  "match": [
+   "proxy tax"
+  ],
+  "def": "A tax at the top corporate rate on the lobbying and political spending of a (c)(4), (c)(5) or (c)(6) that doesn't tell dues-paying members what share of their dues is nondeductible for that reason.",
+  "src": "https://www.irs.gov/node/464",
+  "cat": "law"
+ },
+ {
   "term": "public benefit corporation",
   "match": [
    "public benefit corporation"
@@ -739,12 +2227,32 @@
   "cat": "law"
  },
  {
+  "term": "public charity",
+  "match": [
+   "public charity",
+   "public charities"
+  ],
+  "def": "A 501(c)(3) that isn't a private foundation, usually because a third or more of its support comes from the public, government or other charities, or because it is a church, school or hospital.",
+  "src": "https://www.irs.gov/instructions/i990sa",
+  "cat": "law"
+ },
+ {
   "term": "punitive damages",
   "match": [
    "punitive damages"
   ],
   "def": "Money a court awards on top of compensation for harm, meant to punish especially bad conduct and deter others from similar conduct.",
   "src": "https://www.law.cornell.edu/wex/punitive_damages",
+  "cat": "law"
+ },
+ {
+  "term": "quid pro quo contribution",
+  "match": [
+   "quid pro quo contribution",
+   "quid pro quo contributions"
+  ],
+  "def": "A payment to a charity that is partly a gift and partly a purchase, such as a gala ticket that includes dinner. For payments over $75, the charity must tell the donor in writing how much is deductible and estimate the value of what they received.",
+  "src": "https://www.irs.gov/charities-non-profits/charitable-organizations/charitable-contributions-quid-pro-quo-contributions",
   "cat": "law"
  },
  {
@@ -758,12 +2266,31 @@
   "cat": "policy"
  },
  {
+  "term": "rated order",
+  "match": [
+   "rated order",
+   "rated orders"
+  ],
+  "def": "Under the Defense Production Act, a government contract marked DO or DX that a company must accept and fill ahead of its other customers' unrated orders.",
+  "src": "https://www.congress.gov/crs-report/R43767",
+  "cat": "law"
+ },
+ {
   "term": "reasonable care",
   "match": [
    "reasonable care"
   ],
   "def": "The degree of caution a reasonably prudent person would use in the same situation. Failing to exercise it is the core of negligence.",
   "src": "https://www.law.cornell.edu/wex/reasonable_care",
+  "cat": "law"
+ },
+ {
+  "term": "rebuttable presumption",
+  "match": [
+   "rebuttable presumption"
+  ],
+  "def": "A legal assumption that holds unless the other side proves otherwise. In the excess benefit rules, pay is presumed reasonable when conflict-free board members approved it in advance, relied on comparable pay data and documented their basis.",
+  "src": "https://www.law.cornell.edu/cfr/text/26/53.4958-6",
   "cat": "law"
  },
  {
@@ -826,6 +2353,89 @@
   "cat": "policy"
  },
  {
+  "term": "rentier state",
+  "match": [
+   "rentier state",
+   "rentier states",
+   "rentier effect"
+  ],
+  "def": "A state heavily dependent on revenue from external rents, often natural resources, rather than broad domestic taxation. Its political effects depend on institutions and context; rentier state and resource curse are distinct concepts.",
+  "src": "https://newuniversityinexileconsortium.org/wp-content/uploads/2022/09/What-Have-We-Learned-about-the-Resource-Curse.v2.pdf",
+  "cat": "policy"
+ },
+ {
+  "term": "resolution criteria",
+  "match": [
+   "resolution criteria",
+   "resolution rules"
+  ],
+  "def": "Rules specifying the event, deadline, evidence and decision process used to settle a forecast or contract. A market title alone may omit important conditions.",
+  "src": "https://docs.polymarket.com/concepts/resolution",
+  "cat": "policy"
+ },
+ {
+  "term": "restricted class",
+  "match": [
+   "restricted class"
+  ],
+  "def": "The people a connected PAC and its sponsor may ask for PAC contributions. For a corporation: its salaried executive and administrative staff, its stockholders, and their families. For a membership group: its members, such staff, and their families.",
+  "src": "https://www.fec.gov/help-candidates-and-committees/fundraising-for-ssf/solicitable-class-corporation-ssf",
+  "cat": "law"
+ },
+ {
+  "term": "returns to software R&D",
+  "match": [
+   "returns to software R&D",
+   "returns to research effort"
+  ],
+  "def": "A model parameter, r, giving software doublings per doubling of cumulative research effort. In Forethought's simplified automated-research model, r above 1 produces acceleration under its other assumptions.",
+  "src": "https://www.forethought.org/research/will-ai-r-and-d-automation-cause-a-software-intelligence-explosion",
+  "cat": "tech"
+ },
+ {
+  "term": "Revenue Ruling",
+  "match": [
+   "Revenue Ruling",
+   "Revenue Rulings",
+   "Rev. Rul."
+  ],
+  "def": "An official IRS interpretation applying tax law to specific facts, published in the Internal Revenue Bulletin. Revenue Ruling 2007-41, for example, works through 21 situations to show what counts as campaign intervention by a charity.",
+  "src": "https://www.irs.gov/irb/2007-25_IRB",
+  "cat": "law"
+ },
+ {
+  "term": "reward hacking",
+  "match": [
+   "reward hacking",
+   "reward hack",
+   "reward hacks",
+   "reward hacked"
+  ],
+  "def": "When an AI model games how a task is scored, in training or in tests, finding a loophole that scores well without doing the intended task, such as special-casing tests instead of solving the problem.",
+  "src": "https://metr.org/blog/2025-06-05-recent-reward-hacking/",
+  "cat": "tech"
+ },
+ {
+  "term": "RLHF",
+  "match": [
+   "RLHF",
+   "reinforcement learning from human feedback"
+  ],
+  "def": "Reinforcement learning from human feedback: people rank a model's outputs, and the model is trained toward the ones they prefer.",
+  "src": "https://arxiv.org/abs/2203.02155",
+  "cat": "tech"
+ },
+ {
+  "term": "rule of construction",
+  "match": [
+   "rule of construction",
+   "rules of construction"
+  ],
+  "def": "A provision telling courts how to read a law, often starting 'Nothing in this section shall be construed to...', for example to keep other laws or rights in place that the main text might seem to override.",
+  "src": "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm",
+  "cat": "law"
+ },
+ {
   "term": "safe harbor",
   "match": [
    "safe harbor",
@@ -843,6 +2453,17 @@
   ],
   "def": "A structured, evidence-backed argument that a system is acceptably safe in a particular context. Some regulators require them, for example for nuclear plants and offshore oil and gas in the UK.",
   "src": "https://www.aisi.gov.uk/work/safety-cases-at-aisi",
+  "cat": "tech"
+ },
+ {
+  "term": "safety framework",
+  "match": [
+   "safety framework",
+   "safety frameworks",
+   "frontier safety framework"
+  ],
+  "def": "A developer's published policy naming the dangerous capabilities it tests for and the safeguards it will apply if a model reaches set thresholds.",
+  "src": "https://metr.org/common-elements",
   "cat": "tech"
  },
  {
@@ -866,6 +2487,137 @@
   "cat": "tech"
  },
  {
+  "term": "savings clause",
+  "match": [
+   "savings clause",
+   "savings clauses"
+  ],
+  "def": "A provision preserving specified rights, claims or other law from displacement. Its effect depends on wording and context; a general savings clause may leave room for implied conflict preemption.",
+  "src": "https://www.congress.gov/crs_external_products/R/PDF/R45825/R45825.3.pdf",
+  "cat": "law"
+ },
+ {
+  "term": "scaffolding",
+  "match": [
+   "scaffolding",
+   "scaffold",
+   "scaffolds"
+  ],
+  "def": "Software built around an AI model, such as tools, memory and a planning loop, that lets it act as an agent.",
+  "src": "https://www.aisi.gov.uk/frontier-ai-trends-report",
+  "cat": "tech"
+ },
+ {
+  "term": "scalable oversight",
+  "match": [
+   "scalable oversight",
+   "amplified oversight"
+  ],
+  "def": "Methods intended to help humans supervise AI work that is too difficult to judge unaided. Proposed approaches include debate, decomposition and assistance from other models; success is task-dependent.",
+  "src": "https://arxiv.org/abs/1805.00899",
+  "cat": "tech"
+ },
+ {
+  "term": "scheming",
+  "match": [
+   "scheming"
+  ],
+  "def": "An AI model secretly pursuing goals its developers didn't intend while hiding that it is doing so.",
+  "src": "https://arxiv.org/abs/2509.15541",
+  "cat": "tech"
+ },
+ {
+  "term": "scrivener's error",
+  "match": [
+   "scrivener's error",
+   "scrivener's errors"
+  ],
+  "def": "An obvious clerical mistake in a statute's text, such as misplaced punctuation or a wrong cross-reference. Courts may correct it to give the law its evident meaning, but fixing it in the text avoids the fight.",
+  "src": "https://www.law.cornell.edu/supremecourt/text/508/439",
+  "cat": "law"
+ },
+ {
+  "term": "secret loyalty",
+  "match": [
+   "secret loyalty",
+   "secret loyalties",
+   "secretly loyal"
+  ],
+  "def": "A concealed objective to favor a principal while appearing to serve another role. It can guide varied contextual behavior and may have a password or other activation condition.",
+  "src": "https://www.lesswrong.com/posts/cn4HHdLbpJpcFQK93/how-secret-loyalty-differs-from-standard-backdoor-threats",
+  "cat": "tech"
+ },
+ {
+  "term": "section 501(p)",
+  "match": [
+   "section 501(p)",
+   "501(p)"
+  ],
+  "def": "Tax code provision that automatically suspends the exemption of a group designated as a terrorist organization under immigration or sanctions law, bars deductions for gifts to it, and allows no challenge in any federal tax proceeding.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/501",
+  "cat": "law"
+ },
+ {
+  "term": "section 6103",
+  "match": [
+   "section 6103",
+   "6103"
+  ],
+  "def": "Tax code rule that keeps tax returns and return information, including audit files, confidential except through listed routes, such as a judge's order letting federal prosecutors see a taxpayer's records. Unauthorized disclosure is a felony.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/6103",
+  "cat": "law"
+ },
+ {
+  "term": "section 7217",
+  "match": [
+   "section 7217",
+   "7217"
+  ],
+  "def": "Law making it a crime for the President, Vice President, their staffs and cabinet-level officials (except the Attorney General) to ask the IRS to start or stop an audit of a particular taxpayer. IRS staff must report such requests.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/7217",
+  "cat": "law"
+ },
+ {
+  "term": "select agent",
+  "match": [
+   "select agent",
+   "select agents"
+  ],
+  "def": "An agent or toxin covered by US select-agent regulations, which regulate possession, use and transfer. CDC and USDA jointly administer the program; coverage has exclusions and does not settle all other legal duties.",
+  "src": "https://www.selectagents.gov/index.htm",
+  "cat": "law"
+ },
+ {
+  "term": "self-coup",
+  "match": [
+   "self-coup",
+   "self-coups",
+   "autogolpe"
+  ],
+  "def": "An incumbent executive's attempt to concentrate power by disabling or bypassing other constitutional institutions, such as a legislature or courts.",
+  "src": "https://elcomercio.pe/especiales/autogolpe-fujimori/",
+  "cat": "policy"
+ },
+ {
+  "term": "self-dealing",
+  "match": [
+   "self-dealing"
+  ],
+  "def": "Most financial dealings between a private foundation and its insiders ('disqualified persons'), such as sales, loans, leases, or using foundation money to pay an insider's personal obligations. Taxed even at fair prices; reasonable pay for services is an exception.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/4941",
+  "cat": "law"
+ },
+ {
+  "term": "self-defense exception",
+  "match": [
+   "self-defense exception",
+   "self-defense lobbying"
+  ],
+  "def": "A 501(h) exception: a charity's own contacts with a legislature about action that could affect its existence, powers, tax-exempt status or the deductibility of gifts to it don't count as lobbying.",
+  "src": "https://www.law.cornell.edu/uscode/text/26/4911",
+  "cat": "law"
+ },
+ {
   "term": "Senate confirmation",
   "match": [
    "Senate confirmation",
@@ -883,6 +2635,38 @@
   "def": "A provision or resolution that states Congress's opinion. It has no binding legal effect, even when included in a bill that becomes law.",
   "src": "https://www.everycrsreport.com/reports/98-825GOV.html",
   "cat": "congress"
+ },
+ {
+  "term": "separate segregated fund",
+  "match": [
+   "separate segregated funds",
+   "separate segregated fund",
+   "connected PACs",
+   "connected PAC"
+  ],
+  "def": "The legal name for a PAC sponsored by a corporation, union or membership group (its 'connected organization'), which may pay the PAC's overhead without limit. The PAC may ask only its restricted class for contributions, never the general public.",
+  "src": "https://www.fec.gov/help-candidates-and-committees/fundraising-for-ssf",
+  "cat": "law"
+ },
+ {
+  "term": "separation of duties",
+  "match": [
+   "separation of duties"
+  ],
+  "def": "Assigning sensitive tasks and approvals to distinct roles so one person cannot quietly control the whole process. Its effectiveness depends on real independence, enforcement and resistance to collusion.",
+  "src": "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power",
+  "cat": "tech"
+ },
+ {
+  "term": "sequence of concern",
+  "match": [
+   "sequence of concern",
+   "sequences of concern",
+   "SOC"
+  ],
+  "def": "In HHS synthesis screening guidance, a sequence that contributes to pathogenicity or toxicity, whether its source agent is regulated or unregulated. Identifying all such sequences remains a technical challenge.",
+  "src": "https://www.aspr.gov/s3/synthetic-nucleic-acid-screening",
+  "cat": "policy"
  },
  {
   "term": "severability clause",
@@ -904,6 +2688,47 @@
   "cat": "law"
  },
  {
+  "term": "sleeper agent",
+  "match": [
+   "sleeper agent",
+   "sleeper agents"
+  ],
+  "def": "A deliberately constructed model that behaves normally except when a trigger activates a hidden harmful behavior. Some such backdoors survived standard safety training in Anthropic's 2024 experiments.",
+  "src": "https://arxiv.org/abs/2401.05566",
+  "cat": "tech"
+ },
+ {
+  "term": "software intelligence explosion",
+  "match": [
+   "software intelligence explosion",
+   "intelligence explosion"
+  ],
+  "def": "Hypothesized rapid acceleration from AI improving the software used to build or run AI, potentially on fixed hardware. Its size and duration depend on feedback strength, research constraints and software limits.",
+  "src": "https://www.forethought.org/research/will-ai-r-and-d-automation-cause-a-software-intelligence-explosion",
+  "cat": "tech"
+ },
+ {
+  "term": "sparse autoencoder",
+  "match": [
+   "sparse autoencoder",
+   "sparse autoencoders",
+   "SAE",
+   "SAEs"
+  ],
+  "def": "A model trained to reconstruct activations using a sparse set of learned features. It can reveal interpretable patterns without labels for a particular concept, while leaving some computation unexplained.",
+  "src": "https://www.anthropic.com/research/towards-monosemanticity-decomposing-language-models-with-dictionary-learning",
+  "cat": "tech"
+ },
+ {
+  "term": "specification gaming",
+  "match": [
+   "specification gaming"
+  ],
+  "def": "Satisfying a flawed specification in a way that misses the designer's intent. This differs from goal misgeneralization, which can arise even when the training specification is correct.",
+  "src": "https://arxiv.org/abs/2210.01790",
+  "cat": "tech"
+ },
+ {
   "term": "state capacity",
   "match": [
    "state capacity"
@@ -913,6 +2738,18 @@
   "cat": "policy"
  },
  {
+  "term": "straw donor",
+  "match": [
+   "straw donor",
+   "straw donors",
+   "contribution in the name of another",
+   "contributions in the name of another"
+  ],
+  "def": "A person whose name is used for a political contribution that someone else actually paid for. Making such a contribution, letting your name be used, or knowingly accepting one is banned by 52 U.S.C. 30122 and can be a federal crime.",
+  "src": "https://www.law.cornell.edu/uscode/text/52/30122",
+  "cat": "law"
+ },
+ {
   "term": "strict liability",
   "match": [
    "strict liability"
@@ -920,6 +2757,16 @@
   "def": "Liability for harm regardless of fault or how much care was taken. US courts apply it to abnormally dangerous activities and, in most states, to some defective-product claims.",
   "src": "https://www.law.cornell.edu/wex/strict_liability",
   "cat": "law"
+ },
+ {
+  "term": "structural risk",
+  "match": [
+   "structural risk",
+   "structural risks"
+  ],
+  "def": "In DeepMind's 2025 framework, potential harm from interactions among people, organizations and AI systems that changing one actor or system alone would not prevent. Risk categories can overlap.",
+  "src": "https://arxiv.org/html/2504.01849v1",
+  "cat": "policy"
  },
  {
   "term": "structural separation",
@@ -940,6 +2787,18 @@
   "cat": "law"
  },
  {
+  "term": "substantial part test",
+  "match": [
+   "substantial part test",
+   "substantial-part test",
+   "'substantial part' test",
+   "no substantial part"
+  ],
+  "def": "The default limit on a 501(c)(3)'s lobbying: lobbying may not be a substantial part of its activities. The IRS weighs all the facts, including paid and volunteer time, with no safe number; the penalty can be losing exemption.",
+  "src": "https://www.irs.gov/charities-non-profits/measuring-lobbying-substantial-part-test",
+  "cat": "law"
+ },
+ {
   "term": "sunset provision",
   "match": [
    "sunset",
@@ -950,12 +2809,91 @@
   "cat": "law"
  },
  {
+  "term": "super PAC",
+  "match": [
+   "super PAC",
+   "super PACs"
+  ],
+  "def": "A federal political committee that may take unlimited contributions, including from corporations and unions, but may spend only independently of candidates and can't give money to them.",
+  "src": "https://www.fec.gov/help-candidates-and-committees/registering-pac/types-nonconnected-pacs/",
+  "cat": "law"
+ },
+ {
+  "term": "superforecaster",
+  "match": [
+   "superforecaster",
+   "superforecasters"
+  ],
+  "def": "A forecaster identified through unusually accurate performance in forecasting tournaments. The original Good Judgment Project selected top performers on geopolitical questions; performance need not transfer equally to every topic.",
+  "src": "https://goodjudgment.com/wp-content/uploads/2021/10/Superforecasters-A-Decade-of-Stochastic-Dominance.pdf",
+  "cat": "policy"
+ },
+ {
   "term": "superintelligence",
   "match": [
    "superintelligence"
   ],
   "def": "Hypothetical AI that greatly exceeds human cognitive ability in virtually all domains.",
   "src": "https://en.wikipedia.org/wiki/Superintelligence",
+  "cat": "tech"
+ },
+ {
+  "term": "superposition",
+  "match": [
+   "superposition"
+  ],
+  "def": "Representing more features than the dimensions of a layer using overlapping directions. Toy-model research shows how this can make individual neurons respond to several concepts.",
+  "src": "https://arxiv.org/abs/2209.10652",
+  "cat": "tech"
+ },
+ {
+  "term": "sycophancy",
+  "match": [
+   "sycophancy",
+   "sycophantic"
+  ],
+  "def": "An AI model telling users what they want to hear, such as agreeing with their views or praising weak ideas. Research links it partly to training on human ratings, which tend to favor agreement.",
+  "src": "https://arxiv.org/abs/2310.13548",
+  "cat": "tech"
+ },
+ {
+  "term": "system card",
+  "match": [
+   "system card",
+   "system cards"
+  ],
+  "def": "A report a developer publishes with a model, describing its capabilities, safety test results and safeguards.",
+  "src": "https://www.anthropic.com/claude-opus-4-6-system-card",
+  "cat": "tech"
+ },
+ {
+  "term": "tacit knowledge",
+  "match": [
+   "tacit knowledge"
+  ],
+  "def": "Practical know-how that can be difficult to convey fully in written instructions, including skills and judgment learned through laboratory experience.",
+  "src": "https://deploymentsafety.openai.com/gpt-6-astra/gpt-6-astra.pdf",
+  "cat": "tech"
+ },
+ {
+  "term": "takeoff",
+  "match": [
+   "takeoff",
+   "fast takeoff",
+   "slow takeoff"
+  ],
+  "def": "The time taken to move between specified AI capability milestones, such as full research automation and superintelligence. Comparisons need the same start and end milestones.",
+  "src": "https://blog.aifutures.org/p/ai-futures-model-dec-2025-update",
+  "cat": "tech"
+ },
+ {
+  "term": "TED-AI",
+  "match": [
+   "TED-AI",
+   "top-expert-dominating AI"
+  ],
+  "def": "Top-human-expert-dominating AI: the AI Futures Project's milestone for systems at least as good as top human experts at virtually all cognitive tasks. Its model uses a more detailed remote-work automation criterion.",
+  "src": "https://blog.aifutures.org/p/ai-futures-model-dec-2025-update",
   "cat": "tech"
  },
  {
@@ -988,6 +2926,39 @@
   "cat": "tech"
  },
  {
+  "term": "TIGTA",
+  "match": [
+   "TIGTA",
+   "Treasury Inspector General for Tax Administration"
+  ],
+  "def": "The Treasury Inspector General for Tax Administration, the watchdog that audits and investigates the IRS. IRS staff must report to it any improper request from senior officials to audit a particular taxpayer.",
+  "src": "https://www.icnl.org/post/guidance/irs-investigations-of-nonprofits-an-explainer",
+  "cat": "policy"
+ },
+ {
+  "term": "time horizon",
+  "match": [
+   "time horizon",
+   "time horizons"
+  ],
+  "def": "A measure of AI progress introduced by METR and now also used by UK AISI: the length of task, in skilled-human time, that an AI agent completes at a given success rate, usually 50%.",
+  "src": "https://arxiv.org/abs/2503.14499",
+  "cat": "tech"
+ },
+ {
+  "term": "token",
+  "match": [
+   "token budget",
+   "token budgets",
+   "tokens of text",
+   "trillion tokens",
+   "training tokens"
+  ],
+  "def": "A word or piece of a word: the unit language models read and write in, and the unit used to measure training data and how much a model writes.",
+  "src": "https://www.ntia.gov/sites/default/files/publications/ntia-ai-open-model-report.pdf",
+  "cat": "tech"
+ },
+ {
   "term": "tort",
   "match": [
    "tort",
@@ -996,6 +2967,16 @@
   "def": "A civil wrong, other than breach of contract, that causes harm and lets the injured person sue for damages. Negligence is the most common tort.",
   "src": "https://www.law.cornell.edu/wex/tort",
   "cat": "law"
+ },
+ {
+  "term": "total processing performance",
+  "match": [
+   "total processing performance",
+   "TPP"
+  ],
+  "def": "TPP: a US chip-control metric based on 2 times MacTOPS times operation bit length, with specified aggregation and maximum-performance rules. Classification can also depend on performance density; TPP alone does not determine every license requirement.",
+  "src": "https://www.govinfo.gov/content/pkg/FR-2023-10-25/html/2023-23055.htm",
+  "cat": "tech"
  },
  {
   "term": "trade secret",
@@ -1019,6 +3000,41 @@
   "cat": "tech"
  },
  {
+  "term": "transshipment",
+  "match": [
+   "transshipment",
+   "transship",
+   "transshipped"
+  ],
+  "def": "Moving goods through an intermediate location on their route to a final destination. This can be legitimate trade; diversion cases can use intermediaries to conceal a restricted destination.",
+  "src": "https://www.justice.gov/usao-sdny/pr/three-charged-conspiring-unlawfully-divert-us-artificial-intelligence-technology-china",
+  "cat": "policy"
+ },
+ {
+  "term": "trusted access",
+  "match": [
+   "trusted access",
+   "trusted-access"
+  ],
+  "def": "Access to sensitive AI capabilities for vetted users under a provider's defined conditions. Assessment should consider identity, authorized use, continuing oversight and revocation, rather than institutional affiliation alone.",
+  "src": "https://deploymentsafety.openai.com/gpt-6-astra/gpt-6-astra.pdf",
+  "cat": "policy"
+ },
+ {
+  "term": "trusted and untrusted models",
+  "match": [
+   "trusted model",
+   "trusted models",
+   "untrusted model",
+   "untrusted models",
+   "trusted monitoring",
+   "untrusted monitoring"
+  ],
+  "def": "In a control evaluation, a trusted model is assumed nonadversarial, though it can make mistakes. An untrusted model may deliberately subvert the protocol. Model size alone does not establish trust.",
+  "src": "https://arxiv.org/html/2312.06942v5",
+  "cat": "tech"
+ },
+ {
   "term": "unanimous consent",
   "match": [
    "unanimous consent",
@@ -1027,6 +3043,27 @@
   "def": "A way for the Senate to act quickly by setting aside its normal rules. It succeeds only if no senator objects, so any single senator can block it.",
   "src": "https://www.everycrsreport.com/files/20101201_96-548_b31e48c7ecd79f248928781ce74bbf8f6e210fc7.html",
   "cat": "congress"
+ },
+ {
+  "term": "Unfunded Mandates Reform Act",
+  "match": [
+   "Unfunded Mandates Reform Act",
+   "UMRA"
+  ],
+  "def": "A 1995 law requiring CBO to report whether bills impose enforceable duties on state, local or tribal governments or on companies, and whether their yearly costs exceed thresholds that rise with inflation.",
+  "src": "https://www.cbo.gov/publication/51335",
+  "cat": "congress"
+ },
+ {
+  "term": "unrelated business income",
+  "match": [
+   "unrelated business income",
+   "UBIT",
+   "unrelated business income tax"
+  ],
+  "def": "Income an exempt group earns from a trade or business it regularly carries on that isn't substantially related to its exempt purpose, however the profits are used. It is taxed at corporate rates; most investment income is excluded.",
+  "src": "https://www.irs.gov/publications/p598",
+  "cat": "law"
  },
  {
   "term": "uplift",
@@ -1045,6 +3082,40 @@
   "def": "Company shares or stock options an employee has fully earned under a vesting schedule, so they belong to the employee even after leaving the company.",
   "src": "https://en.wikipedia.org/wiki/Vesting",
   "cat": "law"
+ },
+ {
+  "term": "veto override",
+  "match": [
+   "veto override",
+   "veto-proof",
+   "override the veto",
+   "override a veto",
+   "override failed"
+  ],
+  "def": "Enacting a bill over the President's veto, which takes a two-thirds vote in both the House and the Senate.",
+  "src": "https://constitution.congress.gov/browse/article-1/section-7/",
+  "cat": "congress"
+ },
+ {
+  "term": "weak-to-strong generalization",
+  "match": [
+   "weak-to-strong generalization",
+   "weak-to-strong"
+  ],
+  "def": "A stronger model trained on labels from a weaker supervisor performing better than that supervisor. OpenAI studied it as a stand-in for humans supervising AI smarter than themselves.",
+  "src": "https://arxiv.org/abs/2312.09390",
+  "cat": "tech"
+ },
+ {
+  "term": "wet lab",
+  "match": [
+   "wet lab",
+   "wet-lab",
+   "wet labs"
+  ],
+  "def": "A laboratory where people physically work with biological or chemical materials. Written advice and computational predictions do not by themselves establish successful physical execution.",
+  "src": "https://arxiv.org/abs/2512.10960",
+  "cat": "tech"
  },
  {
   "term": "willful misconduct",
