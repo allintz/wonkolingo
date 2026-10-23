@@ -1,0 +1,3 @@
+#!/bin/bash
+# Course requests players sent from Courses > Request a course (newest first). Each was also emailed to COURSE_REQUEST_TO.
+cd "$(dirname "$0")/.." && npx wrangler d1 execute hill-speak --remote --json --command "SELECT id, datetime(created_at/1000,'unixepoch') AS at, name, topic, level, why, details, contact, emailed FROM course_requests ORDER BY id DESC LIMIT ${1:-30}" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const r=JSON.parse(s)[0].results;for(const x of r)console.log(`#${x.id} ${x.at} ${x.name} [${x.level}${x.emailed?"":", not emailed"}]\n  ${x.topic}\n  Why: ${x.why}${x.details?"\n  Details: "+x.details:""}${x.contact?"\n  Reply to: "+x.contact:""}\n`);if(!r.length)console.log("No requests yet.")})'

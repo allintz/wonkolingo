@@ -46,6 +46,26 @@ button { font: inherit; color: inherit; cursor: pointer; }
 button:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
 svg { display: block; }
 
+
+/* iPhone beta invitation */
+.beta-banner { position: relative; display: flex; align-items: center; gap: 12px; padding: 14px 16px; margin-bottom: 20px; border: 1px solid var(--primary-deep); border-radius: 16px; background: var(--brass-soft); }
+.beta-banner[hidden] { display: none; }
+.beta-icon { width: 46px; height: 46px; border-radius: 12px; flex: none; }
+.beta-copy { flex: 1; min-width: 0; }
+.beta-copy strong { display: block; font-size: 16px; font-weight: 800; }
+.beta-copy span { display: block; color: var(--muted); font-size: 13px; }
+.beta-link { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 14px; border-radius: 10px; background: var(--fill); color: var(--on-primary); font-size: 14px; font-weight: 800; text-decoration: none; white-space: nowrap; flex: none; }
+.beta-dismiss { display: grid; place-items: center; flex: none; width: 36px; height: 44px; padding: 0; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 26px; line-height: 1; }
+.beta-dismiss:hover { background: var(--surface); color: var(--fg); }
+.beta-link:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+.gate-in .beta-banner { width: 100%; box-sizing: border-box; text-align: left; margin: 16px 0 0; }
+@media (max-width: 480px) {
+  .beta-banner { flex-wrap: wrap; padding: 12px; gap: 10px; }
+  .beta-dismiss { position: absolute; top: 4px; right: 4px; width: 40px; height: 40px; }
+  .beta-copy { padding-right: 28px; }
+  .beta-banner .beta-link { width: 100%; box-sizing: border-box; }
+}
+
 /* top bar */
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 2px solid var(--line); }
 .top-in { max-width: 1000px; margin: 0 auto; padding-inline: 16px; padding-block: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -243,7 +263,7 @@ svg { display: block; }
 .recall-in:focus { outline: none; border-color: var(--primary); }
 .conf { display: grid; gap: 8px; justify-items: start; }
 .conf-k { font-size: 13px; font-weight: 800; color: var(--muted); }
-.conf-alt { display: flex; flex-wrap: wrap; gap: 18px; }
+.conf-alt { display: flex; flex-wrap: wrap; gap: 8px; }
 .conf-btns { display: flex; flex-wrap: wrap; gap: 8px; }
 .cbtn { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 12px; padding: 10px 14px; font-weight: 800; font-size: 15px; }
 .cbtn:hover { border-color: var(--primary); }
@@ -590,9 +610,36 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .tcom p { margin: 0; }
 /* Don’t need this */
 .rmbox { display: grid; gap: 8px; margin-top: 4px; }
+.after-acts { margin-top: 10px; }
+.after-acts > .srcs { display: contents; }
+/* Request a course: the card at the bottom of Courses and its form. */
+.req-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 28px; padding: 16px 18px; border: 1px dashed var(--line-deep); border-radius: 16px; background: var(--surface-2); }
+.req-card h2 { margin: 0; font-size: 17px; font-weight: 800; }
+.req-card p { margin: 2px 0 0; color: var(--muted); font-size: 14px; max-width: 46ch; }
+.reqf { display: grid; gap: 14px; }
+.reqf textarea { font: 600 15px/1.45 var(--f-ui); background: var(--bg); }
+.reqf textarea:focus { border-color: var(--primary); }
+.reqf .gerr { margin: 0; color: var(--bad); font-weight: 700; }
+.reqf .req-opt { font-weight: 600; color: var(--muted); }
+.reqf .seg { max-width: 520px; }
+.reqf fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.reqf legend { padding: 0; margin-bottom: 4px; font-size: 13px; font-weight: 800; color: var(--muted); }
 .rmbox p { margin: 0; }
 .rmpre { margin-top: 20px; }
-.rmpre .row { gap: 20px; }
+/* Actions on a question (skip, don't need, hint, type, sources, report, dispute): small outlined buttons rather than
+   bare text links (Alex, 10/23), so they read as tappable and line up in one row. */
+.qacts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.qact { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; max-width: 100%; padding: 6px 12px; border: 1px solid var(--line-deep); border-radius: 99px; background: var(--surface-2); color: var(--fg); font: 700 14px/1.2 var(--f-ui); text-decoration: none; cursor: pointer; }
+.qact:hover { border-color: var(--brass); color: var(--brass); }
+.qact:disabled { opacity: .5; cursor: default; border-color: var(--line-deep); color: var(--fg); }
+.qact svg { width: 16px; height: 16px; flex: none; }
+.qact .qt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.srcs.qacts { margin: 10px 0 0; }
+.srcs a.qact { color: var(--fg); text-decoration: none; font-weight: 600; font-size: 13px; min-height: 32px; padding: 4px 10px; }
+.srcs a.qact:hover { color: var(--brass); }
+.qacts > .rmbox, .qacts > .repbox { display: contents; }
+.qacts > .rmbox:has(p), .qacts > .repbox:has(textarea), .qacts > .repbox:has(p) { display: grid; flex-basis: 100%; }
+#gradeMeta.qacts { margin-top: 2px; }
 .clevel b { color: var(--primary); }
 .chipbtn { background: var(--surface); border: 1px solid var(--line-deep); border-radius: 99px; padding: 6px 12px; font: 700 13px/1.2 var(--f-ui); color: var(--fg); }
 .chipbtn:hover { border-color: var(--brass); }
@@ -741,6 +788,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
     <button class="tabb" data-tab="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Me</span></button>
   </nav>
   <main class="views" id="home">
+    <aside class="beta-banner" id="betaBanner" aria-label="WonkoLingo iPhone app" hidden></aside>
     <section class="view" id="v-today">
       <section class="strip" id="streakStrip" hidden></section>
       <div id="todayWrap"></div>
@@ -805,8 +853,13 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 </section>
 
 <section class="overlay sheet" role="dialog" aria-modal="true" id="addc" hidden>
-  <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Add a course</h2></div>
+  <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Make a course</h2></div>
   <div class="stage"><div class="stage-in" id="addBody"></div></div>
+</section>
+
+<section class="overlay sheet" role="dialog" aria-modal="true" id="reqc" aria-label="Request a course" hidden>
+  <div class="lbar"><button class="icon-btn" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button><h2>Request a course</h2></div>
+  <div class="stage"><div class="stage-in" id="reqBody"></div></div>
 </section>
 
 <section class="overlay sheet" role="dialog" aria-modal="true" id="inboxSheet" aria-label="Notifications" hidden>
@@ -857,15 +910,15 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-23-ea1d9c2';
-  window.WL_BUILT_AT = +'1792767594000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-23-bac26ee';
+  window.WL_BUILT_AT = +'1792780022000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
       const msg = String(message || 'unknown error').slice(0, 300);
       if (sent.has(msg) || sent.size >= 3) return; sent.add(msg);
       const app = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
-      const base = !app && /workers\.dev$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) ? '' : 'https://wonkolingo.alex-l-lintz.workers.dev';
+      const base = !app && /(^|\.)wonkolingo\.com$|workers\.dev$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) ? '' : 'https://wonkolingo.com';
       fetch(base + '/api/bug', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: msg, stack: String(stack || '').slice(0, 1500), where: location.hash.slice(0, 60), build: window.WL_BUILD, app, ua: navigator.userAgent.slice(0, 160) }) }).catch(() => {});
     } catch (err) {}
@@ -2663,7 +2716,10 @@ const FRONTIER_UNITS = [
       ],
       "a": 0,
       "x": "Large frontier developers must write, follow and publish one. It has to explain their risk thresholds, how they decide whether to deploy or use a model internally, how they secure model weights and how they respond to incidents. The Under Secretary sets minimum requirements by regulation.",
-      "id": "fu2l0#0"
+      "id": "fu2l0#0",
+      "dup": [
+       "zu0l0#basic7"
+      ]
      },
      {
       "t": "mc",
@@ -2932,7 +2988,10 @@ const FRONTIER_UNITS = [
       ],
       "a": 0,
       "x": "ARI president Brad Carson said the bill's preemption \"would be effective immediately,\" while its private assurance market \"will take years to set up.\" Very large developers don't have to hire an IVO until a year after the first one is licensed, while the limits on state law apply once the bill is enacted.",
-      "id": "fu3l1#4"
+      "id": "fu3l1#4",
+      "dup": [
+       "fu5l1#0"
+      ]
      }
     ]
    }
@@ -3672,7 +3731,10 @@ const TOOLS_UNITS = [
        "Some people refuse illegal orders",
        "AI replacing those people removes the check"
       ],
-      "x": "This argument is from 'AI-Enabled Coups' (April 2025) by Forethought's Tom Davidson, Lukas Finnveden and Rose Hadshar, which names three risk factors: AI systems loyal to one person or small group, AI with hidden 'secret loyalties', and exclusive access to the most capable AI. Tools aimed at this include law-following AI, statutory limits on military AI and logging of officials' AI use."
+      "x": "This argument is from 'AI-Enabled Coups' (April 2025) by Forethought's Tom Davidson, Lukas Finnveden and Rose Hadshar, which names three risk factors: AI systems loyal to one person or small group, AI with hidden 'secret loyalties', and exclusive access to the most capable AI. Tools aimed at this include law-following AI, statutory limits on military AI and logging of officials' AI use.",
+      "dup": [
+       "ju1l1#nxpsri1"
+      ]
      },
      {
       "id": "tu0l1#nvivuww",
@@ -3937,10 +3999,7 @@ const TOOLS_UNITS = [
        "Procurement: agencies and contractors must comply",
        "Vendors adopt it to win government business"
       ],
-      "x": "Procurement rules spread a standard without regulating every business: vendors who want federal contracts adopt it, and often use it for other customers too. A 2026 House bill, the Stop Rogue AI Act, takes this route for agent identity standards.",
-      "dup": [
-       "au5l1#2"
-      ]
+      "x": "Procurement rules spread a standard without regulating every business: vendors who want federal contracts adopt it, and often use it for other customers too. A 2026 House bill, the Stop Rogue AI Act, takes this route for agent identity standards."
      },
      {
       "id": "vu1l1#n7wam97",
@@ -4565,7 +4624,10 @@ const TOOLS_UNITS = [
        "strong versions can disable a chip or require license renewal",
        "that creates a remote off switch, the most opposed feature"
       ],
-      "x": "Nvidia's chief security officer wrote in August 2025 that its chips 'do not and should not have kill switches and backdoors,' arguing they create single points of failure for hackers. The Chip Security Act would require location verification and have Commerce assess whether further mechanisms should be added."
+      "x": "Nvidia's chief security officer wrote in August 2025 that its chips 'do not and should not have kill switches and backdoors,' arguing they create single points of failure for hackers. The Chip Security Act would require location verification and have Commerce assess whether further mechanisms should be added.",
+      "dup": [
+       "ku5l1#n8z7sav"
+      ]
      },
      {
       "id": "tu4l4#n10i4c1",
@@ -5941,7 +6003,10 @@ const TOOLS_UNITS = [
         "DNA synthesis companies make DNA; AI design tools are built and run by others.",
         "That would be cloud know-your-customer; screening checks DNA orders and buyers."
        ]
-      }
+      },
+      "dup": [
+       "yu0l0#nc733z7"
+      ]
      }
     ]
    },
@@ -7577,7 +7642,10 @@ const TOOLS_UNITS = [
         "That is ControlAI's objection to the Ban Artificial Superintelligence Act's blanket pause.",
         "That is a privacy objection to agent identification."
        ]
-      }
+      },
+      "dup": [
+       "eu2l1#nkdlpvy"
+      ]
      },
      {
       "id": "tu2l1#4",
@@ -8005,7 +8073,10 @@ const TOOLS_UNITS = [
         "Screening is specific to biology; release limits can cover cyber risks too.",
         "Screening acts on DNA orders; it doesn't change what a model knows."
        ]
-      }
+      },
+      "dup": [
+       "yu0l0#nc733z7"
+      ]
      },
      {
       "id": "tu7l4#n0p8b2b",
@@ -14451,7 +14522,10 @@ const POWERS_UNITS = [
        "government access up to 30 days before release to other trusted partners",
        "expressly no mandatory licensing or preclearance"
       ],
-      "x": "The NSA Director decides which models are 'covered' through a classified cyber benchmarking process. The order cites only 'the Constitution and the laws of the United States' and names no emergency statute. Because it is voluntary, the government's hard leverage over labs in 2026 came from other tools."
+      "x": "The NSA Director decides which models are 'covered' through a classified cyber benchmarking process. The order cites only 'the Constitution and the laws of the United States' and names no emergency statute. Because it is voluntary, the government's hard leverage over labs in 2026 came from other tools.",
+      "dup": [
+       "zu0l0#basic10"
+      ]
      },
      {
       "id": "eu5l0#nakggcz",
@@ -14587,7 +14661,10 @@ const POWERS_UNITS = [
        "Chevron overruled",
        "courts no longer defer to agency readings of ambiguous statutes"
       ],
-      "x": "The Court said courts 'need not and under the APA may not defer to an agency interpretation of the law simply because a statute is ambiguous.' Its reach in an AI emergency may be limited, though: it interprets the Administrative Procedure Act, the President isn't an agency under that Act, and export-control actions are exempt from its review provisions."
+      "x": "The Court said courts 'need not and under the APA may not defer to an agency interpretation of the law simply because a statute is ambiguous.' Its reach in an AI emergency may be limited, though: it interprets the Administrative Procedure Act, the President isn't an agency under that Act, and export-control actions are exempt from its review provisions.",
+      "dup": [
+       "bu4l1#n5159a7"
+      ]
      },
      {
       "id": "eu6l0#n85xtz6",
@@ -14615,7 +14692,10 @@ const POWERS_UNITS = [
         "Relief goes to the plaintiff with standing to sue.",
         "An injunction takes effect when issued unless a court stays it."
        ]
-      }
+      },
+      "dup": [
+       "bu3l1#n9ce9a6"
+      ]
      },
      {
       "id": "eu6l0#nmnmv1s",
@@ -14826,7 +14906,10 @@ const POWERS_UNITS = [
        "the Secretary of Commerce",
        "a finding of imminent catastrophic risk"
       ],
-      "x": "'Imminent catastrophic risk' means a present or impending, foreseeable and material risk that the model materially contributes to death or serious injury of more than 50 people, or more than $1 billion in damage, in one incident involving weapons help, harmful conduct without human oversight, or evading control. Provisional orders lapse within 45 days and final orders after 90 unless renewed on a new finding. As of October 2026 the bill had no markup."
+      "x": "'Imminent catastrophic risk' means a present or impending, foreseeable and material risk that the model materially contributes to death or serious injury of more than 50 people, or more than $1 billion in damage, in one incident involving weapons help, harmful conduct without human oversight, or evading control. Provisional orders lapse within 45 days and final orders after 90 unless renewed on a new finding. As of October 2026 the bill had no markup.",
+      "dup": [
+       "fu4l0#0"
+      ]
      },
      {
       "id": "eu8l0#nuoka1n",
@@ -14925,7 +15008,10 @@ const POWERS_UNITS = [
        "exclusivity reaches other statutes, including export controls, for that purpose",
        "the process includes findings, lapse dates and review"
       ],
-      "x": "It could bear on episodes like the June 2026 export directive, depending on the grounds the government gives. Afterward, Lawfare's Alan Rozenshtein (who works at Anthropic) argued that if Washington treats frontier models as switchable assets, Congress should set the standards and process; ARI's Brad Carson said such decisions need insulation from impulse and political favoritism."
+      "x": "It could bear on episodes like the June 2026 export directive, depending on the grounds the government gives. Afterward, Lawfare's Alan Rozenshtein (who works at Anthropic) argued that if Washington treats frontier models as switchable assets, Congress should set the standards and process; ARI's Brad Carson said such decisions need insulation from impulse and political favoritism.",
+      "dup": [
+       "fu4l1#2"
+      ]
      }
     ]
    },
@@ -16432,7 +16518,10 @@ const TECH_UNITS = [
         "The most capable models are typically used internally first.",
         "Labs run internal models as agents with tools; the gap is that this use starts before any release test."
        ]
-      }
+      },
+      "dup": [
+       "tu1l3#n8gnwaj"
+      ]
      }
     ]
    },
@@ -17621,7 +17710,10 @@ const TECH_UNITS = [
        "refusals can be removed cheaply from open weights",
        "release is irreversible"
       ],
-      "x": "This combines three earlier ideas: safety training can be undone cheaply once weights are public, a release can't be recalled, and a knowledge test sets a floor on what a model can help with. Filtering dangerous data before training held up better in 2025 research."
+      "x": "This combines three earlier ideas: safety training can be undone cheaply once weights are public, a release can't be recalled, and a knowledge test sets a floor on what a model can help with. Filtering dangerous data before training held up better in 2025 research.",
+      "dup": [
+       "tu4l5#n4ijm1p"
+      ]
      },
      {
       "id": "hu7l1#np9zq0s",
@@ -19718,6 +19810,9 @@ const POLICY_UNITS = [
       "keys": [
        "Registration: file information, no approval needed",
        "Licensing: permission to build or release that government can revoke"
+      ],
+      "dup": [
+       "tu2l4#n4zke8i"
       ]
      },
      {
@@ -20177,10 +20272,7 @@ const POLICY_UNITS = [
        ]
       ],
       "x": "DHS is the Department of Homeland Security. Sen. Rand Paul blocked Kennedy's unanimous-consent request on Sept. 16, 2026. The Kill Switch Act allows graduated orders, from throttling or suspension up to full shutdown. EO is executive order.",
-      "id": "au5l0#1",
-      "dup": [
-       "eu8l0#n1g1p4c"
-      ]
+      "id": "au5l0#1"
      },
      {
       "t": "recall",
@@ -20735,6 +20827,9 @@ const POLICY_UNITS = [
        "Case-by-case approval of H200 sales to China",
        "Conditions such as no reduced supply for US customers and third-party testing",
        "Paired with a 25% government cut announced by Trump"
+      ],
+      "dup": [
+       "ku4l0#nufhthn"
       ]
      },
      {
@@ -21616,10 +21711,7 @@ const POLICY_UNITS = [
         "Cloud KYC addresses export-control gaps.",
         "Location checks address chip smuggling."
        ]
-      },
-      "dup": [
-       "tu7l3#nqs9h39"
-      ]
+      }
      },
      {
       "t": "recall",
@@ -25066,7 +25158,10 @@ const DEMOCRACY_UNITS = [
       "keys": [
        "That IEEPA authorized the challenged tariffs"
       ],
-      "x": "The 6 to 3 judgment held IEEPA did not authorize tariffs. As the AI Emergency Powers course explains, the source and scope of statutory authority matter even after an emergency declaration."
+      "x": "The 6 to 3 judgment held IEEPA did not authorize tariffs. As the AI Emergency Powers course explains, the source and scope of statutory authority matter even after an emergency declaration.",
+      "dup": [
+       "eu1l1#npii147"
+      ]
      },
      {
       "id": "bu5l1#ndfa9c0",
@@ -33619,7 +33714,10 @@ const TIMELINES_UNITS = [
         "The framework still needs agreement on relevant capabilities and protections."
        ]
       },
-      "x": "Karnofsky presents the approach as a potential bridge across timeline disagreements, with limits. Its usefulness depends on meaningful triggers, tests and credible implementation. Preparation may require lead time even if the capability arrives late."
+      "x": "Karnofsky presents the approach as a potential bridge across timeline disagreements, with limits. Its usefulness depends on meaningful triggers, tests and credible implementation. Preparation may require lead time even if the capability arrives late.",
+      "dup": [
+       "tu5l5#naj3q8d"
+      ]
      },
      {
       "id": "mu6l0#nl1bjhm",
@@ -35359,9 +35457,9 @@ const COURSES = Object.assign(Object.create(null), {
     keyTerms: ["democratic backsliding", "executive aggrandizement", "competitive authoritarianism", "judicial review", "impeachment", "impoundment", "injunction", "executive order"], created: '2026-10-23', updated: '2026-10-23',
     description: "How democracies erode, how to assess the evidence, and which US legal rules shape executive power and elections.",
     caveat: ["Prepared October 23, 2026 from public sources. Legal rules are simplified; dated rulings and scenarios are distinguished from predictions. Research and question quality were reviewed by separate AI agents. No person has reviewed this course. Check current law before relying on it."], meta: '11 units | Intermediate' },
-  lingo: { category: "hill", categories: ["hill"], description: "A playful, tongue-in-cheek take on Hill jargon. This joke course has not been checked for accuracy; don’t rely on it as guidance.", name: 'Staff Talk', units: UNITS, pre: '', level: 'beginner', created: '2026-10-02', updated: '2026-10-21',
-    caveat: ['This is a joke course: a playful take on Hill jargon. It has not been checked for accuracy.', 'Meanings vary by chamber, party, office and individual staffer. Don’t rely on these answers as guidance; ask someone with relevant Hill experience.'],
-    meta: 'Joke course · Not checked for accuracy' },
+  lingo: { category: "hill", categories: ["hill"], description: "A playful, less-verified course on Hill jargon.", name: 'Staff Talk', units: UNITS, pre: '', level: 'beginner', created: '2026-10-02', updated: '2026-10-21',
+    caveat: ['A playful, less-verified course on Hill jargon.', 'Meanings vary by chamber, party, office and individual staffer. Don’t rely on these answers as guidance; ask someone with relevant Hill experience.'],
+    meta: 'Playful · Less verified' },
   proc: { category: "hill", categories: ["hill"], description: "How a bill moves through Congress: committees, floor rules, the filibuster, money, vetoes and the Congressional Review Act.", name: 'Procedure', units: PROC_UNITS, pre: 'p', level: 'beginner', created: '2026-10-16', updated: '2026-10-21',
     caveat: ['These simplify standard House and Senate procedure as described in CRS reports and the chambers’ rules. Precedents and each Congress’s rules package change details over time, and there are exceptions to almost everything here.', 'News examples are paraphrased from 2023 to 2025 coverage, not real headlines.'],
     meta: 'Draft · 2026-10-16 · Not reviewed by a procedure expert' },
@@ -35655,6 +35753,21 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;',
 function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function dstr(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 
+const QI = (() => {
+  const svg = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  return {
+    skip: svg('<path d="M5 12h11M12 7l5 5-5 5M19 6v12"/>'),
+    hide: svg('<circle cx="12" cy="12" r="9"/><path d="M8 12h8"/>'),
+    hint: svg('<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>'),
+    type: svg('<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/>'),
+    list: svg('<path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/>'),
+    idk: svg('<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17h.01"/>'),
+    source: svg('<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>'),
+    flag: svg('<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>'),
+    talk: svg('<path d="M4 5h16v11H9l-5 4z"/>'),
+    self: svg('<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>'),
+  };
+})();
 const ICON = {
   star: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5L2.5 9.3l6.6-.8z"/></svg>',
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
@@ -35874,7 +35987,7 @@ const isStandalone = () => (window.matchMedia && matchMedia('(display-mode: stan
 const isIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 function renderInstallCard() {
   const el = $('#installCard');
-  const onSite = /workers\.dev$|github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
+  const onSite = /(^|\.)wonkolingo\.com$|workers\.dev$|github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
   if (NATIVE || isStandalone() || (!isIOS() && !installPrompt)) { el.hidden = true; return; }
   el.hidden = false;
   el.innerHTML = `<h3>Put WonkoLingo on your home screen</h3>` + (isIOS()
@@ -36280,7 +36393,7 @@ function nextItem() {
   if (run.mode === 'session' && !$('#stage .cardtag')) $('#stage').insertAdjacentHTML('afterbegin', cardTag(it)); // order cards add their own
   if (it._card) $('#stage').insertAdjacentHTML('afterbegin', choiceGuideHTML());
   if (it._card) $('#stage').insertAdjacentHTML('beforeend', testerHTML(it));
-  if (it._card) $('#stage').insertAdjacentHTML('beforeend', '<div class="rmbox rmpre"><div class="row"><button class="linkbtn" id="skipBtn">Skip for now</button><button class="linkbtn" id="rmPre">Don’t need this</button></div></div>');
+  if (it._card) $('#stage').insertAdjacentHTML('beforeend', '<div class="rmbox rmpre"><div class="qacts"><button class="qact" id="skipBtn">' + QI.skip + 'Skip for now</button><button class="qact" id="rmPre">' + QI.hide + 'Don’t need this</button></div></div>');
   $('#stageWrap').scrollTop = 0;
   // Each new card moves focus to its question, so screen readers read it out and Tab starts from the top of the card.
   const pq = $('#stage .prompt'); if (pq && !$('#lesson').hidden && !$('#stage').contains(document.activeElement)) { pq.setAttribute('tabindex', '-1'); pq.focus({ preventScroll: true }); }
@@ -36327,7 +36440,7 @@ function renderReveal(it) {
   $('#stage').innerHTML = `<p class="kicker">${it.predict ? 'Make a prediction' : 'Think of your answer'}</p>${newsHTML(it)}<h3 class="prompt">${gl(it.p || 'What does this most likely mean?')}</h3>${it.q ? quoteHTML(it) : ''}
     <div class="hintbox" id="hintBox" hidden></div>
     <p class="meta">Answer in your head, then show the answer and rate yourself.</p>
-    <div class="conf-alt"><button class="linkbtn" id="hintBtn">Give me a hint</button><button class="linkbtn" id="typeInstead">Type it instead</button></div>`;
+    <div class="conf-alt"><button class="qact" id="hintBtn">${QI.hint}Give me a hint</button><button class="qact" id="typeInstead">${QI.type}Type it instead</button></div>`;
   setCheck(true, true, 'Show answer');
 }
 function quoteHTML(it) {
@@ -36457,10 +36570,11 @@ function sourcesHTML(id) {
   const urls = ((typeof CARD_SOURCES !== 'undefined' && (CARD_SOURCES[id] || equivalentIds(id).map(k=>CARD_SOURCES[k]).find(v=>v&&v.length))) || []).filter(u => /^https?:\/\//.test(u) && hostOf(u)).slice(0, 3);
   if (!urls.length) return '';
   // Short links ("Source", or "Sources 1 2 3") with the site name on hover and for screen readers, so they stay out of the way.
-  if (urls.length === 1) return `<p class="srcs"><a href="${esc(urls[0])}" target="_blank" rel="noopener" title="${esc(hostOf(urls[0]))}" aria-label="Source: ${esc(hostOf(urls[0]))}">Source</a></p>`;
-  return `<p class="srcs">Sources ${urls.map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener" title="${esc(hostOf(u))}" aria-label="Source ${i + 1}: ${esc(hostOf(u))}">${i + 1}</a>`).join(' ')}</p>`;
+  // One small button per source, labeled by site, opening in a new tab.
+  const seen = {}, label = u => { const h = hostOf(u); seen[h] = (seen[h] || 0) + 1; return seen[h] > 1 ? h + ' ' + seen[h] : h; };
+  return `<div class="srcs qacts">${urls.map(u => `<a class="qact" href="${esc(u)}" target="_blank" rel="noopener" title="${esc(u)}" aria-label="Source: ${esc(hostOf(u))} (opens in a new tab)">${QI.source}<span class="qt">${esc(label(u))}</span></a>`).join('')}</div>`;
 }
-function reportHTML(it) { return sourcesHTML(it._card) + ((COURSES[it._course] || {}).group && G ? '<div class="repbox"><button class="linkbtn" id="repBtn">Report a problem</button></div>' : '') + ($('#stage .tbox') ? '' : testerHTML(it)) + removeHTML(it); }
+function reportHTML(it) { const rep = (COURSES[it._course] || {}).group && G ? '<div class="repbox"><button class="qact" id="repBtn">' + QI.flag + 'Report a problem</button></div>' : ''; const acts = sourcesHTML(it._card) + rep + removeHTML(it); return ($('#stage .tbox') ? '' : testerHTML(it)) + (acts ? '<div class="qacts after-acts">' + acts + '</div>' : ''); }
 // Tester mode (Me, then Sessions): two 1 to 5 ratings and an optional comment on each card, shown from the start, plus a note at the end of a
 // session. Each tap is sent on its own (the server keeps the latest per card), so skipping is fine. Review: admin.html, scripts/ratings.sh.
 function testerOn() { return !!(state.prefs && state.prefs.tester); }
@@ -36501,7 +36615,7 @@ function choiceTipHTML() {
 $('#resultIn').addEventListener('click', e => { if (e.target.closest('#choiceTipDismiss')) { choicePrefs({ choiceTipOff: true }); e.target.closest('.choice-tip').remove(); } });
 // RM_REASONS labels removals made before 10/22, when players picked a reason.
 const RM_REASONS = [['trivia', 'Just trivia'], ['wrong', 'Wrong or misleading'], ['unclear', 'Confusing'], ['known', 'I know this already'], ['other', 'Other']];
-function removeHTML(it) { return it._card ? '<div class="rmbox"><button class="linkbtn" id="rmBtn">Don’t need this</button></div>' : ''; }
+function removeHTML(it) { return it._card ? '<div class="rmbox"><button class="qact" id="rmBtn">' + QI.hide + 'Don’t need this</button></div>' : ''; }
 function removeCard(it, reason) {
   state.removed = state.removed || {};
   state.removed[it._card] = { at: Date.now(), reason };
@@ -36532,7 +36646,7 @@ function renderTyped(it) {
   $('#stage').innerHTML = `<p class="kicker">${it.predict ? 'Make a prediction' : fresh ? 'Take your best shot' : 'From memory'}</p>${newsHTML(it)}<h3 class="prompt">${gl(it.p || 'What does this most likely mean?')}</h3>${it.q ? quoteHTML(it) : ''}
     <div class="hintbox" id="hintBox" hidden></div>
     <textarea class="recall-in" id="recallIn" rows="3" enterkeyhint="send" aria-label="Your answer" placeholder="Answer in a few words or a sentence."></textarea>
-    <div class="conf"><div class="conf-btns"><button class="btn sm" data-conf="sure">Check answer</button></div><div class="conf-alt"><button class="linkbtn" id="hintBtn">Give me a hint</button>${hasChoice(it) ? '<button class="linkbtn" id="showChoices">Show choices instead</button>' : ''}<button class="linkbtn" data-conf="none">I don’t know</button></div></div>`;
+    <div class="conf"><div class="conf-btns"><button class="btn sm" data-conf="sure">Check answer</button></div><div class="conf-alt"><button class="qact" id="hintBtn">${QI.hint}Give me a hint</button>${hasChoice(it) ? '<button class="qact" id="showChoices">' + QI.list + 'Show choices instead</button>' : ''}<button class="qact" data-conf="none">${QI.idk}I don’t know</button></div></div>`;
   setCheck(false, false);
   setTimeout(() => { const x = $('#recallIn'); if (x) x.focus(); }, 30);
 }
@@ -36608,7 +36722,7 @@ function showTyped(it, score, feedback, conf, source, detail) {
   $('#foot').className = 'lfoot ' + (ok ? 'good' : 'bad'); buzz(ok ? 'good' : 'bad');
   const fb = $('#fb'); fb.hidden = false; fb.className = 'fb';
   const heads = ['Not quite.', 'Partly there.', 'Mostly right.', 'Exactly right.'];
-  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${pct !== null ? `<span class="gpct">${pct}%</span>` : ''}${heads[score]}</h4>${detail && detail.reply ? `<div class="second"><span>Second opinion from a stronger grader</span><p>${esc(detail.reply)}</p></div>` : ''}${source === 'ai' && feedback ? `<p class="aifb">${esc(feedback)}</p>` : ''}${source === 'ai' ? pointsHTML(detail) : ''}<div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${gl(typedAnswerOf(it), it._gs = new Set())}</p></div><p>${gl(it.x, it._gs)}</p>${it._hinted && score >= 2 ? '<p class="meta">You used a hint, so this one comes back a little sooner.</p>' : ''}${conf === 'cold' && score === 0 ? '<p class="whynot"><span>Confident miss</span>You were sure about this one, so it comes back tomorrow. These are the mistakes most worth fixing.</p>' : ''}${source === 'ai' ? `<p class="meta" id="gradeMeta">${detail && detail.reply ? 'Re-graded by a stronger AI.' : 'Graded by AI.'} ${detail && detail.reply ? '' : '<button class="linkbtn" id="dispute">I think the grader is wrong</button> '}<button class="linkbtn" id="regrade">Grade it myself</button></p>` : ''}${reportHTML(it)}`;
+  fb.innerHTML = `<h4>${ok ? ICON.ok : ICON.no}${pct !== null ? `<span class="gpct">${pct}%</span>` : ''}${heads[score]}</h4>${detail && detail.reply ? `<div class="second"><span>Second opinion from a stronger grader</span><p>${esc(detail.reply)}</p></div>` : ''}${source === 'ai' && feedback ? `<p class="aifb">${esc(feedback)}</p>` : ''}${source === 'ai' ? pointsHTML(detail) : ''}<div class="recall-ans"><span>${it.open ? 'Some good answers' : 'Model answer'}</span><p>${gl(typedAnswerOf(it), it._gs = new Set())}</p></div><p>${gl(it.x, it._gs)}</p>${it._hinted && score >= 2 ? '<p class="meta">You used a hint, so this one comes back a little sooner.</p>' : ''}${conf === 'cold' && score === 0 ? '<p class="whynot"><span>Confident miss</span>You were sure about this one, so it comes back tomorrow. These are the mistakes most worth fixing.</p>' : ''}${source === 'ai' ? `<p class="meta qacts" id="gradeMeta"><span>${detail && detail.reply ? 'Re-graded by a stronger AI.' : 'Graded by AI.'}</span>${detail && detail.reply ? '' : '<button class="qact" id="dispute">' + QI.talk + 'I think the grader is wrong</button>'}<button class="qact" id="regrade">${QI.self}Grade it myself</button></p>` : ''}${reportHTML(it)}`;
   const b = $('#checkBtn'); b.hidden = false; b.disabled = false; b.textContent = 'Continue'; b.focus({ preventScroll: true });
 }
 // Undo an AI grade so the learner can grade the same answer themselves.
@@ -36754,10 +36868,28 @@ document.addEventListener('keydown', e => {
 
 /* ---------- group play ---------- */
 const GKEY = 'hillspeak-group';
-const SITE = 'https://wonkolingo.alex-l-lintz.workers.dev';
+const SITE = 'https://wonkolingo.com';
 // Inside the iPhone app (Capacitor) the page is served from capacitor://localhost, so it always talks to the live site.
 const NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
-const API = !NATIVE && /workers\.dev$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) ? '' : SITE;
+const TESTFLIGHT_URL = 'https://testflight.apple.com/join/uydwvxqz';
+const BETA_BANNER_KEY = 'wl-beta-banner-dismissed-v1';
+let betaBannerDismissed = false;
+try { betaBannerDismissed = localStorage.getItem(BETA_BANNER_KEY) === '1'; } catch (e) {}
+function betaBannerHTML() {
+  return `<img class="beta-icon" src="icons/icon-192.png" alt="" width="46" height="46"><div class="beta-copy"><strong>WonkoLingo for iPhone</strong><span>Try the free beta via TestFlight.</span></div><a class="beta-link" href="${TESTFLIGHT_URL}" target="_blank" rel="noopener noreferrer">Get the beta ↗</a><button class="beta-dismiss" type="button" aria-label="Dismiss iPhone app banner" title="Dismiss banner">×</button>`;
+}
+if (!NATIVE && !betaBannerDismissed) {
+  $('#betaBanner').innerHTML = betaBannerHTML();
+  $('#betaBanner').hidden = false;
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.beta-dismiss')) return;
+  betaBannerDismissed = true;
+  try { localStorage.setItem(BETA_BANNER_KEY, '1'); } catch (err) {}
+  document.querySelectorAll('.beta-banner').forEach(el => { el.hidden = true; });
+});
+const API = !NATIVE && /(^|\.)wonkolingo\.com$|workers\.dev$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) ? '' : SITE;
 const FLAME = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.5 2c.6 3.4 4.9 5.6 4.9 10.6A5.4 5.4 0 0 1 12 18a5.4 5.4 0 0 1-5.4-5.4c0-2.4 1.2-4 2.4-5 0 2 .9 3.2 2 3.4-.3-3.3.5-6.4 1.5-9z"/></svg>';
 let G = (() => { try { return JSON.parse(localStorage.getItem(GKEY)); } catch (e) { return null; } })();
 let board = null, gTab = 'week', gMode = 'join', gErr = '', gBusy = false, gOffline = false, leaveArmed = false, gSel = null;
@@ -36768,7 +36900,13 @@ function saveG() { try { G ? localStorage.setItem(GKEY, JSON.stringify(G)) : loc
 const AKEY = 'wl-account';
 let ACCT = (() => { try { return JSON.parse(localStorage.getItem(AKEY)); } catch (e) { return null; } })();
 if (!ACCT && G && G.token && G.player) ACCT = { token: G.token, player: G.player }; // before Oct 2026 the token lived with the group
-function saveA() { try { ACCT ? localStorage.setItem(AKEY, JSON.stringify(ACCT)) : localStorage.removeItem(AKEY); } catch (e) {} }
+function saveA() {
+  try { ACCT ? localStorage.setItem(AKEY, JSON.stringify(ACCT)) : localStorage.removeItem(AKEY); } catch (e) {}
+  // Existing Google sign-in and passkeys can finish on their original origin.
+  if (ACCT && location.pathname === '/legacy-signin' && location.search === '?return=wonkolingo.com') {
+    location.replace('/' + location.hash);
+  }
+}
 saveA();
 
 /* ---------- iPhone app: reminders, widgets, haptics (only inside the Capacitor app) ---------- */
@@ -37130,7 +37268,7 @@ function ago(ms) {
 let syncState = 'saved', acctPending = null;
 let acctUI = { mode: '', busy: false, err: '', link: null, recShown: false, outArmed: false, delArmed: false, merge: null };
 // In the iPhone app, passkeys go through the native plugin (the page's origin isn't the site's).
-const PASSKEY_OK = NATIVE || (!!(window.PublicKeyCredential && navigator.credentials) && (location.origin === SITE || location.hostname === 'localhost'));
+const PASSKEY_OK = NATIVE || (!!(window.PublicKeyCredential && navigator.credentials) && (location.origin === SITE || location.origin === 'https://wonkolingo.alex-l-lintz.workers.dev' || location.hostname === 'localhost'));
 const CLOUD = '<path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.9 11a3.75 3.75 0 0 1-.4 7.5z"/>';
 function hasProgress() { return Object.keys(state.srs || {}).length > 0 || xpTotal(state) > 0 || savedTerms().length > 0; }
 // Makes this device's account (from the sign-up screen). Progress already on the device goes into it.
@@ -37266,6 +37404,7 @@ const idpOn = () => googleOn() || appleOn();
 const IDP_NAME = { google: 'Google', apple: 'Apple' };
 function loadGoogle() {
   if (!GOOGLE_ID || NATIVE || gisState) return;
+  if (location.hostname === 'wonkolingo.com') { gisState = 'ready'; return; }
   gisState = 'loading';
   const sc = document.createElement('script'); sc.src = 'https://accounts.google.com/gsi/client'; sc.async = true;
   sc.onload = () => {
@@ -37280,6 +37419,9 @@ const APPLE_LOGO = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="tr
 const G_LOGO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.09A6.6 6.6 0 0 1 5.49 12c0-.73.13-1.43.35-2.09V7.07H2.18A11 11 0 0 0 1 12c0 1.77.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1A11 11 0 0 0 2.18 7.07l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/></svg>';
 // The Google button: native in the app; on the web, a placeholder Google draws its own button into once its script loads.
 function gbtnHTML(text) {
+  if (!NATIVE && location.hostname === 'wonkolingo.com') {
+    return `<a class="idp-btn google" style="text-decoration:none;justify-content:center" href="https://wonkolingo.alex-l-lintz.workers.dev/legacy-signin?return=wonkolingo.com#me">${G_LOGO}<span>${text === 'signin_with' ? 'Sign in' : 'Continue'} with Google</span></a>`;
+  }
   if (NATIVE) return `<button class="idp-btn google" data-idp="google">${G_LOGO}<span>${text === 'signin_with' ? 'Sign in' : 'Continue'} with Google</span></button>`;
   return `<div class="gsi-slot" data-text="${text}"><button class="btn ghost" disabled>Loading Google…</button></div>`;
 }
@@ -37331,7 +37473,7 @@ function setTrial(v) { try { localStorage.setItem('wl-trial', v); } catch (e) {}
 function needGate() { return !ACCT && !gateOffline && trialState() !== 'on'; }
 // Where the sign-up screen opens: "save your progress" after a trial, else the welcome (or sign-in when asked for).
 function gateStart(fallback) { return trialState() === 'done' ? (hasProgress() ? 'save' : 'welcome') : fallback || 'welcome'; }
-const TRY_COURSES = [['policy', 'Laws, bills and who argues what in AI policy'], ['lingo', 'A playful joke course, not checked for accuracy'], ['proc', 'How a bill moves through Congress']];
+const TRY_COURSES = [['basics', 'A short foundation for understanding AI policy'], ['tools', 'How AI policy levers work and what they target'], ['policy', 'Laws, bills and who argues what in AI policy']];
 function startTrial(k) {
   if (!COURSES[k]) return;
   setTrial('on'); hideGate();
@@ -37435,6 +37577,7 @@ function renderGate() {
     h += `<button class="linkbtn" id="gtMore" aria-expanded="${!!g.more}">${g.more ? 'Fewer options' : 'Other ways to sign in'}</button>`;
     if (g.more) h += `<div class="glinks gate-more">${PASSKEY_OK ? `<button class="linkbtn" id="gtPkIn"${dis}>Passkey (Face ID or Touch ID)</button>` : ''}<button class="linkbtn" id="gtCodeMode">Code from another device</button><button class="linkbtn" id="gtRecMode">Recovery code</button>${EMAIL_OK && !showForm ? '<button class="linkbtn" id="gtEmailMode">Email me a code</button>' : ''}</div>`;
   }
+  if (!NATIVE && !betaBannerDismissed && g.step === 'welcome') h += `<aside class="beta-banner" aria-label="WonkoLingo iPhone app">${betaBannerHTML()}</aside>`;
   if (g.err) h += `<p class="gerr">${g.err}</p>`;
   if (g.err && g.step === 'passkey') h += `<button class="linkbtn" id="gtLater">Do this later in Me</button>`;
   if (g.offerOffline) h += `<button class="linkbtn" id="gtOffline">Continue offline for now</button>`;
@@ -37920,6 +38063,42 @@ async function addGroupSubmit() {
     renderAdd(); refreshBoard(); loadCourses();
   } catch (e) { a.gBusy = false; a.gErr = netMsg(e); renderAdd(); }
 }
+/* ---------- request a course: a short form, emailed to Alex (POST /api/course-request) ---------- */
+let reqState = null;
+const REQ_LEVELS = [['beginner', 'Beginner'], ['intermediate', 'Intermediate'], ['advanced', 'Advanced'], ['any', 'Not sure']];
+function openRequest() {
+  if (!ACCT) { toast('Make an account first, then request a course.'); showGate(); return; }
+  reqState = { topic: '', why: '', level: '', details: '', contact: ACCT.email || '', busy: false, err: '', sent: false };
+  renderRequest(); openSheet('#reqc'); setTimeout(() => $('#reqTopic') && $('#reqTopic').focus(), 50);
+}
+function renderRequest() {
+  const r = reqState;
+  if (r.sent) { $('#reqBody').innerHTML = `<div class="okbox"><h4>Request sent</h4><p>Thanks. Your request for “${esc(r.topic)}” is on its way${r.contact ? `, and a reply will go to ${esc(r.contact)}` : ''}.</p></div><div class="row"><button class="btn sm" id="reqDone">Done</button></div>`; return; }
+  $('#reqBody').innerHTML = `<form class="reqf" id="reqForm" novalidate>
+    <p>A few details help decide what to build next. Courses take a while to research and check, so not every request becomes one.</p>
+    <label class="fld"><span>What should the course teach?</span><input id="reqTopic" maxlength="120" required value="${esc(r.topic)}" placeholder="For example: how the annual defense bill gets written"></label>
+    <label class="fld"><span>What would you use it for?</span><textarea id="reqWhy" rows="3" maxlength="1000" required placeholder="Your job, a project, a decision coming up, or just curiosity.">${esc(r.why)}</textarea></label>
+    <fieldset class="fld"><legend>What level?</legend><div class="seg" role="group" aria-label="Level">${REQ_LEVELS.map(([k, t]) => `<button type="button" data-rlevel="${k}" class="${r.level === k ? 'on' : ''}" aria-pressed="${r.level === k}">${t}</button>`).join('')}</div></fieldset>
+    <label class="fld"><span>Anything specific? <span class="req-opt">(optional)</span></span><textarea id="reqDetails" rows="3" maxlength="1500" placeholder="Questions it should answer, sources you trust, links.">${esc(r.details)}</textarea></label>
+    <label class="fld"><span>Email for a reply <span class="req-opt">(optional)</span></span><input id="reqContact" type="email" maxlength="254" autocomplete="email" autocapitalize="none" spellcheck="false" value="${esc(r.contact)}"></label>
+    ${r.err ? `<p class="gerr" role="alert">${r.err}</p>` : ''}
+    <div class="row"><button class="btn sm" type="submit" id="reqSend" ${r.busy ? 'disabled' : ''}>${r.busy ? 'Sending…' : 'Send request'}</button></div>
+  </form>`;
+}
+function readRequest() { const r = reqState; r.topic = $('#reqTopic').value.trim(); r.why = $('#reqWhy').value.trim(); r.details = $('#reqDetails').value.trim(); r.contact = $('#reqContact').value.trim(); }
+$('#reqBody').addEventListener('click', e => {
+  const lv = e.target.closest('[data-rlevel]'); if (lv) { readRequest(); reqState.level = lv.dataset.rlevel; reqState.err = ''; renderRequest(); $(`[data-rlevel="${reqState.level}"]`)?.focus(); return; }
+  if (e.target.closest('#reqDone')) closeSheet('#reqc');
+});
+$('#reqBody').addEventListener('submit', async e => {
+  e.preventDefault(); readRequest(); const r = reqState;
+  r.err = r.topic.length < 3 ? 'Say what the course should be about.' : r.why.length < 10 ? 'Add a sentence on what you’d use it for.' : !r.level ? 'Pick a level.' : r.contact && !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(r.contact) ? 'That email address doesn’t look right.' : '';
+  if (r.err) { renderRequest(); return; }
+  r.busy = true; renderRequest();
+  try { await apiCall('/api/course-request', { topic: r.topic, why: r.why, level: r.level, details: r.details, contact: r.contact }); r.sent = true; }
+  catch (err) { r.err = netMsg(err); }
+  r.busy = false; renderRequest();
+});
 function openAdd(prefill) { $('#addBody').innerHTML = ''; addState = { text: prefill || '', check: null, busy: false, err: '' }; renderAdd(); openSheet('#addc'); }
 function runCheck() {
   addState.text = $('#addText').value; addState.err = '';
@@ -38069,7 +38248,7 @@ function renderPick() {
     const C = COURSES[k], pr = courseProgress(k);
     const sub = (levelInfo(C) ? levelInfo(C)[0] + ' · ' : '') + (C.group ? (G && C.authorId === G.player.id ? 'By you' : 'By ' + C.author) : 'Example course');
     const pct = pr.total ? Math.round(pr.done / pr.total * 100) : 0;
-    return `<button class="pk-item${k === state.course ? ' on' : ''}" data-course="${esc(k)}"><span class="t">${esc(C.name)}</span><span class="n">${pr.done === pr.total && pr.total ? 'Done' : pr.done ? pr.done + ' of ' + pr.total : pr.total + ' lessons'}<span class="bar-mini"><i style="width:${pct}%"></i></span></span><span class="s">${esc(sub)}${C.description ? ' · ' + esc(C.description) : ''}</span></button>`;
+    return `<button class="pk-item${k === state.course ? ' on' : ''}" data-course="${esc(k)}"><span class="t">${esc(C.name)}</span><span class="n">${pr.done === pr.total && pr.total ? 'Done' : pr.done ? pr.done + ' of ' + pr.total : pr.total + (pr.total === 1 ? ' lesson' : ' lessons')}<span class="bar-mini"><i style="width:${pct}%"></i></span></span><span class="s">${esc(sub)}${C.description ? ' · ' + esc(C.description) : ''}</span></button>`;
   };
   const started = k => courseProgress(k).done > 0 ? 0 : 1;
   const sortK = (a, b) => started(a) - started(b) || COURSES[a].name.localeCompare(COURSES[b].name);
@@ -38195,7 +38374,7 @@ function renderGroupLine() {
 function courseLine(k) {
   const C = COURSES[k], p = courseProgress(k), on = inMix(k);
   const by = C.group ? (G && C.authorId === G.player.id ? 'By you' : 'By ' + C.author) : '';
-  const meta = [(levelInfo(C) || ['Level not set'])[0], categoryName(C), by, p.done ? `${p.done} of ${p.total} lessons` : `${p.total} lessons`, on ? `${perDay(k)} new a day` : ''].filter(Boolean).join(' · ');
+  const meta = [(levelInfo(C) || ['Level not set'])[0], categoryName(C), by, p.done ? `${p.done} of ${p.total} lesson${p.total === 1 ? '' : 's'}` : `${p.total} lesson${p.total === 1 ? '' : 's'}`, on ? `${perDay(k)} new a day` : ''].filter(Boolean).join(' · ');
   return `<div class="cline"><button class="copen" data-open="${esc(k)}"><b>${esc(C.name)}</b><span>${esc(meta)}</span></button><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="${esc(C.name)} in your daily mix"></button></div>`;
 }
 function catalogCategories() { return [['policy','AI policy'],['tech','AI & technology'],['security','Security & geopolitics'],['hill','Working the Hill'],['democracy','Democracy'],['other','Other']]; }
@@ -38245,6 +38424,7 @@ function renderCourses() {
   if(group.length){sections++;h+=`<section class="catalog-section" data-category="group"><div class="sec-h"><h2>From ${esc(G?G.groupName:'your group')}</h2></div><div class="mix">${group.map(courseLine).join('')}</div></section>`;}
   if(!visible.length)h+=`<p class="note">No courses match these filters. <button class="linkbtn" data-catalog-reset>Show all courses</button></p>`;
   if(!G)h+=`<p class="note">Friends’ courses appear here when you join a group.</p>`;
+  h+=`<section class="req-card"><div><h2>Don’t see what you need?</h2><p>Tell us what you’d like to learn. Requests go to the person who builds WonkoLingo’s courses.</p></div><button class="btn ghost sm" id="cRequest">Request a course</button></section>`;
   $('#coursesBody').innerHTML=h+'</div>';renderSearch();
 }
 function previewSample(k) {
@@ -38321,7 +38501,7 @@ function renderCourseView() {
   const k = state.course, C = COURSES[k]; if (!C) return;
   const p = courseProgress(k), on = inMix(k), cards = courseCards(k).length;
   $('#courseHead').innerHTML = `<div class="chead"><button class="back" data-go="courses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg> Courses</button>
-    <div><h1>${esc(C.name)}</h1>${levelInfo(C) ? `<div class="cmeta clevel"><b>${levelInfo(C)[0]}</b> · ${levelInfo(C)[1]}</div>` : ''}<div class="cmeta">${cards} cards · ${C.units.length} unit${C.units.length === 1 ? '' : 's'} · ${p.done} of ${p.total} lessons resolved</div>${courseDates(C) ? `<div class="cmeta cdates">${courseDates(C)}</div>` : ''}</div>
+    <div><h1>${esc(C.name)}</h1>${levelInfo(C) ? `<div class="cmeta clevel"><b>${levelInfo(C)[0]}</b> · ${levelInfo(C)[1]}</div>` : ''}<div class="cmeta">${cards} cards · ${C.units.length} unit${C.units.length === 1 ? '' : 's'} · ${p.done} of ${p.total} lesson${p.total === 1 ? '' : 's'} resolved</div>${courseDates(C) ? `<div class="cmeta cdates">${courseDates(C)}</div>` : ''}</div>
     ${C.description ? `<p class="cdesc">${esc(C.description)}</p>` : ''}
     ${on ? '' : coursePreviewHTML(k)}
     <div class="csets">
@@ -38394,6 +38574,7 @@ document.addEventListener('click', e => {
   const kt = e.target.closest('[data-keyterms]'); if (kt) { openKeyTerms(kt.dataset.keyterms); return; }
   const ca = e.target.closest('[data-cadv]'); if (ca) { cAdv[ca.dataset.cadv] = !ca.dataset.close; renderHome(); return; }
   if (e.target.closest('#cMake')) openAdd();
+  if (e.target.closest('#cRequest')) openRequest();
 });
 
 function groupPostSession(xp, acc, reviewed, fresh) {
@@ -38604,6 +38785,24 @@ document.addEventListener('keydown', e => {
   const top = ovStack[ovStack.length - 1];
   if (top && top.classList.contains('sheet')) { const x = top.querySelector('[data-close]'); if (x) { e.preventDefault(); x.click(); } }
 });
+
+// Merge same-account progress carried from the former address using the normal sync rules.
+try {
+  const moved = JSON.parse(localStorage.getItem('wl-site-move-state') || 'null');
+  if (isObj(moved) && (!state.owner || !moved.owner || state.owner === moved.owner)) {
+    state = mergeStates(state, normalizeState(moved));
+    save(true);
+    localStorage.removeItem('wl-site-move-state');
+    renderHome();
+  }
+} catch (e) { /* Keep the import available if storage or an older save needs attention. */ }
+if (location.hostname === 'wonkolingo.com') {
+  const link = document.createElement('a');
+  link.href = 'https://wonkolingo.alex-l-lintz.workers.dev/legacy-signin?return=wonkolingo.com#me';
+  link.textContent = 'Use a passkey from the previous site';
+  link.style.cssText = 'display:block;text-align:center;margin:12px 0;font-size:14px';
+  document.querySelector('#gate').appendChild(link);
+}
 
 if (API) $('#privLink').href = SITE + '/privacy.html';
 // A trial still 'on' at startup with no session to pick up (closed on the result screen, or over an hour ago) is over.

@@ -2,13 +2,12 @@
   "format": "wonkolingo-course/1",
   "id": "example-veto-basics",
   "title": "Veto Basics",
-  "description": "A small sample course showing every question type.",
-  "caveat": "Sample course. Simplified from the Constitution's Presentment Clause and Senate historical records.",
+  "description": "A small sample course showing every question type and the optional fields that make cards better.",
+  "level": "beginner",
+  "categories": ["hill"],
+  "caveat": "Sample course. Simplified from the Constitution's Presentment Clause (Article I, Section 7), Clinton v. City of New York (1998) and Senate historical records.",
   "speakers": {
-    "d": {
-      "n": "Dana",
-      "r": "Legislative Director, House office"
-    }
+    "d": { "n": "Dana", "r": "Legislative Director, House office" }
   },
   "units": [
     {
@@ -19,91 +18,98 @@
           "title": "Sign or veto",
           "items": [
             {
+              "id": "ten-day-clock",
               "t": "mc",
               "p": "How long does the President have to act on a bill while Congress is in session?",
-              "o": [
-                "10 days, not counting Sundays",
-                "30 days",
-                "Until the session ends",
-                "48 hours"
-              ],
+              "o": ["10 days, not counting Sundays", "30 days, counting weekends", "Until the session of Congress ends", "48 hours after it arrives"],
               "a": 0,
-              "x": "If the President does nothing for 10 days (Sundays excepted) while Congress is in session, the bill becomes law without a signature.",
-              "id": "q1"
+              "ow": ["", "The Constitution sets 10 days, Sundays excepted.", "There's no open-ended wait; the clock is 10 days.", "No 48-hour rule exists for presidential action."],
+              "keys": ["10 days, Sundays excepted"],
+              "x": "If the President does nothing for 10 days (Sundays excepted) while Congress is in session, the bill becomes law without a signature."
             },
             {
+              "id": "no-votes-to-override",
               "t": "mc",
               "who": "d",
               "q": "“They don’t have the votes to override.”",
-              "p": "What is the staffer saying?",
-              "o": [
-                "Fewer than two-thirds of one chamber will vote to overturn the veto",
-                "The bill lacks a simple majority",
-                "The Senate parliamentarian ruled against it",
-                "The President hasn’t decided yet"
-              ],
+              "p": "What is the staffer saying about the vetoed bill?",
+              "o": ["Fewer than two-thirds of one chamber will vote to overturn the veto", "The bill no longer has a simple majority in either chamber", "The Senate parliamentarian has ruled against the bill", "The President hasn't yet decided whether to sign it"],
               "a": 0,
+              "ow": ["", "Losing a simple majority wouldn't matter now; overriding takes two-thirds.", "The parliamentarian advises on procedure and plays no role in overrides.", "\"Override\" means the veto has already happened."],
+              "keys": ["the veto will stand", "fewer than two-thirds will vote to override"],
               "x": "Overriding a veto takes two-thirds of those voting in each chamber, which is why most vetoes stand.",
-              "ask": "“Who are the members still on the fence?”",
-              "id": "q2"
+              "ask": "“Which members are still on the fence?”"
             },
             {
+              "id": "whole-bill-only",
+              "t": "recall",
+              "p": "Why can't a President veto just one provision of a bill and sign the rest?",
+              "answer": "The Constitution gives the President an all-or-nothing choice on the whole bill. When Congress tried to grant a line-item veto, the Supreme Court struck it down in Clinton v. City of New York (1998).",
+              "keys": ["must sign or veto the whole bill", "the Supreme Court struck down the Line Item Veto Act in 1998"],
+              "hint": "Think about what the Constitution says the President receives, and a 1998 Supreme Court case.",
+              "x": "The Court held that letting the President cancel parts of signed laws amounted to rewriting them outside the Constitution's process for making law.",
+              "choice": {
+                "o": ["The Constitution requires signing or vetoing the whole bill, and the Court struck down a line-item veto in 1998", "Line-item vetoes are allowed only on spending bills, and this bill authorizes no spending", "A line-item veto needs Senate consent, which the President has not asked for", "Line-item vetoes are allowed only in wartime, under emergency powers"],
+                "a": 0,
+                "ow": ["", "No President has a line-item veto for any kind of bill; the 1996 law that tried it was struck down.", "No such consent process exists.", "No wartime exception exists."]
+              }
+            },
+            {
+              "id": "veto-fight-order",
               "t": "order",
-              "p": "Put a veto fight in order.",
-              "ends": [
-                "First",
-                "Last"
-              ],
-              "items": [
-                "Both chambers pass the bill",
-                "The President vetoes it",
-                "The chamber where it started votes on override",
-                "The other chamber votes on override"
-              ],
-              "x": "The vetoed bill goes back to the chamber where it originated. If that chamber fails to override, the other never votes.",
-              "id": "q3"
+              "p": "Put the steps of a veto fight in order.",
+              "ends": ["First", "Last"],
+              "items": ["Both chambers pass the bill", "The President vetoes it", "The chamber where it started votes on override", "The other chamber votes on override"],
+              "x": "The vetoed bill goes back to the chamber where it originated. If that chamber fails to override, the other never votes."
             }
           ]
         },
         {
-          "title": "Veto vocabulary",
+          "title": "Overrides in practice",
           "items": [
             {
+              "id": "veto-terms",
               "t": "match",
-              "p": "Match each term to its meaning.",
+              "p": "Match each veto term to its meaning.",
               "pairs": [
-                [
-                  "Veto",
-                  "The President returns a bill unsigned, with objections"
-                ],
-                [
-                  "Override",
-                  "Two-thirds of each chamber pass the bill anyway"
-                ],
-                [
-                  "Pocket veto",
-                  "A bill dies because Congress adjourned and the President didn’t sign"
-                ],
-                [
-                  "Enrolled bill",
-                  "The final text passed by both chambers"
-                ]
+                ["Veto", "The President returns a bill unsigned, with objections"],
+                ["Override", "Two-thirds of each chamber pass the bill anyway"],
+                ["Pocket veto", "A bill dies because Congress adjourned and the President didn't sign"],
+                ["Enrolled bill", "The final text passed by both chambers"]
               ],
-              "x": "A pocket veto can’t be overridden, because Congress never gets the bill back to vote on.",
-              "id": "q4"
+              "x": "A pocket veto can't be overridden, because Congress never gets the bill back to vote on."
             },
             {
+              "id": "ndaa-2021-override",
               "t": "mc",
-              "p": "Can a President veto only part of a bill?",
-              "o": [
-                "No. The Supreme Court struck down the line-item veto in 1998",
-                "Yes, for spending bills",
-                "Yes, with Senate consent",
-                "Only in wartime"
-              ],
+              "predict": true,
+              "news": { "h": "President Trump vetoes the annual defense authorization bill", "d": "December 23, 2020" },
+              "p": "What happened after President Trump vetoed the defense authorization bill in December 2020?",
+              "o": ["Both chambers voted to override it, the only override of his first term", "The House overrode the veto but the Senate fell short, so it stood", "Congress passed a new version without the provisions he objected to", "Neither chamber tried to override, and the bill died"],
               "a": 0,
-              "x": "In Clinton v. City of New York (1998), the Court held the Line Item Veto Act unconstitutional. A President has to sign or veto the whole bill.",
-              "id": "q5"
+              "ow": ["", "The Senate overrode it too, on January 1, 2021.", "Congress overrode the veto instead of rewriting the bill.", "Both chambers voted to override."],
+              "keys": ["Congress overrode the veto", "his only override"],
+              "x": "The House voted 322 to 87 and the Senate 81 to 13. Must-pass bills like the annual defense bill are where overrides are most likely, because members are reluctant to let them fail."
+            },
+            {
+              "id": "pocket-veto-no-override",
+              "t": "mc",
+              "p": "Why can't Congress override a pocket veto?",
+              "o": ["Congress has adjourned, so the bill never comes back for a vote", "Pocket vetoes need a three-quarters vote, which is never reached", "The Supreme Court must approve any override of a pocket veto", "Pocket vetoes apply only to bills that have already expired"],
+              "a": 0,
+              "ow": ["", "No three-quarters threshold exists; there is simply no bill to vote on.", "Courts play no role in approving overrides.", "A pocket veto applies to a newly passed bill, not an expired one."],
+              "keys": ["Congress has adjourned", "the bill isn't returned, so there's nothing to vote on"],
+              "x": "If Congress adjourns within the 10 days and the President doesn't sign, the bill dies. Because Congress can't receive the bill back, there's no override vote."
+            },
+            {
+              "id": "override-math",
+              "t": "mc",
+              "p": "In a House where all 435 members are present and voting, how many votes does a veto override need?",
+              "o": ["290, two-thirds of members present and voting", "218, a simple majority of the full House", "261, three-fifths of the full House", "327, three-quarters of the full House"],
+              "a": 0,
+              "ow": ["", "A simple majority passes a bill but can't override a veto.", "Three-fifths is the Senate's cloture threshold, not the override rule.", "Three-quarters is the state ratification threshold for amendments."],
+              "keys": ["290", "two-thirds of those present and voting"],
+              "x": "Two-thirds of 435 is 290 when every member votes. With absences, the number drops, because the Constitution counts those present and voting."
             }
           ]
         }

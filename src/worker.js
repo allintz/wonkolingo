@@ -13,6 +13,7 @@ import { pushApi } from './push.js';
 import { sendNudgeEmail } from './email.js';
 import { idpApi } from './idp.js';
 import { randomString, sha256, accountInfo, publicAccountApi, accountApi, takeRate, netId, ipKey, screen, screenFail, takeNewAccount, ACCOUNT_LIMITS } from './accounts.js';
+import { courseRequestApi } from './course-request.js';
 const REMOVE_REASONS = ['trivia', 'wrong', 'unclear', 'known', 'other', 'none', 'restored'];
 
 // Only WonkoLingo's own pages may call the API from a browser: the site, its GitHub Pages copy, the iPhone app and local
@@ -177,6 +178,9 @@ async function api(req, env, path) {
       .bind(message, cleanText(b.stack, 1500), cleanText(b.where, 60), cleanText(b.build, 40), b.app ? 1 : 0, cleanText(b.ua, 160), Date.now()).run();
     return json({ ok: true });
   }
+
+  // A player asks for a course that doesn't exist yet (Courses > Request a course). Stored and emailed to Alex; see src/course-request.js.
+  if (m === 'POST' && path === '/api/course-request') return courseRequestApi(req, env, await auth(req, env), await body(req), { json, fail });
 
   // A player removed a question from their reviews (or put it back). Kept as course feedback; see scripts/removals.sh.
   if (m === 'POST' && path === '/api/feedback/remove') {

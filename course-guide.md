@@ -1,8 +1,8 @@
 # WonkoLingo course format guide
 
-This guide is written for an AI assistant (such as Claude) that has been asked to build a course for **WonkoLingo**, a Duolingo-style quiz app at https://wonkolingo.alex-l-lintz.workers.dev. Friends in a group each upload courses, and everyone competes on the XP they earn finishing lessons.
+This guide is written for an AI assistant (such as Claude) that has been asked to build a course for **WonkoLingo**, a Duolingo-style quiz app at https://wonkolingo.com. Friends in a group each upload courses, and everyone competes on the XP they earn finishing lessons.
 
-Your job: build one course on the topic the user names, as a single JSON file that follows this guide exactly. The app checks every upload against the rules below and rejects files that break them.
+Your job: build one course on the topic the user names, as a single JSON file that follows this guide exactly. Read this guide as raw text if you can (a summarizing web tool can drop table rows and exact limits). When a player uploads the file, the app rejects it if it breaks a rule in the field tables below (field names, types, lengths and counts); everything else in this guide is advice about writing good questions, which the app can't check but players will notice.
 
 ## What makes a good course
 
@@ -61,7 +61,7 @@ The app shuffles answer options, match pairs and ordering steps itself, so write
 | Field | Rules |
 |---|---|
 | `format` | Exactly `"wonkolingo-course/1"`. |
-| `id` | 2 to 40 characters: lowercase letters, numbers, hyphens. Must start with a letter or number. Uploading again with the same `id` replaces your earlier version. |
+| `id` | 2 to 40 characters: lowercase letters, numbers, hyphens. Must start with a letter or number. Ids are unique within the player's group: uploading again with the same `id` replaces your own earlier version, and the app refuses an `id` someone else in the group already uses, so pick a distinctive one (`ecra-2022`, not `elections`). |
 | `title` | Required, up to 40 characters. Shown as a tab, so keep it short. |
 | `description` | Optional, up to 200 characters. |
 | `caveat` | Optional, up to 400 characters. Shown beside the course. |
@@ -69,13 +69,13 @@ The app shuffles answer options, match pairs and ordering steps itself, so write
 | `category` | Legacy single tag, still accepted. Optional: `"hill"`, `"policy"`, `"tech"`, `"security"`, `"democracy"` or `"other"`. The uploader can change it before publishing. If omitted, the app suggests one from the title and description. |
 | `categories` | Recommended: an array of one or more subject tags from `"hill"`, `"policy"`, `"tech"`, `"security"`, `"democracy"`, `"other"`. Choose all that fit. The uploader can edit them before publishing. Missing tags receive editable suggestions. If both fields exist, `categories` takes precedence. |
 | `categoryLabel` | Optional, up to 40 characters. A name for an `"other"` category, such as “Economics”. |
-| `speakers` | Optional. Up to 8 characters who "say" quotes. Keys are 1 to 8 lowercase letters. `n` is a name (up to 30 characters), `r` is a role (up to 60). Use fictional people, never real ones. |
+| `speakers` | Optional. Up to 8 characters who "say" quotes. Keys are 1 to 8 lowercase letters. `n` is a name (up to 30 characters), `r` is a role (up to 60). Use fictional people, never real ones. Their lines in `q` are invented by design; never invent quotes from real people or documents. |
 | `units` | 1 to 12 units. Each has `title` (up to 60 characters), optional `desc` (up to 200) and `lessons`. |
 | `lessons` | 1 to 8 per unit. Each has `title` (up to 60 characters) and `items`. |
 | `items` | 2 to 15 questions per lesson, and at most 400 questions in the whole course. |
-| `id` (on any question) | Optional but recommended: 1 to 40 lowercase letters, numbers or hyphens, unique within the course (for example `"cloture-votes"`). Keep a question's `id` when you edit its wording; give it a new one if it now asks something different. |
+| `id` (on any question) | Accepted without one, but always give one: 1 to 40 lowercase letters, numbers or hyphens, unique within the course. Make it describe the question (`"cloture-votes"`), never a position like `"q1"`: players' review history follows the `id`, so positional ids break when you add or reorder questions. Keep a question's `id` when you edit its wording; give it a new one if it now asks something different. |
 
-Keep the whole file under 200 KB. Fields not listed here are ignored.
+Keep the whole file under 200 KB. Fields not listed here are ignored, so there's no sources field: name your main sources briefly in `caveat`, or credit a source in a question's `x` where it helps.
 
 ## Question types
 
@@ -85,7 +85,7 @@ Keep the whole file under 200 KB. Fields not listed here are ignored.
 {
   "t": "mc",
   "p": "How many votes does cloture on a bill usually need?",
-  "o": ["60", "51", "67", "50 plus the Vice President"],
+  "o": ["60 votes, three-fifths of the Senate", "51 votes, a simple majority", "67 votes, two-thirds of the Senate", "50 votes plus the Vice President"],
   "a": 0,
   "x": "Cloture takes three-fifths of senators duly chosen and sworn, which is 60 when no seats are vacant."
 }
@@ -96,16 +96,17 @@ Keep the whole file under 200 KB. Fields not listed here are ignored.
 | `p` | The question, up to 300 characters. Required unless `q` is given. |
 | `o` | 2 to 5 options, up to 200 characters each, with no duplicates. 4 is best. |
 | `a` | The **0-based position** of the right option in `o` (0 is the first). |
-| `x` | Required explanation, up to 700 characters. |
+| `x` | Required explanation, up to 700 characters (the same limit applies to every question type). |
 | `q` | Optional quote shown in a speech bubble, up to 300 characters. Use for "what does this phrase mean" questions. Include the quotation marks in the text. |
 | `who` | Optional speaker key from `speakers`, used with `q`. |
-| `ask` | Optional follow-up question the player could ask in real life, up to 300 characters. |
-| `news` | Optional `{ "h": "...", "d": "..." }` card shown above the question: `h` is a **paraphrased** description of a real event (up to 160 characters), and `d` is its date (up to 60). Only for real, verified events. The app labels it "paraphrased." |
-
+| `ask` | Optional, up to 300 characters: a follow-up question the player could ask in real life, shown after they answer. Not graded. Most courses don't need it. |
+| `news` | Optional `{ "h": "...", "d": "..." }` card shown above the question: `h` is a **paraphrased** description of a real event (up to 160 characters), and `d` is its date written out ("January 6, 2021", up to 60). Only for real, verified events. The app labels it "paraphrased." |
 | `ow` | Optional. A list the same length as `o`, explaining why each option is wrong, with `""` for the right one. Each entry up to 300 characters. |
-| `keys` | Optional. 1 to 5 key points (up to 160 characters each) the AI grader should look for when the question comes back as a typed answer. |
+| `keys` | Optional. 1 to 5 key points (up to 160 characters each) the AI grader compares a typed answer against. The score depends on how many items the question asks for ("name two" needs two; a single fact needs one), so list only what a full-credit answer must contain, never nice-to-have extras. |
 | `hint` | Optional. A nudge toward the answer (up to 200 characters) shown when the player taps "Give me a hint". It must not give the answer away. If you leave it out, the app writes one. |
 | `predict` | Optional `true`. Shows the question as "Make a prediction" (for example, how a vote or ruling turned out). Use only for real, resolved events, and say in `x` what actually happened. |
+
+**Every multiple-choice card is also a typed-answer card.** Once a player knows a card, the app asks it without the options and an AI grader compares their typed answer with your right option and `keys`. So write the question so it makes sense with no options shown (avoid "Which of these..."), and make the right option a complete answer on its own. Keep options similar in length so the right one doesn't stand out: when the right answer needs a specific detail, give the wrong options equally specific content instead of trimming the right one into something vague.
 
 ### Short answer (`"t": "recall"`)
 
@@ -121,7 +122,7 @@ Keep the whole file under 200 KB. Fields not listed here are ignored.
 
 Depending on how well they know the card, the player sees its multiple-choice version, recalls the answer in their head and rates themselves, or types an answer that an AI grader scores against `answer` and `keys`. `p` (up to 300 characters), `answer` (up to 400) and `x` are required; `keys` and `hint` work the same as for multiple choice. Ask about something with a clear answer that can be stated in a sentence. "Why" and "what happens when" questions work well; open-ended opinion questions don't.
 
-**Multiple-choice version (`"choice"`).** Add a multiple-choice form of the question for players who are still learning it:
+**Multiple-choice version (`"choice"`).** Accepted without one, but always add it: new players see a card as multiple choice first, and a short-answer card with no `choice` skips that stage. Use `ow` here too:
 
 ```json
 "choice": {
@@ -135,6 +136,8 @@ Depending on how well they know the card, the player sees its multiple-choice ve
 `o` (2 to 5 options, 4 is best), `a` (0-based position of the right option) and `ow` (optional, one entry per option) follow the multiple-choice rules above. `p` (optional, up to 300 characters) rewords the question for the choice version, which you need for "name two" questions: ask "Which of these is one policy proposed to address X?" with one right policy and three that address different problems. Keep options similar in length, so the right one doesn't stand out.
 
 **Open questions (`"open": true`).** Some questions have many right answers, like "Name two policies that would reduce this risk." Add `"open": true` and write `answer` as a list of examples ("Examples: A; B; C"). The grader then gives full credit for any specific, correct answer, even one that isn't on your list, and the player sees your list under "Some good answers". Ask for one or two items, never "all of them": nobody can reliably recall a whole list. Opinion questions still don't work, even as open questions.
+
+**When to use `recall` instead of `mc`.** Use a short-answer card when the best answer is a sentence (a reason, a mechanism, "what happens when") or when several answers are right; use multiple choice for a fact, a number, a name or a choice between clear alternatives.
 
 ### Matching (`"t": "match"`)
 
@@ -165,7 +168,7 @@ Depending on how well they know the card, the player sees its multiple-choice ve
 }
 ```
 
-`p` must say what is being ordered on its own ("Put the Senate's cloture process in order", not "Put the usual steps in order"): in daily reviews the card shows up without its lesson title. `items` is 3 to 7 unique steps (up to 160 characters each), listed in the **correct** order. `ends` labels the two ends of the list (up to 30 characters each), such as `["First", "Last"]` or `["Weakest", "Strongest"]`. `p` and `x` are required.
+`p` must say what is being ordered on its own ("Put the Senate's cloture process in order", not "Put the usual steps in order"): in daily reviews the card shows up without its lesson title. `items` is 3 to 7 unique steps (up to 160 characters each), listed in the **correct** order. Keep dates and step numbers out of the steps (put them in `x`), or the card becomes reading instead of recall. `ends` labels the two ends of the list (up to 30 characters each), such as `["First", "Last"]` or `["Weakest", "Strongest"]`. `p` and `x` are required.
 
 ## Before you hand over the file
 
@@ -179,6 +182,6 @@ Check that:
 - every question has a unique `id`, and every `recall` question has a `choice` version whose right option is correct on its own;
 - every fact, number and date is one you verified, and every `news` card describes a real event with its real date.
 
-Give the user the finished course as **one `.json` file** named after the `id` (for example `state-ai-bills.json`), with nothing else in the file. Tell them to open WonkoLingo, choose **+ Add course**, and upload it. If the app lists problems, it will show them as `units[0].lessons[1].items[2].a: ...` paths; fix exactly those and send a new file.
+Give the user the finished course as **one `.json` file** named after the `id` (for example `state-ai-bills.json`), with nothing else in the file. If you can't create files, put the whole course in one code block instead; the app has a box to paste it into. Tell them to open WonkoLingo, go to **Courses**, choose **+ Make one**, and upload or paste it. If the app lists problems, it will show them as `units[0].lessons[1].items[2].a: ...` paths; fix exactly those and send a new file.
 
-A complete small example: https://wonkolingo.alex-l-lintz.workers.dev/example-course.json
+A complete small example with every question type: https://wonkolingo.com/example-course.json
