@@ -691,6 +691,16 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 @keyframes celePop { 0% { transform: scale(.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 .spk { flex-wrap: wrap; }
 @media (prefers-reduced-motion: reduce) { .cele { animation: none; } .gbar i { transition: none; } }
+
+/* Course catalog: filtered subject index and compact previews. */
+
+.catalog-filters{display:grid;gap:10px;margin:14px 0 22px}.catalog-chips{display:flex;flex-wrap:wrap;gap:7px}.catalog-chip{font:inherit;font-size:14px;font-weight:700;border:1px solid var(--line);border-radius:24px;background:var(--surface);color:var(--fg);padding:9px 13px;min-height:44px}.catalog-chip[aria-pressed="true"]{border-color:var(--brass);background:var(--fill);color:#0e141b}
+.catalog-levels{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;border:1px solid var(--line);border-radius:12px;padding:4px}.catalog-levels button{font:inherit;font-size:13px;font-weight:700;min-height:42px;border:0;border-radius:8px;color:var(--muted);background:transparent;padding:4px}.catalog-levels button[aria-pressed="true"]{color:var(--fg);background:var(--surface)}
+.catalog-section{margin-top:24px}.catalog-section .sec-h{align-items:center}.catalog-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:9px;background:var(--brass)}.cat-tech{background:#78b4a7}.cat-security{background:#7ea4cd}.cat-hill{background:#c5a2c6}.cat-democracy{background:#c69376}
+.catalog-start{margin:8px 0 26px;border:1px solid var(--brass);border-radius:16px;padding:16px}.catalog-start summary{cursor:pointer;min-height:44px}.catalog-start summary b{font-family:'Alegreya Sans SC',sans-serif;font-size:22px}.catalog-start summary span{display:block;color:var(--muted);margin-top:4px}.catalog-start ol{padding-left:24px}.catalog-start li{padding:6px 0}.catalog-start li small{display:block;color:var(--muted)}
+.course-preview{margin:18px 0;padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}.preview-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px}.preview-heading h2{font-family:'Alegreya Sans SC',sans-serif;font-size:22px;margin:0}.course-preview p{line-height:1.5}.course-preview summary{cursor:pointer;padding:10px 0;font-weight:700;min-height:44px}.preview-units ul{list-style:none;padding:0}.preview-units li{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid var(--line)}.preview-units small{white-space:nowrap;color:var(--muted)}.catalog-sample{margin:12px 0 18px}.preview-options{display:grid;gap:8px}.preview-options button{text-align:left;white-space:normal;min-height:44px}.preview-options .sample-correct{border-color:var(--brass);box-shadow:inset 3px 0 var(--brass)}.fld select{width:100%;font:inherit;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg)}
+
+@media(max-width:360px){.catalog-levels{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 
 <header class="top">
@@ -829,8 +839,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-23-df6d778';
-  window.WL_BUILT_AT = +'1792758288000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-23-b7fd705';
+  window.WL_BUILT_AT = +'1792760141000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -21665,6 +21675,11 @@ function validateCourse(raw) {
     if (!['beginner', 'intermediate', 'advanced'].includes(raw.level)) err('level', 'must be "beginner", "intermediate" or "advanced"');
     else c.level = raw.level;
   }
+  if (raw.category !== undefined && raw.category !== '') {
+    if (!['hill','policy','tech','security','democracy','other'].includes(raw.category)) err('category', 'must be hill, policy, tech, security, democracy or other');
+    else c.category = raw.category;
+  }
+  if (raw.categoryLabel !== undefined) c.categoryLabel = str(raw.categoryLabel, 'categoryLabel', 40, false) || '';
   c.speakers = {};
   if (raw.speakers !== undefined) {
     if (!raw.speakers || typeof raw.speakers !== 'object' || Array.isArray(raw.speakers)) err('speakers', 'must be an object');
@@ -33350,42 +33365,42 @@ const CONTROL_UNITS = [
 ];
 
 const COURSES = Object.assign(Object.create(null), {
-  biosec: { units: BIOSEC_UNITS, "name": "AI and Biosecurity", "pre": "y", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "How AI can affect biological risks, what evaluations establish, and how safeguards can reduce misuse.", "caveat": ["Reviewed October 23, 2026. Lab capability and safeguard claims are attributed self-reports. Studies cover specific models, users and tasks. Public rules are simplified and may change. Policy-level treatment only; no biological methods or protocols. AI reviewed; no human review.", "Drafted and independently reviewed by AI. No person has reviewed it."], "meta": "5 units | AI reviewed; no human review", "keyTerms": ["wet lab", "tacit knowledge", "sequence of concern", "biological design tool", "benchtop synthesizer", "select agent"] },
-  chips: { units: CHIPS_UNITS, "name": "Chips and the Compute Supply Chain", "pre": "k", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "Follow the compute supply chain from chip design and manufacturing to memory, networking and export controls.", "caveat": ["Reviewed October 23, 2026. Uses dated rule texts and attributed estimates. Effective requirements, exceptions and licenses depend on the transaction and can change. Historical notices do not establish absence of later amendments. Company roadmaps are claims, not delivery records. Simplified educational treatment; AI reviewed; no human review.", "Drafted and independently reviewed by AI. No person has reviewed it."], "meta": "8 units | AI reviewed; no human review", "keyTerms": ["high-bandwidth memory", "EUV", "advanced packaging", "fabless", "multipatterning", "BIS"] },
-  cop: { units: COP_UNITS, "name": "AI and Concentration of Power", "pre": "j", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "How AI could shift economic and political power, the conditions behind those mechanisms, and proposed responses.", "caveat": ["Drafted and independently reviewed by AI. No person has reviewed it."], "meta": "7 units | AI reviewed; no human review", "keyTerms": ["AI-enabled coup", "secret loyalty", "backdoor", "data poisoning", "self-coup", "coup-proofing"] },
-  drafting: { units: DRAFTING_UNITS, "name": "Drafting AI Legislation", "pre": "d", "level": "advanced", "created": "2026-10-23", "updated": "2026-10-23", "description": "Build an AI bill from definitions and coverage to duties, enforcement, legal review and implementation.", "caveat": ["Revised October 23, 2026. Federal bills are drafting examples from their cited introduced versions, not a claim that those provisions are law. Legal interpretation is simplified; check the current text and its context. AI reviewed; no person has reviewed it."], "meta": "8 units | AI reviewed; no human review", "keyTerms": ["savings clause", "rule of construction", "Chevron deference", "express delegation", "intelligible principle", "express preemption"] },
-  timelines: { units: TIMELINES_UNITS, "name": "AI Timelines and Forecasting", "pre": "m", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "Define forecast events, compare evidence about AI progress, and evaluate predictions with uncertainty and scoring rules.", "caveat": ["Source-checked October 23, 2026 by AI reviewers; no human has reviewed this draft. Forecasts are attributed, conditional and uncertain. Historical measurements do not establish future growth. Market-price examples are hypothetical. Research findings are specific to their tested settings.", "Drafted and independently reviewed by AI. No person has reviewed it."], "meta": "8 units | AI reviewed; no human review", "keyTerms": ["effective compute", "Automated Coder", "TED-AI", "takeoff", "returns to software R&D", "software intelligence explosion"] },
-  uschina: { units: USCHINA_UNITS, "name": "US-China AI Relations and Verification", "pre": "w", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "From incentives and diplomacy to agreements, verification and the limits of evidence about compliance.", "caveat": ["Revised and source-checked October 23, 2026 by AI reviewers; no person has reviewed it. Historical treaty examples are analogies. AI verification mechanisms are proposals with important technical and political limits. Hypothetical clauses are labeled."], "meta": "4 units | AI reviewed; no human review", "keyTerms": ["national technical means", "on-site inspection", "challenge inspection", "Additional Protocol", "compute accounting", "hardware-enabled mechanism"] },
-  alignment: { units: ALIGNMENT_UNITS, "name": "Alignment (sample)", "pre": "i", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "A ten-card introduction to alignment goals, training signals, evaluation limits and evidence of misalignment.", "caveat": ["Ten-card sample. Research findings are specific to the tested models and settings. Deployment examples checked through October 23, 2026; these are draft learning materials. AI reviewed; no person has reviewed it."], "meta": "10-card sample | AI reviewed; no human review", "keyTerms": ["outer alignment", "inner alignment", "specification gaming", "emergent misalignment"] },
-  interpretability: { units: INTERPRETABILITY_UNITS, "name": "Interpretability (sample)", "pre": "r", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "A ten-card introduction to studying model internals, interpreting features and testing explanations.", "caveat": ["Ten-card sample. Research findings are specific to the tested models and settings. Deployment examples checked through October 23, 2026; these are draft learning materials. AI reviewed; no person has reviewed it."], "meta": "10-card sample | AI reviewed; no human review", "keyTerms": ["interpretability", "activations", "superposition", "sparse autoencoder"] },
-  control: { units: CONTROL_UNITS, "name": "AI Control (sample)", "pre": "c", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "A ten-card introduction to limiting the harm a model could cause even when its intentions are uncertain.", "caveat": ["Ten-card sample. Research findings are specific to the tested models and settings. Deployment examples checked through October 23, 2026; these are draft learning materials. AI reviewed; no person has reviewed it."], "meta": "10-card sample | AI reviewed; no human review", "keyTerms": ["AI control", "trusted and untrusted models", "control evaluation", "asynchronous monitoring"] },
-  basics: { name: "AI Policy Basics", units: BASICS_UNITS, pre: "z", level: "beginner", created: "2026-10-23", updated: "2026-10-23", description: "A short foundation for the AI courses. Mark what you are familiar with, then learn only the remaining basics. Shared cards carry across courses.", caveat: ["Drafted and independently checked by AI. No person has reviewed it. Facts current as of October 23, 2026."], meta: "Draft · 2026-10-23 · Fact-checked by AI, not by a person" },
-  democracy: { name: 'US Democratic Backsliding', units: DEMOCRACY_UNITS, pre: 'b', level: 'intermediate',
+  biosec: { category: "security", units: BIOSEC_UNITS, "name": "AI and Biosecurity", "pre": "y", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "How AI can affect biological risks, what evaluations establish, and how safeguards can reduce misuse.", "caveat": ["Reviewed October 23, 2026. Lab capability and safeguard claims are attributed self-reports. Studies cover specific models, users and tasks. Public rules are simplified and may change. Policy-level treatment only; no biological methods or protocols. AI reviewed; no human review.", "Drafted and independently reviewed by AI. No person has reviewed it."], "meta": "5 units | AI reviewed; no human review", "keyTerms": ["wet lab", "tacit knowledge", "sequence of concern", "biological design tool", "benchtop synthesizer", "select agent"] },
+  chips: { category: "security", units: CHIPS_UNITS, "name": "Chips and the Compute Supply Chain", "pre": "k", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "Follow the compute supply chain from chip design and manufacturing to memory, networking and export controls.", "caveat": ["Reviewed October 23, 2026. Uses dated rule texts and attributed estimates. Effective requirements, exceptions and licenses depend on the transaction and can change. Historical notices do not establish absence of later amendments. Company roadmaps are claims, not delivery records. Simplified educational treatment; AI reviewed; no human review.", "Drafted and independently reviewed by AI. No person has reviewed it."], "meta": "8 units | AI reviewed; no human review", "keyTerms": ["high-bandwidth memory", "EUV", "advanced packaging", "fabless", "multipatterning", "BIS"] },
+  cop: { category: "policy", units: COP_UNITS, "name": "AI and Concentration of Power", "pre": "j", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "How AI could shift economic and political power, the conditions behind those mechanisms, and proposed responses.", "caveat": ["Drafted and independently reviewed by AI. No person has reviewed it."], "meta": "7 units | AI reviewed; no human review", "keyTerms": ["AI-enabled coup", "secret loyalty", "backdoor", "data poisoning", "self-coup", "coup-proofing"] },
+  drafting: { category: "policy", units: DRAFTING_UNITS, "name": "Drafting AI Legislation", "pre": "d", "level": "advanced", "created": "2026-10-23", "updated": "2026-10-23", "description": "Build an AI bill from definitions and coverage to duties, enforcement, legal review and implementation.", "caveat": ["Revised October 23, 2026. Federal bills are drafting examples from their cited introduced versions, not a claim that those provisions are law. Legal interpretation is simplified; check the current text and its context. AI reviewed; no person has reviewed it."], "meta": "8 units | AI reviewed; no human review", "keyTerms": ["savings clause", "rule of construction", "Chevron deference", "express delegation", "intelligible principle", "express preemption"] },
+  timelines: { category: "tech", units: TIMELINES_UNITS, "name": "AI Timelines and Forecasting", "pre": "m", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "Define forecast events, compare evidence about AI progress, and evaluate predictions with uncertainty and scoring rules.", "caveat": ["Source-checked October 23, 2026 by AI reviewers; no human has reviewed this draft. Forecasts are attributed, conditional and uncertain. Historical measurements do not establish future growth. Market-price examples are hypothetical. Research findings are specific to their tested settings.", "Drafted and independently reviewed by AI. No person has reviewed it."], "meta": "8 units | AI reviewed; no human review", "keyTerms": ["effective compute", "Automated Coder", "TED-AI", "takeoff", "returns to software R&D", "software intelligence explosion"] },
+  uschina: { category: "security", units: USCHINA_UNITS, "name": "US-China AI Relations and Verification", "pre": "w", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "From incentives and diplomacy to agreements, verification and the limits of evidence about compliance.", "caveat": ["Revised and source-checked October 23, 2026 by AI reviewers; no person has reviewed it. Historical treaty examples are analogies. AI verification mechanisms are proposals with important technical and political limits. Hypothetical clauses are labeled."], "meta": "4 units | AI reviewed; no human review", "keyTerms": ["national technical means", "on-site inspection", "challenge inspection", "Additional Protocol", "compute accounting", "hardware-enabled mechanism"] },
+  alignment: { category: "tech", units: ALIGNMENT_UNITS, "name": "Alignment (sample)", "pre": "i", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "A ten-card introduction to alignment goals, training signals, evaluation limits and evidence of misalignment.", "caveat": ["Ten-card sample. Research findings are specific to the tested models and settings. Deployment examples checked through October 23, 2026; these are draft learning materials. AI reviewed; no person has reviewed it."], "meta": "10-card sample | AI reviewed; no human review", "keyTerms": ["outer alignment", "inner alignment", "specification gaming", "emergent misalignment"] },
+  interpretability: { category: "tech", units: INTERPRETABILITY_UNITS, "name": "Interpretability (sample)", "pre": "r", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "A ten-card introduction to studying model internals, interpreting features and testing explanations.", "caveat": ["Ten-card sample. Research findings are specific to the tested models and settings. Deployment examples checked through October 23, 2026; these are draft learning materials. AI reviewed; no person has reviewed it."], "meta": "10-card sample | AI reviewed; no human review", "keyTerms": ["interpretability", "activations", "superposition", "sparse autoencoder"] },
+  control: { category: "tech", units: CONTROL_UNITS, "name": "AI Control (sample)", "pre": "c", "level": "intermediate", "created": "2026-10-23", "updated": "2026-10-23", "description": "A ten-card introduction to limiting the harm a model could cause even when its intentions are uncertain.", "caveat": ["Ten-card sample. Research findings are specific to the tested models and settings. Deployment examples checked through October 23, 2026; these are draft learning materials. AI reviewed; no person has reviewed it."], "meta": "10-card sample | AI reviewed; no human review", "keyTerms": ["AI control", "trusted and untrusted models", "control evaluation", "asynchronous monitoring"] },
+  basics: { category: "policy", name: "AI Policy Basics", units: BASICS_UNITS, pre: "z", level: "beginner", created: "2026-10-23", updated: "2026-10-23", description: "A short foundation for the AI courses. Mark what you are familiar with, then learn only the remaining basics. Shared cards carry across courses.", caveat: ["Drafted and independently checked by AI. No person has reviewed it. Facts current as of October 23, 2026."], meta: "Draft · 2026-10-23 · Fact-checked by AI, not by a person" },
+  democracy: { category: "democracy", name: 'US Democratic Backsliding', units: DEMOCRACY_UNITS, pre: 'b', level: 'intermediate',
     keyTerms: ["democratic backsliding", "executive aggrandizement", "competitive authoritarianism", "judicial review", "impeachment", "impoundment", "injunction", "executive order"], created: '2026-10-23', updated: '2026-10-23',
     description: "How democracies erode, how to assess the evidence, and which US legal rules shape executive power and elections.",
     caveat: ["Prepared October 23, 2026 from public sources. Legal rules are simplified; dated rulings and scenarios are distinguished from predictions. Research and question quality were reviewed by separate AI agents. No person has reviewed this course. Check current law before relying on it."], meta: '11 units | Intermediate' },
-  lingo: { description: "What Hill staffers mean: reading the polite no, buying signals, and the next question to ask.", name: 'Staff Talk', units: UNITS, pre: '', level: 'beginner', created: '2026-10-02', updated: '2026-10-21',
+  lingo: { category: "hill", description: "What Hill staffers mean: reading the polite no, buying signals, and the next question to ask.", name: 'Staff Talk', units: UNITS, pre: '', level: 'beginner', created: '2026-10-02', updated: '2026-10-21',
     caveat: ['These are generic rules of thumb drawn from published staffer guides and Hill reporting. Nobody has checked them against what offices actually did afterward, and meanings vary by chamber, party, office and individual staffer.', 'Treat each answer as a starting guess. Check anything you plan to rely on with a former staffer.'],
     meta: 'Draft · 2026-10-02 12:38 · Not reviewed by a Hill staffer' },
-  proc: { description: "How a bill moves through Congress: committees, floor rules, the filibuster, money, vetoes and the Congressional Review Act.", name: 'Procedure', units: PROC_UNITS, pre: 'p', level: 'beginner', created: '2026-10-16', updated: '2026-10-21',
+  proc: { category: "hill", description: "How a bill moves through Congress: committees, floor rules, the filibuster, money, vetoes and the Congressional Review Act.", name: 'Procedure', units: PROC_UNITS, pre: 'p', level: 'beginner', created: '2026-10-16', updated: '2026-10-21',
     caveat: ['These simplify standard House and Senate procedure as described in CRS reports and the chambers’ rules. Precedents and each Congress’s rules package change details over time, and there are exceptions to almost everything here.', 'News examples are paraphrased from 2023 to 2025 coverage, not real headlines.'],
     meta: 'Draft · 2026-10-16 · Not reviewed by a procedure expert' },
-  policy: { basics: ["zu0l0#basic1", "zu0l0#basic2", "zu0l0#basic3", "zu0l0#basic4", "zu0l0#basic5", "zu0l0#basic6", "zu0l0#basic7", "zu0l0#basic8", "zu0l0#basic9", "zu0l0#basic10", "zu0l0#basic11"], description: "Who is doing what on AI risk as of October 2026: specific laws, bills, executive actions, lab policies and research agendas, their status, backers and critics. For how each policy lever works, take AI Policy Toolkit.", name: 'AI Policy Landscape', units: POLICY_UNITS, pre: 'a', level: 'intermediate',
+  policy: { category: "policy", basics: ["zu0l0#basic1", "zu0l0#basic2", "zu0l0#basic3", "zu0l0#basic4", "zu0l0#basic5", "zu0l0#basic6", "zu0l0#basic7", "zu0l0#basic8", "zu0l0#basic9", "zu0l0#basic10", "zu0l0#basic11"], description: "Who is doing what on AI risk as of October 2026: specific laws, bills, executive actions, lab policies and research agendas, their status, backers and critics. For how each policy lever works, take AI Policy Toolkit.", name: 'AI Policy Landscape', units: POLICY_UNITS, pre: 'a', level: 'intermediate',
     keyTerms: ['model weights', 'open-weight', 'training run', 'alignment', 'superintelligence', 'safety case', 'model card', 'overhang', 'black-box access', 'deployer', 'export controls', 'know-your-customer', 'preemption', 'safe harbor', 'duty of care', 'strict liability', 'negligence', 'antitrust'], created: '2026-10-16', updated: '2026-10-23',
     caveat: ['Drawn from the AI Risk Legislation Tracker, the pacing.tech agenda (Douglas, Dillon, Moore, Leech and Avin) and IFP\u2019s report on automated AI R&D, with facts current as of October 2026. Frameworks, claims about what a policy would do, and objections are the views of the people who hold them, not settled fact.', 'Revised on October 19, 2026 to cut duplicates and report trivia, then re-checked by a second AI, which corrected many attributions. On October 20, general explanations of how each tool works moved to AI Policy Toolkit, so this course focuses on specific laws, bills, actors and frameworks. Many questions have more than one right answer, and the grader accepts any specific, correct one. No person has reviewed it.'],
     meta: 'Draft \u00b7 revised 2026-10-20 \u00b7 Fact-checked by AI, not by a person' },
-  tools: { basics: ["zu0l0#basic1", "zu0l0#basic2", "zu0l0#basic3", "zu0l0#basic4", "zu0l0#basic5", "zu0l0#basic6", "zu0l0#basic7", "zu0l0#basic8", "zu0l0#basic9", "zu0l0#basic10", "zu0l0#basic11"], name: 'AI Policy Toolkit', units: TOOLS_UNITS, pre: 't', level: 'intermediate', created: '2026-10-17', updated: '2026-10-23', description: "The menu of policy levers for catastrophic AI risk: what each targets, how it works, its assumptions and objections. Real bills illustrate tradeoffs; their details and status belong in AI Policy Landscape.",
+  tools: { category: "policy", basics: ["zu0l0#basic1", "zu0l0#basic2", "zu0l0#basic3", "zu0l0#basic4", "zu0l0#basic5", "zu0l0#basic6", "zu0l0#basic7", "zu0l0#basic8", "zu0l0#basic9", "zu0l0#basic10", "zu0l0#basic11"], name: 'AI Policy Toolkit', units: TOOLS_UNITS, pre: 't', level: 'intermediate', created: '2026-10-17', updated: '2026-10-23', description: "The menu of policy levers for catastrophic AI risk: what each targets, how it works, its assumptions and objections. Real bills illustrate tradeoffs; their details and status belong in AI Policy Landscape.",
     caveat: ['Reorganized October 23, 2026, preserving progress on reused questions. Covers policy levers with facts current as of October 2026. Arguments for and against a tool are the views of the people who hold them, not settled fact.', 'Many questions have more than one right answer, and the grader accepts any specific, correct one. Each card was drafted by one AI and then fact-checked against primary sources by a second; many corrections were made. No person has reviewed it, and laws and bills change quickly.'],
     meta: 'Draft \u00b7 2026-10-19 \u00b7 Fact-checked by AI, not by a person' },
-  frontier: { basics: ["zu0l0#basic4", "zu0l0#basic5", "zu0l0#basic7", "zu0l0#basic9", "zu0l0#basic11"], description: "A close reading of H.R. 9925 (July 2026): who it covers, what it requires, emergency orders and the fight over preemption.", name: 'FRONTIER Act', units: FRONTIER_UNITS, pre: 'f', level: 'advanced', created: '2026-10-16', updated: '2026-10-23',
+  frontier: { category: "policy", basics: ["zu0l0#basic4", "zu0l0#basic5", "zu0l0#basic7", "zu0l0#basic9", "zu0l0#basic11"], description: "A close reading of H.R. 9925 (July 2026): who it covers, what it requires, emergency orders and the fight over preemption.", name: 'FRONTIER Act', units: FRONTIER_UNITS, pre: 'f', level: 'advanced', created: '2026-10-16', updated: '2026-10-23',
     caveat: ['Based on the introduced text of H.R. 9925 (July 23, 2026). Status, cosponsors and reactions checked October 19, 2026. Simplified: check the bill text before relying on details, and expect changes if the bill moves in committee.', 'Each question was checked against the bill text by a second AI, and its corrections were applied. No person has reviewed it.'],
     meta: 'Draft · 2026-10-16, attributions rechecked 2026-10-19 · Fact-checked by AI, not by a person' },
-  powers: { basics: ["zu0l0#basic1", "zu0l0#basic3", "zu0l0#basic6", "zu0l0#basic9", "zu0l0#basic11"], name: 'AI Emergency Powers', units: POWERS_UNITS, pre: 'e', level: 'intermediate',
+  powers: { category: "security", basics: ["zu0l0#basic1", "zu0l0#basic3", "zu0l0#basic6", "zu0l0#basic9", "zu0l0#basic11"], name: 'AI Emergency Powers', units: POWERS_UNITS, pre: 'e', level: 'intermediate',
     keyTerms: ['executive order', 'joint resolution', 'veto override', 'injunction', 'notice and comment', 'Federal Register', 'Administrative Procedure Act', 'antitrust', 'model weights', 'open-weight'], created: '2026-10-22', updated: '2026-10-23',
     description: 'What the US government could legally do to an AI company in a crisis using laws already on the books, how courts and Congress check those powers, and how new AI halt powers are being designed.',
     caveat: ['Facts current as of October 22, 2026, from statutes, court opinions, CRS reports and 2026 reporting. Several key questions (whether API access is an export, how far the Defense Production Act reaches) have never been decided by a court, so legal views are attributed to whoever holds them. Not legal advice.', 'Written by Claude, an Anthropic model; Anthropic is a party to two 2026 disputes covered here, so disputed facts are presented as disputed. Every card was checked by separate AI fact-checkers and a question-quality reviewer. No person has reviewed it.'],
     meta: 'Draft · 2026-10-22 · Fact-checked by AI, not by a person' },
-  tech: { basics: ["zu0l0#basic1", "zu0l0#basic2", "zu0l0#basic3", "zu0l0#basic4", "zu0l0#basic5", "zu0l0#basic7", "zu0l0#basic8", "zu0l0#basic9"], name: 'How Frontier AI Is Built and Tested', units: TECH_UNITS, pre: 'h', level: 'intermediate',
+  tech: { category: "tech", basics: ["zu0l0#basic1", "zu0l0#basic2", "zu0l0#basic3", "zu0l0#basic4", "zu0l0#basic5", "zu0l0#basic7", "zu0l0#basic8", "zu0l0#basic9"], name: 'How Frontier AI Is Built and Tested', units: TECH_UNITS, pre: 'h', level: 'intermediate',
     keyTerms: ['training run', 'inference', 'fine-tuning', 'reinforcement learning', 'open-weight', 'token', 'CBRN', 'exfiltration', 'red-teaming', 'sandbox'], created: '2026-10-22', updated: '2026-10-22',
     description: 'How frontier models are trained, what compute thresholds measure, how capabilities and safety are tested, where those tests fall short, and how to read a lab\u2019s safety claims.',
     caveat: ['Facts current as of October 22, 2026. Teaches durable concepts with 2026 examples; model names and numbers will date quickly. System cards, risk reports and incident reports are the labs\u2019 own accounts and are attributed as such.', 'Written by Claude, an Anthropic model, and checked by separate AI fact-checkers against papers, system cards and evaluator reports, plus a question-quality reviewer. No person has reviewed it.'],
@@ -33440,7 +33455,8 @@ async function checkContent() {
 const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const WEEKDAYS = [false, true, true, true, true, true, false];
 let LESSONS = [];
-let cQuery = ''; // the Courses search box
+let cQuery = '';
+let catalogCategory = 'all', catalogLevel = 'all'; // the Courses search box
 let VIEW = 'today';
 // Units the player opened or closed on a course page, so a re-render (a sync finishing, say) doesn't undo it.
 const unitOpen = {};
@@ -35812,7 +35828,7 @@ function installCourses(list) {
   Object.keys(COURSES).filter(k => k.startsWith('c:')).forEach(k => delete COURSES[k]);
   (list || []).forEach(x => {
     const c = x.course;
-    COURSES['c:' + x.slug] = { name: c.title, units: c.units, pre: 'c:' + x.slug + ':', group: true, slug: x.slug, author: x.author, authorId: x.authorId, version: x.version, openReports: x.openReports, description: c.description, level: c.level, created: x.createdAt, updated: x.updatedAt,
+    COURSES['c:' + x.slug] = { name: c.title, units: c.units, pre: 'c:' + x.slug + ':', group: true, slug: x.slug, author: x.author, authorId: x.authorId, version: x.version, openReports: x.openReports, description: c.description, level: c.level, category: c.category, categoryLabel: c.categoryLabel, created: x.createdAt, updated: x.updatedAt,
       speakers: Object.keys(c.speakers || {}).length ? c.speakers : null,
       caveat: [c.caveat, `Written by ${x.author}, probably with AI help, and not checked by anyone else. If an answer looks wrong, use “Report a problem” after answering it.`].filter(Boolean),
       meta: `By ${x.author} · Version ${x.version}` };
@@ -35848,7 +35864,7 @@ function renderAdd() {
     const ex = COURSES['c:' + chk.course.id];
     const taken = ex && G && ex.authorId !== G.player.id;
     const note = !G ? 'Start or join a group above to publish it.' : !ex ? 'This adds a new course for everyone in your group.' : !taken ? `This replaces your version ${ex.version}.` : `Someone else already has a course with the id “${esc(chk.course.id)}”. Change "id" in the file before publishing.`;
-    res = `<div class="okbox"><h4>Ready: ${esc(chk.course.title)}</h4><p>${chk.stats.units} unit${chk.stats.units === 1 ? '' : 's'}, ${chk.stats.lessons} lesson${chk.stats.lessons === 1 ? '' : 's'}, ${chk.stats.items} questions. ${note}</p><div class="row"><button class="btn sm" id="addPub" ${a.busy || !G || taken ? 'disabled' : ''}>${G ? 'Publish to ' + esc(G.groupName) : 'Publish'}</button></div></div>`;
+    res = `<div class="okbox"><h4>Ready: ${esc(chk.course.title)}</h4><p>${chk.stats.units} unit${chk.stats.units === 1 ? '' : 's'}, ${chk.stats.lessons} lesson${chk.stats.lessons === 1 ? '' : 's'}, ${chk.stats.items} questions. ${note}</p><label class="fld"><span>${a.categorySuggested?'Suggested category, change if needed':'Category'}</span><select id="addCategory">${catalogCategories().map(([id,name])=>`<option value="${id}" ${chk.course.category===id?'selected':''}>${name}</option>`).join('')}</select></label>${chk.course.category==='other'?`<label class="fld"><span>Category name (optional)</span><input id="addCategoryLabel" maxlength="40" value="${esc(chk.course.categoryLabel||'')}"></label>`:''}<div class="row"><button class="btn sm" id="addPub" ${a.busy || !G || taken ? 'disabled' : ''}>${G ? 'Publish to ' + esc(G.groupName) : 'Publish'}</button></div></div>`;
   }
   let n = 0;
   const step = t => `<p class="kicker">Step ${++n}</p><h3 class="prompt sm">${t}</h3>`;
@@ -35886,8 +35902,15 @@ function runCheck() {
   addState.text = $('#addText').value; addState.err = '';
   let raw;
   try { raw = JSON.parse(addState.text); } catch (e) { addState.check = { ok: false, errors: ['That isn’t valid JSON (' + e.message + '). Ask your Claude for the raw .json file.'] }; renderAdd(); return; }
-  addState.check = validateCourse(raw); renderAdd();
+  addState.check = validateCourse(raw);
+  if(addState.check.ok && !addState.check.course.category) { addState.check.course.category=suggestCategory(addState.check.course);addState.categorySuggested=true; }
+  renderAdd();
 }
+$('#addBody').addEventListener('change', e=>{
+  if(!addState.check?.ok)return;
+  if(e.target.id==='addCategory'){addState.check.course.category=e.target.value;addState.categorySuggested=false;renderAdd();}
+  if(e.target.id==='addCategoryLabel')addState.check.course.categoryLabel=e.target.value.trim().slice(0,40);
+});
 $('#addBody').addEventListener('click', async e => {
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'copyPrompt') { const v = $('#addPrompt').value; (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(() => toast('Prompt copied.'), () => { $('#addPrompt').select(); toast('Select the text and copy it.'); }); }
@@ -35895,6 +35918,7 @@ $('#addBody').addEventListener('click', async e => {
   if (t.dataset.agmode) { addState.groupMode = t.dataset.agmode; addState.gErr = ''; renderAdd(); return; }
   if (t.id === 'agGo') { addGroupSubmit(); return; }
   if (t.id === 'addPub') {
+    if($('#addCategoryLabel'))addState.check.course.categoryLabel=$('#addCategoryLabel').value.trim().slice(0,40);
     addState.busy = true; renderAdd();
     try {
       const d = await apiCall('/api/courses', { course: addState.check.course });
@@ -36144,27 +36168,70 @@ function renderGroupLine() {
 function courseLine(k) {
   const C = COURSES[k], p = courseProgress(k), on = inMix(k);
   const by = C.group ? (G && C.authorId === G.player.id ? 'By you' : 'By ' + C.author) : '';
-  const meta = [(levelInfo(C) || [''])[0], by, p.done ? `${p.done} of ${p.total} lessons` : `${p.total} lessons`, on ? `${perDay(k)} new a day` : ''].filter(Boolean).join(' · ');
+  const meta = [(levelInfo(C) || ['Level not set'])[0], C.group ? categoryName(C) : '', by, p.done ? `${p.done} of ${p.total} lessons` : `${p.total} lessons`, on ? `${perDay(k)} new a day` : ''].filter(Boolean).join(' · ');
   return `<div class="cline"><button class="copen" data-open="${esc(k)}"><b>${esc(C.name)}</b><span>${esc(meta)}</span></button><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="${esc(C.name)} in your daily mix"></button></div>`;
 }
-function renderCourses() {
-  const keys = Object.keys(COURSES), on = keys.filter(inMix), off = keys.filter(k => !inMix(k));
-  const groupOff = off.filter(k => COURSES[k].group), builtinOff = off.filter(k => !COURSES[k].group);
-  const t = todayCounts(dstr(new Date()));
-  let h = `<div class="sec-h"><h1 class="vtitle">Courses</h1><button class="btn ghost sm" id="cMake">+ Make one</button></div>`;
-  h += `<input class="pk-search" id="cSearch" type="search" placeholder="Search every card and term" aria-label="Search every card and term" autocomplete="off" enterkeyhint="search" value="${esc(cQuery)}"><div id="cSearchOut" aria-live="polite"></div><div id="cLists">`;
-  h += `<div class="sec-h"><div><h2>In your daily mix</h2><p>Today's session pulls reviews and new cards from these.</p></div></div>`;
-  h += on.length ? `<div class="mix">${on.map(courseLine).join('')}</div><p class="note">Today: about ${t.nNew} new cards and ${t.nDue} reviews. Open a course to change its new cards a day or browse its units.</p>` : `<p class="note">Nothing in your mix yet. Switch on a course below to start.</p>`;
-  if (groupOff.length) h += `<div class="sec-h"><h2>From ${esc(G ? G.groupName : 'your group')}</h2></div><div class="mix">${groupOff.map(courseLine).join('')}</div>`;
-  if (builtinOff.length) {
-    const shelves = [['Start here', ['basics']], ['Policy', ['policy','tools','frontier']], ['Government power and security', ['powers']], ['Technical', ['tech']], ['Hill skills', ['proc','lingo']]];
-    const used = new Set(); shelves.forEach(([label,keys]) => { const ks=keys.filter(k=>builtinOff.includes(k));ks.forEach(k=>used.add(k));if(ks.length)h+=`<div class="sec-h"><h2>${label}</h2></div><div class="mix">${ks.map(courseLine).join('')}</div>`; });
-    const rest=builtinOff.filter(k=>!used.has(k));if(rest.length)h+=`<div class="sec-h"><h2>More courses</h2></div><div class="mix">${rest.map(courseLine).join('')}</div>`;
-  }
-  if (!G) h += `<p class="note">Friends' courses show up here once you're in a group.</p>`;
-  $('#coursesBody').innerHTML = h + '</div>';
-  renderSearch();
+function catalogCategories() { return [['policy','AI policy'],['tech','How AI works'],['security','National security'],['hill','Working the Hill'],['democracy','Democracy'],['other','Other']]; }
+function suggestCategory(C) {
+  const t=((C.name||C.title||'')+' '+(C.description||'')).toLowerCase();
+  if(/backsliding|democra|elections/.test(t))return 'democracy';
+  if(/biosecurity|chips|china|emergency powers|national security/.test(t))return 'security';
+  if(/staff talk|procedure|congress|parliament/.test(t))return 'hill';
+  if(/interpretability|alignment|ai control|built and tested|timelines|forecasting|technical/.test(t))return 'tech';
+  if(/\bai\b|policy|legislation|frontier/.test(t))return 'policy';
+  return 'other';
 }
+function categoryOf(C) { return catalogCategories().some(([k])=>k===C.category)?C.category:suggestCategory(C); }
+function categoryName(C) { return categoryOf(C)==='other'&&C.categoryLabel ? C.categoryLabel : catalogCategories().find(([k])=>k===categoryOf(C))[1]; }
+function catalogMatches(k) { const C=COURSES[k];return !!C&&(catalogCategory==='all'||catalogCategory==='group'&&C.group||catalogCategory===categoryOf(C))&&(catalogLevel==='all'||C.level===catalogLevel); }
+function catalogTrack() {
+  if(catalogCategory!=='all'||catalogLevel!=='all'||Object.keys(state.srs).length>=10)return '';
+  const path=['basics','tech','policy','tools','frontier'].filter(k=>COURSES[k]);
+  return `<details class="catalog-start"><summary><b>Start here</b><span>A suggested path into AI policy</span></summary><p>Start wherever useful. Familiar basics and shared cards carry across courses.</p><ol>${path.map(k=>`<li><button class="linkbtn" data-open="${esc(k)}">${esc(COURSES[k].name)}</button>${inMix(k)?'<small>In your mix</small>':''}</li>`).join('')}</ol></details>`;
+}
+function renderCourses() {
+  const keys=Object.keys(COURSES).filter(k=>k!=='terms'||savedTerms().length), visible=keys.filter(catalogMatches), on=visible.filter(inMix), off=visible.filter(k=>!inMix(k));
+  const cats=catalogCategories().filter(([id])=>keys.some(k=>categoryOf(COURSES[k])===id));
+  const chips=[['all','All'],...cats,...(keys.some(k=>COURSES[k].group)?[['group','From your group']]:[])];
+  let h=`<div class="sec-h"><h1 class="vtitle">Courses</h1><button class="btn ghost sm" id="cMake">+ Make one</button></div>`;
+  h+=`<input class="pk-search" id="cSearch" type="search" placeholder="Search courses, cards and terms" aria-label="Search every card and term" autocomplete="off" value="${esc(cQuery)}">`;
+  h+=`<div class="catalog-filters"><div class="catalog-chips" role="group" aria-label="Category">${chips.map(([id,name])=>`<button class="catalog-chip" data-cat="${id}" aria-pressed="${catalogCategory===id}">${name}</button>`).join('')}</div><div class="catalog-levels" role="group" aria-label="Level">${[['all','All levels'],['beginner','Beginner'],['intermediate','Intermediate'],['advanced','Advanced']].map(([id,name])=>`<button data-level="${id}" aria-pressed="${catalogLevel===id}">${name}</button>`).join('')}</div></div><div id="cSearchOut" aria-live="polite"></div><div id="cLists">`;
+  h+=catalogTrack();
+  h+=`<div class="sec-h"><div><h2>In your daily mix</h2><p>Reviews and new cards come from these courses.</p></div></div>`;
+  h+=on.length?`<div class="mix">${on.map(courseLine).join('')}</div>`:`<p class="note">${mixKeys().length?'No courses in your mix match these filters. Your mix is unchanged.':'Switch on a course below to start.'}</p>`;
+  let sections=0;
+  for(const [id,label] of catalogCategories()) {
+    const ks=off.filter(k=>!COURSES[k].group&&categoryOf(COURSES[k])===id);
+    if(!ks.length)continue;sections++;
+    h+=`<section class="catalog-section" data-category="${id}"><div class="sec-h"><h2><i class="catalog-dot cat-${id}"></i>${label}</h2><span class="meta">${ks.length} course${ks.length===1?'':'s'}</span></div><div class="mix">${ks.map(courseLine).join('')}</div></section>`;
+  }
+  const group=off.filter(k=>COURSES[k].group);
+  if(group.length){sections++;h+=`<section class="catalog-section" data-category="group"><div class="sec-h"><h2>From ${esc(G?G.groupName:'your group')}</h2></div><div class="mix">${group.map(courseLine).join('')}</div></section>`;}
+  if(!visible.length)h+=`<p class="note">No courses match these filters. <button class="linkbtn" data-catalog-reset>Show all courses</button></p>`;
+  if(!G)h+=`<p class="note">Friends’ courses appear here when you join a group.</p>`;
+  $('#coursesBody').innerHTML=h+'</div>';renderSearch();
+}
+function previewSample(k) {
+  const C=COURSES[k];if(!C)return null;
+  const items=C.units.flatMap(u=>u.lessons.flatMap(l=>l.items));
+  return items.find(it=>it.t==='mc'||it.t==='recall'&&it.choice)||items.find(it=>it.t==='recall')||items[0];
+}
+function coursePreviewHTML(k) {
+  const C=COURSES[k], sample=previewSample(k);if(!sample)return '';
+  const count=courseCards(k).length, pace=perDay(k), days=Math.ceil(count/pace), weeks=Math.ceil(days/7);
+  const opts=sample.t==='mc'?sample.o:sample.choice&&sample.choice.o;
+  const prompt=sample.t==='recall'&&sample.choice&&sample.choice.p||cardPrompt(sample);
+  return `<section class="course-preview"><div class="preview-heading"><h2>Before you start</h2><span class="meta">${esc(categoryName(C))}</span></div><p>About ${weeks} week${weeks===1?'':'s'} to see ${count} cards at ${pace} new a day. Reviews add practice time; familiar and shared cards can shorten this.</p><details class="preview-units"><summary>${C.units.length} units to explore</summary><ul>${C.units.map(u=>`<li><span>${esc(u.title)}</span><small>${u.lessons.reduce((n,l)=>n+l.items.length,0)} cards</small></li>`).join('')}</ul></details><details class="catalog-sample"><summary>Try a sample question</summary><p>${esc(prompt)}</p>${opts?`<div class="preview-options">${opts.map((o,i)=>`<button class="btn ghost sm" data-sample="${i}" data-sample-course="${esc(k)}">${esc(o)}</button>`).join('')}</div>`:`<button class="btn ghost sm" data-sample="reveal" data-sample-course="${esc(k)}">Think, then show answer</button>`}<div id="previewAnswer" aria-live="polite"></div><p class="meta">Trying a sample does not change your progress.</p></details><p class="meta">${esc(C.meta || 'Review status not specified.')}</p><button class="btn" data-preview-add="${esc(k)}">Add to my daily mix</button></section>`;
+}
+function answerPreview(k, value) {
+  const it=previewSample(k);if(!it)return;
+  const ch=it.t==='mc'?it:it.choice, correct=ch?ch.o[ch.a]:cardAnswer(it);
+  const right=ch&&Number(value)===ch.a;
+  const box=$('#previewAnswer');if(!box)return;
+  box.innerHTML=`<p><b>${value==='reveal'?'Answer':right?'Correct':'Answer'}</b></p><p>${esc(correct)}</p>${it.x?`<p class="meta">${esc(it.x)}</p>`:''}${it.id?sourcesHTML(it.id):''}`;
+  document.querySelectorAll('[data-sample]').forEach(b=>{ b.disabled=true;if(ch&&Number(b.dataset.sample)===ch.a)b.classList.add('sample-correct'); });
+}
+
 /* ---------- search: every card's question, answer and explanation, and the glossary ---------- */
 // Function declarations (not consts): opening the site on #courses renders this before the rest of the script runs.
 function cardAnswer(it) { return it.t === 'recall' ? it.answer : it.t === 'mc' ? (it.o || [])[it.a] : it.t === 'match' ? (it.pairs || []).map(p => p[0] + ': ' + p[1]).join('; ') : it.t === 'order' ? (it.items || []).join(', then ') : ''; }
@@ -36179,7 +36246,7 @@ function renderSearch() {
   // Cards whose question matches come first, then ones whose answer does, then mentions in the explanation.
   const scored = [];
   for (const k of Object.keys(COURSES)) {
-    if (k === 'terms') continue;
+    if (k === 'terms' || !catalogMatches(k)) continue;
     for (const c of courseCards(k)) {
       const it = c.item;
       if (isRemoved(c.id) || !has(cardPrompt(it) + ' ' + cardAnswer(it) + ' ' + (it.x || '') + ' ' + (it.keys || []).join(' '))) continue;
@@ -36187,8 +36254,9 @@ function renderSearch() {
     }
   }
   const cards = scored.sort((x, y) => y[0] - x[0] || x[1] - y[1]).slice(0, 40).map(x => x[2]);
-  if (!terms.length && !cards.length) { out.innerHTML = `<p class="note">Nothing matches “${esc(cQuery.trim())}”.</p>`; return; }
-  let h = '';
+  const matchingCourses=Object.keys(COURSES).filter(k=>catalogMatches(k)&&has(COURSES[k].name+' '+(COURSES[k].description||'')));
+  if (!terms.length && !cards.length && !matchingCourses.length) { out.innerHTML = `<p class="note">Nothing matches “${esc(cQuery.trim())}”.</p>`; return; }
+  let h = matchingCourses.length ? `<div class="sec-h"><h2>Courses</h2></div><div class="mix">${matchingCourses.map(courseLine).join('')}</div>` : '';
   if (terms.length) h += `<div class="sec-h"><h2>Terms</h2></div><div class="mix">${terms.map(g => `<details class="sres"><summary><span class="t">${esc(g.term)}</span><span class="n">Glossary</span></summary><div class="sbody"><p>${esc(g.def)}</p></div></details>`).join('')}</div>`;
   if (cards.length) h += `<div class="sec-h"><h2>Cards</h2><p>${cards.length >= 40 ? 'The first 40 matches' : cards.length + ' match' + (cards.length === 1 ? '' : 'es')}</p></div><div class="mix">${cards.map(c => {
     const it = c.item, learned = !!srsOf(c.id);
@@ -36219,6 +36287,7 @@ function renderCourseView() {
   $('#courseHead').innerHTML = `<div class="chead"><button class="back" data-go="courses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg> Courses</button>
     <div><h1>${esc(C.name)}</h1>${levelInfo(C) ? `<div class="cmeta clevel"><b>${levelInfo(C)[0]}</b> · ${levelInfo(C)[1]}</div>` : ''}<div class="cmeta">${cards} cards · ${C.units.length} unit${C.units.length === 1 ? '' : 's'} · ${p.done} of ${p.total} lessons done</div>${courseDates(C) ? `<div class="cmeta cdates">${courseDates(C)}</div>` : ''}</div>
     ${C.description ? `<p class="cdesc">${esc(C.description)}</p>` : ''}
+    ${on ? '' : coursePreviewHTML(k)}
     <div class="csets">
       <div class="csrow"><span class="clab">In your daily mix</span><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="In your daily mix"></button></div>
       ${on ? '' : `<p class="chint">Switch it on to get its cards in Today, or tap any lesson to try it.</p>`}
@@ -36274,6 +36343,11 @@ function setCourseStyle(k, v) {
 }
 /* ---------- shared clicks: open a course, toggle the mix, new cards a day ---------- */
 document.addEventListener('click', e => {
+  const cf=e.target.closest('[data-cat]');if(cf){catalogCategory=cf.dataset.cat;renderCourses();document.querySelector(`[data-cat="${catalogCategory}"]`)?.focus();return;}
+  const lf=e.target.closest('[data-level]');if(lf){catalogLevel=lf.dataset.level;renderCourses();document.querySelector(`[data-level="${catalogLevel}"]`)?.focus();return;}
+  if(e.target.closest('[data-catalog-reset]')){catalogCategory='all';catalogLevel='all';renderCourses();return;}
+  const pa=e.target.closest('[data-preview-add]');if(pa){setMix(pa.dataset.previewAdd,true);renderHome();toast('Added to your daily mix.');return;}
+  const sa=e.target.closest('[data-sample]');if(sa){answerPreview(sa.dataset.sampleCourse,sa.dataset.sample);return;}
   const g = e.target.closest('[data-go]'); if (g) { go(g.dataset.go); return; }
   const o = e.target.closest('[data-open]'); if (o) { go('course', o.dataset.open); return; }
   const m = e.target.closest('[data-mix]');

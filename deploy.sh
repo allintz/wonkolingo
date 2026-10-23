@@ -11,6 +11,7 @@ for f in src/*.js; do node --check "$f"; done
 node tests/unit.test.mjs
 node scripts/lint_shared.mjs
 node tests/tidy.test.mjs
+node tests/catalog.test.mjs
 node tests/smoke.mjs
 wrangler deploy
 node tests/live-smoke.mjs || { echo "The live site failed its check. Look before telling anyone it's up."; exit 1; }

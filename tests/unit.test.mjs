@@ -69,3 +69,11 @@ t(wkb.repair && wkb.repair.days.join() === '2026-10-16', 'weekday earn-back span
 const old = computeStreak(four.concat('2026-10-12', '2026-10-13'), { days: all }, '2026-10-14');
 t(!old.repair, 'no earn-back once practice resumed on an earlier day', old);
 console.log(f ? f + ' failures' : 'unit tests pass');
+
+// Catalog metadata survives upload validation; unsupported categories are rejected.
+for (const category of ['hill','policy','tech','security','democracy','other']) {
+  const c=validateCourse({...mk([rc({}),rc({})]),category,categoryLabel:'Economics'});
+  t(c.ok && c.course.category===category && c.course.categoryLabel==='Economics','category retained '+category);
+}
+t(!validateCourse({...mk([rc({}),rc({})]),category:'invalid'}).ok,'unsupported category rejected');
+t(!validateCourse({...mk([rc({}),rc({})]),category:'other',categoryLabel:4}).ok,'category label must be text');

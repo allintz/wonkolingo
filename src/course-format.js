@@ -31,6 +31,11 @@ function validateCourse(raw) {
     if (!['beginner', 'intermediate', 'advanced'].includes(raw.level)) err('level', 'must be "beginner", "intermediate" or "advanced"');
     else c.level = raw.level;
   }
+  if (raw.category !== undefined && raw.category !== '') {
+    if (!['hill','policy','tech','security','democracy','other'].includes(raw.category)) err('category', 'must be hill, policy, tech, security, democracy or other');
+    else c.category = raw.category;
+  }
+  if (raw.categoryLabel !== undefined) c.categoryLabel = str(raw.categoryLabel, 'categoryLabel', 40, false) || '';
   c.speakers = {};
   if (raw.speakers !== undefined) {
     if (!raw.speakers || typeof raw.speakers !== 'object' || Array.isArray(raw.speakers)) err('speakers', 'must be an object');

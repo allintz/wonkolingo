@@ -1,0 +1,50 @@
+export async function catalogChecks(p) {
+ return p.evaluate(async()=>{
+  const out=[],ok=(v,n)=>out.push([!!v,n]);
+  if(run)quitRun(true);state=normalizeState({});state.mix={};catalogCategory='all';catalogLevel='all';cQuery='';go('courses');
+  const keys=Object.keys(COURSES).filter(k=>k!=='terms');
+  ok(keys.every(k=>catalogCategories().some(([id])=>id===COURSES[k].category)),'all built-in courses have explicit valid categories');
+  ok(document.querySelectorAll('#cLists .cline').length===keys.length,'every course appears exactly once');
+  ok(document.querySelectorAll('.catalog-section').length>=5,'all five subject categories rendered');
+  ok(document.querySelectorAll('.catalog-start ol li').length===5,'one suggested path contains five courses');
+  document.querySelector('[data-cat="tech"]').click();
+  ok([...document.querySelectorAll('#cLists .copen')].every(b=>categoryOf(COURSES[b.dataset.open])==='tech'),'category filter covers all course rows');
+  const before=JSON.stringify(state.mix);document.querySelector('[data-level="advanced"]').click();
+  ok(!document.querySelector('#cLists .cline')&&/No courses match/.test(document.querySelector('#cLists').textContent),'combined filters show useful empty state');
+  ok(JSON.stringify(state.mix)===before,'filters leave daily mix unchanged');
+  document.querySelector('[data-catalog-reset]').click();
+  ok(document.querySelectorAll('#cLists .cline').length===keys.length,'clear filters restores full catalog');
+  cQuery='AI Timelines and Forecasting';renderCourses();
+  ok([...document.querySelectorAll('#cSearchOut .copen')].some(b=>b.dataset.open==='timelines'),'search matches course titles');
+  cQuery='';catalogCategory='all';catalogLevel='all';go('course','tech');
+  ok(!!document.querySelector('.course-preview')&&/weeks/.test(document.querySelector('.course-preview').textContent),'off-mix course has duration and preview');
+  ok(document.querySelectorAll('.preview-units li').length===COURSES.tech.units.length,'preview lists all units with card counts');
+  const snap=JSON.stringify({srs:state.srs,xp:state.xp,removed:state.removed,mix:state.mix});
+  const sample=previewSample('tech'),ch=sample.t==='mc'?sample:sample.choice;
+  document.querySelector(`[data-sample="${ch.a}"]`).click();
+  ok(document.querySelector('#previewAnswer').textContent.includes('Correct'),'sample question responds correctly');
+  ok(JSON.stringify({srs:state.srs,xp:state.xp,removed:state.removed,mix:state.mix})===snap,'sample changes no reviews, XP, removals or mix');
+  document.querySelector('[data-preview-add]').click();
+  ok(inMix('tech')&&!document.querySelector('.course-preview'),'preview adds course to daily mix');
+  // A legacy upload gets an editable suggestion; explicit and custom categories survive installation.
+  const raw={format:COURSE_FORMAT,id:'catalog-test',title:'AI Chips',units:[{title:'U',lessons:[{title:'L',items:[{t:'mc',p:'Q?',o:['a','b'],a:0,x:'X'},{t:'recall',p:'Q2?',answer:'A',x:'X'}]}]}]};
+  openAdd(JSON.stringify(raw));runCheck();
+  ok(addState.check.ok&&addState.check.course.category==='security'&&!!document.querySelector('#addCategory'),'legacy upload gets category suggestion');
+  const select=document.querySelector('#addCategory');select.value='other';select.dispatchEvent(new Event('change',{bubbles:true}));
+  const label=document.querySelector('#addCategoryLabel');label.value='Economics';label.dispatchEvent(new Event('change',{bubbles:true}));
+  ok(addState.check.course.category==='other'&&addState.check.course.categoryLabel==='Economics','uploader can choose and name another category');
+  closeSheet('#addc');
+  const c=validateCourse({...raw,category:'security'}).course;
+  installCourses([{slug:'catalog-test',course:c,author:'Tester',authorId:'t',version:1}]);
+  ok(COURSES['c:catalog-test'].category==='security','group installation retains category');
+  catalogCategory='security';catalogLevel='all';go('courses');
+  ok([...document.querySelectorAll('#cLists .copen')].some(b=>b.dataset.open==='c:catalog-test'),'group course participates in subject filter');
+  catalogCategory='group';renderCourses();
+  ok([...document.querySelectorAll('#cLists .copen')].every(b=>COURSES[b.dataset.open].group),'group filter isolates group courses');
+  installCourses([]);catalogCategory='all';catalogLevel='all';cQuery='';
+  const data=Object.values(COURSES).map(c=>[c.units,c.keyTerms,c.basics]);
+  const at=contentAt;applyContent({builtAt:at+1,courses:{tech:{...COURSES.tech,category:'tech'}}});
+  ok(COURSES.tech.category==='tech','downloaded phone content preserves category metadata');
+  go('courses');return out;
+ });
+}

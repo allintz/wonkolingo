@@ -79,13 +79,16 @@ r = await call('/api/courses', { token: A.token }); ok(r.s === 200 && r.d.course
 r = await call('/api/courses', { token: A.token, body: { course: { format: 'nope' } } }); ok(r.s === 422 && Array.isArray(r.d.errors), 'invalid course -> 422 with errors', r);
 r = await call('/api/courses', { token: A.token, body: { course: course('Bad ID!') } }); ok(r.s === 422, 'bad slug -> 422', r);
 r = await call('/api/courses', { token: A.token, raw: JSON.stringify({ course: course('big', 'Big', { description: 'x'.repeat(210000) }) }) }); ok(r.s === 413, 'oversized course -> 413', r.s);
-r = await call('/api/courses', { token: A.token, body: { course: course('test-one') } }); ok(r.s === 200 && r.d.version === 1 && !r.d.updated, 'publish course', r);
+r = await call('/api/courses', { token: A.token, body: { course: course('test-one','Test Course',{category:'policy'}) } }); ok(r.s === 200 && r.d.version === 1 && !r.d.updated, 'publish course', r);
 r = await call('/api/courses', { token: A.token, body: { course: course('test-one', 'Renamed') } }); ok(r.s === 200 && r.d.version === 2 && r.d.updated, 'author update bumps version', r);
-r = await call('/api/courses', { token: B.token, body: { course: course('test-one') } }); ok(r.s === 409, 'other member same id -> 409', r);
-r = await call('/api/courses', { token: C.token, body: { course: course('test-one') } }); ok(r.s === 200, 'same id in another group allowed', r);
+r = await call('/api/courses', { token: B.token, body: { course: course('test-one','Test Course',{category:'policy'}) } }); ok(r.s === 409, 'other member same id -> 409', r);
+r = await call('/api/courses', { token: C.token, body: { course: course('test-one','Test Course',{category:'policy'}) } }); ok(r.s === 200, 'same id in another group allowed', r);
 r = await call('/api/courses', { token: B.token }); ok(r.s === 200 && r.d.courses.length === 1 && r.d.courses[0].title === 'Renamed' && r.d.courses[0].author === 'Alicescript', 'member sees group course', r.d);
 const stored = r.d.courses[0].course; ok(stored.units[0].lessons[0].items[0].p.includes('<img'), 'course text stored raw (client must escape)');
 // reports
+r = await call('/api/courses', { token:A.token,body:{course:course('test-one','Test Course',{category:'other',categoryLabel:'Economics'})} }); ok(r.s===200,'category update accepted',r);
+r = await call('/api/courses', {token:A.token});ok(r.d.courses.some(x=>x.course.category==='other'&&x.course.categoryLabel==='Economics'),'category and label survive API storage');
+r = await call('/api/courses', {token:A.token,body:{course:course('bad-category','Bad',{category:'invalid'})}});ok(r.s===422,'invalid category rejected by server',r.s);
 r = await call('/api/courses/test-one/reports', { token: B.token, body: { note: '' } }); ok(r.s === 400, 'report: empty note -> 400', r);
 r = await call('/api/courses/test-one/reports', { token: B.token, body: { note: 'Wrong <b>answer</b>', itemText: 'Q1', lessonId: 'c:test-one:u0l0' } }); ok(r.s === 200, 'report ok', r);
 r = await call('/api/courses/test-one/reports', { token: B.token }); ok(r.s === 403, 'non-author cannot list reports', r);

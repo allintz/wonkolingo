@@ -2,6 +2,7 @@
 // Run: node tests/e2e.test.mjs http://localhost:8799   (needs Google Chrome; set CHROME=/path/to/chrome otherwise)
 // Covers: cold start on every route, sign-up and sign-in, a full session, every card rendered and answered in every
 // style, saved states of every shape, phone layout, offline and slow networks, groups, and Me settings.
+import { catalogChecks } from './catalog-checks.mjs';
 import { tidyChecks } from './tidy-checks.mjs';
 import { chromium } from 'playwright-core';
 import { randomBytes } from 'node:crypto';
@@ -994,6 +995,11 @@ tests.tidy = async () => {
   const p = await page(c); await p.goto(BASE + '/');
   for(const [v,name] of await tidyChecks(p)) ok(v, 'tidy: '+name);
   ok(!p.errors.length, 'tidy: no browser errors',p.errors); await c.close();
+};
+
+tests.catalog = async () => {
+  const c=await ctx({storage:{'wl-account':JSON.stringify({token:'x.y',player:{id:'catalog',name:'Catalog'}})}});const p=await page(c);await p.goto(BASE+'/');
+  for(const [v,name]of await catalogChecks(p))ok(v,'catalog: '+name);ok(!p.errors.length,'catalog: no browser errors',p.errors);await c.close();
 };
 
 for (const [name, fn] of Object.entries(tests)) {

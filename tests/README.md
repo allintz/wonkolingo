@@ -40,3 +40,7 @@ wrangler dev --local --port 8795 --ip 127.0.0.1 --compatibility-date 2026-04-17 
 `node scripts/lint_shared.mjs` validates the current built-in identity graph in `docs/content-v2.json`. `node tests/tidy.test.mjs` checks shared learning history, v2 migration, removals/restores, skips, familiarity checklists, glossary terms and direct lessons in local Chrome. Both run before deployment. The main browser suite includes the same assertions as `ONLY=tidy`.
 
 The page and new iPhone bundles fetch `/content-v2.json`. Keep the existing `/content.json` unchanged for older installed apps: they cannot interpret list-based duplicate links or the retired Toolkit draft. A physical phone needs the updated native bundle before receiving this app behavior. `WONKOLINGO_SOURCE` optionally points build.sh at a staging page for isolated testing.
+
+## Course catalog (2026-10-23)
+
+`node tests/catalog.test.mjs` checks categories, category/level filters, title search, the suggested path, previews, sample questions without progress changes, editable upload suggestions, and category metadata in downloaded content. It exercises 320px and 390px phone layouts, desktop, and dark mode. `ONLY=catalog` runs the corresponding checks in the main browser suite. Course category round trips are covered by `api.test.mjs`. The catalog suite is also part of the deployment gate.
