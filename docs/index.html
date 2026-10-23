@@ -844,8 +844,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-23-9712acd';
-  window.WL_BUILT_AT = +'1792762114000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-23-ff7fbaf';
+  window.WL_BUILT_AT = +'1792762242000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -35340,7 +35340,7 @@ function setTrial(v) { try { localStorage.setItem('wl-trial', v); } catch (e) {}
 function needGate() { return !ACCT && !gateOffline && trialState() !== 'on'; }
 // Where the sign-up screen opens: "save your progress" after a trial, else the welcome (or sign-in when asked for).
 function gateStart(fallback) { return trialState() === 'done' ? (hasProgress() ? 'save' : 'welcome') : fallback || 'welcome'; }
-const TRY_COURSES = [['policy', 'Laws, bills and who argues what in AI policy'], ['lingo', 'What Hill staffers really mean'], ['proc', 'How a bill moves through Congress']];
+const TRY_COURSES = [['policy', 'Laws, bills and who argues what in AI policy'], ['lingo', 'A playful joke course, not checked for accuracy'], ['proc', 'How a bill moves through Congress']];
 function startTrial(k) {
   if (!COURSES[k]) return;
   setTrial('on'); hideGate();
