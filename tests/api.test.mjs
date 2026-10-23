@@ -86,8 +86,9 @@ r = await call('/api/courses', { token: C.token, body: { course: course('test-on
 r = await call('/api/courses', { token: B.token }); ok(r.s === 200 && r.d.courses.length === 1 && r.d.courses[0].title === 'Renamed' && r.d.courses[0].author === 'Alicescript', 'member sees group course', r.d);
 const stored = r.d.courses[0].course; ok(stored.units[0].lessons[0].items[0].p.includes('<img'), 'course text stored raw (client must escape)');
 // reports
-r = await call('/api/courses', { token:A.token,body:{course:course('test-one','Test Course',{category:'other',categoryLabel:'Economics'})} }); ok(r.s===200,'category update accepted',r);
-r = await call('/api/courses', {token:A.token});ok(r.d.courses.some(x=>x.course.category==='other'&&x.course.categoryLabel==='Economics'),'category and label survive API storage');
+r = await call('/api/courses', { token:A.token,body:{course:course('test-one','Test Course',{categories:['policy','other'],categoryLabel:'Economics'})} }); ok(r.s===200,'category update accepted',r);
+r = await call('/api/courses', {token:A.token});ok(r.d.courses.some(x=>x.course.categories?.includes('policy')&&x.course.categories?.includes('other')&&x.course.categoryLabel==='Economics'),'multiple tags and custom label survive API storage');
+r = await call('/api/courses', {token:A.token,body:{course:course('bad-tags','Bad',{categories:['policy','invalid']})}});ok(r.s===422,'invalid subject tag rejected by server',r.s);
 r = await call('/api/courses', {token:A.token,body:{course:course('bad-category','Bad',{category:'invalid'})}});ok(r.s===422,'invalid category rejected by server',r.s);
 r = await call('/api/courses/test-one/reports', { token: B.token, body: { note: '' } }); ok(r.s === 400, 'report: empty note -> 400', r);
 r = await call('/api/courses/test-one/reports', { token: B.token, body: { note: 'Wrong <b>answer</b>', itemText: 'Q1', lessonId: 'c:test-one:u0l0' } }); ok(r.s === 200, 'report ok', r);

@@ -41,7 +41,7 @@ The app shuffles answer options, match pairs and ordering steps itself, so write
   "title": "State AI Bills",
   "description": "What the biggest state AI laws require and who they cover.",
   "level": "intermediate",
-  "category": "policy",
+  "categories": ["policy", "tech"],
   "caveat": "Facts current as of October 2026. Simplified; check the statute before relying on details.",
   "speakers": {
     "s": { "n": "Sam", "r": "State legislative staffer" }
@@ -66,7 +66,8 @@ The app shuffles answer options, match pairs and ordering steps itself, so write
 | `description` | Optional, up to 200 characters. |
 | `caveat` | Optional, up to 400 characters. Shown beside the course. |
 | `level` | Optional: `"beginner"` (no background needed), `"intermediate"` (assumes the basics of the field) or `"advanced"` (for people who already work on it). Shown on the course. Intermediate and advanced courses can skip intro material: don't spend cards defining terms the level assumes. |
-| `category` | Optional: `"hill"`, `"policy"`, `"tech"`, `"security"`, `"democracy"` or `"other"`. The uploader can change it before publishing. If omitted, the app suggests one from the title and description. |
+| `category` | Legacy single tag, still accepted. Optional: `"hill"`, `"policy"`, `"tech"`, `"security"`, `"democracy"` or `"other"`. The uploader can change it before publishing. If omitted, the app suggests one from the title and description. |
+| `categories` | Recommended: an array of one or more subject tags from `"hill"`, `"policy"`, `"tech"`, `"security"`, `"democracy"`, `"other"`. Choose all that fit. The uploader can edit them before publishing. Missing tags receive editable suggestions. If both fields exist, `categories` takes precedence. |
 | `categoryLabel` | Optional, up to 40 characters. A name for an `"other"` category, such as “Economics”. |
 | `speakers` | Optional. Up to 8 characters who "say" quotes. Keys are 1 to 8 lowercase letters. `n` is a name (up to 30 characters), `r` is a role (up to 60). Use fictional people, never real ones. |
 | `units` | 1 to 12 units. Each has `title` (up to 60 characters), optional `desc` (up to 200) and `lessons`. |

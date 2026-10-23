@@ -22,7 +22,7 @@ const cStart = html.indexOf('const COURSES = Object.assign(Object.create(null), 
 const cFrom = html.indexOf('{', html.indexOf('Object.create(null)', cStart));
 const cEnd = html.indexOf('\n});', cFrom);
 const courses = new Function(...unitNames, `return (${html.slice(cFrom, cEnd + 2)});`)(...unitNames.map(n => units[n]));
-const keep = ['name', 'units', 'pre', 'created', 'updated', 'description', 'caveat', 'meta', 'keyTerms', 'basics', 'level', 'category', 'categoryLabel'];
+const keep = ['name', 'units', 'pre', 'created', 'updated', 'description', 'caveat', 'meta', 'keyTerms', 'basics', 'level', 'category', 'categories', 'categoryLabel'];
 const aliases = JSON.parse(block('CARD_ALIASES', '{', '}'));
 const data = { aliases, retired: ['tools2'], builtAt: +builtAt, courses: Object.fromEntries(Object.entries(courses).map(([k, c]) => [k, Object.fromEntries(keep.filter(f => c[f] !== undefined).map(f => [f, c[f]]))])), glossary, sources };
 writeFileSync(out, JSON.stringify(data));

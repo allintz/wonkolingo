@@ -1,5 +1,6 @@
+import {choiceChecks} from './choice-checks.mjs';
 export async function catalogChecks(p) {
- return p.evaluate(async()=>{
+ const catalog = await p.evaluate(async()=>{
   const out=[],ok=(v,n)=>out.push([!!v,n]);
   if(run)quitRun(true);state=normalizeState({});state.mix={};catalogCategory='all';catalogLevel='all';cQuery='';go('courses');
   const keys=Object.keys(COURSES).filter(k=>k!=='terms');
@@ -8,7 +9,10 @@ export async function catalogChecks(p) {
   ok(document.querySelectorAll('.catalog-section').length>=5,'all five subject categories rendered');
   ok(document.querySelectorAll('.catalog-start ol li').length===5,'one suggested path contains five courses');
   document.querySelector('[data-cat="tech"]').click();
-  ok([...document.querySelectorAll('#cLists .copen')].every(b=>categoryOf(COURSES[b.dataset.open])==='tech'),'category filter covers all course rows');
+  ok([...document.querySelectorAll('#cLists .copen')].every(b=>categoriesOf(COURSES[b.dataset.open]).includes('tech')),'category filter covers all course rows');
+  document.querySelector('[data-cat="tech"]').click();ok(catalogCategory==='all','tapping active tag returns to All');document.querySelector('[data-cat="tech"]').click();
+  ok([...document.querySelectorAll('#cLists .copen')].some(b=>b.dataset.open==='chips'),'secondary tag finds course');
+  ok(document.querySelectorAll('#cLists .cline').length===new Set([...document.querySelectorAll('#cLists .copen')].map(b=>b.dataset.open)).size,'tag filter does not duplicate course rows');
   const before=JSON.stringify(state.mix);document.querySelector('[data-level="advanced"]').click();
   ok(!document.querySelector('#cLists .cline')&&/No courses match/.test(document.querySelector('#cLists').textContent),'combined filters show useful empty state');
   ok(JSON.stringify(state.mix)===before,'filters leave daily mix unchanged');
@@ -29,10 +33,10 @@ export async function catalogChecks(p) {
   // A legacy upload gets an editable suggestion; explicit and custom categories survive installation.
   const raw={format:COURSE_FORMAT,id:'catalog-test',title:'AI Chips',units:[{title:'U',lessons:[{title:'L',items:[{t:'mc',p:'Q?',o:['a','b'],a:0,x:'X'},{t:'recall',p:'Q2?',answer:'A',x:'X'}]}]}]};
   openAdd(JSON.stringify(raw));runCheck();
-  ok(addState.check.ok&&addState.check.course.category==='security'&&!!document.querySelector('#addCategory'),'legacy upload gets category suggestion');
-  const select=document.querySelector('#addCategory');select.value='other';select.dispatchEvent(new Event('change',{bubbles:true}));
+  ok(addState.check.ok&&addState.check.course.category==='security'&&!!document.querySelector('[data-add-category]'),'legacy upload gets category suggestion');
+  document.querySelector('[data-add-category="other"]').click();
   const label=document.querySelector('#addCategoryLabel');label.value='Economics';label.dispatchEvent(new Event('change',{bubbles:true}));
-  ok(addState.check.course.category==='other'&&addState.check.course.categoryLabel==='Economics','uploader can choose and name another category');
+  ok(addState.check.course.categories.includes('security')&&addState.check.course.categories.includes('other')&&addState.check.course.categoryLabel==='Economics','uploader can select multiple tags and name Other');
   closeSheet('#addc');
   const c=validateCourse({...raw,category:'security'}).course;
   installCourses([{slug:'catalog-test',course:c,author:'Tester',authorId:'t',version:1}]);
@@ -47,4 +51,5 @@ export async function catalogChecks(p) {
   ok(COURSES.tech.category==='tech','downloaded phone content preserves category metadata');
   go('courses');return out;
  });
+ return [...catalog,...await choiceChecks(p)];
 }

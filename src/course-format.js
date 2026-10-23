@@ -35,6 +35,10 @@ function validateCourse(raw) {
     if (!['hill','policy','tech','security','democracy','other'].includes(raw.category)) err('category', 'must be hill, policy, tech, security, democracy or other');
     else c.category = raw.category;
   }
+  if (raw.categories !== undefined) {
+    if (!Array.isArray(raw.categories) || !raw.categories.length || raw.categories.length > 6 || raw.categories.some(k => !['hill','policy','tech','security','democracy','other'].includes(k))) err('categories', 'must contain 1 to 6 valid subject tags');
+    else { c.categories = [...new Set(raw.categories)]; c.category = c.categories[0]; }
+  } else if (c.category) c.categories = [c.category];
   if (raw.categoryLabel !== undefined) c.categoryLabel = str(raw.categoryLabel, 'categoryLabel', 40, false) || '';
   c.speakers = {};
   if (raw.speakers !== undefined) {
