@@ -6,7 +6,7 @@ A spaced-repetition quiz app for groups of friends, with a Duolingo-style social
 - **Procedure:** how bills move through the House and Senate: committees, the Rules Committee, cloture, reconciliation, conference, vetoes and the Congressional Review Act.
 - **FRONTIER Act:** how the leading bipartisan House frontier AI bill (H.R. 9925) would work: developer tiers, reporting, licensed outside auditors, emergency orders and state preemption. Also available as a course file in [courses/frontier-act.json](courses/frontier-act.json).
 
-Play it at https://allintz.github.io/wonkolingo/ (also at https://wonkolingo.alex-l-lintz.workers.dev).
+Play it at https://wonkolingo.com/. The former workers.dev address transfers saved progress and redirects here.
 
 It's a single self-contained page (`docs/index.html`). Your own progress is saved in your browser.
 
@@ -16,7 +16,7 @@ Start a group or join one with a 6-letter invite code to see everyone's streaks,
 
 ## Making your own courses
 
-Anyone in a group can add a course with **+ Add course**. Give your AI assistant the [course format guide](course-guide.md) (also at https://wonkolingo.alex-l-lintz.workers.dev/course-guide.md), upload the `.json` file it produces, and the app checks it before publishing it to your group. Everyone's lessons count toward the same leaderboard. Players can report wrong answers; only the author sees the reports. See [example-course.json](example-course.json) for a small complete course.
+Anyone in a group can add a course with **+ Add course**. Give your AI assistant the [course format guide](course-guide.md) (also at https://wonkolingo.com/course-guide.md), upload the `.json` file it produces, and the app checks it before publishing it to your group. Everyone's lessons count toward the same leaderboard. Players can report wrong answers; only the author sees the reports. See [example-course.json](example-course.json) for a small complete course.
 
 Streaks are forgiving: you choose which days count (every day, weekdays or custom), can pause, and earn a streak freeze every 5 practice days (up to 3) that covers a missed day automatically. Progress saves to an account that every player gets automatically once they answer their first cards, so it follows you across devices; groups are optional on top. There are no emails or passwords. To sign in on another device, use a passkey (Face ID, Touch ID or a device PIN), a single-use 8-character code shown on a device that's already signed in (10 minutes), or the recovery code. A player outside a group sits in a private one-person "home" group on the server (`groups.solo = 1`); joining or leaving a group moves the same account. See `src/accounts.js`.
 
@@ -33,3 +33,7 @@ The Staff Talk answers are generic rules of thumb from published staffer guides 
 ## Editing
 
 The source lives outside this repo. `build.sh` wraps it into `docs/index.html`; `deploy.sh` rebuilds and deploys the page and API to Cloudflare. For a new database, run `wrangler d1 execute DB --remote --file schema.sql` once. To publish to GitHub Pages, commit and push `docs/`.
+
+## Public address
+
+`redirect/` serves wonkolingo.com through an internal service binding to the existing app Worker and database. The old address keeps API and iPhone compatibility; browser visits transfer saved state by HTTPS POST, then open the new domain. Google sign-in and old passkeys can finish at `/legacy-signin` on the original origin before returning.

@@ -1,4 +1,5 @@
-// WonkoLingo group play API. Static files come from ./docs; only /api/* reaches this code.
+import { siteMove } from './site-move.js';
+// WonkoLingo API and site routing. Static files come from ./docs.
 // Identity is a random token per player (no passwords). The token doubles as a recovery code.
 // Every player has an account; groups are optional (see accounts.js for passkeys, sign-in codes and home groups).
 
@@ -16,7 +17,7 @@ const REMOVE_REASONS = ['trivia', 'wrong', 'unclear', 'known', 'other', 'none', 
 
 // Only WonkoLingo's own pages may call the API from a browser: the site, its GitHub Pages copy, the iPhone app and local
 // development. Other websites can't use visitors' browsers to spend the AI grading quota.
-const CORS_ORIGINS = ['https://wonkolingo.alex-l-lintz.workers.dev', 'https://allintz.github.io', 'capacitor://localhost'];
+const CORS_ORIGINS = ['https://wonkolingo.alex-l-lintz.workers.dev', 'https://wonkolingo.com', 'https://www.wonkolingo.com', 'https://allintz.github.io', 'capacitor://localhost'];
 const corsOk = o => CORS_ORIGINS.includes(o) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o);
 function withCors(res, req) {
   const o = req.headers.get('Origin') || '';
@@ -461,6 +462,8 @@ async function api(req, env, path) {
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
+    const moved = await siteMove(req, env);
+    if (moved) return moved;
     if (url.pathname.startsWith('/api/')) {
       if (req.method === 'OPTIONS') return withCors(new Response(null, { status: 204 }), req);
       // JSON only: a plain form or text post from another website can't reach the API without the browser asking first.

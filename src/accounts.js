@@ -10,7 +10,7 @@ const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 const ID_ALPHABET = 'abcdefghijkmnpqrstuvwxyz23456789';
 const SECRET_ALPHABET = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
 // Origins allowed to use passkeys; the passkey's site (rpID) is the origin's hostname.
-const PASSKEY_ORIGINS = ['https://wonkolingo.alex-l-lintz.workers.dev', 'http://localhost:8799', 'http://localhost:8791'];
+const PASSKEY_ORIGINS = ['https://wonkolingo.alex-l-lintz.workers.dev', 'https://wonkolingo.com', 'https://www.wonkolingo.com', 'http://localhost:8799', 'http://localhost:8791'];
 export const ACCOUNT_LIMITS = { newAccountsPerIpPerDay: 20, codeClaimsPerIpPerHour: 10, passkeysPerPlayer: 10, codeMinutes: 10, passwordTriesPerIpPerHour: 30,
   passwordTriesPerNamePerIpPerHour: 10, passwordTriesPerNamePerHour: 100, passkeyLoginsPerIpPerHour: 60, groupLookupsPerIpPerHour: 60, freshSignInMinutes: 15 };
 // AI screening of names and courses: a per-network and a site-wide daily cap, so screening can't run up the bill.

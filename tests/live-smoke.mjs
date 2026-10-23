@@ -1,8 +1,8 @@
 // Read-only check of the live site right after a deploy: pages load signed out without errors, and the API, privacy
 // page and Apple association file answer. Creates nothing.
-// Run: node tests/live-smoke.mjs [https://wonkolingo.alex-l-lintz.workers.dev]
+// Run: node tests/live-smoke.mjs [https://wonkolingo.com]
 import { chromium } from 'playwright-core';
-const SITE = (process.argv[2] || 'https://wonkolingo.alex-l-lintz.workers.dev').replace(/\/$/, '');
+const SITE = (process.argv[2] || 'https://wonkolingo.com').replace(/\/$/, '');
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const fails = [];
 const get = async (path, want) => { const r = await fetch(SITE + path); if (r.status !== 200) fails.push(`${path}: ${r.status}`); const t = await r.text(); if (want && !want.test(t)) fails.push(`${path}: unexpected body`); return t; };
@@ -18,6 +18,11 @@ for (const r of ['', '#courses', '#me', '#course/policy']) {
   await p.goto(SITE + '/' + r, { waitUntil: 'networkidle' });
   if (errs.length) fails.push(`${r || '/'}: ${errs.join(' | ')}`);
   if (!await p.locator('#gtNew').isVisible()) fails.push(`${r || '/'}: sign-up screen missing`);
+  if (new URL(SITE).hostname === 'wonkolingo.com') {
+    const prior = 'https://wonkolingo.alex-l-lintz.workers.dev/legacy-signin?return=wonkolingo.com#me';
+    if (!await p.locator('a[href="' + prior + '"]').count()) fails.push(`${r || '/'}: previous-origin sign-in missing`);
+  }
+
   await c.close();
 }
 await browser.close();

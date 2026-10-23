@@ -5,7 +5,7 @@ compatibility_date = "2026-09-01"
 [assets]
 directory = "./docs"
 binding = "ASSETS"
-run_worker_first = ["/api/*", "/.well-known/*", "/content.json"]
+run_worker_first = true
 
 [[d1_databases]]
 binding = "DB"
@@ -14,6 +14,7 @@ database_id = "0c6cfe6d-28ad-4e54-9b96-78d55d165124"
 
 # Sender for sign-in and confirmation codes (src/email.js). Email switches on once the RESEND_API_KEY secret is set too.
 [vars]
+REDIRECT_OLD_SITE = "true"
 EMAIL_FROM = "WonkoLingo <codes@wonkolingo.com>"
 # Players who can open the review page (/admin.html). Alex's account.
 ADMIN_PLAYERS = "2rpep26wjp"

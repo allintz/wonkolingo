@@ -112,7 +112,7 @@ export async function sendNudgeEmail(env, req, to, from) {
   const row = await env.DB.prepare("SELECT e.email, json_extract(s.json, '$.prefs.mailNudge') AS opt FROM emails e LEFT JOIN player_state s ON s.player_id = e.player_id WHERE e.player_id = ?").bind(to.id).first();
   if (!row || row.opt === 0 || row.opt === false) return false;
   if (!await takeRate(env, 'nudgemail:' + to.id, 2, 'day')) return false;
-  const site = 'https://wonkolingo.alex-l-lintz.workers.dev';
+  const site = 'https://wonkolingo.com';
   await send(env, req, row.email, `${from.name} nudged you on WonkoLingo`,
     `${from.name} is practicing on WonkoLingo and nudged you to do a round today.\n\n${site}/\n\nTo stop these emails, open Me in the app and switch off "Email me when a friend nudges me".`);
   return true;
