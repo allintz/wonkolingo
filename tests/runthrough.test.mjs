@@ -6,7 +6,7 @@ import { chromium } from 'playwright-core';
 import { randomBytes } from 'node:crypto';
 
 const BASE = (process.argv[2] || 'http://localhost:8791').replace(/\/$/, '');
-if (/workers\.dev|github\.io/.test(BASE)) { console.error('Local server only.'); process.exit(2); }
+if (!['localhost','127.0.0.1'].includes(new URL(BASE).hostname)) { console.error('Local server only.'); process.exit(2); }
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const ONLY = process.env.ONLY ? new Set(process.env.ONLY.split(',')) : null;
 let pass = 0, failN = 0; const fails = [];
@@ -30,6 +30,7 @@ async function player(name, { dayShift = 0, tz, phone = true } = {}) {
     await p.fill('#gtName', name); await p.fill('#gtUser', p.creds.username); await p.fill('#gtPass', p.creds.password);
     await p.click('#gtMake'); await p.waitForSelector('#gate', { state: 'hidden', timeout: 15000 });
   }
+  await p.evaluate(()=>{window.joinOrStart=async(mode,b)=>{const r=await apiCall(mode==='start'?'/api/groups':'/api/join',{groupName:b.group,code:b.code,name:b.name});G={code:r.code,groupName:r.groupName,player:r.player};saveG();await refreshAccount();await loadCourses();await refreshBoard();return r;};});
   await spy(p);
   return p;
 }
@@ -80,9 +81,17 @@ async function group(owner, members) {
   await ev(owner, `joinOrStart('start', { group: 'Run ${rnd()}', name: ACCT.player.name })`);
   const code = await ev(owner, 'G.code');
   for (const m of members) await ev(m, `joinOrStart('join', { code: '${code}', name: ACCT.player.name })`);
-  for (const x of [owner, ...members]) await ev(x, 'refreshBoard()');
+  const all=[owner,...members];
+  for(let i=0;i<all.length;i++)for(let j=i+1;j<all.length;j++){
+    const a=await ev(all[i],'ACCT.player.id'),b=await ev(all[j],'ACCT.player.id');
+    await ev(all[i],`apiCall('/api/friends/request',{to:'${b}'})`);await ev(all[j],`apiCall('/api/friends/accept',{to:'${a}'})`);
+  }
+  for (const x of all) {await ev(x, "apiCall('/api/inbox/seen',{}).then(()=>refreshBoard())");}
+
   return code;
 }
+async function profile(p,id){await ev(p,"go('group')");await p.click('[data-f-tab="friends"]');await p.click(`[data-f-profile="${id}"]`);}
+async function invite(p,id){await profile(p,id);await p.click('[data-f-streak]');await p.click('[data-fsreq]');}
 const board = async p => { await ev(p, 'refreshBoard()'); return ev(p, 'board'); };
 const clean = async (p, where) => { const t = await text(p, '#home'); const m = t.match(BAD_TEXT); ok(!m, `${p.who}: clean text on ${where}`, m && t.slice(Math.max(0, m.index - 60), m.index + 60)); };
 const noErrors = (p, where) => ok(p.errors.length === 0, `${p.who}: no page errors (${where})`, p.errors);
@@ -220,6 +229,7 @@ tests.buyFreezes = async () => {
   await ev(d2, `(async () => { const r = await apiCall('/api/password/login', { username: '${p.creds.username}', password: '${p.creds.password}' }); return r; })()`).then(async r => {
     await ev(d2, `(async r => { ACCT = { token: r.token, player: r.player, passkeys: 0 }; saveA(); state.owner = null; await syncNow(); renderHome(); })(${JSON.stringify(r)})`);
   }).catch(e => ok(false, 'second device sign-in', String(e)));
+  await d2.waitForFunction(()=>state.xp===350,null,{timeout:10000}).catch(()=>{});
   ok(await ev(d2, 'streakInfo().freezes') === 3 && await ev(d2, 'xpSpendable()') === 50, 'second device sees 3 freezes and 50 XP to spend', [await ev(d2, 'streakInfo().freezes'), await ev(d2, 'xpSpendable()')]);
   noErrors(p, 'buy freezes'); noErrors(d2, 'second device');
 };
@@ -245,9 +255,9 @@ tests.friends = async () => {
   const bid = await ev(b, 'ACCT.player.id'), cid = await ev(c, 'ACCT.player.id'), aid = await ev(a, 'ACCT.player.id');
   // no friend streaks yet: Group explains how to start one; Today shows nothing about friends
   await ev(a, `go('group')`);
-  ok(/Tap a name on the board to start one/.test(await text(a, '#group')), 'Group explains friend streaks when there are none');
+  ok(/Open a friend’s profile to invite them/.test(await text(a, '#group')), 'Group explains friend streaks when there are none');
   // Ana asks Ben from the board; Ben declines from Today
-  await a.click(`li[data-pid="${bid}"]`); await a.click(`[data-fsreq="${bid}"]`); await a.waitForTimeout(800);
+  await invite(a,bid); await a.waitForTimeout(800);
   ok(/Asked\s+Ben/.test(await text(a, '#group')), 'Ana sees her pending request with Cancel', await text(a, '#group'));
   await board(b); await ev(b, `go('today')`);
   ok(/Ana wants a friend streak with you/.test(await text(b, '#streakStrip')), 'Ben sees the request on Today', await text(b, '#streakStrip'));
@@ -255,7 +265,7 @@ tests.friends = async () => {
   ok((await ev(b, 'board.friends')).length === 0, 'No thanks removes it');
   // Ana asks Cy, then cancels from Group
   await ev(a, `gSel = null; refreshBoard()`); await a.waitForTimeout(500);
-  await a.click(`li[data-pid="${cid}"]`); await a.click(`[data-fsreq="${cid}"]`); await a.waitForTimeout(800);
+  await invite(a,cid); await a.waitForTimeout(800);
   await a.click(`#group [data-fsend="${cid}"]`); await a.waitForTimeout(800);
   ok((await ev(a, 'board.friends')).length === 0, 'Cancel withdraws the request');
   // Cy asks Ana; Ana tries to ask Cy back at the same time and is told to accept instead
@@ -296,6 +306,7 @@ tests.limits = async () => {
   const code = await (async () => { await ev(a, `joinOrStart('start', { group: 'Lim ${rnd()}', name: 'Lim' })`); return ev(a, 'G.code'); })();
   const others = [];
   for (let i = 0; i < 6; i++) others.push(await ev(a, `fetch('/api/join', { method: 'POST', headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': '10.9.${i}.1' }, body: JSON.stringify({ code: '${code}', name: 'Pal${i}' }) }).then(r => r.json())`));
+  for(const o of others){const aid=await ev(a,'ACCT.player.id');await ev(a,`apiCall('/api/friends/request',{to:'${o.player.id}'})`);await ev(a,`fetch('/api/friends/accept',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer ${o.token}'},body:JSON.stringify({to:'${aid}'})})`);}
   const results = [];
   for (const o of others) results.push(await ev(a, `apiCall('/api/friend/request', { to: '${o.player.id}', today: dstr(new Date()) }).then(() => 'ok', e => e.message)`));
   ok(results.slice(0, 5).every(x => x === 'ok') && /up to 5/.test(results[5]), 'sixth friend streak request refused', results);
@@ -312,17 +323,17 @@ tests.nudgesAndInbox = async () => {
   const add = await ev(b, `apiCall('/api/email', { email: 'oli-${rnd()}@example.com' })`);
   ok(add.devCode, 'test server returns the email code', add);
   await ev(b, `apiCall('/api/email/verify', { code: '${add.devCode}' })`);
-  await ev(b, `__snd.length = 0; lastUnseen = null; refreshBoard()`); await b.waitForTimeout(400);
+  await ev(b, `__snd.length = 0; lastUnseen = null; apiCall('/api/inbox/seen',{}).then(()=>refreshBoard())`); await b.waitForTimeout(400);
   // Nia nudges Oli from the board (Oli hasn't practiced; his streak is 0 so the inline button isn't shown)
   await ev(a, `refreshBoard().then(() => go('group'))`); await a.waitForTimeout(500);
-  await a.click(`li[data-pid="${bid}"]`);
-  ok(await vis(a, `.lbact [data-nudge="${bid}"]`), 'Nudge offered for someone who hasn’t practiced');
+  await profile(a,bid);
+  ok(await vis(a, `#friendsBody [data-nudge="${bid}"]`), 'Nudge offered for someone who hasn’t practiced');
   const resp = a.waitForResponse(r => r.url().includes('/api/nudge'));
-  await a.click(`.lbact [data-nudge="${bid}"]`);
+  await a.click(`#friendsBody [data-nudge="${bid}"]`);
   const nr = await (await resp).json();
   ok(nr.ok && nr.emailed === true, 'nudge sent, and by email', nr);
   await a.waitForTimeout(800);
-  ok(await ev(a, `nudgedToday('${bid}')`) && /Nudged/.test(await text(a, '#group')), 'Nudge shows as done');
+  ok(await ev(a, `nudgedToday('${bid}')`), 'Nudge shows as done');
   const again = await ev(a, `apiCall('/api/nudge', { to: '${bid}' }).then(() => 'ok', e => e.message)`);
   ok(/already nudged/.test(again), 'second nudge the same day refused', again);
   // Oli, with the app open, gets the sound and the badge on the next refresh
@@ -340,11 +351,11 @@ tests.nudgesAndInbox = async () => {
   for (let i = 0; i < 60 && await answerOne(b); i++);
   await b.waitForSelector('#result', { timeout: 10000 }); await home(b); await ev(b, 'syncNow()');
   // Nia high-fives Oli's session; the button stays done after a reload
-  await ev(a, `refreshBoard().then(() => go('group'))`); await a.waitForTimeout(600);
-  ok(await vis(a, `.feed [data-kudos="${bid}"]`), 'High five button on Oli’s feed item');
-  await a.click(`.feed [data-kudos="${bid}"]`); await a.waitForTimeout(600);
+  await ev(a, `refreshBoard().then(() => {friendUI().tab='activity';go('group');renderGroup()})`); await a.waitForTimeout(600);
+  ok(await vis(a, `.friend-activity [data-kudos="${bid}"]`), 'High five button on Oli’s feed item');
+  await a.click(`.friend-activity [data-kudos="${bid}"]`); await a.waitForTimeout(600);
   await a.reload(); await spy(a); await ev(a, `go('group')`); await a.waitForTimeout(800);
-  ok(await ev(a, `document.querySelector('.feed [data-kudos="${bid}"]').disabled`) === true, 'high-five stays done after reload');
+  ok(await ev(a, `document.querySelector('.friend-activity [data-kudos="${bid}"]').disabled`) === true, 'high-five stays done after reload');
   await ev(b, 'refreshBoard()'); await b.waitForTimeout(300); await b.click('#bellBtn'); await b.waitForTimeout(800);
   ok(/Nia high-fived your review session/.test(await text(b, '#inboxBody')), 'Oli sees the high-five', await text(b, '#inboxBody'));
   await b.click('#inboxSheet [data-close]');
@@ -452,7 +463,7 @@ tests.pushAsk = async () => {
   ok(!(await vis(a, '#pushAskOn')), '"Not now" hides the card');
   ok(await ev(a, `Date.now() - state.prefs.pushAskAt < 5000`), '...for 14 days (time saved)');
   // starting a friend streak brings up the phone's own prompt once
-  await a.click(`li[data-pid="${bid}"]`); await a.click(`[data-fsreq="${bid}"]`); await a.waitForTimeout(2200);
+  await invite(a,bid); await a.waitForTimeout(2200);
   ok(await ev(a, 'window.__asked') === 1 && await ev(a, 'window.__reg') === 1, 'friend streak request asks for notifications, then registers', [await ev(a, 'window.__asked'), await ev(a, 'window.__reg')]);
   // a second player who taps the card
   await ev(b, stub('prompt')); await ev(b, `go('group')`); await b.waitForTimeout(400);

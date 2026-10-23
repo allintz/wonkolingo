@@ -48,3 +48,9 @@ The page and new iPhone bundles fetch `/content-v2.json`. Keep the existing `/co
 ## Native widget stills (2026-10-23)
 
 `ONLY=widget node tests/e2e.test.mjs http://localhost:8807` checks the app-to-widget snapshot, uncapped XP, future days, reviews and freeze consumption on a local server. The full browser suite includes these checks. Native selection and old-payload compatibility can be checked with `cat ios/App/Shared/WidgetStore.swift tests/widget-store.test.swift > /tmp/wonko-widget-main.swift && swift /tmp/wonko-widget-main.swift`. The seven approved original-style PNGs are bundled under `ios/App/WonkoWidget/Artwork/`; the widget decodes 512px thumbnails at runtime to keep memory bounded.
+
+## Friends (2026-10-23)
+
+`FRIENDS_TEST_DB=.wrangler/friends-v1 node tests/friends.test.mjs http://127.0.0.1:8817` checks account-to-account username search, private email sign-ins, separate friendship and streak consent, mute/block/removal, course share links, reward concurrency, 7/30/100-day milestones, restart farming and migration of accepted legacy streak partners without adding all group members. Use a local server initialized from schema.sql with the same persist-to path. The date fixtures edit only that isolated local database. `ONLY=groups,retention,fixes` in the main browser suite checks the Friends screens. The broader run-through suite keeps legacy group API fixtures for older-app compatibility and explicitly connects friends.
+
+Deploy the additive migration `migrations/2026-10-23-friends.sql` before the Worker. Existing course group codes, player ids, review progress and streak rows stay in place. Old app versions can continue using the group API. New uploads use a personal library, with explicit share links. Weekly reward and badge claims are durable and unique per pair, recipient and numbered milestone. High fives stay in-app; request/streak push preferences and optional milestone pushes are under Friends.

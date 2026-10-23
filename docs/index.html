@@ -766,6 +766,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .xp-bonus .gk { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 8px; font-size: 13px; font-weight: 700; color: var(--brass); }
 .xp-bonus .gbar { height: 12px; }
 .xp-bonus p { margin: 0; color: var(--muted); font-size: 13px; font-weight: 600; }
+.friend-person{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}.friend-person .grow{flex:1;min-width:90px}.friend-person .meta{display:block}.friend-avatar{display:grid;place-items:center;background:var(--soft);color:var(--muted);border-radius:50%;width:38px;height:38px;flex-shrink:0;font-weight:800}.friend-block{margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}.friend-block summary{cursor:pointer;font-weight:700}.friend-activity{padding:12px 0;border-bottom:1px solid var(--line)}.friend-activity .friend-person{border:0;padding:0}.friend-activity p{margin:8px 0}.friend-stats{display:flex;gap:16px;margin:20px 0}.friend-options{display:flex;gap:15px;flex-wrap:wrap;margin-top:24px}.friend-setting{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.friend-empty{text-align:center;padding:24px 16px}.friend-empty img{width:85px;height:110px;object-fit:contain}.friend-earned{display:flex;align-items:center;gap:15px;padding:16px;border:1px solid var(--line);border-radius:12px;margin:18px 0;background:var(--soft)}.friend-owls{display:flex;align-items:center;flex-shrink:0}.friend-owls img{width:40px;height:55px;object-fit:contain}.friend-owls img+img{margin-left:-8px}.friend-earned p{margin:4px 0}.friend-badges{display:flex;flex-wrap:wrap;gap:14px;margin:20px 5px}.friend-badge{width:75px;height:75px;border:2px solid var(--brass);border-radius:50%;outline:1px solid var(--brass);outline-offset:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--brass);background:var(--soft)}.friend-badge b{font-size:24px;line-height:1.1}.friend-badge small{font-size:9px}.friend-badge.century{border-width:3px}.friend-username{padding:12px 0}#friendsBody .fld input{width:100%}#friendsSheet .sheet{max-width:520px}.friend-person .btn{white-space:nowrap}
+
 </style>
 
 <header class="top">
@@ -784,7 +786,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   <nav class="tabs" id="tabs" aria-label="Main">
     <button class="tabb" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Today</span></button>
     <button class="tabb" data-tab="courses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/></svg><span>Courses</span></button>
-    <button class="tabb" data-tab="group"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg><span>Group</span></button>
+    <button class="tabb" data-tab="group"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg><span>Friends</span></button>
     <button class="tabb" data-tab="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Me</span></button>
   </nav>
   <main class="views" id="home">
@@ -806,7 +808,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
       <section class="card" id="caveat"></section>
     </section>
     <section class="view" id="v-group" hidden>
-      <h1 class="vtitle">Group</h1>
+      <h1 class="vtitle">Friends</h1>
       <section class="card" id="group"></section>
     </section>
     <section class="view" id="v-me" hidden>
@@ -895,6 +897,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 <style>body.in-lesson .toast { bottom: auto; top: calc(64px + env(safe-area-inset-top, 0px)); }</style>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
+<div class="overlay" id="friendsSheet" hidden><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="friendsTitle"><div class="ghead"><h2 id="friendsTitle">Friends</h2><button class="x" data-f-close="1" aria-label="Close Friends">×</button></div><div id="friendsBody"></div></section></div>
 <script>
 // If the app itself hits an error, say so and offer a reload, instead of leaving a page that silently stops responding.
 (() => {
@@ -910,8 +913,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-23-38c1585';
-  window.WL_BUILT_AT = +'1792782914000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-23-781fc69';
+  window.WL_BUILT_AT = +'1792789450000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -38677,7 +38680,7 @@ function dailyXPHTML(xt, goal) {
 }
 function renderStrip() {
   const el = $('#streakStrip'); if (!el) return;
-  if (!xpToday() && !state.activeDays.length && !Object.keys(state.srs).length && !(G && board && (board.friends || []).length)) { el.hidden = true; return; }
+  if (!xpToday() && !state.activeDays.length && !Object.keys(state.srs).length && !(ACCT && board && (board.friends || []).length)) { el.hidden = true; return; }
   el.hidden = false;
   if (!run && earnBack()) toast('You earned your streak back.');
   const si = streakInfo(), goal = dailyGoal(), xt = xpToday();
@@ -38699,10 +38702,10 @@ $('#streakStrip').addEventListener('click', e => {
 });
 // Friend streaks: on Today only the active ones and requests waiting for you; the Group page also lists your own requests.
 function friendsHTML(inGroup) {
-  if (!board || !G) return '';
+  if (!board || !ACCT) return '';
   const fr = board.friends || [], act = fr.filter(f => f.status === 'active').sort((a, b) => (b.count || 0) - (a.count || 0));
   const inc = fr.filter(f => f.status === 'pending' && !f.mine), out = fr.filter(f => f.status === 'pending' && f.mine);
-  if (!act.length && !inc.length && !(inGroup && out.length)) return inGroup ? `<div class="fsl"><h4>Friend streaks</h4><p class="meta">Keep a streak going with a friend: a day counts when you both practice. Tap a name on the board to start one (up to 5).</p></div>` : '';
+  if (!act.length && !inc.length && !(inGroup && out.length)) return inGroup ? `<div class="fsl"><h4>Friend streaks</h4><p class="meta">Keep a streak going with a friend: a day counts when you both practice. Open a friend’s profile to invite them (up to 5).</p></div>` : '';
   const rows = act.map(f => {
     let st, btn = '';
     if (f.meDone && f.themDone) st = 'you both practiced today.';
@@ -38763,16 +38766,16 @@ function socialClick(t) {
 /* Notifications: the bell in the header (players in a group), a sheet listing nudges, high-fives and friend-streak news. */
 function renderBell() {
   const b = $('#bellBtn'); if (!b) return;
-  b.hidden = !G;
-  const n = board && G ? board.unseen || 0 : 0, badge = $('#bellN');
+  b.hidden = !ACCT;
+  const n = board && ACCT ? board.unseen || 0 : 0, badge = $('#bellN');
   badge.hidden = !n; badge.textContent = n > 9 ? '9+' : String(n);
   b.setAttribute('aria-label', n ? `Notifications, ${n} new` : 'Notifications');
 }
 // A new notification while the app is open gets a sound and a toast; on opening the app, only a toast.
 function noticeNotes() {
-  if (!board || !G) return;
+  if (!board || !ACCT) return;
   const n = board.unseen || 0;
-  if (lastUnseen !== null && n > lastUnseen && !run) { sfx('nudge'); toast('New notification from your group.'); }
+  if (lastUnseen !== null && n > lastUnseen && !run) { sfx('nudge'); toast('New notification from a friend.'); }
   else if (lastUnseen === null && n) toast(`${n} new notification${n === 1 ? '' : 's'}. Tap the bell.`);
   lastUnseen = n; renderBell();
 }
@@ -38788,7 +38791,7 @@ async function openInbox() {
 function renderInbox() {
   const el = $('#inboxBody');
   if (!inboxNotes) { el.innerHTML = '<p>Loading…</p>'; return; }
-  if (!inboxNotes.length) { el.innerHTML = '<p>Nothing yet. Nudges, high-fives and friend streak requests from your group show up here.</p>'; return; }
+  if (!inboxNotes.length) { el.innerHTML = '<p>Nothing yet. Nudges, high-fives and friend streak requests from your friends show up here.</p>'; return; }
   const pend = id => board && (board.friends || []).some(f => f.id === id && f.status === 'pending' && !f.mine);
   el.innerHTML = `<ul class="notes">${inboxNotes.map(n => {
     const who = `<b>${esc(n.name)}</b>`;
@@ -38797,11 +38800,17 @@ function renderInbox() {
     else if (n.kind === 'kudos') txt = `${who} high-fived your ${String(n.ref).startsWith('review-') ? 'review session' : 'lesson'}.`;
     else if (n.kind === 'fs_request') { txt = `${who} wants to start a friend streak with you.`; if (pend(n.from)) act = `<button class="btn sm" data-fsacc="${esc(n.from)}">Accept</button><button class="btn ghost sm" data-fsend="${esc(n.from)}">No thanks</button>`; }
     else if (n.kind === 'fs_accept') txt = `${who} accepted your friend streak. A day counts when you both practice.`;
+    else if(n.kind==='friend_request'){txt=`${who} sent you a friend request.`;if(board?.requests?.some(r=>r.id===n.from&&!r.mine))act=`<button class="btn sm" data-f-action="accept" data-id="${esc(n.from)}">Accept</button><button class="linkbtn" data-f-action="decline" data-id="${esc(n.from)}">Decline</button>`;}
+    else if(n.kind==='friend_accept')txt=`${who} accepted your friend request.`;
+    else if(n.kind==='friend_reward')txt=`You and ${who} reached ${esc(n.ref)} shared days. +50 XP each!`;
+    else if(n.kind==='friend_badge')txt=`You and ${who} earned a ${esc(n.ref)}-day shared badge.`;
+    else if(n.kind==='both_done')txt=`You and ${who} both practiced. Your friend streak grew!`;
     else return '';
     return `<li class="${n.seen ? '' : 'new'}"><span>${txt}</span><span class="when">${ago(n.at)}</span>${act ? `<div class="row">${act}</div>` : ''}</li>`;
   }).join('')}</ul>`;
 }
 $('#bellBtn').addEventListener('click', openInbox);
+$('#inboxBody').addEventListener('click', friendClick, true);
 $('#inboxBody').addEventListener('click', e => { const t = e.target.closest('button'); if (t) socialClick(t); });
 /* Celebrations on the result screen: the first round of the day extends the streak, milestones get a bigger moment,
    and so does reaching the daily goal or keeping a friend streak alive. Sounds follow the "done" chime. */
@@ -38878,7 +38887,7 @@ function isDayStr(d) { return typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.tes
 function dropBadTypes(s) {
   ['done', 'srs', 'hints', 'mix', 'xpBy', 'xpDays', 'newCounts', 'removed', 'myTerms', 'keyTerms', 'accepted', 'prefs', 'settings'].forEach(k => { if (s[k] !== undefined && !isObj(s[k])) delete s[k]; });
   ['activeDays', 'jumped'].forEach(k => { if (s[k] !== undefined && !Array.isArray(s[k])) delete s[k]; });
-  ['xp', 'xpBase', 'streak', 'newCount', 'resetAt', 'prefsAt', 'mixAt', 'settingsAt'].forEach(k => { if (s[k] !== undefined && !Number.isFinite(s[k])) delete s[k]; });
+  ['xp', 'xpBase', 'friendXP', 'streak', 'newCount', 'resetAt', 'prefsAt', 'mixAt', 'settingsAt'].forEach(k => { if (s[k] !== undefined && !Number.isFinite(s[k])) delete s[k]; });
   if (s.course != null && typeof s.course !== 'string') delete s.course;
   if (s.srs) for (const [id, c] of Object.entries(s.srs)) if (!isObj(c) || !isDayStr(c.due) || !isDayStr(c.last) || !(c.s > 0)) delete s.srs[id];
   if (s.activeDays) s.activeDays = s.activeDays.filter(isDayStr);
@@ -38906,7 +38915,7 @@ function blankState() { return { done: {}, xp: 0, xpBase: 0, xpBy: {}, streak: 0
 function defaultStreakSettings() { return { days: [true, true, true, true, true, true, true], pauses: [] }; }
 // XP is stored as a legacy base plus a running total per device, so merging two devices adds their earnings.
 const DEV = (() => { try { let d = localStorage.getItem('wl-device'); if (!d) { d = Math.random().toString(36).slice(2, 10); localStorage.setItem('wl-device', d); } return d; } catch (e) { return 'nodevice'; } })();
-const xpTotal = s => (s.xpBase || 0) + Object.values(s.xpBy || {}).reduce((a, b) => a + (+b || 0), 0);
+const xpTotal = s => (s.friendXP || 0) + (s.xpBase || 0) + Object.values(s.xpBy || {}).reduce((a, b) => a + (+b || 0), 0);
 function addXP(n) { state.xpBy = state.xpBy || {}; state.xpBy[DEV] = (state.xpBy[DEV] || 0) + n; state.xp = xpTotal(state); noteDayXP(n); }
 // XP earned per day (last three weeks), for the daily goal. Merging two devices keeps the larger count for each day.
 // Kept per device, like xpBy, so two devices' XP on the same day add up after a merge.
@@ -39918,7 +39927,7 @@ function finishSession() {
   const parts = [];
   if (run.reviewed) parts.push(`You remembered ${run.remembered} of ${run.reviewed} review${run.reviewed === 1 ? '' : 's'}`);
   if (run.newSeen) parts.push(`learned ${run.newSeen} new card${run.newSeen === 1 ? '' : 's'}`);
-  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${left ? `${left} card${left === 1 ? '' : 's'} left today.` : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${posting && G ? `<p class="meta" id="postLine">Posting to ${esc(G.groupName)}…</p>` : ''}${remAskHTML()}${styleTipHTML()}${choiceTipHTML()}${testerNoteHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT || gateOffline ? 'Done' : 'Save my progress'}</button>${(left || canLearn) && (ACCT || gateOffline) ? `<button class="btn ghost" id="rMore">${left ? `Next ${nextN}` : 'Learn more'}</button>` : ''}</div>`;
+  $('#resultIn').innerHTML = `<img class="mascot m-result" src="mascot/${run.reviewed && acc < 60 ? 'read' : 'cheer'}.webp" alt=""><h2>Session done.</h2><p>${(t => t.charAt(0).toUpperCase() + t.slice(1))(parts.join(' and '))}. ${left ? `${left} card${left === 1 ? '' : 's'} left today.` : tomorrow ? tomorrow + ' review' + (tomorrow === 1 ? '' : 's') + ' due tomorrow.' : 'Nothing else is due tomorrow.'}</p><div class="rtiles"><div class="rtile"><span class="k">XP</span><span class="v">+${run.xp}</span></div><div class="rtile acc"><span class="k">Remembered</span><span class="v">${run.reviewed ? acc + '%' : 'n/a'}</span></div><div class="rtile st"><span class="k">Streak</span><span class="v">${state.streak}d</span></div></div>${posting && G ? `<p class="meta" id="postLine">Saving your round…</p>` : ''}${remAskHTML()}${styleTipHTML()}${choiceTipHTML()}${testerNoteHTML()}<div class="rbtns"><button class="btn" id="rHome">${ACCT || gateOffline ? 'Done' : 'Save my progress'}</button>${(left || canLearn) && (ACCT || gateOffline) ? `<button class="btn ghost" id="rMore">${left ? `Next ${nextN}` : 'Learn more'}</button>` : ''}</div>`;
   show('#result');
   celebrate();
   $('#rHome').onclick = () => goHome(); $('#rHome').focus();
@@ -40351,7 +40360,7 @@ function ensureAccount(name, pw) {
   if (!acctPending) acctPending = apiCall('/api/account', { name, ...(pw || {}) }).then(d => {
     ACCT = { token: d.token, player: d.player, passkeys: 0, username: d.username || null }; saveA();
     state.owner = d.player.id; save(true);
-    renderGroup(); // a fresh form, so the display name defaults to this account's
+    refreshBoard(); loadCourses().then(openSharedCourse); // Pick up the new account’s Friends profile and shared course link.
     if (VIEW === 'me' && !run) renderAcctCard();
     return ACCT;
   }).finally(() => { acctPending = null; });
@@ -40445,7 +40454,7 @@ function completeSignIn(d, keepLocal) {
   G = d.group ? { code: d.group.code, groupName: d.group.groupName, player: d.player } : null; saveG();
   board = null; try { localStorage.removeItem(CKEY); } catch (e) {}
   Object.assign(acctUI, { mode: '', merge: null, link: null, recShown: false, outArmed: false, err: '' });
-  installCourses([]); syncNow(); refreshBoard(); loadCourses();
+  installCourses([]); syncNow(); refreshBoard().then(()=>{if(location.pathname.startsWith('/@'))showFriendSearch();}); loadCourses().then(openSharedCourse);
   toast('Signed in' + (G ? ', in ' + G.groupName : '') + '.');
   if (!run) renderHome();
 }
@@ -40536,7 +40545,7 @@ async function idpCredential(provider, cred, name) {
     const d = await apiCall('/api/' + provider, body, '-');
     if (!d.created) { gateSignedIn(d); return; }
     ACCT = { token: d.token, player: d.player, passkeys: 0, username: null, google: d.google || null, apple: d.apple || null, signedIn: Date.now() }; saveA();
-    state.owner = d.player.id; save(true); renderGroup(); syncNow();
+    state.owner = d.player.id; save(true); renderGroup(); syncNow(); refreshBoard(); loadCourses().then(openSharedCourse);
     toast('Account created. Welcome, ' + d.player.name + '.'); hideGate();
   });
 }
@@ -40757,7 +40766,7 @@ function renderAcctCard() {
   const el = $('#acctCard'); if (!el) return;
   const keep = {}; ['aCodeIn', 'aRecIn', 'aPwUser', 'aPwCur', 'aPwPass', 'aEmail', 'aEmailCode'].forEach(id => { const x = document.getElementById(id); if (x) keep[id] = x.value; });
   const a = acctUI, dis = a.busy ? ' disabled' : '', pk = ACCT ? ACCT.passkeys || 0 : 0;
-  let h = `<div class="ghead"><h3>Account</h3>${G ? `<span class="meta">${esc(G.player.name)} in ${esc(G.groupName)}</span>` : ''}</div><p id="acctStatus">${esc(acctStatusText())}</p>`;
+  let h = `<div class="ghead"><h3>Account</h3>${ACCT ? `<span class="meta">${esc(ACCT.player.name)}</span>` : ''}</div><p id="acctStatus">${esc(acctStatusText())}</p>`;
   if (a.merge) {
     const n = Object.keys(state.srs || {}).length, t = savedTerms().length, xp = xpTotal(state);
     const what = [n && `${n} card${n === 1 ? '' : 's'} in your reviews`, t && `${t} saved term${t === 1 ? '' : 's'}`, !n && !t && `${xp} XP`].filter(Boolean).join(' and ');
@@ -40907,61 +40916,94 @@ $('#acctCard').addEventListener('keydown', e => { if (e.key === 'Enter' && e.tar
 // "Sign in" links elsewhere open the sign-in form in Me.
 document.addEventListener('click', e => { if (e.target.closest('[data-signin]')) { e.preventDefault(); e.stopPropagation(); showGate('signin'); } }, true);
 
-async function refreshBoard() {
-  if (!G) return renderGroup();
-  try { board = await apiCall('/api/board?today=' + dstr(new Date())); gOffline = false; G.groupName = board.groupName; saveG(); }
-  catch (e) { if (e.status === 401) acctLost(); else gOffline = true; }
-  renderGroup();  if (VIEW === 'today') { renderGroupLine(); renderStrip(); }
-  noticeNotes();
+// Friends are account connections; G is retained only for existing shared-course access.
+var FUI;
+function friendUI() { return FUI || (FUI={tab:'activity',query:'',results:[],searching:false,profile:null,armed:null,err:''}); }
+function friendBadges(badges) {
+  return `<div class="friend-badges">${(badges||[]).map(n=>`<span class="friend-badge ${n===100?'century':''}" title="${n} shared days"><b>${n}</b><small>days together</small></span>`).join('')}</div>`;
 }
-
+function friendPerson(p,actions='') {return `<div class="friend-person"><span class="friend-avatar" aria-hidden="true">${esc((p.name||'?').slice(0,1))}</span><div class="grow"><b>${esc(p.name)}</b>${p.handle?`<span class="meta">@${esc(p.handle)}</span>`:''}</div>${actions}</div>`;}
 function renderGroup() {
-  const el = $('#group');
-  if (!G) {
-    const modes = [['join', 'Join'], ['start', 'Start a group']];
-    let form = '';
-    if (gMode === 'join') form = `<label class="fld"><span>Invite code</span><input id="gCode" maxlength="6" autocomplete="off" autocapitalize="characters" value="${esc(joinParam)}"></label><label class="fld"><span>Your display name</span><input id="gName" maxlength="24" autocomplete="nickname"></label><button class="btn sm" id="gGo">Join group</button>`;
-    else if (gMode === 'start') form = `<label class="fld"><span>Group name</span><input id="gGroup" maxlength="40"></label><label class="fld"><span>Your display name</span><input id="gName" maxlength="24" autocomplete="nickname"></label><button class="btn sm" id="gGo">Start group</button>`;
-    else form = `<label class="fld"><span>Group name</span><input id="gGroup" maxlength="40"></label><label class="fld"><span>Your display name</span><input id="gName" maxlength="24" autocomplete="nickname"></label><button class="btn sm" id="gGo">Start group</button>`;
-    el.innerHTML = `<h3>Play with friends</h3><p>Join a group to see each other’s streaks and compete on weekly XP. Your display name and finished lessons are visible to the group.</p><div class="seg">${modes.map(([k, t]) => `<button data-gmode="${k}" class="${k === gMode ? 'on' : ''}">${t}</button>`).join('')}</div>${form}${gErr ? `<p class="gerr">${gErr}</p>` : ''}${ACCT ? '' : '<p class="meta">In a group on another device? <button class="linkbtn" data-go="me" data-signin="1">Sign in to your account</button> and your group comes with you.</p>'}`;
-    $('#gGo').disabled = gBusy; defaultGroupName();
-    return;
+  const el=$('#group'),u=friendUI();
+  if(!ACCT){el.innerHTML='<h3>Learn with friends</h3><p>Sign in to find friends by username and practice together.</p><button class="btn" data-signin="1">Sign in</button>';return;}
+  if(!board||!board.profile){el.innerHTML=`<p>${gOffline?'Can’t load your friends right now.':'Loading friends…'}</p><button class="btn ghost sm" data-f-retry="1">Try again</button>`;return;}
+  const me=board.profile,others=board.players.filter(p=>p.id!==board.me),inc=(board.requests||[]).filter(r=>!r.mine),out=(board.requests||[]).filter(r=>r.mine);
+  const requests=inc.map(p=>friendPerson(p,`<button class="btn sm" data-f-action="accept" data-id="${esc(p.id)}">Accept</button><button class="linkbtn" data-f-action="decline" data-id="${esc(p.id)}">Decline</button>`)).join('');
+  const earned=board.rewards||[], newest=earned[0];
+  let h=`<div class="ghead"><h3>${others.length} friend${others.length===1?'':'s'}</h3><button class="btn sm" data-f-search="1">+ Add friend</button></div>`;
+  if(me.handle)h+=`<p class="meta">You’re @${esc(me.handle)}. <button class="linkbtn" data-f-link="1">Copy profile link</button></p>`;
+  else h+='<form id="friendUsername" class="friend-username"><label class="fld"><span>Choose your public username</span><input name="username" id="fUsername" minlength="3" maxlength="40" autocomplete="off" placeholder="e.g. alexlintz" required></label><button class="btn sm" type="submit">Save username</button><p class="meta">Friends can find you by this name. Your sign-in details stay the same.</p></form>';
+  h+=pushCardHTML();
+  if(inc.length)h+=`<div class="friend-block"><h4>Friend requests</h4>${requests}</div>`;
+  if(newest)h+=`<div class="friend-earned"><div class="friend-owls"><img src="mascot/cheer.webp" alt=""><img src="mascot/wave.webp" alt=""></div><div><b>${newest.kind==='badge'?`${newest.milestone} days together. Badge earned!`:`${newest.milestone} shared days. +50 XP each!`}</b><p class="meta">Earned together. Yours to keep.</p></div></div>`;
+  h+=friendsHTML(true);
+  if(!others.length)h+='<div class="friend-empty"><img src="mascot/think.webp" alt="Thinking owl"><h3>A little company helps.</h3><p>Add a friend to see their progress and cheer each other on.</p><button class="btn" data-f-search="1">Find a friend</button></div>';
+  else {
+    h+=`<div class="seg"><button data-f-tab="activity" class="${u.tab==='activity'?'on':''}">Activity</button><button data-f-tab="friends" class="${u.tab==='friends'?'on':''}">Your friends</button><button data-f-tab="week" class="${u.tab==='week'?'on':''}">This week</button></div>`;
+    if(u.tab==='activity'){
+      h+=others.filter(p=>[7,30,100,365].includes(p.streak)&&!(board.links||[]).find(l=>l.id===p.id)?.muted).map(p=>`<div class="friend-activity">${friendPerson(p,`<span class="meta">${p.streak}-day streak</span>`)}<p>${esc(p.name)} reached ${p.streak} days of practice.</p></div>`).join('');
+      h+=(board.feed||[]).length?board.feed.map(f=>`<div class="friend-activity">${friendPerson(f,`<span class="meta">${ago(f.at)}</span>`)}<p>Finished ${esc(feedTitle(f))}.</p><button class="btn ghost sm" data-kudos="${esc(f.id)}" data-ref="${esc(f.lessonId)}"${highFived(f.id,f.lessonId)?' disabled':''}>${highFived(f.id,f.lessonId)?'High-fived':'High five'}</button></div>`).join(''):'<p class="meta">Your friends’ completed rounds and milestones will appear here.</p>';
+    }else if(u.tab==='friends')h+=others.map(p=>friendPerson(p,`<span class="meta">${p.streak} days · ${p.week} XP this week</span><button class="linkbtn" data-f-profile="${esc(p.id)}">View profile</button>`)).join('');
+    else h+=`<ol class="lb">${board.players.slice().sort((a,b)=>b.week-a.week||a.name.localeCompare(b.name)).map((p,i)=>`<li><span class="rk">${i+1}</span><span class="nm">${esc(p.name)}${p.id===board.me?' (you)':''}</span><span class="pts">${p.week} XP</span></li>`).join('')}</ol><p class="meta">Weekly XP resets Monday at 00:00 UTC.</p>`;
   }
-  let h = `<div class="ghead"><h3>${esc(G.groupName)}</h3><button class="linkbtn" id="gInvite">Copy invite link</button></div><div class="meta">Code ${esc(G.code)} · You’re ${esc(G.player.name)}</div>`;
-  if (gOffline) h += `<p class="gerr">Can’t reach the group server right now. Lessons you finish still count on this device.</p>`;
-  h += pushCardHTML();
-  if (board) {
-    h += questHTML() + friendsHTML(true);
-    const key = gTab === 'week' ? 'week' : 'total';
-    const rows = board.players.slice().sort((a, b) => b[key] - a[key] || b.streak - a.streak || a.name.localeCompare(b.name));
-    h += `<div class="seg"><button data-gtab="week" class="${gTab === 'week' ? 'on' : ''}">This week</button><button data-gtab="all" class="${gTab === 'all' ? 'on' : ''}">All time</button></div>`;
-    h += `<ol class="lb">${rows.map((r, i) => {
-      const fl = r.streak === 0 ? 'zero' : r.atRisk ? 'risk' : '';
-      const tip = r.streak === 0 ? 'No current streak' : r.atRisk ? `${r.streak}-day streak, needs practice today` + (r.freezes ? ` (${r.freezes} freeze${r.freezes === 1 ? '' : 's'} saved)` : '') : `${r.streak}-day streak` + (r.offToday ? ', off today' : '');
-      const fs = (board.friends || []).find(f => f.id === r.id);
-      const act = gSel === r.id && r.id !== board.me ? `<li class="lbact">${fs ? '' : `<button class="btn sm" data-fsreq="${esc(r.id)}">Start a friend streak</button>`}${!r.doneToday ? `<button class="btn ghost sm" data-nudge="${esc(r.id)}" data-name="${esc(r.name)}"${nudgedToday(r.id) ? ' disabled' : ''}>${nudgedToday(r.id) ? 'Nudged' : 'Nudge'}</button>` : ''}<button class="linkbtn" data-block="${esc(r.id)}" data-name="${esc(r.name)}">Block ${esc(r.name)}</button><span class="meta">Blocking hides their courses, scores and activity.</span></li>` : '';
-      return `<li class="${r.id === board.me ? 'me' : 'other'}" data-pid="${esc(r.id)}"><span class="rk">${i + 1}</span><span class="nm">${esc(r.name)}${r.id !== board.me && r.atRisk && !nudgedToday(r.id) ? ` <button class="nudge" data-nudge="${esc(r.id)}" data-name="${esc(r.name)}" aria-label="Nudge ${esc(r.name)}">Nudge</button>` : ''}</span><span class="fl ${fl}" title="${esc(tip)}">${FLAME}${r.streak}</span><span class="pts">${r[key]} XP</span></li>${act}`;
-    }).join('')}</ol>`;
-    if (gTab === 'week') h += `<p class="meta">Weekly XP resets Monday 00:00 UTC. Tap someone to start a friend streak, nudge or block them.</p>`;
-    if ((board.blocked || []).length) h += `<p class="meta">Blocked: ${board.blocked.map(b => `${esc(b.name)} <button class="linkbtn" data-unblock="${esc(b.id)}">Unblock</button>`).join(' · ')}</p>`;
-    if (board.feed.length) h += `<h4 class="gsub">Recent</h4><ul class="feed">${board.feed.slice(0, 8).map(f => `<li><b>${esc(f.name)}</b> finished ${esc(feedTitle(f))} · ${f.acc}% · ${ago(f.at)}${f.id !== board.me && !/^(review-|gu\d)/.test(String(f.lessonId)) ? `<button class="beat" data-beat="${esc(f.lessonId)}" data-who="${esc(f.name)}" data-acc="${f.acc}">Beat it</button>` : ''}${f.id !== board.me ? `<button class="hi5" data-kudos="${esc(f.id)}" data-ref="${esc(f.lessonId)}"${highFived(f.id, f.lessonId) ? ' disabled>High-fived' : '>High five'}</button>` : ''}</li>`).join('')}</ul>`;
-    else h += `<p>No lessons finished yet. Be the first.</p>`;
-  } else if (!gOffline) h += `<p>Loading…</p>`;
-  h += `<div class="glinks"><button class="linkbtn" id="gLeave"${gBusy ? ' disabled' : ''}>${leaveArmed ? 'Click again to leave' : 'Leave group'}</button></div>`;
-  el.innerHTML = h;
+  if(out.length)h+=`<details class="friend-block"><summary>Sent requests (${out.length})</summary>${out.map(p=>friendPerson(p,`<button class="linkbtn" data-f-action="decline" data-id="${esc(p.id)}">Cancel request</button>`)).join('')}</details>`;
+  if(board.suggestions?.length)h+=`<details class="friend-block"><summary>People you practiced with</summary><p class="meta">People from your existing group. Add whoever you want to stay connected with.</p>${board.suggestions.map(p=>friendPerson(p,`<button class="btn ghost sm" data-f-action="request" data-id="${esc(p.id)}">Add friend</button>`)).join('')}</details>`;
+  h+=`<details class="friend-block"><summary>Your badges ${me.badges?.length?'('+me.badges.length+')':''}</summary>${friendBadges(me.badges)}<p class="meta">Earn 50 XP each every 7 shared days. At 30 and 100 days, earn a shared badge. Badges stay earned if the streak breaks.</p></details>`;
+  const pref=board.prefs||{};
+  h+=`<details class="friend-block"><summary>Friend notifications</summary>${[['requests','Friend requests'],['streaks','Friend streaks and nudges'],['milestones','Friends’ milestone pushes']].map(([k,t])=>`<label class="friend-setting"><span>${t}</span><input type="checkbox" data-f-pref="${k}" ${pref[k]?'checked':''}></label>`).join('')}<p class="meta">Progress and high fives are always available in the app. Routine rounds do not each send a push. Phone notification permission and your main notification setting still apply.</p></details>`;
+  if(board.blocked?.length)h+=`<details class="friend-block"><summary>Blocked people</summary>${board.blocked.map(p=>friendPerson(p,`<button class="linkbtn" data-unblock="${esc(p.id)}" data-name="${esc(p.name)}">Unblock</button>`)).join('')}</details>`;
+  if(gOffline)h+='<p class="gerr">Showing the last saved friend list. Reconnect to update it.</p>';
+  if(u.err)h+=`<p class="gerr" role="alert">${esc(u.err)}</p>`;
+  el.innerHTML=h;
 }
+function showFriendSearch() {
+  friendUI().profile=null;friendUI().err='';
+  $('#friendsBody').innerHTML='<h3>Add friends</h3><label class="fld"><span>Search by username</span><input id="fSearch" autocomplete="off" maxlength="40" placeholder="@username"></label><div id="fResults"><p class="meta">Enter at least three characters.</p></div>';
+  $('#fSearch').value=friendUI().query;openSheet('#friendsSheet');if(friendUI().query)friendSearch();
+}
+var friendSearchTimer,friendSearchSeq=0;
+async function friendSearch(){const input=$('#fSearch');if(!input)return;const q=input.value;friendUI().query=q;const seq=++friendSearchSeq;
+  if(q.replace(/^@/,'').trim().length<3){$('#fResults').innerHTML='<p class="meta">Enter at least three characters.</p>';return;}
+  $('#fResults').innerHTML='<p class="meta">Searching…</p>';
+  try{const r=await apiCall('/api/friends/search?q='+encodeURIComponent(q));if(seq!==friendSearchSeq||!$('#fResults'))return;friendUI().results=r.people;
+    $('#fResults').innerHTML=r.people.length?r.people.map(p=>friendPerson(p,p.status==='accepted'?'<span class="meta">Friends</span>':p.status==='pending'?p.mine?`<button class="linkbtn" data-f-action="decline" data-id="${esc(p.id)}">Cancel request</button>`:`<button class="btn sm" data-f-action="accept" data-id="${esc(p.id)}">Accept</button>`:`<button class="btn sm" data-f-action="request" data-id="${esc(p.id)}">Add friend</button>`)).join(''):'<p class="meta">No matching usernames. Check the spelling or ask for their profile link.</p>';
+  }catch(e){if(seq===friendSearchSeq&&$('#fResults'))$('#fResults').innerHTML=`<p class="gerr">${esc(netMsg(e))}</p>`}}
+function showFriendProfile(id){const p=board?.players.find(x=>x.id===id);if(!p)return;friendUI().profile=id;friendUI().armed=null;
+  const fs=board.friends.find(x=>x.id===id),l=board.links.find(x=>x.id===id);
+  $('#friendsBody').innerHTML=`<div class="friend-profile">${friendPerson(p)}<div class="friend-stats"><b>${p.streak} days</b><b>${p.week} XP this week</b></div>${friendBadges(p.badges)}</div>${!fs?`<button class="btn" data-f-streak="${esc(id)}">Start a friend streak</button><p class="meta">An optional invitation. Both of you choose to join.</p>`:fs.status==='pending'?`<p>${fs.mine?'Friend streak invitation sent.':'They invited you to a friend streak.'}</p>${fs.mine?`<button class="linkbtn" data-fsend="${esc(id)}">Cancel invitation</button>`:`<button class="btn sm" data-fsacc="${esc(id)}">Accept streak invitation</button>`}`:`<p>${fs.count}-day friend streak. ${fs.meDone&&fs.themDone?'You both practiced today.':fs.themDone?'Your turn to practice.':'Keep learning together.'}</p><button class="btn ghost sm" data-fsend="${esc(id)}">End friend streak</button>`}<p class="meta">Every 7 shared days: 50 XP each. At 30 and 100 days: badges for both profiles.</p>${!p.doneToday&&!nudgedToday(id)?`<button class="btn ghost sm" data-nudge="${esc(id)}" data-name="${esc(p.name)}">Nudge</button>`:''}<div class="friend-options"><button class="linkbtn" data-f-action="mute" data-id="${esc(id)}" data-muted="${l?.muted?'0':'1'}">${l?.muted?'Unmute':'Mute'} activity</button><button class="linkbtn" data-f-remove="${esc(id)}">Remove friend</button><button class="linkbtn" data-block="${esc(id)}" data-name="${esc(p.name)}">Block ${esc(p.name)}</button></div>`;
+  openSheet('#friendsSheet');
+}
+async function refreshBoard() {
+  if(!ACCT){board=null;return renderGroup();}
+  const token=ACCT.token;
+  try{const r=await apiCall('/api/friends?today='+dstr(new Date()));if(ACCT?.token!==token)return;board=r;gOffline=false;
+    // A server total is its own XP component, so two devices never each add the same reward as new practice XP.
+    state.friendXP=Math.max(0,r.rewardXP||0);state.xp=xpTotal(state);state.xpDays=state.xpDays||{};
+    for(const [d,n]of Object.entries(r.rewardDays||{})){const old=state.xpDays[d];state.xpDays[d]={...(typeof old==='number'?{legacy:old}:old||{}),friendRewards:n};}
+    save(true);
+  }catch(e){if(e.status===401)acctLost();else gOffline=true;}
+  $('#xp').textContent=state.xp;renderGroup();if(VIEW==='today'){renderGroupLine();renderStrip();}noticeNotes();
+}
+async function friendClick(e){const t=e.target.closest('button');if(!t)return;const d=t.dataset;
+  if(t.hasAttribute('data-f-search')){e.preventDefault();e.stopImmediatePropagation();showFriendSearch();return;}
+  if(t.hasAttribute('data-f-retry')){e.stopImmediatePropagation();refreshBoard();return;}
+  if(d.fTab){e.stopImmediatePropagation();friendUI().tab=d.fTab;renderGroup();return;}
+  if(t.hasAttribute('data-f-link')){e.stopImmediatePropagation();const link=SITE+'/@'+encodeURIComponent(board.profile.handle);try{await navigator.clipboard.writeText(link);toast('Profile link copied.')}catch{toast(link)}return;}
+  if(d.fProfile){e.stopImmediatePropagation();showFriendProfile(d.fProfile);return;}
+  if(d.fStreak){e.stopImmediatePropagation();$('#friendsBody').innerHTML=`<h3>Start a friend streak?</h3><p>A day counts when you both practice. Days off, pauses and freezes keep your existing rules.</p><p>Every 7 shared days earns you 50 XP each. Shared badges at 30 and 100 days.</p><button class="btn" data-fsreq="${esc(d.fStreak)}">Send invitation</button>`;return;}
+  if(d.fRemove){e.stopImmediatePropagation();if(friendUI().armed!==d.fRemove){friendUI().armed=d.fRemove;t.textContent='Confirm removal and end shared streak';return;}d.fAction='remove';d.id=d.fRemove;}
+  if(d.fAction){e.stopImmediatePropagation();t.disabled=true;friendUI().err='';try{await apiCall('/api/friends/'+d.fAction,{to:d.id,muted:d.muted==='1'});await refreshBoard();if(!$('#inboxSheet').hidden)renderInbox();toast(({request:'Friend request sent.',accept:'You’re now friends.',decline:'Request removed.',remove:'Friend removed.',mute:'Activity preference saved.'})[d.fAction]);if(!$('#friendsSheet').hidden){if(d.fAction==='mute')showFriendProfile(d.id);else if($('#fSearch'))await friendSearch();else closeSheet('#friendsSheet');}}catch(err){friendUI().err=netMsg(err);toast(friendUI().err);t.disabled=false;}return;}
+  if(e.currentTarget===$('#friendsBody')){if(d.block||d.unblock){e.stopImmediatePropagation();await setBlock(d.block||d.unblock,!!d.block,d.name);closeSheet('#friendsSheet');return;}if(socialClick(t)){e.stopImmediatePropagation();if(d.fsend && fsEndArmed===d.fsend){t.textContent='Tap again to end';}else closeSheet('#friendsSheet');}}
+}
+$('#group').addEventListener('click',friendClick,true);$('#friendsBody').addEventListener('click',friendClick,true);
+$('#friendsSheet').addEventListener('click',e=>{if(e.target.closest('[data-f-close]'))closeSheet('#friendsSheet');});
+$('#friendsBody').addEventListener('input',e=>{if(e.target.id==='fSearch'){clearTimeout(friendSearchTimer);friendSearchTimer=setTimeout(friendSearch,250);}});
+$('#group').addEventListener('submit',async e=>{if(e.target.id!=='friendUsername')return;e.preventDefault();try{const r=await apiCall('/api/friends/username',{username:$('#fUsername').value});await refreshBoard();toast('Your username is @'+r.handle);}catch(err){toast(netMsg(err));}});
+$('#group').addEventListener('keydown',e=>{if(e.target.closest('#friendUsername'))e.stopImmediatePropagation();},true);
+$('#group').addEventListener('change',async e=>{const k=e.target.dataset.fPref;if(!k)return;const prefs={...board.prefs,[k]:e.target.checked?1:0};try{await apiCall('/api/friends/settings',prefs);board.prefs=prefs;toast('Notification preference saved.');}catch(err){toast(netMsg(err));renderGroup();}});
+function renderGroupLine(){const el=$('#groupLine');if(!ACCT){el.innerHTML='';return;}const n=board?.links?.length||0;el.innerHTML=`<button class="glink" data-go="group"><span>${n?`Learn alongside ${n} friend${n===1?'':'s'}`:'Find people to learn alongside'}</span><b>Friends</b></button>`;}
 
-// Join or start a group. A signed-in player's account moves into it; without an account, the server makes one.
-async function joinOrStart(mode, fields) {
-  if (!ACCT && hasProgress()) await ensureAccount();
-  const d = mode === 'start' ? await apiCall('/api/groups', { groupName: fields.group, name: fields.name }) : await apiCall('/api/join', { code: fields.code, name: fields.name });
-  if (d.token) { ACCT = { token: d.token, player: d.player, passkeys: 0 }; state.owner = d.player.id; save(true); }
-  else ACCT.player = d.player;
-  saveA();
-  G = { code: d.code, groupName: d.groupName, player: d.player }; saveG(); syncNow();
-  toast('You’re in ' + d.groupName + '.');
-  return d;
-}
+
 async function groupSubmit() {
   gErr = ''; gBusy = true; renderGroupKeep();
   try {
@@ -41023,19 +41065,19 @@ async function setBlock(id, on, name) {
   } catch (e) { toast(e instanceof TypeError ? 'Can’t reach the server right now.' : e.message); }
 }
 function groupPost(L, xp, acc) {
-  if (!G) return null;
+  if (!ACCT) return null;
   return apiCall('/api/complete', { lessonId: L.id, title: L.title, xp, acc, day: dstr(new Date()) }).then(refreshBoard, e => { gOffline = true; renderGroup(); throw e; });
 }
 function groupLine(acc, posting) {
   let s = '';
   if (run.challenge) { const c = run.challenge; s += `<p class="vs">${acc > c.acc ? 'You beat' : acc === c.acc ? 'You tied' : 'You didn’t beat'} ${esc(c.name)}: ${acc}% vs ${c.acc}% first try.</p>`; }
-  if (posting && G) s += `<p class="meta" id="postLine">Posting to ${esc(G.groupName)}…</p>`;
+  if (posting && ACCT) s += `<p class="meta" id="postLine">Saving your round…</p>`;
   return s;
 }
 // The result screen says "Posted" only once the group actually has it.
 function postLine(p) {
   if (!p) return;
-  const set = done => { const el = document.getElementById('postLine'); if (el && G) el.textContent = done ? `Posted to ${G.groupName}.` : `Couldn’t post to ${G.groupName} right now. It still counts on this device.`; };
+  const set = done => { const el = document.getElementById('postLine'); if (el && ACCT) el.textContent = done ? `Round saved.` : `Couldn’t save the round online right now. It still counts on this device.`; };
   p.then(() => set(true), () => set(false));
 }
 // What a feed item says the player finished. Lesson titles come from this app's own copy of the course, so text
@@ -41050,8 +41092,8 @@ function feedTitle(f) {
   }
   return 'a lesson';
 }
-setInterval(() => { if (G && !document.hidden && !run) refreshBoard(); }, 60000);
-document.addEventListener('visibilitychange', () => { if (G && !document.hidden && !run) refreshBoard(); });
+setInterval(() => { if (ACCT && !document.hidden && !run) refreshBoard(); }, 60000);
+document.addEventListener('visibilitychange', () => { if (ACCT && !document.hidden && !run) refreshBoard(); });
 
 buildLessons();
 VIEW = viewFromHash();
@@ -41079,14 +41121,14 @@ function installCourses(list) {
   buildLessons(); renderHome(); renderPotd();
 }
 async function loadCourses() {
-  if (!G) { installCourses([]); return; }
+  if (!ACCT) { installCourses([]); return; }
   try {
     const d = await apiCall('/api/courses');
-    try { localStorage.setItem(CKEY, JSON.stringify({ code: G.code, courses: d.courses })); } catch (e) {}
+    try { localStorage.setItem(CKEY, JSON.stringify({ code: ACCT.player.id, courses: d.courses })); } catch (e) {}
     installCourses(d.courses);
   } catch (e) { /* keep whatever is cached */ }
 }
-(() => { try { const c = JSON.parse(localStorage.getItem(CKEY)); if (G && c && c.code === G.code) installCourses(c.courses); } catch (e) {} })();
+(() => { try { const c = JSON.parse(localStorage.getItem(CKEY)); if (ACCT && c && (c.code === ACCT.player.id || G && c.code === G.code)) installCourses(c.courses); } catch (e) {} })();
 
 function openSheet(id) { $(id).hidden = false; document.body.classList.add('in-lesson'); }
 function closeSheet(id) { $(id).hidden = true; if ($('#lesson').hidden && $('#result').hidden) document.body.classList.remove('in-lesson'); }
@@ -41102,21 +41144,13 @@ function renderAdd() {
   else if (chk && !chk.ok) res = `<div class="errbox"><h4>${chk.errors.length >= 40 ? '40+' : chk.errors.length} problem${chk.errors.length === 1 ? '' : 's'} to fix</h4><ul>${chk.errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul><p>Paste these back to your Claude and ask it to fix them.</p></div>`;
   else if (chk && chk.ok) {
     const ex = COURSES['c:' + chk.course.id];
-    const taken = ex && G && ex.authorId !== G.player.id;
-    const note = !G ? 'Start or join a group above to publish it.' : !ex ? 'This adds a new course for everyone in your group.' : !taken ? `This replaces your version ${ex.version}.` : `Someone else already has a course with the id “${esc(chk.course.id)}”. Change "id" in the file before publishing.`;
-    res = `<div class="okbox"><h4>Ready: ${esc(chk.course.title)}</h4><p>${chk.stats.units} unit${chk.stats.units === 1 ? '' : 's'}, ${chk.stats.lessons} lesson${chk.stats.lessons === 1 ? '' : 's'}, ${chk.stats.items} questions. ${note}</p><fieldset class="fld"><legend>${a.categorySuggested?'Suggested tags, change freely':'Subject tags'}</legend><p class="meta">Choose all that fit.</p><div class="row">${catalogCategories().map(([id,name])=>`<label style="display:flex;align-items:center;gap:6px"><input type="checkbox" data-add-category="${id}" ${categoriesOf(chk.course).includes(id)?'checked':''}>${esc(name)}</label>`).join('')}</div></fieldset>${categoriesOf(chk.course).includes('other')?`<label class="fld"><span>Other tag name (optional)</span><input id="addCategoryLabel" maxlength="40" value="${esc(chk.course.categoryLabel||'')}"></label>`:''}<div class="row"><button class="btn sm" id="addPub" ${a.busy || !G || taken ? 'disabled' : ''}>${G ? 'Publish to ' + esc(G.groupName) : 'Publish'}</button></div></div>`;
+    const taken = ex && ACCT && ex.authorId !== ACCT.player.id;
+    const note = !ACCT ? 'Sign in to save your course.' : !ex ? 'This adds a course to your library. You can share its link afterward.' : !taken ? `This replaces your version ${ex.version}.` : 'Choose a different course id; that one is already in your library.';
+    res = `<div class="okbox"><h4>Ready: ${esc(chk.course.title)}</h4><p>${chk.stats.units} unit${chk.stats.units === 1 ? '' : 's'}, ${chk.stats.lessons} lesson${chk.stats.lessons === 1 ? '' : 's'}, ${chk.stats.items} questions. ${note}</p><fieldset class="fld"><legend>${a.categorySuggested?'Suggested tags, change freely':'Subject tags'}</legend><p class="meta">Choose all that fit.</p><div class="row">${catalogCategories().map(([id,name])=>`<label style="display:flex;align-items:center;gap:6px"><input type="checkbox" data-add-category="${id}" ${categoriesOf(chk.course).includes(id)?'checked':''}>${esc(name)}</label>`).join('')}</div></fieldset>${categoriesOf(chk.course).includes('other')?`<label class="fld"><span>Other tag name (optional)</span><input id="addCategoryLabel" maxlength="40" value="${esc(chk.course.categoryLabel||'')}"></label>`:''}<div class="row"><button class="btn sm" id="addPub" ${a.busy || !ACCT || taken ? 'disabled' : ''}>Save course</button></div></div>`;
   }
   let n = 0;
   const step = t => `<p class="kicker">Step ${++n}</p><h3 class="prompt sm">${t}</h3>`;
-  let grp = '';
-  if (!G) {
-    const gm = a.groupMode || 'start';
-    grp = step('Start or join a group') + `<p>Courses are shared inside a group, so friends can play them and you can compete. A group of one is fine too.</p>
-      <div class="seg"><button data-agmode="start" class="${gm === 'start' ? 'on' : ''}">Start a group</button><button data-agmode="join" class="${gm === 'join' ? 'on' : ''}">Join with a code</button></div>
-      ${gm === 'start' ? '<label class="fld"><span>Group name</span><input id="agGroup" maxlength="40"></label>' : '<label class="fld"><span>Invite code</span><input id="agCode" maxlength="6" autocomplete="off" autocapitalize="characters"></label>'}
-      <label class="fld"><span>Your display name</span><input id="agName" maxlength="24" autocomplete="nickname"></label>
-      <div class="row"><button class="btn sm" id="agGo" ${a.gBusy ? 'disabled' : ''}>${gm === 'start' ? 'Start group' : 'Join group'}</button></div>${a.gErr ? `<p class="gerr">${a.gErr}</p>` : ''}`;
-  } else grp = `<p class="meta">Publishing to ${esc(G.groupName)} as ${esc(G.player.name)}.</p>`;
+  const grp = ACCT ? '<p class="meta">Your course will be saved in your library. Share it with a separate course link.</p>' : '<p>Sign in to save a course.</p><button class="btn sm" data-signin="1">Sign in</button>';
   $('#addBody').innerHTML = grp + step('Have your AI assistant write it') + `
     <p>Paste this into Claude (or another assistant) and fill in the topic. It reads the <a href="${GUIDE}" target="_blank" rel="noopener">course format guide</a> and gives you back a file.</p>
     <textarea id="addPrompt" rows="4" readonly>Read ${GUIDE} and follow it exactly. Build me a WonkoLingo course about [TOPIC]. Research the facts before writing questions, then give me the finished course as a single .json file.</textarea>
@@ -41201,8 +41235,8 @@ $('#addBody').addEventListener('click', async e => {
     if($('#addCategoryLabel'))addState.check.course.categoryLabel=$('#addCategoryLabel').value.trim().slice(0,40);
     addState.busy = true; renderAdd();
     try {
-      const d = await apiCall('/api/courses', { course: addState.check.course });
-      closeSheet('#addc'); toast(d.updated ? `Updated to version ${d.version}.` : 'Course published to your group.');
+      const d = await apiCall('/api/courses', { personal: true, course: addState.check.course });
+      closeSheet('#addc'); toast(d.updated ? `Updated to version ${d.version}.` : 'Course saved to your library.');
       setMix('c:' + d.slug, true); state.course = 'c:' + d.slug; save(); await loadCourses(); go('course', 'c:' + d.slug);
     } catch (err) { addState.busy = false; addState.err = netMsg(err); renderAdd(); }
   }
@@ -41219,6 +41253,7 @@ $('#cinfo').addEventListener('click', async e => {
   const C = COURSES[state.course];
   if (t.id === 'ciUpdate') openAdd();
   if (t.id === 'ciReports') openReports(C);
+  if (t.id === 'ciShare') { try {const r=await apiCall('/api/course-share',{slug:C.slug});const link=SITE+'/?courseShare='+r.token;try{await navigator.clipboard.writeText(link);toast('Course link copied. Anyone with it can add a copy.');}catch{toast(link)}}catch(e){toast(netMsg(e))}return;}
   if (t.id === 'ciBlock') { if (t.dataset.armed !== '1') { t.dataset.armed = '1'; t.textContent = 'Click again to hide their courses and activity'; return; } state.course = null; save(); go('courses'); setBlock(C.authorId, true, C.author); }
   if (t.id === 'ciDelete') {
     if (t.dataset.armed !== '1') { t.dataset.armed = '1'; t.textContent = 'Click again to remove it for everyone'; setTimeout(() => { if (t.isConnected) { t.dataset.armed = ''; t.textContent = 'Remove course'; } }, 4000); return; }
@@ -41320,19 +41355,19 @@ function renderPick() {
   const match = k => !q || (COURSES[k].name + ' ' + (COURSES[k].author || '') + ' ' + (COURSES[k].description || '')).toLowerCase().includes(q);
   const item = k => {
     const C = COURSES[k], pr = courseProgress(k);
-    const sub = (levelInfo(C) ? levelInfo(C)[0] + ' · ' : '') + (C.group ? (G && C.authorId === G.player.id ? 'By you' : 'By ' + C.author) : 'Example course');
+    const sub = (levelInfo(C) ? levelInfo(C)[0] + ' · ' : '') + (C.group ? (ACCT && C.authorId === ACCT.player.id ? 'By you' : 'By ' + C.author) : 'Example course');
     const pct = pr.total ? Math.round(pr.done / pr.total * 100) : 0;
     return `<button class="pk-item${k === state.course ? ' on' : ''}" data-course="${esc(k)}"><span class="t">${esc(C.name)}</span><span class="n">${pr.done === pr.total && pr.total ? 'Done' : pr.done ? pr.done + ' of ' + pr.total : pr.total + (pr.total === 1 ? ' lesson' : ' lessons')}<span class="bar-mini"><i style="width:${pct}%"></i></span></span><span class="s">${esc(sub)}${C.description ? ' · ' + esc(C.description) : ''}</span></button>`;
   };
   const started = k => courseProgress(k).done > 0 ? 0 : 1;
   const sortK = (a, b) => started(a) - started(b) || COURSES[a].name.localeCompare(COURSES[b].name);
-  const mine = keys.filter(k => COURSES[k].group && G && COURSES[k].authorId === G.player.id && match(k)).sort(sortK);
-  const group = keys.filter(k => COURSES[k].group && !(G && COURSES[k].authorId === G.player.id) && match(k)).sort(sortK);
+  const mine = keys.filter(k => COURSES[k].group && ACCT && COURSES[k].authorId === ACCT.player.id && match(k)).sort(sortK);
+  const group = keys.filter(k => COURSES[k].group && !(ACCT && COURSES[k].authorId === ACCT.player.id) && match(k)).sort(sortK);
   const builtin = keys.filter(k => !COURSES[k].group && match(k));
   let h = `<div class="row"><button class="btn sm" id="pkCreate">+ Create a course</button></div>`;
   if (keys.length > 6) h += `<input class="pk-search" id="pickQ" type="search" placeholder="Search courses" value="${esc(pickQ)}" autocomplete="off">`;
   h += `<div class="pk-sec"><h4>Your courses</h4>${mine.length ? mine.map(item).join('') : q ? '<p>No matches.</p>' : `<div class="pk-empty"><p>You haven’t made a course yet. Pick a topic you want to learn or teach, and your AI assistant can draft one in a few minutes.</p><div class="row"><button class="btn ghost sm" id="pkCreate2">Make one</button></div></div>`}</div>`;
-  if (G) h += `<div class="pk-sec"><h4>From ${esc(G.groupName)}</h4>${group.length ? group.map(item).join('') : `<p>${q ? 'No matches.' : 'Nobody else in your group has shared a course yet.'}</p>`}</div>`;
+  if (G) h += `<div class="pk-sec"><h4>Shared and your courses</h4>${group.length ? group.map(item).join('') : `<p>${q ? 'No matches.' : 'Add a course file or open a shared course link.'}</p>`}</div>`;
   if (builtin.length) h += `<div class="pk-sec"><h4>Example courses</h4>${builtin.map(item).join('')}</div>`;
   $('#pickBody').innerHTML = h;
 }
@@ -41434,20 +41469,11 @@ function renderMix() {
   }).join('')}</div>`;
 }
 function ordinal(n) { return n + ((n % 100 >= 11 && n % 100 <= 13) ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' })[n % 10] || 'th'); }
-function renderGroupLine() {
-  const el = $('#groupLine');
-  if (!G) { el.innerHTML = `<button class="glink" data-go="group"><span>Play with friends: start or join a group</span><b>Group</b></button>`; return; }
-  if (!board) { el.innerHTML = ''; return; }
-  const rows = board.players.slice().sort((a, b) => b.week - a.week);
-  const me = rows.findIndex(r => r.id === board.me), lead = rows[0];
-  const gap = lead && me > 0 ? lead.week - rows[me].week : 0;
-  el.innerHTML = `<button class="glink" data-go="group"><span>${esc(G.groupName)}${me >= 0 ? ` · you're ${ordinal(me + 1)} this week` : ''}</span><b>${me < 0 ? 'Group' : me === 0 ? 'In the lead' : gap + ' XP to 1st'}</b></button>`;
-}
 
 /* ---------- courses: choose your daily mix ---------- */
 function courseLine(k) {
   const C = COURSES[k], p = courseProgress(k), on = inMix(k);
-  const by = C.group ? (G && C.authorId === G.player.id ? 'By you' : 'By ' + C.author) : '';
+  const by = C.group ? (ACCT && C.authorId === ACCT.player.id ? 'By you' : 'By ' + C.author) : '';
   const meta = [(levelInfo(C) || ['Level not set'])[0], categoryName(C), by, p.done ? `${p.done} of ${p.total} lesson${p.total === 1 ? '' : 's'}` : `${p.total} lesson${p.total === 1 ? '' : 's'}`, on ? `${perDay(k)} new a day` : ''].filter(Boolean).join(' · ');
   return `<div class="cline"><button class="copen" data-open="${esc(k)}"><b>${esc(C.name)}</b><span>${esc(meta)}</span></button><button class="switch" data-mix="${esc(k)}" aria-pressed="${on}" aria-label="${esc(C.name)} in your daily mix"></button></div>`;
 }
@@ -41481,7 +41507,7 @@ function catalogTrack() {
 function renderCourses() {
   const keys=Object.keys(COURSES).filter(k=>k!=='terms'||savedTerms().length), visible=keys.filter(catalogMatches), on=visible.filter(inMix), off=visible.filter(k=>!inMix(k));
   const cats=catalogCategories().filter(([id])=>keys.some(k=>categoriesOf(COURSES[k]).includes(id)));
-  const chips=[['all','All'],...cats,...(keys.some(k=>COURSES[k].group)?[['group','From your group']]:[])];
+  const chips=[['all','All'],...cats,...(keys.some(k=>COURSES[k].group)?[['group','Shared and yours']]:[])];
   let h=`<div class="sec-h"><h1 class="vtitle">Courses</h1><button class="btn ghost sm" id="cMake">+ Make one</button></div>`;
   h+=`<input class="pk-search" id="cSearch" type="search" placeholder="Search courses, cards and terms" aria-label="Search every card and term" autocomplete="off" value="${esc(cQuery)}">`;
   h+=`<div class="catalog-filters"><div class="catalog-chips" role="group" aria-label="Category">${chips.map(([id,name])=>`<button class="catalog-chip" data-cat="${id}" aria-pressed="${catalogCategory===id}">${name}</button>`).join('')}</div><div class="catalog-levels" role="group" aria-label="Level">${[['all','All levels'],['beginner','Beginner'],['intermediate','Intermediate'],['advanced','Advanced']].map(([id,name])=>`<button data-level="${id}" aria-pressed="${catalogLevel===id}">${name}</button>`).join('')}</div></div><div id="cSearchOut" aria-live="polite"></div><div id="cLists">`;
@@ -41495,9 +41521,9 @@ function renderCourses() {
     h+=`<section class="catalog-section" data-category="${id}"><div class="sec-h"><h2><i class="catalog-dot cat-${id}"></i>${label}</h2><span class="meta">${ks.length} course${ks.length===1?'':'s'}</span></div><div class="mix">${ks.map(courseLine).join('')}</div></section>`;
   }
   const group=off.filter(k=>COURSES[k].group);
-  if(group.length){sections++;h+=`<section class="catalog-section" data-category="group"><div class="sec-h"><h2>From ${esc(G?G.groupName:'your group')}</h2></div><div class="mix">${group.map(courseLine).join('')}</div></section>`;}
+  if(group.length){sections++;h+=`<section class="catalog-section" data-category="group"><div class="sec-h"><h2>Shared and your courses</h2></div><div class="mix">${group.map(courseLine).join('')}</div></section>`;}
   if(!visible.length)h+=`<p class="note">No courses match these filters. <button class="linkbtn" data-catalog-reset>Show all courses</button></p>`;
-  if(!G)h+=`<p class="note">Friends’ courses appear here when you join a group.</p>`;
+  if(!G)h+=`<p class="note">Add a friend’s course using its share link.</p>`;
   h+=`<section class="req-card"><div><h2>Don’t see what you need?</h2><p>Tell us what you’d like to learn. Requests go to the person who builds WonkoLingo’s courses.</p></div><button class="btn ghost sm" id="cRequest">Request a course</button></section>`;
   $('#coursesBody').innerHTML=h+'</div>';renderSearch();
 }
@@ -41587,9 +41613,9 @@ function renderCourseView() {
       <div class="csrow"><button class="linkbtn" data-cadv="${esc(k)}" data-close="1">Hide advanced options</button></div>`
       : `<div class="csrow"><button class="linkbtn" data-cadv="${esc(k)}">Advanced options</button></div>`}
     </div></div>`;
-  const mine = C.group && G && C.authorId === G.player.id;
+  const mine = C.group && ACCT && C.authorId === ACCT.player.id;
   $('#cinfo').hidden = !C.group;
-  $('#cinfo').innerHTML = C.group ? `<span>${esc(C.meta)}</span>${mine ? `<button class="linkbtn" id="ciReports">${C.openReports} open report${C.openReports === 1 ? '' : 's'}</button><button class="linkbtn" id="ciUpdate">Upload new version</button><button class="linkbtn" id="ciDelete">Remove course</button>` : `<button class="linkbtn" id="ciBlock">Block ${esc(C.author)}</button>`}` : '';
+  $('#cinfo').innerHTML = C.group ? `<span>${esc(C.meta)}</span>${mine ? `<button class="linkbtn" id="ciReports">${C.openReports} open report${C.openReports === 1 ? '' : 's'}</button><button class="linkbtn" id="ciUpdate">Upload new version</button><button class="linkbtn" id="ciShare">Copy share link</button><button class="linkbtn" id="ciDelete">Remove course</button>` : `<button class="linkbtn" id="ciBlock">Block ${esc(C.author)}</button>`}` : '';
   $('#caveat').innerHTML = `<h3>How sure are these answers?</h3>${C.caveat.map(t => `<p>${esc(t)}</p>`).join('')}<div class="meta">${esc(C.meta)}</div>`;
   const next = LESSONS.findIndex(l => !state.done[l.id]);
   const nextU = LESSONS.findIndex(l => l.unit >= 0 && !state.done[l.id]);
@@ -41652,7 +41678,7 @@ document.addEventListener('click', e => {
 });
 
 function groupPostSession(xp, acc, reviewed, fresh) {
-  if (!G || !xp) return null;
+  if (!ACCT || !xp) return null;
   const title = reviewed ? `today’s review (${reviewed} card${reviewed === 1 ? '' : 's'})` : `${fresh} new card${fresh === 1 ? '' : 's'}`;
   return apiCall('/api/complete', { lessonId: 'review-' + Date.now(), title, reviewed, fresh, xp, acc, day: dstr(new Date()) }).then(refreshBoard, e => { gOffline = true; renderGroup(); throw e; });
 }
@@ -41727,7 +41753,7 @@ $('#streakBody').addEventListener('click', e => {
 
 /* ---------- sync progress to the server ---------- */
 let syncTimer = null, syncBusy = false, syncAgain = false;
-function syncPayload() { const { srs, done, jumped, activeDays, xp, xpBase, xpBy, resetAt, prefs, prefsAt, myTerms, removed, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt, xpDays } = state; return { v: 1, srs, done, jumped, activeDays, xp, xpBase, xpBy, resetAt, prefs, prefsAt, myTerms, removed, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt, xpDays }; }
+function syncPayload() { const { srs, done, jumped, activeDays, xp, xpBase, xpBy, friendXP, resetAt, prefs, prefsAt, myTerms, removed, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt, xpDays } = state; return { v: 1, srs, done, jumped, activeDays, xp, xpBase, xpBy, friendXP, resetAt, prefs, prefsAt, myTerms, removed, settings, settingsAt, newDay, newCount, newCounts, hints, accepted, mix, mixAt, xpDays }; }
 // Merges another device's progress into this one: the most-reviewed copy of each card wins, practice days are combined.
 function mergeStates(a, b) {
   // A reset on either device wipes the other copy's progress from before that reset.
@@ -41747,6 +41773,7 @@ function mergeStates(a, b) {
   out.xpBase = Math.max(a.xpBase !== undefined ? a.xpBase : (a.xp || 0), b.xpBase !== undefined ? b.xpBase : (b.xp || 0));
   out.xpBy = { ...(b.xpBy || {}) };
   Object.entries(a.xpBy || {}).forEach(([k, n]) => out.xpBy[k] = Math.max(out.xpBy[k] || 0, n));
+  out.friendXP = Math.max(a.friendXP || 0, b.friendXP || 0);
   out.xp = xpTotal(out);
   if ((b.settingsAt || 0) > (a.settingsAt || 0) && b.settings) { out.settings = b.settings; out.settingsAt = b.settingsAt; }
   // Freezes bought and days earned back are kept from both copies (the newest copy wins for the rest of the settings):
@@ -41890,6 +41917,12 @@ syncNow();
 checkContent();
 document.addEventListener('visibilitychange', () => { if (!document.hidden) checkContent(); });
 if (Native) nativeSync();
+
+if(location.pathname.startsWith('/@')){try{friendUI().query=decodeURIComponent(location.pathname.slice(2));}catch{friendUI().query='';}go('group');if(ACCT)showFriendSearch();}
+
+async function openSharedCourse(){const token=new URL(location.href).searchParams.get('courseShare');if(!token||!ACCT)return;try{const d=await apiCall('/api/course-share?token='+encodeURIComponent(token));const existing=Object.keys(COURSES).find(k=>COURSES[k].authorId===d.authorId&&COURSES[k].slug===d.slug);if(existing){go('course',existing);return;}friendUI().shared=d;$('#friendsBody').innerHTML=`<h3>${esc(d.course.title)}</h3><p>Shared by ${esc(d.author)}. Add your own copy to learn at your pace.</p><button class="btn" id="fAddShared">Add to my courses</button>`;openSheet('#friendsSheet');}catch(e){toast(netMsg(e))}}
+$('#friendsBody').addEventListener('click',async e=>{if(e.target.id!=='fAddShared')return;const d=friendUI().shared;if(!d)return;e.target.disabled=true;try{const course={...d.course,id:'shared-'+d.id};const r=await apiCall('/api/courses',{personal:true,course});await loadCourses();setMix('c:'+r.slug,true);closeSheet('#friendsSheet');go('course','c:'+r.slug);toast('Course added.');}catch(err){toast(netMsg(err));e.target.disabled=false;}});
+if(ACCT)openSharedCourse();
 </script>
 <script>if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});</script>
 </body></html>

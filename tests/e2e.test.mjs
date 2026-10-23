@@ -9,7 +9,7 @@ import { chromium } from 'playwright-core';
 import { randomBytes } from 'node:crypto';
 
 const BASE = (process.argv[2] || 'http://localhost:8799').replace(/\/$/, '');
-if (/workers\.dev|github\.io/.test(BASE)) { console.error('Local server only: these tests create accounts.'); process.exit(2); }
+if (!['localhost','127.0.0.1'].includes(new URL(BASE).hostname)) { console.error('Local server only: these tests create accounts.'); process.exit(2); }
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const ONLY = process.env.ONLY ? new Set(process.env.ONLY.split(',')) : null;
 let pass = 0, failN = 0; const fails = [];
@@ -97,7 +97,7 @@ const tests = {};
 // ---------- 1. Cold start: every route, signed out, desktop and phone
 tests.coldStart = async () => {
   const keys = await (async () => { const c = await ctx(); const p = await page(c); await p.goto(BASE + '/'); const k = await ev(p, 'Object.keys(COURSES)'); await c.close(); return k; })();
-  const routes = ['', '#today', '#courses', '#group', '#me', ...keys.map(k => '#course/' + k), '#course/nope', '#course/', '#%E0%A4%A', '#<img src=x onerror=alert(1)>', '?join=ABC123', '?join=<b>x</b>#me'];
+  const routes = ['@missing-user', '@alex%2Bfriend', '', '#today', '#courses', '#group', '#me', ...keys.map(k => '#course/' + k), '#course/nope', '#course/', '#%E0%A4%A', '#<img src=x onerror=alert(1)>', '?join=ABC123', '?join=<b>x</b>#me'];
   for (const phone of [true, false]) for (const r of routes) {
     const c = await ctx({ phone }); const p = await page(c);
     await p.goto(BASE + '/' + r); await p.waitForTimeout(150);
@@ -340,26 +340,31 @@ tests.network = async () => {
 
 // ---------- 7. Groups between two accounts
 tests.groups = async () => {
-  const ca = await ctx(); const a = await page(ca); await signUp(a, { name: 'Ann ' + rnd() });
-  await ev(a, `go('group')`);
-  ok(await visible(a, '#gName') || await visible(a, '#gGroup'), 'Group tab offers to start or join a group');
-  const startBtn = await ev(a, `(() => { const b = [...document.querySelectorAll('#group button')].find(b => /start/i.test(b.textContent)); if (b) b.id = b.id || 'tStart'; return b ? '#' + b.id : null; })()`);
-  if (startBtn) await a.click(startBtn);
-  if (await visible(a, '#gGroup')) await a.fill('#gGroup', 'Test club ' + rnd());
-  await a.click('#gGo'); await a.waitForFunction(() => G && G.code, null, { timeout: 8000 }).catch(() => {});
-  const code = await ev(a, 'G && G.code');
-  ok(code && code.length === 6, 'started a group with a 6-character code', code);
-  const cb = await ctx(); const b = await page(cb); await signUp(b, { name: 'Bob ' + rnd() });
-  await b.goto(BASE + '/?join=' + code); await b.waitForTimeout(500); await ev(b, `go('group')`);
-  if (await visible(b, '#gCode')) { const v = await b.inputValue('#gCode'); if (!v) await b.fill('#gCode', code); }
-  await b.click('#gGo'); await b.waitForFunction(() => G && G.code, null, { timeout: 8000 }).catch(() => {});
-  ok(await ev(b, 'G && G.code') === code, 'second account joined with the code');
-  await ev(a, 'refreshBoard && refreshBoard()'); await a.waitForTimeout(1500);
-  const names = await ev(a, `board ? board.players.map(p => p.name) : []`);
-  ok(names.length === 2, 'leaderboard shows both players', names);
-  ok(!badText(await a.locator('#home').innerText()), 'group page text is clean', badText(await a.locator('#home').innerText()));
-  ok(a.errors.length === 0 && b.errors.length === 0, 'groups: no page errors', [...a.errors, ...b.errors]);
-  await ca.close(); await cb.close();
+  const ca=await ctx(),a=await page(ca),ua=await signUp(a,{name:'Ann '+rnd()});
+  const cb=await ctx(),b=await page(cb),ub=await signUp(b,{name:'Bob '+rnd()});
+  await ev(a, "refreshBoard().then(()=>go('group'))");await ev(b,'refreshBoard()');
+  ok(await visible(a,'[data-f-search]')&&!await visible(a,'#gGo'),'Friends offers username search without group setup');
+  await a.locator('[data-f-search]').first().click();await a.fill('#fSearch',ub.username);
+  await a.waitForSelector('#fResults [data-f-action="request"]');
+  await a.click('#fResults [data-f-action="request"]');await a.waitForSelector('#fResults [data-f-action="decline"]');
+  ok(await a.locator('#fResults').innerText().then(t=>t.includes('Cancel request')),'search confirms pending request');
+  await a.click('[data-f-close]');await ev(b,"refreshBoard().then(()=>go('group'))");
+  await b.click('#group [data-f-action="accept"]');await b.waitForFunction(()=>board.players.length===2);
+  await ev(a,'refreshBoard()');await a.click('[data-f-tab="friends"]');
+  const bid=await ev(b,'ACCT.player.id');await a.click(`[data-f-profile="${bid}"]`);
+  ok(await visible(a,'[data-f-streak]'),'accepted friend profile offers optional streak');
+  await a.click('[data-f-streak]');await a.click('[data-fsreq]');await a.waitForFunction(()=>board.friends.length===1);
+  await ev(b,'refreshBoard()');await b.click('#group [data-fsacc]');await b.waitForFunction(()=>board.friends[0].status==='active');
+  ok(await ev(b,'board.friends[0].status')==='active','friend streak requires separate acceptance');
+  await ev(a,'refreshBoard()');await a.click('[data-f-tab="friends"]');await a.click(`[data-f-profile="${bid}"]`);
+  await a.click('[data-f-action="mute"]');await a.waitForSelector('[data-f-action="mute"][data-muted="0"]');
+  ok(await ev(a,'board.links[0].muted'),'activity mute is saved');
+  await a.click('[data-f-remove]');ok(await a.locator('[data-f-remove]').innerText().then(t=>t.includes('Confirm')),'remove asks for a second deliberate tap');
+  await a.click('[data-f-remove]');await a.waitForFunction(()=>board.players.length===1);
+  ok(await ev(a,'board.friends.length')===0,'remove ends the shared streak');
+  ok(!badText(await a.locator('#home').innerText()),'Friends text renders cleanly');
+  ok(!a.errors.length&&!b.errors.length,'Friends has no browser errors',[...a.errors,...b.errors]);
+  await ca.close();await cb.close();
 };
 
 // ---------- 8. Me: settings, removed questions, password change
@@ -515,14 +520,16 @@ tests.fixes = async () => {
   }
   ok(p.errors.length === 0, 'fixes: no page errors', p.errors);
   await c.close();
-  { // Group feed shows lesson titles from the app's own course copy, not text the poster sent.
-    const ca = await ctx(); const a = await page(ca); await signUp(a);
-    await ev(a, `go('group')`); await a.click('[data-gmode="start"]'); await a.fill('#gGroup', 'Feed club'); await a.fill('#gName', 'Ann'); await a.click('#gGo');
-    await a.waitForFunction(() => G && G.code, null, { timeout: 8000 });
-    await ev(a, `apiCall('/api/complete', { lessonId: 'au0l0', title: 'Visit spam.example now', xp: 10, acc: 90, day: dstr(new Date()) })`); await ev(a, 'refreshBoard()'); await a.waitForTimeout(800);
-    const txt = await a.locator('.feed').innerText().catch(() => '');
-    ok(!/spam\.example/.test(txt) && txt.includes(await ev(a, `COURSES.policy.units[0].lessons[0].title`)), 'feed uses the course’s own lesson title', txt);
-    await ca.close();
+  { // A friend's feed uses the course's own lesson title, never sender-supplied text.
+    const ca=await ctx(),a=await page(ca);await signUp(a);
+    const cb=await ctx(),b=await page(cb);await signUp(b);
+    const aid=await ev(a,'ACCT.player.id'),bid=await ev(b,'ACCT.player.id');
+    await ev(a,`apiCall('/api/friends/request',{to:'${bid}'})`);await ev(b,`apiCall('/api/friends/accept',{to:'${aid}'})`);
+    await ev(b,`apiCall('/api/complete',{lessonId:'au0l0',title:'Visit spam.example now',xp:10,acc:90,day:dstr(new Date())})`);
+    await ev(a,"refreshBoard().then(()=>go('group'))");
+    const txt=await a.locator('.friend-activity').innerText();
+    ok(!/spam\.example/.test(txt)&&txt.includes(await ev(a,'COURSES.policy.units[0].lessons[0].title')),'feed uses the course’s own lesson title',txt);
+    await ca.close();await cb.close();
   }
 };
 
@@ -965,39 +972,26 @@ tests.retention = async () => {
   ok(await ev(a, `document.querySelectorAll('#resultIn .cele').length`) >= 1 && /5-day streak/.test(await a.locator('#resultIn').innerText()) && /earned your streak back/.test(await a.locator('#resultIn').innerText()), 'result screen celebrates the earned-back streak', await a.locator('#resultIn').innerText());
   ok(await ev(a, `xpToday()`) > 0, 'XP today is counted', await ev(a, 'state.xpDays'));
   await a.click('#rHome');
-  // Group with a friend streak, a nudge and notifications.
-  await ev(a, `go('group')`);
-  const startBtn = await ev(a, `(() => { const b = [...document.querySelectorAll('#group button')].find(b => /start/i.test(b.textContent)); if (b) b.id = b.id || 'tStart'; return b ? '#' + b.id : null; })()`);
-  if (startBtn) await a.click(startBtn);
-  if (await visible(a, '#gGroup')) await a.fill('#gGroup', 'Streakers ' + rnd());
-  await a.click('#gGo'); await a.waitForFunction(() => G && G.code, null, { timeout: 8000 }).catch(() => {});
-  const code = await ev(a, 'G && G.code');
-  const cb = await ctx(); const b = await page(cb); await signUp(b, { name: 'Sol ' + rnd() });
-  await b.goto(BASE + '/?join=' + code); await b.waitForTimeout(500); await ev(b, `go('group')`);
-  if (await visible(b, '#gCode')) { const v = await b.inputValue('#gCode'); if (!v) await b.fill('#gCode', code); }
-  await b.click('#gGo'); await b.waitForFunction(() => G && G.code, null, { timeout: 8000 }).catch(() => {});
-  await ev(a, 'refreshBoard()'); await a.waitForFunction(() => board && board.players.length === 2, null, { timeout: 8000 }).catch(() => {});
-  ok(await visible(a, '.quest'), 'Group shows the weekly group goal');
-  ok(await visible(a, '#bellBtn'), 'bell shows for players in a group');
-  const bid = await ev(b, 'ACCT.player.id');
-  await a.click(`li[data-pid="${bid}"]`); await a.click(`[data-fsreq="${bid}"]`);
-  await a.waitForFunction(() => board && board.friends && board.friends.length === 1, null, { timeout: 8000 }).catch(() => {});
-  ok(await ev(a, `board.friends[0].status`) === 'pending', 'friend streak requested');
-  await ev(b, 'refreshBoard()'); await b.waitForFunction(() => board && board.unseen === 1, null, { timeout: 8000 }).catch(() => {});
-  ok(await ev(b, `$('#bellN').textContent`) === '1', 'Sol’s bell shows one new notification', await ev(b, `$('#bellN').textContent`));
-  await b.click('#bellBtn'); await b.waitForSelector('#inboxBody .notes', { timeout: 8000 }).catch(() => {});
-  ok(/wants to start a friend streak/.test(await b.locator('#inboxBody').innerText()), 'notification lists the request');
-  await b.click('#inboxBody [data-fsacc]'); await b.waitForFunction(() => board && board.friends[0] && board.friends[0].status === 'active', null, { timeout: 8000 }).catch(() => {});
-  ok(await ev(b, `board.friends[0].status`) === 'active', 'friend streak accepted from the notification');
-  await b.click('#inboxSheet [data-close]');
-  await ev(b, `go('today')`); ok(/Rae/.test(await b.locator('#streakStrip').innerText()), 'Today lists the friend streak', await b.locator('#streakStrip').innerText());
-  await ev(b, `go('today')`);
-  const nudge = await ev(b, `!!document.querySelector('#streakStrip [data-nudge]')`);
-  ok(!nudge, 'no nudge offered while Sol hasn’t practiced (Rae is done, so it’s Sol’s turn)');
-  ok(/Your turn/.test(await b.locator('#streakStrip').innerText()), 'Today says it’s Sol’s turn');
+  // Friends are independent accounts; streak invitations remain a separate opt-in.
+  const cb=await ctx(),b=await page(cb);await signUp(b,{name:'Sol '+rnd()});
+  const aid=await ev(a,'ACCT.player.id'),bid=await ev(b,'ACCT.player.id');
+  await ev(a,`apiCall('/api/friends/request',{to:'${bid}'})`);await ev(b,`apiCall('/api/friends/accept',{to:'${aid}'})`);
+  await ev(a,"refreshBoard().then(()=>go('group'))");await ev(b,'refreshBoard()');
+  ok(await visible(a,'#bellBtn'),'bell is available without a group');
+  await a.click('[data-f-tab="friends"]');await a.click(`[data-f-profile="${bid}"]`);await a.click('[data-f-streak]');await a.click('[data-fsreq]');
+  await a.waitForFunction(()=>board.friends.length===1);
+  ok(await ev(a,'board.friends[0].status')==='pending','friend streak requested');
+  await ev(b,'refreshBoard()');await b.click('#bellBtn');await b.waitForSelector('#inboxBody [data-fsacc]');
+  ok(/wants to start a friend streak/.test(await b.locator('#inboxBody').innerText()),'notification lists streak invitation');
+  await b.click('#inboxBody [data-fsacc]');await b.waitForFunction(()=>board.friends[0].status==='active');
+  ok(await ev(b,'board.friends[0].status')==='active','friend streak accepted from notification');
+  await b.click('#inboxSheet [data-close]');await ev(b,"go('today')");
+  ok(/Rae/.test(await b.locator('#streakStrip').innerText()),'Today lists the friend streak');
+  ok(!await visible(b,'#streakStrip [data-nudge]'),'no nudge offered while it is your own turn');
+  ok(/Your turn/.test(await b.locator('#streakStrip').innerText()),'Today identifies your turn');
   // Rae nudges Sol from the board.
   await ev(a, 'refreshBoard()'); await a.waitForTimeout(800); await ev(a, `gSel = null; go('group')`);
-  await a.click(`li[data-pid="${bid}"]`); await a.click(`.lbact [data-nudge="${bid}"]`); await a.waitForTimeout(1200);
+  await ev(a,"go('today')"); await a.click(`#streakStrip [data-nudge="${bid}"]`); await a.waitForTimeout(1200);
   ok(await ev(a, `nudgedToday('${bid}')`), 'nudge sent and remembered for today');
   await ev(b, 'refreshBoard()'); await b.waitForTimeout(1200);
   ok(await ev(b, 'board.unseen') === 1, 'Sol has the nudge', await ev(b, 'board.unseen'));

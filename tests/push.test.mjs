@@ -7,6 +7,7 @@ import { createVerify } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 
 const BASE = process.argv[2] || 'http://127.0.0.1:8814';
+if(!['localhost','127.0.0.1'].includes(new URL(BASE).hostname))throw new Error('Local test server only.');
 const KEY = JSON.parse(readFileSync(new URL('./push-test-key.json', import.meta.url)));
 let pass = 0, failN = 0; const fails = [];
 const ok = (cond, name, extra) => { if (cond) pass++; else { failN++; fails.push(name + (extra !== undefined ? ' :: ' + JSON.stringify(extra).slice(0, 400) : '')); } };
@@ -68,7 +69,17 @@ try {
   await call('/api/complete', { token: B.token, body: { lessonId: 'review-1', reviewed: 2, xp: 20, acc: 100, day: today } });
   r = await call('/api/kudos', { token: C.token, body: { to: B.player.id, ref: 'review-1' } }); ok(r.s === 200, 'Cy high-fives Bo', r);
   sent = mark();
-  ok(sent.length === 1 && sent[0].token === tok('b') && /high-fived/.test(sent[0].body.aps.alert.body), 'high-five pushed, dead phone no longer tried', sent.map(x => [x.token.slice(0, 6), x.body.aps && x.body.aps.alert.body]));
+  ok(sent.length === 0, 'high-fives stay in-app without a routine push', sent);
+
+  // Account friendships push separately from optional friend streaks.
+  await call('/api/push/register',{token:A.token,body:{token:tok('a')}});
+  mark=since();await call('/api/friends/request',{token:B.token,body:{to:A.player.id}});
+  ok(mark().length===1&&mark()[0].body.kind==='friend_request','friend request sends an actionable push');
+  mark=since();await call('/api/friends/accept',{token:A.token,body:{to:B.player.id}});
+  ok(mark().length===1&&mark()[0].body.kind==='friend_accept','friend acceptance sends an actionable push');
+  await call('/api/friends/settings',{token:A.token,body:{requests:false,streaks:true,milestones:false}});
+  mark=since();await call('/api/friends/request',{token:C.token,body:{to:A.player.id}});
+  ok(mark().length===0,'request preference suppresses request pushes');
 
   // friend streak request and accept push to the other person
   await call('/api/push/register', { token: A.token, body: { token: tok('a') } });
@@ -79,17 +90,20 @@ try {
   ok(sent.length === 2 && sent[0].token === tok('a') && /wants to start a friend streak/.test(sent[0].body.aps.alert.body) && sent[1].token === tok('b') && /accepted/.test(sent[1].body.aps.alert.body), 'request pushed to Ann, accept pushed to Bo', sent.map(x => [x.token.slice(0, 1), x.body.aps.alert.body]));
 
   // "your turn": Bo already practiced today (his completion), so Ann finishing doesn't push him;
-  // Ann hasn't practiced, so Bo finishing pushes her, once a day
+  // Ann's real completion still counts even if another device syncs an empty day list.
   await call('/api/state', { token: B.token, body: { state: { srs: {}, activeDays: [today] } } });
   mark = since();
   await call('/api/complete', { token: A.token, body: { lessonId: 'review-2', reviewed: 2, xp: 20, acc: 100, day: today } });
   ok(mark().length === 0, 'no "your turn" for a partner who already practiced');
   await call('/api/state', { token: A.token, body: { state: { srs: {}, activeDays: [] } } });
+  await call('/api/push/register',{token:C.token,body:{token:tok('c')}});
+  await call('/api/friend/request',{token:B.token,body:{to:C.player.id,today}});
+  await call('/api/friend/accept',{token:C.token,body:{to:B.player.id,today}});
   mark = since();
   await call('/api/complete', { token: B.token, body: { lessonId: 'review-3', reviewed: 2, xp: 20, acc: 100, day: today } });
   await call('/api/complete', { token: B.token, body: { lessonId: 'review-4', reviewed: 2, xp: 20, acc: 100, day: today } });
   sent = mark();
-  ok(sent.length === 1 && sent[0].token === tok('a') && sent[0].body.kind === 'turn' && /practiced today/.test(sent[0].body.aps.alert.body), '"your turn" pushed to Ann once', sent.map(x => x.body.aps.alert.body));
+  ok(sent.length === 1 && sent[0].token === tok('c') && sent[0].body.kind === 'turn' && /practiced today/.test(sent[0].body.aps.alert.body), '"your turn" pushed once to Cy; real completed round suppresses Ann’s reminder', sent.map(x => x.body.aps.alert.body));
 
   // turning friend notifications off stops pushes (the in-app note still arrives)
   await call('/api/state', { token: A.token, body: { state: { srs: {}, activeDays: [], prefs: { pushFriends: false } } } });
@@ -115,7 +129,7 @@ try {
   mark = since();
   await call('/api/nudge', { token: pals[1].token, body: { to: C.player.id } });
   sent = mark();
-  ok(sent.length === 1 && sent[0].token === tok('a'), 'a phone signed in as someone else now gets their pushes', sent.length);
+  ok(sent.some(x=>x.token===tok('a')) && sent.every(x=>x.token===tok('a')||x.token===tok('c')), 'a phone signed in as someone else now gets their pushes', sent.length);
   // deleting an account forgets its phones
   await call('/api/account/delete', { token: C.token, body: {} });
   r = await call('/api/push/register', { token: pals[2].token, body: { token: tok('a') } }); ok(r.s === 200, 'token free after account deletion', r);

@@ -9,6 +9,7 @@ import { gradeAnswer, takeGradeQuota, takeDisputeQuota, hintFor, defineTerm } fr
 import { publicEmailApi, emailApi } from './email.js';
 import { adminApi } from './admin.js';
 import { socialApi, friendRows, friendTurnPushes } from './social.js';
+import { friendsApi, settleFriendRewards, personalCourseGroup, courseShareApi } from './friends.js';
 import { pushApi } from './push.js';
 import { sendNudgeEmail } from './email.js';
 import { idpApi } from './idp.js';
@@ -101,7 +102,7 @@ async function createPlayer(env, code, name) {
 async function moveToGroup(env, me, code, name) {
   const stmts = [env.DB.prepare('UPDATE players SET group_code = ?, name = ? WHERE id = ?').bind(code, name, me.id)];
   // Friend streaks are within a group, so they end when a player moves to another one.
-  if (code !== me.group_code) stmts.push(env.DB.prepare('DELETE FROM friend_streaks WHERE a = ? OR b = ?').bind(me.id, me.id));
+  if (code !== me.group_code) stmts.push(env.DB.prepare(`DELETE FROM friend_streaks WHERE (a = ? OR b = ?) AND NOT EXISTS(SELECT 1 FROM friendships f WHERE f.a=friend_streaks.a AND f.b=friend_streaks.b AND f.status='accepted')`).bind(me.id, me.id));
   // Courses come along only while the group has room (50).
   const room = me.solo ? Math.max(0, 50 - (await env.DB.prepare('SELECT COUNT(*) AS n FROM courses WHERE group_code = ?').bind(code).first()).n) : 0;
   if (me.solo) stmts.push(
@@ -308,6 +309,8 @@ async function api(req, env, path) {
   }
   const mine = await accountApi(req, env, path, me, { json, fail, body }) || await emailApi(req, env, path, me, { json, fail, body })
     || await pushApi(req, env, path, me, { json, fail, body })
+    || await courseShareApi(req, env, path, me, {json,fail,body})
+    || await friendsApi(req, env, path, me, { json, fail, body, today: utcDay() })
     || await socialApi(req, env, path, me, { json, fail, body, today: utcDay(), dayOk: d => realDay(d) && d >= utcDay(-1) && d <= utcDay(1), sendNudgeEmail: (to, from) => sendNudgeEmail(env, req, to, from) });
   if (mine) return mine;
 
@@ -331,7 +334,7 @@ async function api(req, env, path) {
     // At most one completion of the same lesson per minute, to blunt double-submits.
     const dup = await env.DB.prepare('SELECT 1 FROM completions WHERE player_id = ? AND lesson_id = ? AND created_at > ?').bind(me.id, lessonId, Date.now() - 60000).first();
     if (!dup) await env.DB.prepare('INSERT INTO completions (player_id, group_code, lesson_id, title, xp, acc, day, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)').bind(me.id, me.group_code, lessonId, title, xp, acc, b.day, Date.now()).run();
-    if (!dup) await friendTurnPushes(env, me, b.day);
+    if (!dup) { await friendTurnPushes(env, me, b.day); await settleFriendRewards(env, me.id, b.day); }
     return json({ ok: true, xp });
   }
 
@@ -400,18 +403,19 @@ async function api(req, env, path) {
   if (m === 'GET' && path === '/api/courses') {
     const rows = await env.DB.prepare(`SELECT c.id, c.slug, c.title, c.json, c.version, c.author_id, p.name AS author, c.created_at, c.updated_at,
       (SELECT COUNT(*) FROM reports r WHERE r.course_id = c.id AND r.resolved = 0) AS open_reports
-      FROM courses c JOIN players p ON p.id = c.author_id WHERE c.group_code = ? AND c.author_id NOT IN (SELECT blocked_id FROM blocks WHERE player_id = ?) ORDER BY c.created_at`).bind(me.group_code, me.id).all();
+      FROM courses c JOIN players p ON p.id = c.author_id WHERE (c.group_code = ? OR c.group_code IN (SELECT group_code FROM course_libraries WHERE player_id = ?)) AND c.author_id NOT IN (SELECT blocked_id FROM blocks WHERE player_id = ?) ORDER BY c.created_at`).bind(me.group_code, me.id, me.id).all();
     return json({ courses: rows.results.map(r => ({ slug: r.slug, title: r.title, version: r.version, authorId: r.author_id, author: r.author, createdAt: r.created_at, updatedAt: r.updated_at, openReports: r.open_reports, course: JSON.parse(r.json) })) });
   }
 
   if (m === 'POST' && path === '/api/courses') {
     const text = await req.text();
     if (text.length > COURSE_LIMITS.bytes + 1000) return fail('That course file is too large.', 413);
-    let raw; try { raw = safeParse(text).course; } catch { return fail('That isn’t valid JSON.'); }
+    let raw, input; try { input = safeParse(text); raw = input.course; } catch { return fail('That isn’t valid JSON.'); }
     const v = validateCourse(raw);
     if (!v.ok) return json({ error: 'The course has problems.', errors: v.errors }, 422);
-    const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM courses WHERE group_code = ?').bind(me.group_code).first();
-    const existing = await env.DB.prepare('SELECT id, author_id, version, json FROM courses WHERE group_code = ? AND slug = ?').bind(me.group_code, v.course.id).first();
+    const library = input.personal === true ? await personalCourseGroup(env,me) : me.group_code;
+    const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM courses WHERE group_code = ?').bind(library).first();
+    const existing = await env.DB.prepare('SELECT id, author_id, version, json FROM courses WHERE (group_code = ? OR author_id = ?) AND slug = ? ORDER BY updated_at DESC LIMIT 1').bind(library,me.id,v.course.id).first();
     const body = JSON.stringify(v.course), now = Date.now();
     if (existing && existing.author_id !== me.id) return fail('Someone else in this group already has a course with that id. Change "id" in your file.', 409);
     if (existing && existing.json === body) return json({ slug: v.course.id, version: existing.version, updated: false, unchanged: true });
@@ -423,14 +427,14 @@ async function api(req, env, path) {
       await env.DB.prepare('UPDATE courses SET title = ?, json = ?, version = version + 1, updated_at = ? WHERE id = ?').bind(v.course.title, body, now, existing.id).run();
       return json({ slug: v.course.id, version: existing.version + 1, updated: true });
     }
-    await env.DB.prepare('INSERT INTO courses (group_code, slug, author_id, title, json, version, created_at, updated_at) VALUES (?, ?, ?, ?, ?, 1, ?, ?)').bind(me.group_code, v.course.id, me.id, v.course.title, body, now, now).run();
+    await env.DB.prepare('INSERT INTO courses (group_code, slug, author_id, title, json, version, created_at, updated_at) VALUES (?, ?, ?, ?, ?, 1, ?, ?)').bind(library, v.course.id, me.id, v.course.title, body, now, now).run();
     return json({ slug: v.course.id, version: 1, updated: false });
   }
 
   const cm = path.match(/^\/api\/courses\/([a-z0-9-]{2,40})(\/reports|\/delete)?$/);
   if (cm) {
     // An author can still delete a course they wrote after leaving its group.
-    const c = await env.DB.prepare('SELECT id, author_id, version FROM courses WHERE group_code = ? AND slug = ?').bind(me.group_code, cm[1]).first()
+    const c = await env.DB.prepare('SELECT id, author_id, version FROM courses WHERE (group_code = ? OR group_code IN (SELECT group_code FROM course_libraries WHERE player_id=?)) AND slug = ?').bind(me.group_code,me.id,cm[1]).first()
       || (cm[2] === '/delete' ? await env.DB.prepare('SELECT id, author_id, version FROM courses WHERE author_id = ? AND slug = ? ORDER BY updated_at DESC').bind(me.id, cm[1]).first() : null);
     if (!c) return fail('No course with that id in this group.', 404);
     if (m === 'POST' && cm[2] === '/reports') {
@@ -485,6 +489,7 @@ export default {
       const r = await env.ASSETS.fetch(req);
       return withCors(new Response(r.body, r), req);
     }
+    if (/^\/@[a-z0-9._+%-]{3,120}$/i.test(url.pathname)) return env.ASSETS.fetch(new Request(new URL('/', req.url), req));
     return env.ASSETS.fetch(req);
   }
 };

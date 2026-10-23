@@ -126,8 +126,8 @@ async function checkPassword(password, stored) {
 async function setPassword(env, playerId, username, password) {
   const u = cleanUsername(username), up = usernameProblem(u) || passwordProblem(password);
   if (up) return up;
-  const taken = await env.DB.prepare('SELECT player_id FROM passwords WHERE username = ?').bind(u).first();
-  if (taken && taken.player_id !== playerId) return 'That username is taken. Try another.';
+  const taken = await env.DB.prepare('SELECT player_id FROM passwords WHERE username = ? UNION ALL SELECT player_id FROM friend_handles WHERE handle = ?').bind(u,u).all();
+  if (taken.results.some(p => p.player_id !== playerId)) return 'That username is taken. Try another.';
   await env.DB.prepare('INSERT INTO passwords (player_id, username, hash, updated_at) VALUES (?, ?, ?, ?) ON CONFLICT(player_id) DO UPDATE SET username = excluded.username, hash = excluded.hash, updated_at = excluded.updated_at')
     .bind(playerId, u, await hashPassword(password), Date.now()).run();
   return '';
@@ -151,7 +151,7 @@ export async function publicAccountApi(req, env, path, { json, fail, body, clean
     const withPw = b.username !== undefined || b.password !== undefined;
     if (withPw) { const up = usernameProblem(cleanUsername(b.username)) || passwordProblem(b.password); if (up) return fail(up); }
     if (!await takeNewAccount(env, req)) return fail('Too many new accounts from this network today. Try again tomorrow.', 429);
-    if (withPw && await env.DB.prepare('SELECT 1 FROM passwords WHERE username = ?').bind(cleanUsername(b.username)).first()) return fail('That username is taken. Try another.', 409);
+    if (withPw && await env.DB.prepare('SELECT 1 FROM passwords WHERE username = ? UNION ALL SELECT 1 FROM friend_handles WHERE handle = ?').bind(cleanUsername(b.username),cleanUsername(b.username)).first()) return fail('That username is taken. Try another.', 409);
     if (name !== 'Player') { const mod = await screen(env, req, `Display name: ${name}`); if (!mod.allowed) return screenFail(fail, mod, 'That name can’t be used: '); }
     const code = await createHomeGroup(env);
     const id = randomString(10, ID_ALPHABET), secret = randomString(24, SECRET_ALPHABET);
@@ -237,12 +237,12 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
   if (m === 'POST' && path === '/api/account/delete') {
     const id = me.id, mine = await env.DB.prepare('SELECT id FROM courses WHERE author_id = ?').bind(id).all();
     const stmts = mine.results.map(c => env.DB.prepare('DELETE FROM reports WHERE course_id = ?').bind(c.id));
-    for (const sql of ['DELETE FROM courses WHERE author_id = ?', 'DELETE FROM reports WHERE player_id = ?', 'DELETE FROM completions WHERE player_id = ?',
+    for (const sql of ['DELETE FROM course_shares WHERE course_id IN (SELECT id FROM courses WHERE author_id=?)', 'DELETE FROM courses WHERE author_id = ?', 'DELETE FROM reports WHERE player_id = ?', 'DELETE FROM completions WHERE player_id = ?',
       'DELETE FROM player_state WHERE player_id = ?', 'DELETE FROM sessions WHERE player_id = ?', 'DELETE FROM passkeys WHERE player_id = ?',
       'DELETE FROM link_codes WHERE player_id = ?', 'DELETE FROM webauthn_challenges WHERE player_id = ?', 'DELETE FROM grade_usage WHERE player_id = ?',
       'DELETE FROM disputes WHERE who = ?', 'DELETE FROM card_feedback WHERE who = ?', 'DELETE FROM passwords WHERE player_id = ?',
       'DELETE FROM card_ratings WHERE who = ?', 'DELETE FROM session_feedback WHERE who = ?', 'DELETE FROM notes WHERE player_id = ? OR from_id = ?',
-      'DELETE FROM friend_streaks WHERE a = ? OR b = ?', 'DELETE FROM push_tokens WHERE player_id = ?', 'DELETE FROM course_requests WHERE player_id = ?']) stmts.push(env.DB.prepare(sql).bind(...Array(sql.split('?').length - 1).fill(id)));
+      'DELETE FROM friend_streaks WHERE a = ? OR b = ?', 'DELETE FROM friendships WHERE a = ? OR b = ?', 'DELETE FROM course_libraries WHERE player_id=?', 'DELETE FROM friend_handles WHERE player_id = ?', 'DELETE FROM friend_preferences WHERE player_id = ?', 'DELETE FROM friend_rewards WHERE player_id = ?', 'DELETE FROM friend_days WHERE a = ? OR b = ?', 'DELETE FROM push_tokens WHERE player_id = ?', 'DELETE FROM course_requests WHERE player_id = ?']) stmts.push(env.DB.prepare(sql).bind(...Array(sql.split('?').length - 1).fill(id)));
     stmts.push(env.DB.prepare('DELETE FROM blocks WHERE player_id = ? OR blocked_id = ?').bind(id, id), env.DB.prepare('DELETE FROM grade_usage WHERE player_id = ?').bind('dispute:' + id),
       env.DB.prepare('DELETE FROM rate_limits WHERE key = ?').bind('rm:' + id), env.DB.prepare('DELETE FROM emails WHERE player_id = ?').bind(id), env.DB.prepare('DELETE FROM email_codes WHERE player_id = ?').bind(id), env.DB.prepare('DELETE FROM sign_in_ids WHERE player_id = ?').bind(id),
       env.DB.prepare('DELETE FROM players WHERE id = ?').bind(id));
@@ -255,12 +255,13 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
     if (!other || other === me.id) return fail('Pick someone else to block.');
     if (path === '/api/unblock') { await env.DB.prepare('DELETE FROM blocks WHERE player_id = ? AND blocked_id = ?').bind(me.id, other).run(); return json({ ok: true }); }
     // Only people you can see: someone in your group (blocking also hides them if they come back after leaving).
-    const p = await env.DB.prepare('SELECT id FROM players WHERE id = ? AND group_code = ?').bind(other, me.group_code).first();
-    if (!p) return fail('You can only block people in your group.', 404);
+    const p = await env.DB.prepare('SELECT p.id FROM players p WHERE p.id=? AND (p.group_code=? OR EXISTS(SELECT 1 FROM friend_handles WHERE player_id=p.id) OR EXISTS(SELECT 1 FROM friendships WHERE a=min(?,p.id) AND b=max(?,p.id)))').bind(other,me.group_code,me.id,me.id).first();
+    if (!p) return fail('This person isn’t available.', 404);
     await env.DB.batch([
       env.DB.prepare('INSERT OR IGNORE INTO blocks (player_id, blocked_id, created_at) VALUES (?, ?, ?)').bind(me.id, other, Date.now()),
       // Blocking someone ends any friend streak or request between you, so it doesn't keep using one of the 5 places.
-      env.DB.prepare('DELETE FROM friend_streaks WHERE (a = ? AND b = ?) OR (a = ? AND b = ?)').bind(me.id, other, other, me.id)]);
+      env.DB.prepare('DELETE FROM friend_streaks WHERE (a = ? AND b = ?) OR (a = ? AND b = ?)').bind(me.id, other, other, me.id),
+      env.DB.prepare('DELETE FROM friendships WHERE (a=? AND b=?) OR (a=? AND b=?)').bind(me.id,other,other,me.id)]);
     return json({ ok: true });
   }
   // Set or change this account's username and password.
@@ -295,7 +296,7 @@ export async function accountApi(req, env, path, me, { json, fail, body }) {
     if (me.solo) return json({ ok: true });
     const code = await createHomeGroup(env);
     await env.DB.batch([env.DB.prepare('UPDATE players SET group_code = ? WHERE id = ?').bind(code, me.id),
-      env.DB.prepare('DELETE FROM friend_streaks WHERE a = ? OR b = ?').bind(me.id, me.id)]);
+      env.DB.prepare(`DELETE FROM friend_streaks WHERE (a = ? OR b = ?) AND NOT EXISTS(SELECT 1 FROM friendships f WHERE f.a=friend_streaks.a AND f.b=friend_streaks.b AND f.status='accepted')`).bind(me.id, me.id)]);
     return json({ ok: true });
   }
   if (m === 'POST' && path === '/api/passkey/register-options') {

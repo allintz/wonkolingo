@@ -1,9 +1,10 @@
 // Friend streaks, nudges, high-fives and the notification inbox.
-// A friend streak is between two players in the same group. Each day counts when both practiced; a day either one kept
+// A friend streak is between accepted friends, with same-group support for older apps. Each day counts when both practiced; a day either one kept
 // their own streak on (off day, pause, freeze, repair) holds it without adding; a day either one simply missed resets it.
 // Notes are short notifications for one player (nudge, high-five, friend-streak request or accept), kept 30 days.
 import { takeRate } from './accounts.js';
 import { pushTo } from './push.js';
+import { isFriend } from './friends.js';
 
 export const SOCIAL_LIMITS = { friendStreaks: 5, notesKept: 40, nudgeEmailsPerDay: 2 };
 const NOTE_KINDS = ['nudge', 'kudos', 'fs_request', 'fs_accept'];
@@ -47,7 +48,8 @@ async function note(env, to, from, kind, ref) {
   await env.DB.batch([
     env.DB.prepare('INSERT INTO notes (player_id, from_id, kind, ref, created_at, seen) VALUES (?, ?, ?, ?, ?, 0)').bind(to, from.id, kind, ref || '', Date.now()),
     env.DB.prepare('DELETE FROM notes WHERE player_id = ? AND created_at < ?').bind(to, Date.now() - 30 * 864e5)]);
-  await pushTo(env, to, { title: 'WonkoLingo', body: PUSH_TEXT[kind](from.name), kind });
+  const pref = await env.DB.prepare('SELECT streaks FROM friend_preferences WHERE player_id=?').bind(to).first();
+  if (kind !== 'kudos' && pref?.streaks !== 0) await pushTo(env, to, { title: 'WonkoLingo', body: PUSH_TEXT[kind](from.name), kind });
 }
 // After a player finishes a round: each friend-streak partner who hasn't practiced today gets one "your turn" push a day.
 export async function friendTurnPushes(env, me, day) {
@@ -55,8 +57,9 @@ export async function friendTurnPushes(env, me, day) {
     const pals = (await env.DB.prepare(`SELECT CASE WHEN f.a = ? THEN f.b ELSE f.a END AS id FROM friend_streaks f
       WHERE (f.a = ? OR f.b = ?) AND f.status = 'active'`).bind(me.id, me.id, me.id).all()).results;
     for (const { id } of pals) {
-      const p = await env.DB.prepare("SELECT p.group_code, s.json LIKE ? AS done FROM players p LEFT JOIN player_state s ON s.player_id = p.id WHERE p.id = ?").bind('%"' + day + '"%', id).first();
-      if (!p || p.group_code !== me.group_code || p.done) continue;
+      const p = await env.DB.prepare("SELECT p.group_code, (EXISTS(SELECT 1 FROM json_each(COALESCE(s.json,'{}'), '$.activeDays') WHERE value=?) OR EXISTS(SELECT 1 FROM completions WHERE player_id=p.id AND day=?)) AS done FROM players p LEFT JOIN player_state s ON s.player_id = p.id WHERE p.id = ?").bind(day,day,id).first();
+      if (!p || p.done || (p.group_code !== me.group_code && !await isFriend(env, me.id, id))) continue;
+      const pref = await env.DB.prepare('SELECT streaks FROM friend_preferences WHERE player_id=?').bind(id).first(); if(pref?.streaks===0)continue;
       if (!await takeRate(env, 'turn:' + me.id + ':' + id, 1, 'day')) continue;
       await pushTo(env, id, { title: 'Your turn', body: `${me.name} practiced today. Keep your friend streak going.`, kind: 'turn' });
     }
@@ -66,7 +69,7 @@ export async function friendTurnPushes(env, me, day) {
 async function peer(env, me, id) {
   if (typeof id !== 'string' || !id || id === me.id) return null;
   const p = await env.DB.prepare('SELECT id, name, group_code FROM players WHERE id = ?').bind(id).first();
-  if (!p || p.group_code !== me.group_code) return null;
+  if (!p || (p.group_code !== me.group_code && !await isFriend(env, me.id, id))) return null;
   const b = await env.DB.prepare('SELECT 1 FROM blocks WHERE (player_id = ? AND blocked_id = ?) OR (player_id = ? AND blocked_id = ?)').bind(me.id, id, id, me.id).first();
   return b ? null : p;
 }
@@ -110,7 +113,7 @@ export async function socialApi(req, env, path, me, { json, fail, body, today, d
     const ref = typeof b.ref === 'string' && /^[A-Za-z0-9:#._-]{1,90}$/.test(b.ref) ? b.ref : '';
     if (!ref) return fail('Bad high-five.');
     // Only for something they actually finished in this group.
-    const real = await env.DB.prepare('SELECT 1 FROM completions WHERE player_id = ? AND lesson_id = ? AND group_code = ?').bind(p.id, ref, me.group_code).first();
+    const real = await env.DB.prepare('SELECT 1 FROM completions WHERE player_id = ? AND lesson_id = ?').bind(p.id, ref).first();
     if (!real) return fail('That isn’t in the group feed.');
     const dup = await env.DB.prepare("SELECT 1 FROM notes WHERE player_id = ? AND from_id = ? AND kind = 'kudos' AND ref = ?").bind(p.id, me.id, ref).first();
     if (!dup) await note(env, p.id, me, 'kudos', ref);
