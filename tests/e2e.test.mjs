@@ -932,6 +932,20 @@ tests.retention = async () => {
   ok(await ev(a, `document.querySelectorAll('[data-spack]').length`) === 5, 'Me lists five sound packs');
   await a.click('[data-spack="marimba"]'); ok(await ev(a, `state.prefs.soundPack`) === 'marimba', 'sound pack saved');
   ok(await ev(a, `(() => { for (const k of SOUND_PACK_KEYS) for (const [e] of SOUND_EVENTS) sfx(e, k); return true; })()`), 'every sound in every pack plays');
+  const xpChecks = await a.evaluate(() => {
+    const before = structuredClone(state), out = [], check = (v,n) => out.push([!!v,n]);
+    state.activeDays = [dstr(new Date())]; state.prefs.goal = 50;
+    for (const xp of [0,25,50,51,75,100,125,150,151,10000]) {
+      state.xpDays = { [dstr(new Date())]: { test: xp } }; renderStrip();
+      const el = document.querySelector('.daily-xp'), bonus = el.querySelector('.xp-bonus'), bar = bonus?.querySelector('[role=progressbar]');
+      check(el.querySelector('strong').textContent.replaceAll(',','') === String(xp), 'daily XP total remains exact at '+xp);
+      check(!!bonus === (xp>50) && (!bar || +bar.getAttribute('aria-valuenow') >= +bar.getAttribute('aria-valuemin') && +bar.getAttribute('aria-valuenow') <= +bar.getAttribute('aria-valuemax')), 'bonus milestone is valid at '+xp);
+    }
+    check(document.querySelector('#v-today').firstElementChild.id === 'streakStrip', 'daily XP is above the daily round');
+    state.prefs.goal=0;renderStrip();check(!document.querySelector('.daily-xp .gbar') && !!document.querySelector('.xp-today'), 'goals off keeps total without a goal bar');
+    state=before;renderHome();return out;
+  });
+  for (const [v,n] of xpChecks) ok(v,n);
   // Daily goal and buying a freeze with XP; spending doesn't lower the score.
   await ev(a, `state.activeDays = [addDays(dstr(new Date()), -1)]; state.xpBy[DEV] = 250; state.xp = xpTotal(state); save(); renderHome()`);
   await ev(a, `go('me')`);

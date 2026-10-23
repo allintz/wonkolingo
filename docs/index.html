@@ -706,6 +706,19 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .brand-owl { display: inline-block; position: relative; width: 32px; height: 32px; overflow: hidden; border-radius: 50%; flex-shrink: 0; }
 .brand-owl img { position: absolute; width: 64px; height: 64px; max-width: none; left: -16px; top: -5px; }
 @media(max-width:400px) { .top-in { flex-wrap: wrap; gap: 8px; } .top-in .stats { margin-left: auto; } }
+
+.daily-xp { display: grid; gap: 10px; }
+.xp-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; }
+.xp-today { display: flex; align-items: baseline; flex-wrap: wrap; gap: 7px; margin: 0; font-weight: 700; color: var(--muted); font-size: 15px; }
+.xp-today strong { font-size: 34px; line-height: 1.1; color: var(--fg); font-weight: 900; font-variant-numeric: tabular-nums; }
+.xp-multiple { padding: 5px 9px; border-radius: 9px; background: var(--brass-soft); color: var(--brass); font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.daily-xp .goal { flex: none; }
+.daily-xp .gk { flex-wrap: wrap; }
+.daily-xp .goal.met .gbar { height: 6px; }
+.xp-bonus { display: grid; gap: 6px; }
+.xp-bonus .gk { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 8px; font-size: 13px; font-weight: 700; color: var(--brass); }
+.xp-bonus .gbar { height: 12px; }
+.xp-bonus p { margin: 0; color: var(--muted); font-size: 13px; font-weight: 600; }
 </style>
 
 <header class="top">
@@ -729,8 +742,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   </nav>
   <main class="views" id="home">
     <section class="view" id="v-today">
-      <div id="todayWrap"></div>
       <section class="strip" id="streakStrip" hidden></section>
+      <div id="todayWrap"></div>
       <div id="mixWrap"></div>
       <div id="groupLine"></div>
       <section class="card" id="potd" hidden></section>
@@ -844,8 +857,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-23-ff7fbaf';
-  window.WL_BUILT_AT = +'1792762242000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-23-ea1d9c2';
+  window.WL_BUILT_AT = +'1792767594000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -33519,17 +33532,29 @@ function repairHTML(si) {
   const when = d === y ? 'yesterday' : 'on ' + ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(d + 'T12:00:00').getDay()];
   return `<div class="repair"><span>Your ${si.repair.lost}-day streak lapsed ${when}. Finish a round today and it comes back.</span></div>`;
 }
+function dailyXPHTML(xt, goal) {
+  const extra = Math.max(0, xt - goal), reached = goal > 0 && xt >= goal;
+  let h = `<div class="daily-xp"><div class="xp-heading"><p class="xp-today"><strong>${xt.toLocaleString()}</strong><span>XP today</span></p>${reached ? `<span class="xp-multiple">${Math.round(xt / goal * 100).toLocaleString()}% of goal</span>` : ''}</div>`;
+  if (goal) {
+    const n = Math.min(xt, goal), pct = n / goal * 100;
+    h += `<div class="goal${reached ? ' met' : ''}"><div class="gk"><span>${reached ? 'Daily goal reached' : 'Daily goal'}</span><span>${n} / ${goal} XP</span></div><div class="gbar" role="progressbar" aria-label="Daily goal" aria-valuemin="0" aria-valuemax="${goal}" aria-valuenow="${n}"><i style="width:${pct}%"></i></div></div>`;
+    if (extra > 0) {
+      const lap = Math.ceil(extra / goal), from = lap * goal, to = from + goal, into = xt - from;
+      h += `<div class="xp-bonus"><div class="gk"><span>+${extra.toLocaleString()} XP beyond your goal</span></div><div class="gbar" role="progressbar" aria-label="Bonus XP milestone" aria-valuemin="${from}" aria-valuemax="${to}" aria-valuenow="${xt}" aria-valuetext="${xt} XP today, ${extra} beyond your ${goal} XP goal. ${Math.round(xt/goal*100)} percent of goal."><i style="width:${into / goal * 100}%"></i></div><p>${xt === to ? `${to.toLocaleString()} XP milestone reached` : `Next milestone: ${to.toLocaleString()} XP`}</p></div>`;
+    }
+  }
+  return h + '</div>';
+}
 function renderStrip() {
   const el = $('#streakStrip'); if (!el) return;
-  if (!state.activeDays.length && !Object.keys(state.srs).length && !(G && board && (board.friends || []).length)) { el.hidden = true; return; }
+  if (!xpToday() && !state.activeDays.length && !Object.keys(state.srs).length && !(G && board && (board.friends || []).length)) { el.hidden = true; return; }
   el.hidden = false;
   if (!run && earnBack()) toast('You earned your streak back.');
-  const si = streakInfo(), goal = dailyGoal(), xt = xpToday(), pct = goal ? Math.min(100, Math.round(xt / goal * 100)) : 0;
+  const si = streakInfo(), goal = dailyGoal(), xt = xpToday();
   const cls = si.streak === 0 ? 'zero' : si.atRisk ? 'risk' : '';
   const sub = si.doneToday ? 'done today' : si.offToday ? 'off today' : si.streak ? 'practice today to keep it' : 'finish a round to start one';
   const flakes = Array.from({ length: STREAK_RULES.maxFreezes }, (_, i) => `<span class="flake${i < si.freezes ? ' on' : ''}">${snowSVG()}</span>`).join('');
-  let h = `<div class="strip-top"><button class="sk ${cls}" data-go="me" aria-label="${si.streak}-day streak, ${sub}. Open streak details">${flameSVG()}<span>${si.streak}</span><small>${sub}</small></button><span class="fz" title="${si.freezes} streak freeze${si.freezes === 1 ? '' : 's'} saved">${flakes}</span>`;
-  if (goal) h += `<div class="goal${xt >= goal ? ' met' : ''}"><div class="gk"><span>${xt >= goal ? 'Daily goal reached' : 'Daily goal'}</span><span>${Math.min(xt, goal)} / ${goal} XP</span></div><div class="gbar" role="progressbar" aria-label="Daily goal" aria-valuemin="0" aria-valuemax="${goal}" aria-valuenow="${Math.min(xt, goal)}"><i style="width:${Math.max(pct, 3)}%"></i></div></div>`;
+  let h = dailyXPHTML(xt, goal) + `<div class="strip-top"><button class="sk ${cls}" data-go="me" aria-label="${si.streak}-day streak, ${sub}. Open streak details">${flameSVG()}<span>${si.streak}</span><small>${sub}</small></button><span class="fz" title="${si.freezes} streak freeze${si.freezes === 1 ? '' : 's'} saved">${flakes}</span>`;
   h += `</div>`;
   if (si.frozen.includes(addDays(dstr(new Date()), -1))) h += `<p class="note-line">A streak freeze covered yesterday, so your streak is safe.</p>`;
   h += repairHTML(si) + friendsHTML(false);
