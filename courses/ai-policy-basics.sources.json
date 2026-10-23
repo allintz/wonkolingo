@@ -1,0 +1,94 @@
+[
+ {
+  "id": "zu0l0#basic1",
+  "q": "Policy documents talk constantly about a model's 'weights.' What are they?",
+  "src": [
+   "https://www.ntia.gov/sites/default/files/publications/ntia-ai-open-model-report.pdf"
+  ]
+ },
+ {
+  "id": "zu0l0#basic2",
+  "q": "Why do security researchers treat a frontier model's weights as the key asset to protect?",
+  "src": [
+   "https://www.rand.org/pubs/research_reports/RRA2849-1.html"
+  ]
+ },
+ {
+  "id": "zu0l0#basic3",
+  "q": "Why do analysts say that releasing a model's weights publicly can't be undone?",
+  "src": [
+   "https://www.ntia.gov/sites/default/files/publications/ntia-ai-open-model-report.pdf"
+  ]
+ },
+ {
+  "id": "zu0l0#basic4",
+  "q": "California's SB 53 covers models trained using more than 10^26 operations. What exactly is being counted?",
+  "src": [
+   "https://epoch.ai/blog/estimating-training-compute",
+   "https://bidenwhitehouse.archives.gov/briefing-room/presidential-actions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence/",
+   "https://metr.org/notes/2026-01-29-frontier-ai-safety-regulations/"
+  ]
+ },
+ {
+  "id": "zu0l0#basic5",
+  "q": "Match each law or proposal to the compute line it uses.",
+  "src": [
+   "https://artificialintelligenceact.eu/article/51/",
+   "https://metr.org/notes/2026-01-29-frontier-ai-safety-regulations/",
+   "https://bidenwhitehouse.archives.gov/briefing-room/presidential-actions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence/",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm",
+   "https://www.govinfo.gov/content/pkg/FR-2025-01-28/pdf/2025-01901.pdf"
+  ]
+ },
+ {
+  "id": "zu0l0#basic6",
+  "q": "As of October 2026, is there a US federal requirement to report large AI training runs to the government? What existed b",
+  "src": [
+   "frag-ideas.json#compute-reporting",
+   "https://artificialintelligenceact.eu/article/52/",
+   "https://www.kslaw.com/news-and-insights/white-house-issues-executive-order-on-ai-innovation-and-security"
+  ]
+ },
+ {
+  "id": "zu0l0#basic7",
+  "q": "What is a frontier AI safety framework?",
+  "src": [
+   "https://www.anthropic.com/responsible-scaling-policy/rsp-v3-0",
+   "https://metr.org/common-elements"
+  ]
+ },
+ {
+  "id": "zu0l0#basic8",
+  "q": "What is a system card?",
+  "src": [
+   "https://www.anthropic.com/claude-opus-4-6-system-card",
+   "https://time.com/7313320/google-deepmind-gemini-ai-safety-pledge/",
+   "https://techcrunch.com/2025/04/17/googles-latest-ai-model-report-lacks-key-safety-details-experts-say/",
+   "https://calmatters.digitaldemocracy.org/bills/ca_202520260sb53"
+  ]
+ },
+ {
+  "id": "zu0l0#basic9",
+  "q": "AI risk discussions separate 'misuse' from 'loss of control'. What is the main difference?",
+  "src": [
+   "https://internationalaisafetyreport.org/sites/default/files/2026-02/international-ai-safety-report-2026_1.pdf",
+   "https://arxiv.org/pdf/2501.17805"
+  ]
+ },
+ {
+  "id": "zu0l0#basic10",
+  "q": "As of October 2026, how does US government pre-deployment testing of frontier AI models work?",
+  "src": [
+   "frag-ideas.json#pre-deployment-testing",
+   "https://www.whitehouse.gov/presidential-actions/2026/06/promoting-advanced-artificial-intelligence-innovation-and-security/",
+   "https://www.cio.com/article/4168122/us-government-agency-to-safety-test-frontier-ai-models-before-release.html"
+  ]
+ },
+ {
+  "id": "zu0l0#basic11",
+  "src": [
+   "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB53"
+  ],
+  "q": "Match these California SB 53 duties to what each concerns."
+ }
+]

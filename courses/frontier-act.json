@@ -2,7 +2,7 @@
  "format": "wonkolingo-course/1",
  "id": "frontier-act",
  "title": "The FRONTIER Act",
- "description": "How the bipartisan House frontier AI bill (H.R. 9925) would work: tiers, reporting, outside auditors, emergency orders and state preemption.",
+ "description": "A close reading of H.R. 9925 (July 2026): who it covers, what it requires, emergency orders and the fight over preemption.",
  "caveat": "Based on the introduced text of H.R. 9925 (July 23, 2026). Status, cosponsors and reactions checked October 19, 2026. Simplified: check the bill text before relying on details. The bill could change in committee.",
  "units": [
   {
@@ -22,7 +22,7 @@
         "Rep. Don Beyer (D-VA) and Sen. Brian Schatz (D-HI)"
        ],
        "a": 0,
-       "x": "Obernolte introduced it on July 23, 2026, with Trahan as an original cosponsor. Cruz and Klobuchar are working on a separate Senate draft; Hawley and Blumenthal wrote a different bill that would have the Department of Energy evaluate models.",
+       "x": "Obernolte introduced it on July 23, 2026, with Trahan as an original cosponsor. Cruz and Klobuchar had been negotiating a separate Senate draft, but those talks stalled on September 29, 2026; Hawley and Blumenthal wrote a different bill that would have the Department of Energy evaluate models.",
        "id": "fu0l0#0"
       },
       {
@@ -506,7 +506,7 @@
      "items": [
       {
        "t": "order",
-       "p": "Put the IVO review cycle in order.",
+       "p": "Under the FRONTIER Act, put the review cycle between a developer and its independent verification organization (IVO) in order.",
        "ends": [
         "First",
         "Last"
@@ -662,7 +662,7 @@
      "items": [
       {
        "t": "order",
-       "p": "Put a contested emergency order in order.",
+       "p": "Under the FRONTIER Act, a lab contests an emergency order from the Secretary. Put the steps in order.",
        "ends": [
         "First",
         "Last"

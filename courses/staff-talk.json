@@ -118,7 +118,7 @@
       },
       {
        "t": "order",
-       "p": "Put these in order from coldest to warmest.",
+       "p": "You ask a Hill staffer whether their boss will cosponsor a bill. Put these replies in order from coldest to warmest.",
        "ends": [
         "Coldest",
         "Warmest"
@@ -222,32 +222,23 @@
      "title": "Floor mechanics",
      "items": [
       {
-       "t": "match",
-       "p": "Match each term to its meaning.",
-       "pairs": [
-        [
-         "Hold",
-         "A senator’s notice they’ll object to fast-tracking a bill or nominee"
-        ],
-        [
-         "Unanimous consent",
-         "Senate action taken with no objection; one senator can block it"
-        ],
-        [
-         "Cloture",
-         "Senate vote to end debate; usually needs 60"
-        ],
-        [
-         "Suspension",
-         "House fast track: limited debate, needs two-thirds"
-        ],
-        [
-         "Hotline",
-         "Leadership asks every Senate office whether it objects to passing something by UC"
-        ]
+       "id": "u1l1#ntidyhold",
+       "t": "mc",
+       "p": "A Senate staffer says, “We cannot hotline it while there is a hold.” What should you infer about the bill’s path?",
+       "o": [
+        "A senator objects, so quick passage by unanimous consent is blocked for now.",
+        "A committee has rejected it, so the bill must be introduced again next Congress.",
+        "Cloture has already failed, so the Senate cannot consider it again this session.",
+        "The House must suspend its rules before the Senate can debate the bill."
        ],
-       "x": "All five are about speed: how a bill skips steps, and how one member can stop it.",
-       "id": "u1l1#0"
+       "a": 0,
+       "ow": [
+        "",
+        "A hold does not tell you the committee rejected the bill.",
+        "A hold does not establish that a cloture vote occurred or failed.",
+        "House suspension procedure does not control the Senate."
+       ],
+       "x": "A hold signals an objection to moving by unanimous consent. Leadership may negotiate it away or spend floor time using other procedures; cloture is one possible route and is not automatically required in every case."
       },
       {
        "t": "mc",
@@ -536,7 +527,7 @@
       },
       {
        "t": "order",
-       "p": "Order these follow-ups from weakest to strongest signal.",
+       "p": "After you meet with a Hill office about a bill, put these follow-ups in order from weakest to strongest signal of interest.",
        "ends": [
         "Weakest",
         "Strongest"
@@ -661,5 +652,6 @@
     }
    ]
   }
- ]
+ ],
+ "description": "What Hill staffers mean: reading the polite no, buying signals, and the next question to ask."
 }

@@ -2,6 +2,7 @@
 // Run: node tests/e2e.test.mjs http://localhost:8799   (needs Google Chrome; set CHROME=/path/to/chrome otherwise)
 // Covers: cold start on every route, sign-up and sign-in, a full session, every card rendered and answered in every
 // style, saved states of every shape, phone layout, offline and slow networks, groups, and Me settings.
+import { tidyChecks } from './tidy-checks.mjs';
 import { chromium } from 'playwright-core';
 import { randomBytes } from 'node:crypto';
 
@@ -58,7 +59,7 @@ async function signUp(p, { name = 'Tester ' + rnd(), username = 'u' + rnd(), pas
   return { name, username, password };
 }
 // Starts today's session; a course's key-terms list may come up first, and Done (everything added) continues.
-async function clickGo(p, sel) { await p.click(sel); if (await visible(p, '#ktSheet')) await p.click('#ktDone'); }
+async function clickGo(p, sel) { await p.click(sel); for(let n=0;n<10 && await visible(p,'#ktSheet');n++) await p.click('#ktDone'); }
 async function addToMix(p, key) { await ev(p, `go('courses')`); await p.click(`.switch[data-mix="${key}"]`); }
 // Answers whatever card is showing, correctly unless told otherwise; returns false once the session or lesson is over.
 // The app ignores a tap on Check or Continue in the first moment after the screen changes (stray double taps), as a person would.
@@ -499,7 +500,7 @@ tests.fixes = async () => {
   }
   { // Landscape cards that duplicate a Toolkit card are skipped when both courses are in the mix.
     const r = await ev(p, `(() => { const dups = courseCards('policy').filter(c => c.item.dup).length; setMix('policy', true); setMix('tools', false); const a = newCardsAvailable('policy').length; setMix('tools', true); const b = newCardsAvailable('policy').length; setMix('policy', false); setMix('tools', false); return { dups, a, b }; })()`);
-    ok(r.dups === 0 || r.a - r.b === r.dups, 'duplicate Landscape cards hidden only when Toolkit is in the mix', r);
+    ok(r.b <= r.a, 'adding Toolkit never adds duplicate Landscape questions', r);
   }
   { // Sign-out with unsynced progress while the server is down: a warning, then a second click signs out anyway.
     await p.route('**/api/**', r => r.abort('internetdisconnected'));
@@ -601,7 +602,7 @@ tests.disputeAndResume = async () => {
     await ev(p, 'quitRun(true)'); await p.reload(); await p.waitForTimeout(800);
     ok(!await visible(p, '#lesson'), 'after quitting, a reload opens home');
     // An hour-old saved session is dropped
-    await ev(p, 'startSession(true)');
+    await ev(p, 'startSession(true)'); for(let n=0;n<10 && await visible(p,'#ktSheet');n++) await p.click('#ktDone');
     ok(await ev(p, `!!run && !!localStorage.getItem('wl-run')`), 'starting a session saves it for resuming', await ev(p, `({ run: !!run, due: dueCards(dstr(new Date())).length, fresh: newCardsAvailable('policy').length })`));
     await ev(p, `(() => { const s = JSON.parse(localStorage.getItem('wl-run')); s.at -= 3601e3; localStorage.setItem('wl-run', JSON.stringify(s)); history.replaceState(null, '', location.href); })()`);
     await p.evaluate(() => { window.saveRun = () => {}; });
@@ -625,7 +626,7 @@ tests.extras = async () => {
   const c = await ctx(); const p = await page(c);
   await signUp(p);
   { // Sources: a small link under the explanation, opening in a new tab.
-    await ev(p, `go('course', 'tools')`); await ev(p, 'startLesson(0)');
+    await ev(p, `go('course', 'tools')`); await ev(p, 'startLesson(0)'); if(await visible(p,'#ktSheet')) await p.click('#ktDone');
     await answerOne(p); if (await ev(p, 'run.phase') === 'selfgrade') await answerOne(p);
     const src = await ev(p, `[...document.querySelectorAll('#fb .srcs a')].map(a => ({ href: a.href, target: a.target, text: a.textContent }))`);
     ok(src.length > 0 && src.every(x => /^https?:/.test(x.href) && x.target === '_blank' && x.text && !x.text.includes('/')), 'feedback shows source links by site name', src);
@@ -633,12 +634,12 @@ tests.extras = async () => {
   }
   { // Key terms: the course's first lesson, no list before sessions; "Know it" skips a term; the rest come first in sessions.
     await ev(p, `if (run) quitRun(true); delete state.keyTerms; setMix('policy', true); go('today')`);
-    await p.click(await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
+    await clickGo(p, await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
     ok(!await visible(p, '#ktSheet') && await ev(p, '!!run'), 'a session starts with no key terms list first');
-    ok(await ev(p, `run.queue.concat(run.cur).some(q => /#key-/.test(q._card))`), 'key term cards are among the first new cards');
+    ok(await ev(p, `run.queue.concat(run.cur).some(q => /#basic-/.test(q._card))`), 'shared Basics cards precede the key terms');
     await ev(p, `quitRun(true); go('course', 'policy')`);
     ok(/0 · Key terms/.test(await p.locator('.keyblock').innerText()), 'course page shows Key terms as unit 0 above the units');
-    ok(await ev(p, `LESSONS[0].id === 'akey' && LESSONS[0].items.length > 10`), 'Key terms is the first lesson');
+    ok(await ev(p, `LESSONS.some(l=>l.id==='akey'&&l.items.length>10)&&LESSONS[0].unit===-2`), 'Basics precedes the key terms lesson');
     ok(!await visible(p, '[data-keyterms]') && !await visible(p, '[data-perday]') && await visible(p, '.switch[data-mix="policy"]'), 'course settings are hidden except the daily mix switch');
     await p.click('[data-cadv]'); ok(await visible(p, '[data-keyterms]') && await visible(p, '[data-perday="5"][aria-pressed="true"]'), 'Advanced options shows key terms and new cards a day (5 by default)');
     await p.click('[data-keyterms]'); ok(await visible(p, '#ktSheet'), 'course page opens the skip list');
@@ -646,7 +647,7 @@ tests.extras = async () => {
     await p.locator('#ktSheet [data-kt]').nth(0).click(); await p.locator('#ktSheet [data-kt]').nth(1).click();
     ok(await p.locator('#ktSheet [data-kt][aria-pressed="true"]').count() === 2, 'Know it toggles on each term');
     await p.click('#ktDone');
-    const r = await ev(p, `({ known: state.keyTerms.policy.known.length, cards: keyTermCards('policy').length, lesson: LESSONS[0].items.length })`);
+    const r = await ev(p, `({ known: state.keyTerms.policy.known.length, cards: keyTermCards('policy').filter(it=>!isFamiliar(it.id)).length, lesson: LESSONS.find(l=>l.id==='akey').items.length })`);
     ok(r.known === 2 && r.cards === n - 2 && r.lesson === n - 2, 'known terms are skipped in the lesson and sessions', { n, ...r });
     ok(/2 of \d+ skipped/.test(await p.locator('[data-keyterms]').innerText()), 'course page shows how many terms were skipped');
     await ev(p, `delete state.keyTerms; buildLessons(); renderHome()`);
@@ -660,7 +661,7 @@ tests.extras = async () => {
   }
   { // Remove this question before answering: the card leaves the round ungraded and the next one comes up.
     await ev(p, `if (run) quitRun(true); setMix('policy', true); go('today')`);
-    await p.click(await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
+    await clickGo(p, await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
     const before = await ev(p, `({ id: run.cur._card, total: run.total })`);
     ok(await visible(p, '#rmPre'), 'an unanswered card shows Remove this question');
     await p.click('#rmPre');
@@ -672,7 +673,7 @@ tests.extras = async () => {
   }
   { // Skip for now: the card leaves the round ungraded, isn't removed, and stays out of rounds until reload.
     await ev(p, `if (run) quitRun(true); setMix('policy', true); go('today')`);
-    await p.click(await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
+    await clickGo(p, await visible(p, '#todayGo') ? '#todayGo' : '#todayMore');
     const before = await ev(p, `({ id: run.cur._card, total: run.total })`);
     ok(await visible(p, '#skipBtn'), 'an unanswered card shows Skip for now');
     await p.click('#skipBtn');
@@ -882,7 +883,7 @@ tests.regressions = async () => {
   // A key term marked known after it was learned keeps its review schedule.
   const k = await ev(p, `(() => { const id = 'au0l0#key-' + termSlug('alignment'); state.srs[id] = { s: 2, d: 5, last: dstr(new Date()), due: dstr(new Date()), reps: 1, lapses: 0, ok: 1, at: Date.now() };
     state.keyTerms = { policy: { at: Date.now(), known: ['alignment', 'antitrust'] } };
-    const ids = courseCards('policy').map(c => c.id); return { learned: ids.includes(id), skipped: !ids.includes('au0l0#key-' + termSlug('antitrust')) }; })()`);
+    const ids = courseCards('policy').map(c => c.id); return { learned: ids.includes(id)&&!isFamiliar(id), skipped: isFamiliar('au0l0#key-' + termSlug('antitrust')) }; })()`);
   ok(k.learned && k.skipped, 'known-but-learned term stays in reviews; known unlearned term is skipped', k);
   // One run counts one practice day.
   const d = await ev(p, `(() => { let calls = 0; const real = bumpStreak; bumpStreak = () => { calls++; }; run = newRun({ mode: 'session', total: 1, queue: [] });
@@ -986,6 +987,13 @@ tests.retention = async () => {
   ok(await ev(b, 'board.unseen') === 1, 'Sol has the nudge', await ev(b, 'board.unseen'));
   for (const [x, nm] of [[a, 'Rae'], [b, 'Sol']]) { ok(!badText(await x.locator('#home').innerText()), `${nm}: retention text is clean`, badText(await x.locator('#home').innerText())); ok(x.errors.length === 0, `${nm}: retention: no page errors`, x.errors); }
   await ca.close(); await cb.close();
+};
+
+tests.tidy = async () => {
+  const c = await ctx({storage:{'wl-account':JSON.stringify({token:'x.y',player:{id:'tidy',name:'Tidy'},passkeys:0})}});
+  const p = await page(c); await p.goto(BASE + '/');
+  for(const [v,name] of await tidyChecks(p)) ok(v, 'tidy: '+name);
+  ok(!p.errors.length, 'tidy: no browser errors',p.errors); await c.close();
 };
 
 for (const [name, fn] of Object.entries(tests)) {

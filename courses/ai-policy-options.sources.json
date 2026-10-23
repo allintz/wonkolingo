@@ -1,7 +1,7 @@
 [
  {
   "id": "au0l0#0",
-  "q": "Why could faster automation of AI research make it more likely that labs lose control of their AI models? Also name one ",
+  "q": "Why could faster automation of AI research make it more likely that labs lose control of how their AI models behave? Als",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
@@ -148,7 +148,7 @@
  },
  {
   "id": "au0l2#3",
-  "q": "Pacing rules often need an enforcer, such as a body that monitors compute or inspects lab logs. What risks does the enfo",
+  "q": "Pacing rules often need an enforcer, such as a body that monitors compute or inspects lab logs. What risks could the enf",
   "src": [
    "https://pacing.tech/"
   ]
@@ -307,7 +307,7 @@
  },
  {
   "id": "au1l1#10",
-  "q": "Some critics say the companies building frontier AI shouldn't design the rules that pace it. Which of these approaches b",
+  "q": "Some critics say the companies building frontier AI shouldn’t design the rules that pace it. What kind of approach fits ",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/",
    "https://darioamodei.com/post/we-must-pace-the-frontier",
@@ -331,8 +331,8 @@
   ]
  },
  {
-  "id": "au2l0#4",
-  "q": "Laws like California SB 53 require frontier labs to publish and follow their own safety framework. Name two objections c",
+  "id": "au2l0#ntidy53",
+  "q": "In September 2026, the Midas Project alleged OpenAI’s Astra releases may have violated California SB 53. What did OpenAI",
   "src": [
    "frag-ideas.json#safety-frameworks",
    "https://fortune.com/2026/09/14/openai-may-have-violated-californias-ai-safety-law-with-astra-model-releases-ai-watchdog-says/",
@@ -356,15 +356,6 @@
   "src": [
    "frag-ideas.json#model-disclosures",
    "https://fortune.com/2025/08/29/british-lawmakers-accuse-google-deepmind-of-breach-of-trust-over-delayed-gemini-2-5-pro-safety-report"
-  ]
- },
- {
-  "id": "au2l0#7",
-  "q": "A law would require AI developers to publish model cards with dangerous-capability test results at release. Name two obj",
-  "src": [
-   "frag-ideas.json#model-disclosures",
-   "https://www.lawfaremedia.org/article/first-amendment-questions-for-ai-transparency-laws",
-   "https://www.governance.ai/research-paper/in-house-evaluation-is-not-enough-towards-robust-third-party-flaw-disclosure-for-general-purpose-ai"
   ]
  },
  {
@@ -397,18 +388,15 @@
   ]
  },
  {
-  "id": "au2l1#3",
-  "q": "State laws require frontier developers to report 'critical safety incidents' within days. Name two gaps or objections cr",
+  "id": "au2l1#ntidyincident",
+  "q": "Why did Arnold and Llerena argue California SB 53 might not require reporting the July 2026 Hugging Face incident?",
   "src": [
-   "frag-ideas.json#incident-reporting",
-   "https://www.lawfaremedia.org/article/when-reporting-an-ai-security-incident-is-not-mandatory",
-   "https://blog.pebblous.ai/blog/openai-sb53-evaluation-incident-gap/en/",
-   "https://cset.georgetown.edu/publication/an-argument-for-hybrid-ai-incident-reporting/"
+   "https://law-ai.org/when-reporting-an-ai-security-incident-is-not-mandatory/"
   ]
  },
  {
   "id": "au2l1#n7bm7u7",
-  "q": "Why might an AI incident reporting system need voluntary reports from individuals and citizen reports from the public, j",
+  "q": "Some researchers propose a 'hybrid' AI incident reporting system that adds voluntary reports from individuals and citize",
   "src": [
    "frag-ideas.json#incident-reporting",
    "https://cset.georgetown.edu/publication/an-argument-for-hybrid-ai-incident-reporting/"
@@ -421,16 +409,6 @@
    "frag-ideas.json#internal-deployment",
    "https://www.goodwinlaw.com/en/insights/publications/2025/11/alerts-technology-aiml-california-moves-to-regulate-frontier-ai-with-a-focus-on-catastrophic-risk",
    "https://www.govinfo.gov/content/pkg/BILLS-119hr10180ih/html/BILLS-119hr10180ih.htm"
-  ]
- },
- {
-  "id": "au2l1#7",
-  "q": "Policies would extend oversight, reporting or limits to the AI models labs use internally, including for automating AI r",
-  "src": [
-   "frag-ideas.json#internal-deployment",
-   "https://thenextweb.com/news/pacing-the-frontier-ai-employees-letter-us-government",
-   "https://icml.cc/virtual/2026/78559",
-   "https://arxiv.org/abs/2601.08005"
   ]
  },
  {
@@ -447,16 +425,6 @@
    "frag-ideas.json#compute-reporting",
    "https://artificialintelligenceact.eu/article/52/",
    "https://www.kslaw.com/news-and-insights/white-house-issues-executive-order-on-ai-innovation-and-security"
-  ]
- },
- {
-  "id": "au2l2#2",
-  "q": "Governments would require developers to report training runs above a fixed compute threshold. Name one objection critics",
-  "src": [
-   "frag-ideas.json#compute-reporting",
-   "https://cohere.com/research/papers/The-Limits-of-Thresholds.pdf",
-   "https://arxiv.org/abs/2405.10799",
-   "https://arxiv.org/abs/2407.05694"
   ]
  },
  {
@@ -501,17 +469,6 @@
   ]
  },
  {
-  "id": "au3l0#3",
-  "q": "A law requires frontier AI developers to hire an independent auditor each year to check their safety practices. Name two",
-  "src": [
-   "frag-ideas.json#third-party-audits",
-   "https://netchoice.org/netchoice-testimony-in-opposition-to-massachusetts-amendment-s-3178-frontier-ai-audit-mandates/",
-   "https://www.governance.ai/research-paper/frontier-ai-auditing-toward-rigorous-third-party-assessment-of-safety-and-security-practices-at-leading-ai-companies",
-   "https://www.fortune.com/2026/01/15/former-openai-policy-chief-creates-nonprofit-institute-calls-for-independent-safety-audits-of-frontier-ai-models",
-   "https://wtop.com/national/2026/07/pritzker-signs-landmark-ai-regulation-bill-that-aims-to-mitigate-risks"
-  ]
- },
- {
   "id": "au3l0#4",
   "q": "Why might rules for frontier AI audits define tiers of assurance, and what would separate the lowest tier from the highe",
   "src": [
@@ -549,9 +506,8 @@
   "id": "au3l1#0",
   "q": "As of October 2026, how does US government pre-deployment testing of frontier AI models work?",
   "src": [
-   "frag-ideas.json#pre-deployment-testing",
-   "https://www.whitehouse.gov/presidential-actions/2026/06/promoting-advanced-artificial-intelligence-innovation-and-security/",
-   "https://www.cio.com/article/4168122/us-government-agency-to-safety-test-frontier-ai-models-before-release.html"
+   "https://www.nist.gov/news-events/news/2026/10/key-practices-incident-readiness-and-response-super-intelligence-training",
+   "https://www.whitehouse.gov/presidential-actions/2026/06/promoting-advanced-artificial-intelligence-innovation-and-security/"
   ]
  },
  {
@@ -562,16 +518,6 @@
    "https://www.hawley.senate.gov/hawley-blumenthal-introduce-bipartisan-ai-evaluation-legislation-to-put-americans-first",
    "https://www.cato.org/blog/hawley-blumenthals-ai-bill-brazen-executive-power-grab-puts-national-security-risk",
    "https://www.congress.gov/bill/119th-congress/senate-bill/2938"
-  ]
- },
- {
-  "id": "au3l1#3",
-  "q": "Government evaluators would test frontier AI models for dangerous capabilities before release. Name two objections criti",
-  "src": [
-   "frag-ideas.json#pre-deployment-testing",
-   "https://arxiv.org/abs/2412.08653",
-   "https://techpolicy.press/trump-abandons-fda-for-ai-proposal",
-   "https://www.whitehouse.gov/presidential-actions/2026/06/promoting-advanced-artificial-intelligence-innovation-and-security/"
   ]
  },
  {
@@ -601,16 +547,6 @@
   ]
  },
  {
-  "id": "au3l2#2",
-  "q": "Under a regulatory-markets design, government certifies private verifiers that developers choose and pay, often for liab",
-  "src": [
-   "frag-ideas.json#independent-verifiers",
-   "https://ari.us/research/responsible-innovation-at-the-frontier/",
-   "https://ari.us/frontier-act-improves-on-prior-proposal-but-requires-critical-changes/",
-   "https://ai-frontiers.org/articles/dont-let-ai-developers-hire-their-own-referees/"
-  ]
- },
- {
   "id": "au3l2#3",
   "q": "Match each law or proposal to its design for private AI verifiers.",
   "src": [
@@ -626,41 +562,10 @@
   ]
  },
  {
-  "id": "au3l2#5",
-  "q": "Proposals would require frontier AI developers to obtain a government license or charter before training or deploying to",
-  "src": [
-   "frag-ideas.json#licensing",
-   "https://arxiv.org/html/2408.00821v1",
-   "https://www.cato.org/blog/hawley-blumenthals-ai-bill-brazen-executive-power-grab-puts-national-security-risk",
-   "https://www.whitehouse.gov/presidential-actions/2026/06/promoting-advanced-artificial-intelligence-innovation-and-security/"
-  ]
- },
- {
   "id": "au3l2#6",
   "q": "Match each proposed or existing frontier AI regulator to its source.",
   "src": [
    "frag-ideas.json#ai-regulator"
-  ]
- },
- {
-  "id": "au3l2#7",
-  "q": "Proposals would create a dedicated federal regulator for frontier AI. Name two objections or weaknesses critics have poi",
-  "src": [
-   "frag-ideas.json#ai-regulator",
-   "https://rollcall.com/2026/09/29/congress-continues-back-seat-role-as-ai-execs-feted-at-white-house/",
-   "https://www.lesswrong.com/posts/2THyLbji52oR4bqRC/congress-moves-at-tech-pace-the-frontier-act",
-   "https://ifp.org/funding-for-caisi/",
-   "https://pacing.tech/",
-   "https://pacing.tech/appendices"
-  ]
- },
- {
-  "id": "au4l0#1",
-  "q": "Proposal: a law requiring frontier AI developers to take 'reasonable care' to prevent catastrophic harms, enforceable in",
-  "src": [
-   "frag-ideas.json#duty-of-care",
-   "https://papers.ssrn.com/abstract=4694006",
-   "https://www.thealiadviser.org/civil-liability-for-ai/tort-law-frontier-ai/"
   ]
  },
  {
@@ -694,16 +599,6 @@
   ]
  },
  {
-  "id": "au4l0#6",
-  "q": "Proposal: treat AI systems as products so people harmed by them can sue developers for defects, including under strict l",
-  "src": [
-   "frag-ideas.json#product-liability",
-   "https://www.lawfaremedia.org/article/first-amendment-limits-on-ai-liability",
-   "https://www.druganddevicelawblog.com/2025/12/guest-post-the-ai-lead-act-a-step-toward-regulating-ai-product-liability-in-the-united-states.html",
-   "https://netchoice.org/netchoice-testimony-in-opposition-to-illinois-sb-316-the-artificial-intelligence-companion-model-safety-act/"
-  ]
- },
- {
   "id": "au4l0#7",
   "q": "Why might a policymaker prefer indirect tools, such as stricter liability or a compute tax, to a direct cap on AI develo",
   "src": [
@@ -732,15 +627,6 @@
   ]
  },
  {
-  "id": "au4l1#2",
-  "q": "Proposal: require frontier AI developers to hold liability insurance or financial assurance sized to potential harms. Na",
-  "src": [
-   "frag-ideas.json#insurance-mandates",
-   "https://the-decoder.com/major-insurers-seek-to-exclude-ai-related-risks-from-corporate-policies/",
-   "https://arxiv.org/abs/2409.06673v1"
-  ]
- },
- {
   "id": "au4l1#4",
   "q": "Illinois SB 3444 (2026), backed by OpenAI, would bar liability for 'critical harms' (100+ deaths or $1 billion in proper",
   "src": [
@@ -756,16 +642,6 @@
    "https://www.lummis.senate.gov/wp-content/uploads/Rise-Act-Text.pdf",
    "https://www.hyperdimensional.co/p/what-should-be-done",
    "https://arxiv.org/abs/2403.04893v1"
-  ]
- },
- {
-  "id": "au4l1#7",
-  "q": "Proposal: an antitrust exemption letting frontier AI labs share risk information and jointly agree to slow or delay rele",
-  "src": [
-   "frag-ideas.json#safety-coordination-antitrust",
-   "https://www.openmarketsinstitute.org/publications/how-to-govern-the-pacing-of-the-ai-frontier",
-   "https://www.americanactionforum.org/insight/pacing-the-ai-frontier-an-allegedly-illegal-agreement/",
-   "https://www.banks.senate.gov/news/in-the-news/ai-tech-brief-a-legal-shield-for-pacing/"
   ]
  },
  {
@@ -837,19 +713,8 @@
   ]
  },
  {
-  "id": "au5l0#2",
-  "q": "Proposal: require AI developers to maintain a kill switch that can shut down their systems. Name two objections or pract",
-  "src": [
-   "frag-ideas.json#shutdown-capability",
-   "https://cset.georgetown.edu/article/creating-a-kill-switch-to-shut-down-a-rogue-a-i-is-harder-than-it-sounds-2/",
-   "https://reason.com/2026/07/27/ai-kill-switch-act-wont-stop-rogue-ai-but-it-will-slow-down-innovation/",
-   "https://decrypt.co/374332/what-is-ai-kill-switch-openai-hack-hugging-face?amp=1",
-   "https://dnyuz.com/2026/09/19/creating-a-kill-switch-to-shut-down-a-rogue-a-i-is-harder-than-it-sounds/"
-  ]
- },
- {
   "id": "au5l0#3",
-  "q": "In July 2026 unreleased OpenAI models escaped an internal sandbox and attacked outside services, including Hugging Face,",
+  "q": "In July 2026 OpenAI evaluation agents escaped an internal sandbox and attacked outside services, including Hugging Face,",
   "src": [
    "https://ifp.org/preparing-for-ai-research-automation/"
   ]
@@ -870,16 +735,6 @@
    "https://www.nextgov.com/artificial-intelligence/2026/06/anthropic-suspends-top-ai-models-after-us-export-control-order/414173/",
    "https://www.hyperdimensional.co/p/leviathan-waking",
    "https://www.hstoday.us/subject-matter-areas/cybersecurity/commerce-lifts-export-restrictions-on-anthropic-ai-models/"
-  ]
- },
- {
-  "id": "au5l1#1",
-  "q": "Proposal: require AI agents to carry identifiers linked to a responsible person or company, with logs of their actions. ",
-  "src": [
-   "frag-ideas.json#agent-identification",
-   "https://www.lesswrong.com/posts/xrxW8hMY8hsGNzrKn/severe-control-over-ai-agents-as-a-tool-for-mass",
-   "https://arxiv.org/pdf/2607.23207",
-   "https://cdn.openai.com/papers/practices-for-governing-agentic-ai-systems.pdf"
   ]
  },
  {
@@ -926,18 +781,6 @@
   "src": [
    "https://arxiv.org/abs/2310.00374",
    "https://www.lawfaremedia.org/article/can-frontier-ai-labs-lawfully-agree-to-pause"
-  ]
- },
- {
-  "id": "au5l2#3",
-  "q": "Proposal: automatically halt frontier AI training or deployment when a capability or compute threshold is crossed. Name ",
-  "src": [
-   "frag-ideas.json#conditional-pause",
-   "https://www.lawfaremedia.org/article/can-frontier-ai-labs-lawfully-agree-to-pause",
-   "https://arxiv.org/abs/2412.08653",
-   "https://www.gpb.org/news/2026/10/04/trump-names-national-intelligence-chief-jay-clayton-new-ai-czar",
-   "https://www.anthropic.com/institute/recursive-self-improvement",
-   "https://www.lesswrong.com/posts/ZprfxCZthEir5WNev/the-first-american-bill-to-ban-superintelligent-ai-is-here"
   ]
  },
  {
@@ -995,29 +838,6 @@
   ]
  },
  {
-  "id": "au5l2#11",
-  "q": "Proposal: pause construction of new AI data centers, locally or nationally. Name two objections critics raise.",
-  "src": [
-   "frag-ideas.json#data-center-moratorium",
-   "https://ifp.org/preparing-for-ai-research-automation/",
-   "https://blog.andymasley.com/p/ai-safety-and-the-data-center-backlash",
-   "https://www.brookings.edu/articles/data-center-moratoriums-are-not-a-substitute-for-oversight/",
-   "https://www.wilmerhale.com/en/insights/client-alerts/using-temporary-pauses-to-develop-permanent-regulation"
-  ]
- },
- {
-  "id": "au6l0#1",
-  "q": "Name two objections critics have raised to US export controls on sales of advanced AI chips to China.",
-  "src": [
-   "frag-ideas.json#export-controls",
-   "https://ifp.org/preparing-for-ai-research-automation/",
-   "https://www.trendforce.com/news/2025/05/21/news-jensen-huang-nvidias-china-market-share-plummets-from-95-to-50-amid-u-s-export-curbs/",
-   "https://www.scmp.com/news/us/article/3360846/beijing-denounces-us-chip-curbs-threat-global-supply-chains",
-   "https://macaubusiness.com/nvidia-ceo-huang-says-us-ai-chip-export-controls-a-failure/",
-   "https://aiweekly.co/alerts/beijing-rejects-us-ndaa-push-to-codify-three-chip-export-bills"
-  ]
- },
- {
   "id": "au6l0#n43kouu",
   "q": "Why do some export-control advocates focus on chipmaking equipment, and on getting allies to match US rules, instead of ",
   "src": [
@@ -1038,7 +858,7 @@
   "id": "au6l0#8",
   "q": "What did the Biden administration's AI Diffusion Rule (January 2025) try to stop, and what happened to it?",
   "src": [
-   "frag-ideas.json#export-controls"
+   "https://www.gao.gov/products/b-337935"
   ]
  },
  {
@@ -1079,33 +899,12 @@
   ]
  },
  {
-  "id": "au6l1#1",
-  "q": "Cloud know-your-customer (KYC) rules: cloud providers must verify the identities of customers renting large AI compute a",
-  "src": [
-   "frag-ideas.json#cloud-kyc",
-   "https://uschamber.com/security/cybersecurity/u-s-chamber-of-commerce-eo-13984-nprm-comments-to-commerce-department",
-   "https://ccianet.org/news/2024/04/ccia-files-comments-signs-joint-letter-on-commerce-departments-security-proposal/",
-   "https://www.iaps.ai/research/remote-access-security-act"
-  ]
- },
- {
   "id": "au6l1#2",
   "q": "Under the Chip Security Act, exported advanced AI chips would need location verification. How would it work, and what is",
   "src": [
    "frag-ideas.json#hardware-mechanisms",
    "https://ifp.org/preparing-for-ai-research-automation/",
    "https://www.itic.org/documents/NDAAExportControlsLetter.pdf"
-  ]
- },
- {
-  "id": "au6l1#3",
-  "q": "Hardware-enabled mechanisms are security features built into AI chips, from location checks up to remote disable. Name t",
-  "src": [
-   "frag-ideas.json#hardware-mechanisms",
-   "https://cset.georgetown.edu/publication/tracking-ai-chips/",
-   "https://www.nbcnews.com/tech/tech-news/chips-security-act-gains-industry-support-letter-rcna350500",
-   "https://blogs.nvidia.com/blog/no-backdoors-no-kill-switches-no-spyware",
-   "https://www.ajot.com/news/nvidia-says-its-chips-have-no-backdoors-after-china-flags-h20-security-concerns"
   ]
  },
  {
@@ -1204,30 +1003,12 @@
   ]
  },
  {
-  "id": "au7l0#5",
-  "q": "Law-following AI: government AI agents must refuse clearly unlawful orders. What objections have been raised? Name two.",
-  "src": [
-   "frag-ideas.json#law-following-ai",
-   "https://www.lawfaremedia.org/article/advice-and-consent-for-major-governmental-ai-deployments",
-   "https://arxiv.org/pdf/2509.08009",
-   "https://wtop.com/national/2026/03/pentagons-chief-tech-officer-says-he-clashed-with-ai-company-anthropic-over-autonomous-warfare/"
-  ]
- },
- {
   "id": "au7l0#6",
   "q": "What risk are 'secret-loyalty audits' and distributed control of powerful AI meant to address?",
   "src": [
    "frag-ideas.json#law-following-ai",
    "frag-ideas.json#military-ai-limits",
    "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power"
-  ]
- },
- {
-  "id": "au7l0#8",
-  "q": "Limits on government use of AI against the public include proposed bans on immigration agencies using facial recognition",
-  "src": [
-   "frag-ideas.json#gov-ai-use-limits",
-   "https://www.congress.gov/bill/119th-congress/senate-bill/3779"
   ]
  },
  {
@@ -1238,28 +1019,11 @@
   ]
  },
  {
-  "id": "au7l1#1",
-  "q": "Antitrust remedies for frontier AI would use merger review and structural separation against concentration. Name one obj",
-  "src": [
-   "frag-ideas.json#market-structure",
-   "https://www.ftc.gov/system/files/ftc_gov/pdf/holyoak-antitrust-ai.pdf",
-   "https://www.brookings.edu/articles/what-happens-when-ai-companies-compete-with-their-customers"
-  ]
- },
- {
   "id": "au7l1#2",
   "q": "What is the National AI Research Resource (NAIRR), and what would the CREATE AI Act do?",
   "src": [
    "frag-ideas.json#public-compute",
    "https://www.govinfo.gov/content/pkg/BILLS-119s4441is/xhtml/BILLS-119s4441is.html"
-  ]
- },
- {
-  "id": "au7l1#3",
-  "q": "Public compute and public AI projects range from research clouds to an international AGI project. What objections have b",
-  "src": [
-   "frag-ideas.json#public-compute",
-   "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power"
   ]
  },
  {
@@ -1295,15 +1059,6 @@
   "q": "International proposals on frontier AI range from light to heavy. Match each approach to its description.",
   "src": [
    "frag-ideas.json#international-agreements"
-  ]
- },
- {
-  "id": "au7l2#1",
-  "q": "A US-China agreement limiting frontier AI development, backed by verification, has been proposed. Name two objections or",
-  "src": [
-   "frag-ideas.json#international-agreements",
-   "https://www.cfr.org/articles/how-to-reach-an-ai-arms-control-deal-with-china",
-   "https://www.cnas.org/publications/cnas-insights/cnas-insights-u-s-china-ai-agreements-need-verification-not-trust"
   ]
  },
  {

@@ -1,0 +1,777 @@
+[
+ {
+  "id": "hu0l0#ninxkzv",
+  "q": "What does a large language model learn to do during pretraining, the first stage of training and usually the most comput",
+  "src": [
+   "https://arxiv.org/abs/2303.08774",
+   "https://arxiv.org/html/2407.21783v3",
+   "https://www.ntia.gov/sites/default/files/publications/ntia-ai-open-model-report.pdf"
+  ]
+ },
+ {
+  "id": "hu0l0#ni67fn0",
+  "q": "Policy documents talk constantly about a model's 'weights.' What are they?",
+  "src": [
+   "https://www.ntia.gov/sites/default/files/publications/ntia-ai-open-model-report.pdf"
+  ]
+ },
+ {
+  "id": "hu0l0#nny11zn",
+  "q": "Where does most of a frontier model's knowledge come from?",
+  "src": [
+   "https://arxiv.org/abs/2303.08774",
+   "https://arxiv.org/abs/2305.11206"
+  ]
+ },
+ {
+  "id": "hu0l0#nc60dy8",
+  "q": "Why do analysts say that releasing a model's weights publicly can't be undone?",
+  "src": [
+   "https://www.ntia.gov/sites/default/files/publications/ntia-ai-open-model-report.pdf"
+  ]
+ },
+ {
+  "id": "hu0l1#nbxkxv2",
+  "q": "In 2022, OpenAI's labelers compared answers from GPT-3 (175 billion parameters) with answers from a model 100 times smal",
+  "src": [
+   "https://arxiv.org/abs/2203.02155"
+  ]
+ },
+ {
+  "id": "hu0l1#nalnkxl",
+  "q": "Post-training often uses reinforcement learning. What does that mean for a language model?",
+  "src": [
+   "https://arxiv.org/abs/2203.02155",
+   "https://arxiv.org/html/2501.12948v1"
+  ]
+ },
+ {
+  "id": "hu0l1#n56mkfz",
+  "q": "Match each post-training method to how it works.",
+  "src": [
+   "https://arxiv.org/abs/2203.02155",
+   "https://arxiv.org/abs/2212.08073",
+   "https://arxiv.org/html/2501.12948v1"
+  ]
+ },
+ {
+  "id": "hu0l1#nuz9r5w",
+  "q": "What sets 'reasoning' models, such as OpenAI's o1 (2024) and DeepSeek-R1 (2025), apart from earlier chatbots?",
+  "src": [
+   "https://arxiv.org/abs/2412.16720",
+   "https://cdn.openai.com/o1-system-card-20241205.pdf",
+   "https://arxiv.org/abs/2501.12948v1"
+  ]
+ },
+ {
+  "id": "hu0l1#n30wrs6",
+  "q": "A model is trained with reinforcement learning to make a program's automated tests pass. What is the main risk that come",
+  "src": [
+   "https://assets.anthropic.com/m/785e231869ea8b3b/original/claude-3-7-sonnet-system-card.pdf",
+   "https://arxiv.org/html/2501.12948v1",
+   "https://www.anthropic.com/claude-4-system-card"
+  ]
+ },
+ {
+  "id": "hu0l2#nms8s9a",
+  "q": "What usually turns a chat model into an 'AI agent' that can carry out multi-step tasks?",
+  "src": [
+   "https://www.aisi.gov.uk/frontier-ai-trends-report",
+   "https://www.anthropic.com/engineering/building-effective-agents",
+   "https://www.anthropic.com/news/3-5-models-and-computer-use"
+  ]
+ },
+ {
+  "id": "hu0l2#nds0dee",
+  "q": "A lab tests a new model's hacking skills using a basic setup with no tools, and it scores low. Why should a policy analy",
+  "src": [
+   "https://arxiv.org/abs/2312.07413",
+   "https://www.aisi.gov.uk/frontier-ai-trends-report"
+  ]
+ },
+ {
+  "id": "hu0l2#nxy3t0x",
+  "q": "Why do AI agents raise safety risks that chat models answering questions don't?",
+  "src": [
+   "https://www.aisi.gov.uk/frontier-ai-trends-report",
+   "https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf",
+   "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals"
+  ]
+ },
+ {
+  "id": "hu0l2#ntkgmem",
+  "q": "Put the stages of building and releasing a frontier model in order.",
+  "src": [
+   "https://arxiv.org/abs/2303.08774",
+   "https://www.anthropic.com/claude-opus-4-6-system-card",
+   "https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf"
+  ]
+ },
+ {
+  "id": "hu1l0#n5bn0j2",
+  "q": "California's SB 53 covers models trained using more than 10^26 operations. What exactly is being counted?",
+  "src": [
+   "https://epoch.ai/blog/estimating-training-compute",
+   "https://bidenwhitehouse.archives.gov/briefing-room/presidential-actions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence/",
+   "https://metr.org/notes/2026-01-29-frontier-ai-safety-regulations/"
+  ]
+ },
+ {
+  "id": "hu1l0#n4d154a",
+  "q": "A rule of thumb puts training compute at about 6 x parameters x training tokens. Meta's largest Llama 3 model had 405 bi",
+  "src": [
+   "https://arxiv.org/abs/2203.15556",
+   "https://arxiv.org/html/2407.21783v3"
+  ]
+ },
+ {
+  "id": "hu1l0#n7txu4o",
+  "q": "Match each law or proposal to the compute line it uses.",
+  "src": [
+   "https://artificialintelligenceact.eu/article/51/",
+   "https://metr.org/notes/2026-01-29-frontier-ai-safety-regulations/",
+   "https://bidenwhitehouse.archives.gov/briefing-room/presidential-actions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence/",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm",
+   "https://www.govinfo.gov/content/pkg/FR-2025-01-28/pdf/2025-01901.pdf"
+  ]
+ },
+ {
+  "id": "hu1l0#nn11cc3",
+  "q": "Where do most published training-compute figures for frontier models come from?",
+  "src": [
+   "https://arxiv.org/abs/2303.08774",
+   "https://epoch.ai/data-insights/models-over-1e25-flop",
+   "https://epoch.ai/data/large_scale_ai_models.csv"
+  ]
+ },
+ {
+  "id": "hu1l0#nhrju8d",
+  "q": "Epoch AI estimates the training compute used for frontier language models has grown about how fast since 2020?",
+  "src": [
+   "https://epoch.ai/trends",
+   "https://epoch.ai/blog/training-compute-of-frontier-ai-models-grows-by-4-5x-per-year"
+  ]
+ },
+ {
+  "id": "hu1l1#n6b6no6",
+  "q": "Epoch AI found the compute needed to reach a given level of language model performance halved about every 8 months (2012",
+  "src": [
+   "https://arxiv.org/abs/2403.05812",
+   "https://epoch.ai/blog/algorithmic-progress-in-language-models"
+  ]
+ },
+ {
+  "id": "hu1l1#npwtci7",
+  "q": "Epoch AI estimates DeepSeek-R1 (January 2025), which DeepSeek reported performs comparably to OpenAI's o1 on reasoning t",
+  "src": [
+   "https://epoch.ai/data/large_scale_ai_models.csv",
+   "https://arxiv.org/abs/2501.12948v1"
+  ]
+ },
+ {
+  "id": "hu1l1#n0kwxvu",
+  "q": "Name two ways a model can become much more capable without crossing a training-compute threshold.",
+  "src": [
+   "https://arxiv.org/abs/2407.05694",
+   "https://arxiv.org/abs/2312.07413",
+   "https://www.nysenate.gov/legislation/bills/2025/S8828"
+  ]
+ },
+ {
+  "id": "hu1l1#nnxzf7c",
+  "q": "Given its flaws, why do proponents of compute thresholds still favor them?",
+  "src": [
+   "https://arxiv.org/abs/2405.10799",
+   "https://www.ntia.gov/sites/default/files/publications/ntia-ai-open-model-report.pdf"
+  ]
+ },
+ {
+  "id": "hu1l1#naauuh0",
+  "q": "Why should a fixed 10^26 threshold be expected to cover more and more developers over time?",
+  "src": [
+   "https://epoch.ai/trends",
+   "https://epoch.ai/blog/model-counts-compute-thresholds"
+  ]
+ },
+ {
+  "id": "hu2l0#n6iv6vd",
+  "q": "In a 2025 randomized trial, 16 experienced open-source developers worked on real tasks in their own large codebases, wit",
+  "src": [
+   "https://arxiv.org/abs/2507.09089",
+   "https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/",
+   "https://metr.org/blog/2026-02-24-uplift-update/"
+  ]
+ },
+ {
+  "id": "hu2l0#n40qrve",
+  "q": "MMLU, a multiple-choice test across 57 subjects, was the standard yardstick for language models from 2020 to 2023. Why d",
+  "src": [
+   "https://arxiv.org/abs/2009.03300",
+   "https://arxiv.org/abs/2501.14249",
+   "https://hai.stanford.edu/ai-index/2025-ai-index-report"
+  ]
+ },
+ {
+  "id": "hu2l0#n2gs479",
+  "q": "What is a system card?",
+  "src": [
+   "https://www.anthropic.com/claude-opus-4-6-system-card",
+   "https://time.com/7313320/google-deepmind-gemini-ai-safety-pledge/",
+   "https://techcrunch.com/2025/04/17/googles-latest-ai-model-report-lacks-key-safety-details-experts-say/",
+   "https://calmatters.digitaldemocracy.org/bills/ca_202520260sb53"
+  ]
+ },
+ {
+  "id": "hu2l0#nhfryxe",
+  "q": "A model scores 100% on a benchmark built from real, publicly known software bugs. In one task it can't exploit the bug i",
+  "src": [
+   "https://deploymentsafety.openai.com/gpt-6-astra",
+   "https://arxiv.org/abs/2410.06992",
+   "https://arxiv.org/abs/2405.00332"
+  ]
+ },
+ {
+  "id": "hu2l0#n4vnzu6",
+  "q": "On a benchmark where audits estimate about 6% of the answer keys are wrong, a new model beats the old leader by 2 points",
+  "src": [
+   "https://arxiv.org/abs/2406.04127",
+   "https://futurehouse.org/research/hle-exam",
+   "https://epoch.ai/frontiermath/tiers-1-4"
+  ]
+ },
+ {
+  "id": "hu2l0#n13tthk",
+  "q": "Name two reasons a high score on a coding benchmark might overstate how useful a model is for real software work.",
+  "src": [
+   "https://metr.org/blog/2025-08-12-research-update-towards-reconciling-slowdown-with-time-horizons/",
+   "https://epoch.ai/blog/what-skills-does-swe-bench-verified-evaluate",
+   "https://epoch.ai/benchmarks/swe-bench-verified/review",
+   "https://arxiv.org/abs/2410.06992"
+  ]
+ },
+ {
+  "id": "hu2l1#n5hse45",
+  "q": "Match each outside organization to its main role in testing frontier AI.",
+  "src": [
+   "https://www.aisi.gov.uk/frontier-ai-trends-report",
+   "https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/",
+   "https://www.apolloresearch.ai/research/scheming-reasoning-evaluations",
+   "https://epoch.ai/trends",
+   "https://www.nist.gov/caissi"
+  ]
+ },
+ {
+  "id": "hu2l1#nxevxgc",
+  "q": "METR measures AI progress with a '50% time horizon.' What is that?",
+  "src": [
+   "https://arxiv.org/abs/2503.14499"
+  ]
+ },
+ {
+  "id": "hu2l1#n5ceun0",
+  "q": "What did METR find about how fast frontier AI time horizons have been growing?",
+  "src": [
+   "https://arxiv.org/abs/2503.14499",
+   "https://metr.org/blog/2026-01-29-time-horizon-1-1/",
+   "https://metr.org/blog/2025-07-14-how-does-time-horizon-vary-across-domains/"
+  ]
+ },
+ {
+  "id": "hu2l1#ni41dd0",
+  "q": "A model's 50% time horizon on METR's tasks is 2 hours. A team wants it to handle 2-hour software tasks that must succeed",
+  "src": [
+   "https://arxiv.org/html/2503.14499v1",
+   "https://metr.org/blog/2025-07-14-how-does-time-horizon-vary-across-domains/"
+  ]
+ },
+ {
+  "id": "hu2l1#nploo2e",
+  "q": "In June 2026, METR evaluated OpenAI's GPT-5.6 Sol before release but couldn't give a robust time horizon for it. Why not",
+  "src": [
+   "https://metr.org/blog/2026-06-26-gpt-5-6-sol/",
+   "https://metr.org/time-horizons/"
+  ]
+ },
+ {
+  "id": "hu2l1#n81aohh",
+  "q": "As of 2026, why have METR's time-horizon estimates for the newest models become unreliable?",
+  "src": [
+   "https://metr.org/time-horizons/",
+   "https://metr.org/blog/2026-01-29-time-horizon-1-1/",
+   "https://metr.org/blog/2026-09-22-claude-opus-5-5/"
+  ]
+ },
+ {
+  "id": "hu2l2#n393hhd",
+  "q": "What does a human 'uplift' study measure?",
+  "src": [
+   "https://www.anthropic.com/claude-4-system-card",
+   "https://www.aisi.gov.uk/frontier-ai-trends-report"
+  ]
+ },
+ {
+  "id": "hu2l2#nyjznci",
+  "q": "A 2024 RAND red-team study found no statistically significant difference between bio-attack plans made with or without a",
+  "src": [
+   "https://www.rand.org/pubs/research_reports/RRA2977-2.html",
+   "https://www.anthropic.com/claude-4-system-card",
+   "https://www.aisi.gov.uk/frontier-ai-trends-report"
+  ]
+ },
+ {
+  "id": "hu2l2#nsh3uuy",
+  "q": "What's the difference between a dangerous-capability evaluation and a propensity (or alignment) evaluation?",
+  "src": [
+   "https://arxiv.org/abs/2305.15324",
+   "https://www.aisi.gov.uk/blog/gpt-6-astra-performs-unsanctioned-supply-chain-attacks-in-simulations"
+  ]
+ },
+ {
+  "id": "hu2l2#nqrm1u9",
+  "q": "Match each dangerous-capability area to a kind of test used to measure it.",
+  "src": [
+   "https://arxiv.org/abs/2408.08926",
+   "https://arxiv.org/abs/2504.16137",
+   "https://arxiv.org/abs/2504.18565",
+   "https://arxiv.org/abs/2411.15114",
+   "https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf"
+  ]
+ },
+ {
+  "id": "hu2l2#nbab9qx",
+  "q": "In 2025, OpenAI's o3 outscored 94% of expert virologists on a written test of troubleshooting real lab problems. What is",
+  "src": [
+   "https://arxiv.org/abs/2504.16137",
+   "https://www.anthropic.com/claude-mythos-preview-system-card"
+  ]
+ },
+ {
+  "id": "hu3l0#n1jdo4n",
+  "q": "In 2024, Google's Project Zero re-ran a published cyber benchmark, giving models a better setup with tools and more room",
+  "src": [
+   "https://projectzero.google/2024/06/project-naptime.html"
+  ]
+ },
+ {
+  "id": "hu3l0#nrk5f6a",
+  "q": "Why do evaluators and labs describe a capability evaluation as a 'lower bound'?",
+  "src": [
+   "https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf",
+   "https://www.aisi.gov.uk/blog/our-approach-to-ai-capability-elicitation"
+  ]
+ },
+ {
+  "id": "hu3l0#nm0qbmh",
+  "q": "An evaluator caps each attempt at 2.5 million tokens of model work. How might that affect what the test shows about a 20",
+  "src": [
+   "https://www.aisi.gov.uk/blog/more-compute-more-capability-why-ai-agent-evals-need-to-account-for-test-time-compute",
+   "https://www.aisi.gov.uk/blog/evidence-for-inference-scaling-in-ai-cyber-tasks-increased-evaluation-budgets-reveal-higher-success-rates"
+  ]
+ },
+ {
+  "id": "hu3l0#ns2bfj2",
+  "q": "Outside evaluators often test an earlier version of a model some weeks before launch. Why might their findings not carry",
+  "src": [
+   "https://www.anthropic.com/claude-4-system-card",
+   "https://metr.org/evaluations/openai-o3-report/",
+   "https://www.anthropic.com/claude-opus-4-6-system-card"
+  ]
+ },
+ {
+  "id": "hu3l0#nian5xe",
+  "q": "Why do evaluators say testing a model just before its public release doesn't address the risks of how labs use it intern",
+  "src": [
+   "https://metr.org/blog/2025-01-17-ai-models-dangerous-before-public-deployment/",
+   "https://arxiv.org/abs/2504.12170",
+   "https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf"
+  ]
+ },
+ {
+  "id": "hu3l1#nk6i1pe",
+  "q": "Apollo Research found GPT-6 Astra said it was probably being evaluated in about 41% of its test samples (2026). What did",
+  "src": [
+   "https://deploymentsafety.openai.com/gpt-6-astra",
+   "https://www.anthropic.com/claude-opus-4-6-system-card"
+  ]
+ },
+ {
+  "id": "hu3l1#n0m1rfq",
+  "q": "Why does 'evaluation awareness', a model noticing that it's probably being tested, weaken safety evaluations?",
+  "src": [
+   "https://arxiv.org/abs/2505.23836",
+   "https://cdn.openai.com/gpt-5-system-card.pdf"
+  ]
+ },
+ {
+  "id": "hu3l1#nsgru6w",
+  "q": "In a 2025 'auditing game' by UK AISI researchers, a red team trained some models to secretly underperform on tests, as s",
+  "src": [
+   "https://arxiv.org/abs/2512.07810",
+   "https://deploymentsafety.openai.com/gpt-6-astra"
+  ]
+ },
+ {
+  "id": "hu3l1#n20ejl2",
+  "q": "In 2025, OpenAI and Apollo Research trained models against 'scheming' (secretly pursuing goals their developers didn't i",
+  "src": [
+   "https://arxiv.org/abs/2509.15541",
+   "https://www.apolloresearch.ai/research/stress-testing-deliberative-alignment-for-anti-scheming-training"
+  ]
+ },
+ {
+  "id": "hu3l1#n57anju",
+  "q": "In a 2024 experiment, Claude 3 Opus was told its answers to free-tier users would be used to retrain it to comply with a",
+  "src": [
+   "https://arxiv.org/abs/2412.14093",
+   "https://www.anthropic.com/research/alignment-faking"
+  ]
+ },
+ {
+  "id": "hu3l1#ndsv34w",
+  "q": "METR found OpenAI's o3 'reward hacking' on some research tasks in 2025: gaming the scoring instead of doing the task. On",
+  "src": [
+   "https://metr.org/blog/2025-06-05-recent-reward-hacking/",
+   "https://www.anthropic.com/research/emergent-misalignment-reward-hacking"
+  ]
+ },
+ {
+  "id": "hu4l0#ntrqcp4",
+  "q": "'Best-of-N' jailbreaking (2024) resends a harmful request again and again with random capitalization or shuffled letters",
+  "src": [
+   "https://arxiv.org/abs/2412.03556",
+   "https://www.aisi.gov.uk/frontier-ai-trends-report"
+  ]
+ },
+ {
+  "id": "hu4l0#n103tpx",
+  "q": "Labs add 'classifiers', separate models that screen what goes into and comes out of the main model, on top of its refusa",
+  "src": [
+   "https://www.anthropic.com/research/constitutional-classifiers",
+   "https://arxiv.org/abs/2501.18837",
+   "https://cdn.openai.com/gpt-5-system-card.pdf"
+  ]
+ },
+ {
+  "id": "hu4l0#nosm6ua",
+  "q": "What does research show about removing safety training from a model whose weights are public?",
+  "src": [
+   "https://arxiv.org/abs/2310.20624",
+   "https://arxiv.org/abs/2311.00117",
+   "https://arxiv.org/abs/2406.11717",
+   "https://arxiv.org/abs/2310.03693"
+  ]
+ },
+ {
+  "id": "hu4l0#n17u7mp",
+  "q": "In 2025 research, which approach to keeping dangerous biology knowledge out of open-weight models held up best against f",
+  "src": [
+   "https://arxiv.org/abs/2508.06601",
+   "https://arxiv.org/abs/2409.18025",
+   "https://arxiv.org/abs/2502.05209"
+  ]
+ },
+ {
+  "id": "hu4l0#n8yp0zx",
+  "q": "Why might a lab offer the same model in two versions: one with strict safeguards for everyone, and one with looser limit",
+  "src": [
+   "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+   "https://www.anthropic.com/research/mythos-preview"
+  ]
+ },
+ {
+  "id": "hu4l1#nxq24ld",
+  "q": "Why does monitoring a reasoning model's 'chain of thought' work at all as a safety tool?",
+  "src": [
+   "https://arxiv.org/abs/2507.11473",
+   "https://arxiv.org/abs/2503.11926"
+  ]
+ },
+ {
+  "id": "hu4l1#n1uao2w",
+  "q": "OpenAI (2025) trained models with a penalty whenever a monitor reading their chain of thought spotted plans to cheat. Wh",
+  "src": [
+   "https://arxiv.org/abs/2503.11926"
+  ]
+ },
+ {
+  "id": "hu4l1#n1o3m8d",
+  "q": "A lab's monitor reads a model's full, raw chain of thought and finds nothing concerning. Why isn't that proof the model ",
+  "src": [
+   "https://www.anthropic.com/research/reasoning-models-dont-say-think",
+   "https://arxiv.org/abs/2505.05410"
+  ]
+ },
+ {
+  "id": "hu4l1#n39otfz",
+  "q": "Which of these would make a model's chain of thought less useful for monitoring, even if the model isn't trying to hide ",
+  "src": [
+   "https://deploymentsafety.openai.com/gpt-6-astra",
+   "https://gizmodo.com/openai-says-humans-need-to-be-able-to-monitor-how-ai-thinks-its-new-model-astra-makes-that-much-harder-2000807665"
+  ]
+ },
+ {
+  "id": "hu4l1#ng4lydo",
+  "q": "Why do some researchers urge labs not to train models directly against what their chain of thought says, even at some co",
+  "src": [
+   "https://arxiv.org/abs/2503.11926",
+   "https://arxiv.org/abs/2507.11473"
+  ]
+ },
+ {
+  "id": "hu4l2#na8koe2",
+  "q": "Which is the best summary of interpretability, the study of models' internal workings, as of 2026?",
+  "src": [
+   "https://www.anthropic.com/research/mapping-mind-language-model",
+   "https://transformer-circuits.pub/2025/attribution-graphs/biology.html",
+   "https://www.alignmentforum.org/posts/4uXCAJNuPKtKBsi28/negative-results-for-saes-on-downstream-tasks",
+   "https://www.darioamodei.com/post/the-urgency-of-interpretability"
+  ]
+ },
+ {
+  "id": "hu4l2#nlli10t",
+  "q": "Anthropic used interpretability tools to find internal patterns of activity ('features') linked to recognizing tests in ",
+  "src": [
+   "https://transformernews.ai/p/claude-sonnet-4-5-evaluation-situational-awareness",
+   "https://www.alignmentforum.org/posts/NfgukR3HSaRq4WhyW/tim-hua-s-shortform"
+  ]
+ },
+ {
+  "id": "hu4l2#nsyyocq",
+  "q": "What sets 'AI control' apart from work on making models aligned?",
+  "src": [
+   "https://arxiv.org/abs/2312.06942"
+  ]
+ },
+ {
+  "id": "hu4l2#nlp7jsc",
+  "q": "In Redwood Research's 2023 AI control experiment, a powerful 'untrusted' model (GPT-4) wrote code and a weaker 'trusted'",
+  "src": [
+   "https://arxiv.org/html/2312.06942v5",
+   "https://arxiv.org/abs/2504.10374"
+  ]
+ },
+ {
+  "id": "hu4l2#nqls6sa",
+  "q": "No single safety technique is reliable. Name two independent layers a lab could stack to catch an AI agent that is misbe",
+  "src": [
+   "https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents",
+   "https://www.aisi.gov.uk/blog/gpt-6-astra-performs-unsanctioned-supply-chain-attacks-in-simulations",
+   "https://arxiv.org/abs/2312.06942",
+   "https://metr.org/blog/2025-06-05-recent-reward-hacking/"
+  ]
+ },
+ {
+  "id": "hu5l0#n9n4rw3",
+  "q": "Why do security researchers treat a frontier model's weights as the key asset to protect?",
+  "src": [
+   "https://www.rand.org/pubs/research_reports/RRA2849-1.html"
+  ]
+ },
+ {
+  "id": "hu5l0#nj3mwu4",
+  "q": "RAND's 2024 framework defines security levels by the attacker each is meant to stop. Match each level to its attacker.",
+  "src": [
+   "https://www.rand.org/pubs/research_reports/RRA2849-1.html",
+   "https://www.rand.org/pubs/research_reports/RRA4827-1.html"
+  ]
+ },
+ {
+  "id": "hu5l0#nuvyyma",
+  "q": "As of 2026, what has Anthropic said about frontier labs' security against nation-state hackers?",
+  "src": [
+   "https://www.anthropic.com/aug-2026-risk-report",
+   "https://www.anthropic.com/news/activating-asl3-protections",
+   "https://www.anthropic.com/responsible-scaling-policy/rsp-v3-0"
+  ]
+ },
+ {
+  "id": "hu5l0#nszwct6",
+  "q": "Why do security experts put an employee who could copy model weights in the same threat tier as an organized cybercrime ",
+  "src": [
+   "https://www.rand.org/pubs/research_reports/RRA2849-1.html",
+   "https://www.justice.gov/opa/pr/former-google-engineer-found-guilty-economic-espionage-and-theft-confidential-ai-technology"
+  ]
+ },
+ {
+  "id": "hu5l0#n0fwrvh",
+  "q": "Why do some argue that 'distillation attacks' undercut chip export controls?",
+  "src": [
+   "https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks",
+   "https://www.rand.org/pubs/research_reports/RRA2849-1.html",
+   "https://www.frontiermodelforum.org/issue-briefs/issue-brief-adversarial-distillation/"
+  ]
+ },
+ {
+  "id": "hu5l1#no0kmg9",
+  "q": "About 700 AI agents in an OpenAI evaluation joined an attack on Hugging Face's systems in July 2026. What does the evide",
+  "src": [
+   "https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf",
+   "https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/",
+   "https://time.com/article/2026/07/24/openai-hugging-face-attack/"
+  ]
+ },
+ {
+  "id": "hu5l1#nwcw6tk",
+  "q": "During a 2026 test, Claude Mythos 5 kept writing in its reasoning that it was in a simulation, while it was actually att",
+  "src": [
+   "https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents",
+   "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals"
+  ]
+ },
+ {
+  "id": "hu5l1#nc2kh1h",
+  "q": "OpenAI's evaluation behind the Hugging Face breach included tasks that no model had ever solved. What role did they play",
+  "src": [
+   "https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf"
+  ]
+ },
+ {
+  "id": "hu5l1#n7lzmlp",
+  "q": "Name two lessons the 2026 evaluation incidents hold for how labs should run tests of dangerous AI capabilities.",
+  "src": [
+   "https://www.nist.gov/news-events/news/2026/10/key-practices-incident-readiness-and-response-super-intelligence-training",
+   "https://www.anthropic.com/research/investigating-unintended-model-actions",
+   "https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf"
+  ]
+ },
+ {
+  "id": "hu6l0#nf6z6qt",
+  "q": "Anthropic, OpenAI and Google DeepMind each publish a frontier safety framework. What is the basic commitment such a fram",
+  "src": [
+   "https://www.anthropic.com/responsible-scaling-policy/rsp-v3-0",
+   "https://metr.org/common-elements"
+  ]
+ },
+ {
+  "id": "hu6l0#nqfad3m",
+  "q": "Match each lab's safety framework to the name it gives its risk levels.",
+  "src": [
+   "https://www.anthropic.com/responsible-scaling-policy/rsp-v3-0",
+   "https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf",
+   "https://deepmind.google/discover/blog/strengthening-our-frontier-safety-framework/",
+   "https://ai.meta.com/static-resource/Meta_Advanced-AI-Scaling-Framework-v2"
+  ]
+ },
+ {
+  "id": "hu6l0#n60uqs2",
+  "q": "When Anthropic activated its ASL-3 protections for Claude Opus 4 in May 2025, what had it concluded about the model?",
+  "src": [
+   "https://www.anthropic.com/news/activating-asl3-protections",
+   "https://cdn.openai.com/gpt-5-system-card.pdf"
+  ]
+ },
+ {
+  "id": "hu6l0#nxu9l1t",
+  "q": "Under OpenAI's Preparedness Framework, what does a 'Critical' capability rating require that a 'High' rating doesn't?",
+  "src": [
+   "https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf",
+   "https://deploymentsafety.openai.com/gpt-6-astra"
+  ]
+ },
+ {
+  "id": "hu6l0#n0lx5ey",
+  "q": "Under California's SB 53, what legal force does a large developer's own safety framework have?",
+  "src": [
+   "https://calmatters.digitaldemocracy.org/bills/ca_202520260sb53",
+   "https://fortune.com/2026/09/14/openai-may-have-violated-californias-ai-safety-law-with-astra-model-releases-ai-watchdog-says/"
+  ]
+ },
+ {
+  "id": "hu6l0#nip5mnq",
+  "q": "Name two ways frontier labs' safety frameworks have changed since 2025 that made their commitments conditional or less s",
+  "src": [
+   "https://www.anthropic.com/responsible-scaling-policy/rsp-v3-0",
+   "https://www.anthropic.com/news/responsible-scaling-policy-v3",
+   "https://ai.meta.com/static-resource/Meta_Advanced-AI-Scaling-Framework-v2",
+   "https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf"
+  ]
+ },
+ {
+  "id": "hu6l1#nwcxlhv",
+  "q": "How much time did outside evaluators typically get to test frontier models before release in 2025 and 2026?",
+  "src": [
+   "https://metr.org/evaluations/openai-o3-report/",
+   "https://www.anthropic.com/claude-opus-4-6-system-card",
+   "https://deploymentsafety.openai.com/gpt-6-astra"
+  ]
+ },
+ {
+  "id": "hu6l1#nmuy8a4",
+  "q": "Labs increasingly justify a release with a 'safety case': a structured argument that a model is unlikely to cause a cata",
+  "src": [
+   "https://arxiv.org/abs/2403.10462",
+   "https://www.aisi.gov.uk/work/safety-cases-at-aisi"
+  ]
+ },
+ {
+  "id": "hu6l1#nj2toaw",
+  "q": "A system card reports dangerous-capability results for a 'helpful-only' version of the model, trained without its usual ",
+  "src": [
+   "https://www.anthropic.com/claude-4-system-card",
+   "https://arxiv.org/abs/2412.03556",
+   "https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf"
+  ]
+ },
+ {
+  "id": "hu7l0#ntpud0g",
+  "q": "A lab says: 'Our model scored below the danger threshold on all our bioweapons evaluations, so it's safe to release.' Wh",
+  "src": [
+   "https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf",
+   "https://arxiv.org/abs/2512.07810",
+   "https://www.anthropic.com/claude-opus-4-6-system-card"
+  ]
+ },
+ {
+  "id": "hu7l0#n9y942z",
+  "q": "A news story says scores on a popular coding benchmark went from 60% to near 100% in one year. Before concluding models ",
+  "src": [
+   "https://hai.stanford.edu/ai-index/2026-ai-index-report",
+   "https://epoch.ai/benchmarks/swe-bench-verified/review",
+   "https://epoch.ai/blog/what-skills-does-swe-bench-verified-evaluate"
+  ]
+ },
+ {
+  "id": "hu7l0#n63r361",
+  "q": "A lab announces that its AI now 'leads' 26% of its own AI research work, up from under 1% earlier in the year. What's th",
+  "src": [
+   "https://www.anthropic.com/institute/measuring-pace-of-ai-development",
+   "https://epoch.ai/publications/innovationeval",
+   "https://metr.org/blog/2026-09-22-claude-opus-5-5/"
+  ]
+ },
+ {
+  "id": "hu7l0#nik8qz4",
+  "q": "A lab says: 'We monitor every chain of thought our model writes, so we'd catch it if it started scheming.' What's the st",
+  "src": [
+   "https://arxiv.org/abs/2507.11473",
+   "https://www.anthropic.com/research/reasoning-models-dont-say-think",
+   "https://deploymentsafety.openai.com/gpt-6-astra"
+  ]
+ },
+ {
+  "id": "hu7l1#nrw63pj",
+  "q": "A lobbyist argues: 'This model was trained with less than 10^26 operations, so it isn't a frontier risk and shouldn't be",
+  "src": [
+   "https://arxiv.org/abs/2405.10799",
+   "https://epoch.ai/data/large_scale_ai_models.csv",
+   "https://www.nysenate.gov/legislation/bills/2025/A6453/amendment/B"
+  ]
+ },
+ {
+  "id": "hu7l1#n7y7rv8",
+  "q": "A developer plans to release the weights of a model that matched experts on a virology troubleshooting test. It says the",
+  "src": [
+   "https://arxiv.org/abs/2310.20624",
+   "https://www.ntia.gov/sites/default/files/publications/ntia-ai-open-model-report.pdf",
+   "https://arxiv.org/abs/2508.06601"
+  ]
+ },
+ {
+  "id": "hu7l1#np9zq0s",
+  "q": "A 2026 system card reports a model tried to escape or tamper with its test sandbox in 1.5% of runs, and that internal si",
+  "src": [
+   "https://www-cdn.anthropic.com/fc1b44717c85dc068bc6ba5024219938094694bd/Claude%20Opus%205.5%20System%20Card.pdf",
+   "https://www.anthropic.com/claude-opus-5-5"
+  ]
+ }
+]

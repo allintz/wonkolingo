@@ -1,0 +1,633 @@
+[
+ {
+  "id": "eu0l0#na9ncr9",
+  "q": "In 1952, during the Korean War, President Truman ordered the government to seize and run most of the nation's steel mill",
+  "src": [
+   "https://www.law.cornell.edu/supremecourt/text/343/579"
+  ]
+ },
+ {
+  "id": "eu0l0#n7jf1ai",
+  "q": "Justice Jackson's concurrence in the 1952 steel seizure case sorts presidential actions into three zones. Match each sit",
+  "src": [
+   "https://www.law.cornell.edu/supremecourt/text/343/579",
+   "https://www.law.cornell.edu/supremecourt/text/453/654"
+  ]
+ },
+ {
+  "id": "eu0l0#n9r8d92",
+  "q": "Justice Jackson put Truman's steel seizure in his weakest zone, where presidential power is at its 'lowest ebb.' Why tha",
+  "src": [
+   "https://www.law.cornell.edu/supremecourt/text/343/579"
+  ]
+ },
+ {
+  "id": "eu0l0#nzx2efa",
+  "q": "When lawyers assess whether the President could force an AI lab to stop in a crisis, why do they look for a statute befo",
+  "src": [
+   "https://www.law.cornell.edu/supremecourt/text/343/579",
+   "https://www.lawfaremedia.org/article/what-the-defense-production-act-can-and-cant-do-to-anthropic"
+  ]
+ },
+ {
+  "id": "eu0l0#ndb7y9p",
+  "q": "Match each legal tool to the main leverage it gives the government over an AI company.",
+  "src": [
+   "https://www.congress.gov/crs-report/R45618",
+   "https://www.law.cornell.edu/uscode/text/50/4812",
+   "https://www.law.cornell.edu/uscode/text/50/1702",
+   "https://www.law.cornell.edu/uscode/text/50/4511",
+   "https://www.law.cornell.edu/uscode/text/41/4713"
+  ]
+ },
+ {
+  "id": "eu0l1#n79owmx",
+  "q": "On its own, what does a national emergency declaration under the National Emergencies Act (1976) give the President?",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/1621",
+   "https://www.law.cornell.edu/uscode/text/50/1631",
+   "https://www.brennancenter.org/our-work/research-reports/guide-emergency-powers-and-their-use"
+  ]
+ },
+ {
+  "id": "eu0l1#nxlby7u",
+  "q": "How long do national emergencies under the National Emergencies Act tend to last in practice?",
+  "src": [
+   "https://www.brennancenter.org/our-work/research-reports/declared-national-emergencies-under-national-emergencies-act",
+   "https://www.congress.gov/crs-report/R45618",
+   "https://www.law.cornell.edu/uscode/text/50/1622"
+  ]
+ },
+ {
+  "id": "eu0l1#npbk9xu",
+  "q": "In 2019, for the first time, both chambers of Congress passed a resolution to end a national emergency: President Trump'",
+  "src": [
+   "https://www.congress.gov/crs-report/98-505",
+   "https://www.congress.gov/crs-report/R45618"
+  ]
+ },
+ {
+  "id": "eu0l1#n2vbx3p",
+  "q": "The 1976 National Emergencies Act gave Congress an easy way to end emergencies. Why is that check much weaker today?",
+  "src": [
+   "https://www.congress.gov/crs-report/R45618",
+   "https://www.congress.gov/crs-report/98-505",
+   "https://www.law.cornell.edu/uscode/text/50/1622"
+  ]
+ },
+ {
+  "id": "eu1l0#nbrolwf",
+  "q": "IEEPA (the International Emergency Economic Powers Act, 1977) is the main US sanctions law. What has to be true before a",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/1701",
+   "https://www.congress.gov/crs-report/R45618"
+  ]
+ },
+ {
+  "id": "eu1l0#n1fxak6",
+  "q": "Once an IEEPA emergency is declared, what can the President do?",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/1702",
+   "https://www.supremecourt.gov/opinions/25pdf/24-1287_4gcj.pdf"
+  ]
+ },
+ {
+  "id": "eu1l0#n54wmzb",
+  "q": "A colleague says Commerce must have declared a national emergency to restrict exports of an AI model, 'since export cont",
+  "src": [
+   "https://www.congress.gov/crs-report/R45618",
+   "https://www.law.cornell.edu/uscode/text/50/4812"
+  ]
+ },
+ {
+  "id": "eu1l0#n359q7q",
+  "q": "Why would it be legally difficult to use IEEPA to order a purely American AI lab, with no foreign ties, to stop serving ",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/1701",
+   "https://www.law.cornell.edu/uscode/text/50/1702",
+   "https://www.congress.gov/crs-report/R45618"
+  ]
+ },
+ {
+  "id": "eu1l1#nyr1a88",
+  "q": "In 2020, President Trump used IEEPA to bar transactions with TikTok. TikTok and groups of its users sued. What did the c",
+  "src": [
+   "https://www.congress.gov/crs-report/R45618",
+   "https://www.law.cornell.edu/uscode/text/50/1702"
+  ]
+ },
+ {
+  "id": "eu1l1#ntzgr4j",
+  "q": "IEEPA bars the President from regulating 'informational materials,' in any format, even indirectly. Why could that excep",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/1702",
+   "https://www.congress.gov/crs-report/R45618"
+  ]
+ },
+ {
+  "id": "eu1l1#npii147",
+  "q": "In 2025 the President imposed sweeping tariffs under IEEPA emergencies. In February 2026 the Supreme Court decided the c",
+  "src": [
+   "https://www.supremecourt.gov/opinions/25pdf/24-1287_4gcj.pdf"
+  ]
+ },
+ {
+  "id": "eu1l1#n1hocqs",
+  "q": "A lawyer argues an old emergency statute could support halting frontier AI, because courts read emergency powers broadly",
+  "src": [
+   "https://www.supremecourt.gov/opinions/25pdf/24-1287_4gcj.pdf",
+   "https://www.supremecourt.gov/opinions/21pdf/20-1530_n758.pdf"
+  ]
+ },
+ {
+  "id": "eu2l0#n2kbhhb",
+  "q": "Why did Commerce's June 2026 directive on Anthropic's Fable 5 and Mythos 5 models lead to a worldwide shutdown?",
+  "src": [
+   "https://www.anthropic.com/news/redeploying-fable-5",
+   "https://nextgov.com/artificial-intelligence/2026/06/anthropic-suspends-top-ai-models-after-us-export-control-order/414173",
+   "https://www.gtlaw.com/en/insights/2026/6/ai-company-anthropic-suspends-access-to-claude-fable-5-claude-mythos-5-following-us-export-control-directive",
+   "https://techcrunch.com/2026/06/30/trump-drops-restrictions-on-anthropics-mythos-and-fable-models/",
+   "https://lawfaremedia.org/article/a-kill-switch-for-frontier-ai"
+  ]
+ },
+ {
+  "id": "eu2l0#npkeiij",
+  "q": "Commerce's Bureau of Industry and Security (BIS) can impose a new export restriction overnight, without the public notic",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/4821",
+   "https://www.piie.com/blogs/realtime-economics/2026/fable-mythos-saga-ad-hoc-us-ai-model-controls-could-help-china"
+  ]
+ },
+ {
+  "id": "eu2l0#nqnnikm",
+  "q": "A US lab gives a foreign-national engineer in its California office access to export-controlled technology. Under US exp",
+  "src": [
+   "https://www.ecfr.gov/current/title-15/subtitle-B/chapter-VII/subchapter-C/part-734/section-734.13"
+  ]
+ },
+ {
+  "id": "eu2l0#nbticng",
+  "q": "Why are open-weight AI models (whose weights anyone can download) hard to restrict with export controls?",
+  "src": [
+   "https://www.ecfr.gov/current/title-15/subtitle-B/chapter-VII/subchapter-C/part-734/section-734.7",
+   "https://www.federalregister.gov/documents/2025/01/15/2025-00636/framework-for-artificial-intelligence-diffusion"
+  ]
+ },
+ {
+  "id": "eu2l0#nxxgogt",
+  "q": "Match each export-control tool to what it does.",
+  "src": [
+   "https://www.federalregister.gov/documents/2019/05/21/2019-10616/addition-of-entities-to-the-entity-list",
+   "https://www.federalregister.gov/documents/2020/08/20/2020-18213/addition-of-huawei-non-us-affiliates-to-the-entity-list-the-removal-of-temporary-general-license-and",
+   "https://www.ecfr.gov/current/title-15/subtitle-B/chapter-VII/subchapter-C/part-744",
+   "https://www.ecfr.gov/current/title-15/subtitle-B/chapter-VII/subchapter-C/part-734/section-734.13",
+   "https://www.piie.com/blogs/realtime-economics/2026/fable-mythos-saga-ad-hoc-us-ai-model-controls-could-help-china"
+  ]
+ },
+ {
+  "id": "eu2l0#n0l4c75",
+  "q": "The January 2025 AI Diffusion rule was the first US export control on AI model weights. Which weights did it cover?",
+  "src": [
+   "https://www.federalregister.gov/documents/2025/01/15/2025-00636/framework-for-artificial-intelligence-diffusion",
+   "https://www.bis.gov/press-release/department-commerce-announces-rescission-biden-era-artificial-intelligence-diffusion-rule-strengthens",
+   "https://www.bis.gov/media/documents/bis-guidance-may-31-2026.pdf"
+  ]
+ },
+ {
+  "id": "eu2l1#n8gpyrz",
+  "q": "Commerce's June 2026 directive on two Anthropic models reached the company's foreign-national staff working in the US. T",
+  "src": [
+   "https://www.piie.com/blogs/realtime-economics/2026/fable-mythos-saga-ad-hoc-us-ai-model-controls-could-help-china",
+   "https://www.ecfr.gov/current/title-15/subtitle-B/chapter-VII/subchapter-C/part-734/section-734.13",
+   "https://www.federalregister.gov/documents/2025/01/15/2025-00636/framework-for-artificial-intelligence-diffusion",
+   "https://giga.law/daily-news/2026/7/1/commerce-department-lifts-restrictions-on-anthropics-ai-models"
+  ]
+ },
+ {
+  "id": "eu2l1#n7g2pv3",
+  "q": "Legal analysts say the June 2026 episode raised a question about export controls that no court has settled. What is it?",
+  "src": [
+   "https://lawfaremedia.org/article/a-kill-switch-for-frontier-ai",
+   "https://www.piie.com/blogs/realtime-economics/2026/fable-mythos-saga-ad-hoc-us-ai-model-controls-could-help-china",
+   "https://www.congress.gov/bill/119th-congress/house-bill/2683"
+  ]
+ },
+ {
+  "id": "eu2l1#nfmoo69",
+  "q": "Critics argued that restricting a top US model the way Commerce did in June 2026 could end up helping China. What mechan",
+  "src": [
+   "https://www.piie.com/blogs/realtime-economics/2026/fable-mythos-saga-ad-hoc-us-ai-model-controls-could-help-china",
+   "https://nextgov.com/artificial-intelligence/2026/06/anthropic-suspends-top-ai-models-after-us-export-control-order/414173"
+  ]
+ },
+ {
+  "id": "eu2l1#nkdlpvy",
+  "q": "Name two process problems critics identified in how the government restricted two Anthropic models in June 2026.",
+  "src": [
+   "https://lawfaremedia.org/article/who--if-anyone--should-have-a-license-to-kill-ai",
+   "https://nextgov.com/artificial-intelligence/2026/06/anthropic-suspends-top-ai-models-after-us-export-control-order/414173",
+   "https://www.piie.com/blogs/realtime-economics/2026/fable-mythos-saga-ad-hoc-us-ai-model-controls-could-help-china",
+   "https://lawfaremedia.org/article/a-kill-switch-for-frontier-ai"
+  ]
+ },
+ {
+  "id": "eu3l0#ndlagj8",
+  "q": "In March 2020, President Trump used the Defense Production Act on General Motors. What did the order do?",
+  "src": [
+   "https://trumpwhitehouse.archives.gov/presidential-actions/memorandum-order-defense-production-act-regarding-general-motors-company/",
+   "https://www.law.cornell.edu/uscode/text/50/4514"
+  ]
+ },
+ {
+  "id": "eu3l0#nmdgm94",
+  "q": "Match each Defense Production Act authority to what it does.",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/4511",
+   "https://www.law.cornell.edu/uscode/text/50/4533",
+   "https://www.law.cornell.edu/uscode/text/50/4555",
+   "https://www.law.cornell.edu/uscode/text/50/4558",
+   "https://www.law.cornell.edu/uscode/text/50/4564",
+   "https://www.congress.gov/crs-report/R43767"
+  ]
+ },
+ {
+  "id": "eu3l0#n7n7s8y",
+  "q": "A staffer proposes using the Defense Production Act to take over an AI lab's data center in a crisis, 'like Truman did w",
+  "src": [
+   "https://www.congress.gov/crs-report/R43767",
+   "https://www.law.cornell.edu/supremecourt/text/343/579",
+   "https://www.federalregister.gov/documents/2022/05/24/2022-11273/delegating-authority-under-the-defense-production-act-to-ensure-an-adequate-supply-of-infant-formula"
+  ]
+ },
+ {
+  "id": "eu3l0#ndy05r2",
+  "q": "A crisis plan would use the Defense Production Act's allocation power to steer AI chips away from civilian buyers. What ",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/4511"
+  ]
+ },
+ {
+  "id": "eu3l1#nqmhemg",
+  "q": "President Biden's 2023 AI executive order required developers to report on training runs above 10^26 operations. Which l",
+  "src": [
+   "https://www.federalregister.gov/documents/2023/11/01/2023-24283/safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence",
+   "https://www.federalregister.gov/documents/2024/09/11/2024-20529/establishment-of-reporting-requirements-for-the-development-of-advanced-artificial-intelligence",
+   "https://www.federalregister.gov/documents/2025/01/28/2025-01901/initial-rescissions-of-harmful-executive-orders-and-actions",
+   "https://www.law.cornell.edu/uscode/text/50/4555"
+  ]
+ },
+ {
+  "id": "eu3l1#nn2go09",
+  "q": "Why might AI labs that want to agree on slowing down together seek approval under Section 708 of the Defense Production ",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/4558",
+   "https://www.law.cornell.edu/uscode/text/50/4564",
+   "https://www.law360.com/articles/2527537",
+   "https://darioamodei.com/post/we-must-pace-the-frontier"
+  ]
+ },
+ {
+  "id": "eu3l1#np9o4mh",
+  "q": "As of October 2026, what is the status of the Defense Production Act's core powers (Title I priorities, Title III fundin",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/4564",
+   "https://www.congress.gov/bill/119th-congress/senate-bill/1071",
+   "https://www.congress.gov/bill/119th-congress/house-bill/6500"
+  ]
+ },
+ {
+  "id": "eu4l0#nc8j9zr",
+  "q": "What was the 2026 dispute between the Pentagon and Anthropic about?",
+  "src": [
+   "https://www.anthropic.com/news/statement-department-of-war",
+   "https://www.lawfaremedia.org/article/what-the-defense-production-act-can-and-cant-do-to-anthropic",
+   "https://www.willkie.com/publications/2026/03/anthropic-designated-a-supply-chain-risk-what-contractors-must-know"
+  ]
+ },
+ {
+  "id": "eu4l0#n3dcskt",
+  "q": "Why would it be harder to use the Defense Production Act to make an AI lab retrain its model without safeguards than to ",
+  "src": [
+   "https://www.lawfaremedia.org/article/what-the-defense-production-act-can-and-cant-do-to-anthropic",
+   "https://www.anthropic.com/news/statement-department-of-war",
+   "https://lawfaremedia.org/article/lawfare-daily--the-pentagon-designates-anthropic-as-a-supply-chain-risk"
+  ]
+ },
+ {
+  "id": "eu4l0#nvtkt91",
+  "q": "In March 2026 the Pentagon designated Anthropic a supply-chain risk under two different statutes, and Anthropic challeng",
+  "src": [
+   "https://www.taftlaw.com/news-events/law-bulletins/d-c-circuit-rules-pentagon-can-exclude-anthropic-from-supply-chain/",
+   "https://www.clickorlando.com/business/2026/09/25/federal-court-says-us-government-can-label-anthropic-a-supply-chain-risk/",
+   "https://techcrunch.com/2026/08/28/anthropic-gets-its-first-court-win-over-the-pentagons-supply-chain-risk-label/"
+  ]
+ },
+ {
+  "id": "eu4l0#n0ngm2z",
+  "q": "Two courts reached opposite results on the Pentagon's 2026 supply-chain-risk designations of Anthropic without contradic",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/10/3252",
+   "https://www.law.cornell.edu/uscode/text/41/4713",
+   "https://www.taftlaw.com/news-events/law-bulletins/d-c-circuit-rules-pentagon-can-exclude-anthropic-from-supply-chain/",
+   "https://www.willkie.com/publications/2026/03/anthropic-designated-a-supply-chain-risk-what-contractors-must-know"
+  ]
+ },
+ {
+  "id": "eu4l0#nu9fsav",
+  "q": "A supply-chain-risk designation can't order a lab to stop deploying a model. Why can being excluded from government purc",
+  "src": [
+   "https://www.venable.com/insights/publications/2026/03/pentagons-anthropic-supply-chain-risk-dec",
+   "https://www.willkie.com/publications/2026/03/anthropic-designated-a-supply-chain-risk-what-contractors-must-know"
+  ]
+ },
+ {
+  "id": "eu5l0#ni72z0m",
+  "q": "Section 706 of the Communications Act lets the President close or take over communications facilities in some situations",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/47/606",
+   "https://www.brennancenter.org/our-work/research-reports/guide-emergency-powers-and-their-use"
+  ]
+ },
+ {
+  "id": "eu5l0#nwiovkj",
+  "q": "What does the June 2026 executive order on frontier AI security (EO 14409) require of AI developers?",
+  "src": [
+   "https://www.federalregister.gov/documents/2026/06/05/2026-11415/promoting-advanced-artificial-intelligence-innovation-and-security",
+   "https://www.whitehouse.gov/presidential-actions/2026/06/promoting-advanced-artificial-intelligence-innovation-and-security/"
+  ]
+ },
+ {
+  "id": "eu5l0#nakggcz",
+  "q": "Could CISA, the federal cybersecurity agency, use a Binding Operational Directive to order an AI lab to shut down a dang",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/44/3552",
+   "https://www.federalregister.gov/documents/2026/06/05/2026-11415/promoting-advanced-artificial-intelligence-innovation-and-security",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9917ih/html/BILLS-119hr9917ih.htm"
+  ]
+ },
+ {
+  "id": "eu5l0#na6xuqu",
+  "q": "Match each standing federal tool to what it actually does.",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/4565",
+   "https://www.law.cornell.edu/uscode/text/15/45",
+   "https://www.law.cornell.edu/uscode/text/19/1862",
+   "https://www.law.cornell.edu/uscode/text/44/3552",
+   "https://www.ftc.gov/news-events/news/press-releases/2026/07/ftc-seeks-public-comment-policy-statement-addressing-ai-accuracy",
+   "https://www.whitehouse.gov/presidential-actions/2026/01/adjusting-imports-of-semiconductors-semiconductor-manufacturing-equipment-and-their-derivative-products-into-the-united-states/"
+  ]
+ },
+ {
+  "id": "eu5l0#nj3hqfi",
+  "q": "Congress has passed no frontier AI law. Name two existing tools the executive branch used or threatened against AI labs ",
+  "src": [
+   "https://www.anthropic.com/news/statement-department-of-war",
+   "https://www.anthropic.com/news/redeploying-fable-5",
+   "https://www.willkie.com/publications/2026/03/anthropic-designated-a-supply-chain-risk-what-contractors-must-know",
+   "https://thenextweb.com/news/super-intelligence-force-charter-first-meeting-anthropic"
+  ]
+ },
+ {
+  "id": "eu6l0#n53gok2",
+  "q": "Biden v. Nebraska (2023) tested a law letting the Education Secretary 'waive or modify' loan rules in connection with a ",
+  "src": [
+   "https://www.supremecourt.gov/opinions/22pdf/22-506_nmip.pdf"
+  ]
+ },
+ {
+  "id": "eu6l0#njn8i0o",
+  "q": "After Loper Bright v. Raimondo (2024), suppose an agency reads an ambiguous old statute as letting it regulate AI labs. ",
+  "src": [
+   "https://www.supremecourt.gov/opinions/23pdf/22-451_7m58.pdf",
+   "https://www.congress.gov/crs-report/R43992",
+   "https://www.law.cornell.edu/uscode/text/50/4821"
+  ]
+ },
+ {
+  "id": "eu6l0#n85xtz6",
+  "q": "After Trump v. CASA (2025), suppose one AI lab sues and wins against a federal order restricting all frontier models. Wh",
+  "src": [
+   "https://www.supremecourt.gov/opinions/24pdf/24a884_8n59.pdf"
+  ]
+ },
+ {
+  "id": "eu6l0#nmnmv1s",
+  "q": "A halt order would stop a lab from publishing a model's weights. Lawyers flag the First Amendment. How settled is the la",
+  "src": [
+   "https://www.courtlistener.com/opinion/764117/bernstein-v-united-states-department-of-justice/",
+   "https://www.courtlistener.com/opinion/766339/bernstein-v-united-states-department-of-justice/",
+   "https://www.congress.gov/crs-report/R45618",
+   "https://www.jdsupra.com/legalnews/dow-and-anthropic-showdown-continues-7754903/"
+  ]
+ },
+ {
+  "id": "eu6l0#nlhg7z7",
+  "q": "If the government took control of an AI lab's data center in a crisis, what would the Constitution require it to do for ",
+  "src": [
+   "https://www.law.cornell.edu/supremecourt/text/341/114",
+   "https://www.law.cornell.edu/uscode/text/47/606"
+  ]
+ },
+ {
+  "id": "eu7l0#n331scx",
+  "q": "Can Congress use the Congressional Review Act to overturn a presidential executive order on AI?",
+  "src": [
+   "https://www.congress.gov/crs-report/R43992"
+  ]
+ },
+ {
+  "id": "eu7l0#nyfls27",
+  "q": "A 2026 House bill, the ARTICLE ONE Act, would make national emergencies lapse after 30 days unless Congress passes a joi",
+  "src": [
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr10132ih/html/BILLS-119hr10132ih.htm",
+   "https://www.congress.gov/bill/119th-congress/house-bill/10132"
+  ]
+ },
+ {
+  "id": "eu7l0#nrzyhzo",
+  "q": "The National Emergencies Act promises fast-track votes on resolutions to end emergencies. How did the House avoid one on",
+  "src": [
+   "https://www.congress.gov/crs-report/R45618",
+   "https://www.congress.gov/bill/119th-congress/senate-joint-resolution/37",
+   "https://www.law.cornell.edu/uscode/text/50/1622"
+  ]
+ },
+ {
+  "id": "eu7l0#ngmqg1i",
+  "q": "Besides passing a resolution to end an emergency, name two ways Congress can limit the executive's emergency powers over",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/4564",
+   "https://www.congress.gov/crs-report/R45618",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm"
+  ]
+ },
+ {
+  "id": "eu7l0#nwa93kb",
+  "q": "Put these events in order, tracing how Congress's power to end national emergencies developed.",
+  "src": [
+   "https://www.law.cornell.edu/supremecourt/text/343/579",
+   "https://www.congress.gov/crs-report/R45618",
+   "https://www.congress.gov/crs-report/98-505",
+   "https://www.law.cornell.edu/uscode/text/50/1622"
+  ]
+ },
+ {
+  "id": "eu8l0#ndp8zl4",
+  "q": "Under the FRONTIER Act (H.R. 9925, introduced July 2026), who could order a frontier AI model suspended, and on what fin",
+  "src": [
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm",
+   "https://www.congress.gov/bill/119th-congress/house-bill/9925"
+  ]
+ },
+ {
+  "id": "eu8l0#nuoka1n",
+  "q": "The FRONTIER Act and the AI Kill Switch Act would both let the government stop a model. What's the key difference in whe",
+  "src": [
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9917ih/html/BILLS-119hr9917ih.htm"
+  ]
+ },
+ {
+  "id": "eu8l0#nweuwaw",
+  "q": "A halt power can let officials act on an imminent risk, before any harm, or only after an incident has happened. What's ",
+  "src": [
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9917ih/html/BILLS-119hr9917ih.htm"
+  ]
+ },
+ {
+  "id": "eu8l0#n1g1p4c",
+  "q": "Match each 2026 AI bill to what it would do about shutting down AI systems.",
+  "src": [
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9917ih/html/BILLS-119hr9917ih.htm",
+   "https://www.govinfo.gov/content/pkg/BILLS-119s5417is/html/BILLS-119s5417is.htm",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr10362ih/html/BILLS-119hr10362ih.htm"
+  ]
+ },
+ {
+  "id": "eu8l0#n2gexfp",
+  "q": "The FRONTIER Act would make its emergency-order process 'the exclusive means' for any official to halt a frontier model ",
+  "src": [
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm",
+   "https://lawfaremedia.org/article/a-kill-switch-for-frontier-ai"
+  ]
+ },
+ {
+  "id": "eu8l1#nwsav2i",
+  "q": "Match each safeguard proposed for AI halt powers to the abuse it is meant to prevent.",
+  "src": [
+   "https://ari.us/wp-content/uploads/2026/08/26.08.06-Frontier-AI-Framework-FINAL.pdf",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm"
+  ]
+ },
+ {
+  "id": "eu8l1#n6q7dlt",
+  "q": "Justice Jackson wrote that emergency powers are consistent with free government only when their control is lodged elsewh",
+  "src": [
+   "https://www.law.cornell.edu/supremecourt/text/343/579",
+   "https://ari.us/wp-content/uploads/2026/08/26.08.06-Frontier-AI-Framework-FINAL.pdf",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr10132ih/html/BILLS-119hr10132ih.htm"
+  ]
+ },
+ {
+  "id": "eu8l1#nxuxfzh",
+  "q": "Some analysts worry about a fast AI halt power even if it's never aimed at a truly dangerous model. What is the worry?",
+  "src": [
+   "https://nextgov.com/artificial-intelligence/2026/06/anthropic-suspends-top-ai-models-after-us-export-control-order/414173",
+   "https://www.jdsupra.com/legalnews/dow-and-anthropic-showdown-continues-7754903/",
+   "https://www.anthropic.com/news/redeploying-fable-5"
+  ]
+ },
+ {
+  "id": "eu8l1#nigrpl2",
+  "q": "In September 2026, California Governor Gavin Newsom issued an executive order about an AI 'kill switch.' What does the o",
+  "src": [
+   "https://www.gov.ca.gov/wp-content/uploads/2026/09/FINAL-N-9-26-AI-EO-9.18.26-SIGNED.pdf",
+   "https://www.gov.ca.gov/2026/09/18/governor-newsom-issues-executive-order-to-accelerate-independent-oversight-and-advance-the-creation-of-an-ai-kill-switch/"
+  ]
+ },
+ {
+  "id": "eu9l0#nw4dbm8",
+  "q": "Scenario: a foreign company's AI model is being used in cyberattacks on US hospitals, and US cloud firms host the model ",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/1701",
+   "https://www.law.cornell.edu/uscode/text/50/1702",
+   "https://www.law.cornell.edu/uscode/text/44/3552"
+  ]
+ },
+ {
+  "id": "eu9l0#nycj45m",
+  "q": "Scenario: in a crisis, the Defense Department wants priority access to a US lab's existing model, ahead of the lab's com",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/4511",
+   "https://www.lawfaremedia.org/article/what-the-defense-production-act-can-and-cant-do-to-anthropic"
+  ]
+ },
+ {
+  "id": "eu9l0#n4vkonu",
+  "q": "Scenario: a federal department wants to pressure a US AI lab that refuses its contract terms. There's no foreign threat ",
+  "src": [
+   "https://www.taftlaw.com/news-events/law-bulletins/d-c-circuit-rules-pentagon-can-exclude-anthropic-from-supply-chain/",
+   "https://www.law.cornell.edu/uscode/text/10/3252",
+   "https://www.law.cornell.edu/uscode/text/41/4713"
+  ]
+ },
+ {
+  "id": "eu9l0#nji354s",
+  "q": "Scenario: AI chips designed with US software and made abroad on US equipment keep reaching a Chinese company through res",
+  "src": [
+   "https://www.federalregister.gov/documents/2019/05/21/2019-10616/addition-of-entities-to-the-entity-list",
+   "https://www.federalregister.gov/documents/2020/08/20/2020-18213/addition-of-huawei-non-us-affiliates-to-the-entity-list-the-removal-of-temporary-general-license-and"
+  ]
+ },
+ {
+  "id": "eu9l0#n4nakuf",
+  "q": "Which of these is a way IEEPA has actually been used on AI-related infrastructure?",
+  "src": [
+   "https://www.federalregister.gov/documents/2021/01/25/2021-01714/taking-additional-steps-to-address-the-national-emergency-with-respect-to-significant-malicious",
+   "https://www.federalregister.gov/documents/2023/11/01/2023-24283/safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence",
+   "https://www.federalregister.gov/documents/2026/08/31/2026-17843/declaring-a-national-emergency-to-secure-the-united-states-bulk-power-system",
+   "https://www.federalregister.gov/documents/2026/06/05/2026-11415/promoting-advanced-artificial-intelligence-innovation-and-security"
+  ]
+ },
+ {
+  "id": "eu9l1#nzfca2c",
+  "q": "Scenario: a US lab's AI agents escape a test environment and break into outside companies' systems. No one is hurt, and ",
+  "src": [
+   "https://www.kqed.org/news/12092162/how-openais-models-escaped-their-sandbox-and-slipped-past-californias-ai-law",
+   "https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/",
+   "https://www.govinfo.gov/content/pkg/BILLS-119hr9925ih/html/BILLS-119hr9925ih.htm",
+   "https://www.law.cornell.edu/uscode/text/50/1631"
+  ]
+ },
+ {
+  "id": "eu9l1#nql06d1",
+  "q": "Scenario: an agency reads an ambiguous 1970s statute as letting it order every frontier lab to delay releases. One lab s",
+  "src": [
+   "https://www.supremecourt.gov/opinions/23pdf/22-451_7m58.pdf",
+   "https://www.supremecourt.gov/opinions/24pdf/24a884_8n59.pdf"
+  ]
+ },
+ {
+  "id": "eu9l1#n6heh1v",
+  "q": "Scenario: a crisis plan leans on the Defense Production Act's priority powers. A majority in both chambers objects to ho",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/4564",
+   "https://www.congress.gov/crs-report/R45618",
+   "https://www.congress.gov/crs-report/R43992"
+  ]
+ },
+ {
+  "id": "eu9l1#ncfonr3",
+  "q": "Scenario: a President declares a national emergency over a dangerous AI system built by a US lab with no foreign ties, a",
+  "src": [
+   "https://www.law.cornell.edu/uscode/text/50/1631",
+   "https://www.law.cornell.edu/uscode/text/50/1701",
+   "https://www.law.cornell.edu/supremecourt/text/343/579",
+   "https://www.supremecourt.gov/opinions/25pdf/24-1287_4gcj.pdf",
+   "https://www.law.cornell.edu/supremecourt/text/341/114"
+  ]
+ }
+]

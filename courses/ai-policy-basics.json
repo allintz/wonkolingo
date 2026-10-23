@@ -1,0 +1,305 @@
+{
+ "format": "wonkolingo-course/1",
+ "id": "ai-policy-basics",
+ "title": "AI Policy Basics",
+ "description": "A short foundation for the AI courses. Mark what you are familiar with, then learn only the remaining basics. Shared cards carry across courses.",
+ "caveat": "Drafted and independently checked by AI. No person has reviewed it. Facts current as of October 23, 2026.",
+ "units": [
+  {
+   "title": "Shared foundations",
+   "desc": "Concepts used across the AI courses.",
+   "lessons": [
+    {
+     "title": "The basics",
+     "items": [
+      {
+       "id": "zu0l0#basic1",
+       "t": "mc",
+       "p": "Policy documents talk constantly about a model's 'weights.' What are they?",
+       "o": [
+        "Numbers set during training that determine what the model outputs",
+        "A compressed copy of the documents the model was trained on",
+        "The written rules a developer gives the model about what it may say",
+        "The ranking of answers human labelers preferred during training"
+       ],
+       "a": 0,
+       "ow": [
+        "",
+        "Weights encode patterns learned from the data. Models do memorize some passages word for word, yet nothing in the weights works like a stored, searchable copy of the documents.",
+        "Those are instructions or policies; they sit outside the weights.",
+        "Labelers' rankings are training data for RLHF; the weights are what training produces."
+       ],
+       "keys": [
+        "numerical values learned in training",
+        "they determine the model's outputs",
+        "not a copy of the training data"
+       ],
+       "x": "Weights are the learned numerical parameters of a model. With the necessary software and hardware, someone with the weights can run the model.",
+       "basicLabel": "Model weights"
+      },
+      {
+       "id": "zu0l0#basic2",
+       "t": "recall",
+       "p": "Why do security researchers treat a frontier model's weights as the key asset to protect?",
+       "answer": "The weights embody costly training. A thief can run or modify the model without retraining it from scratch, outside the developer’s access controls and monitoring, and can work to remove learned safeguards.",
+       "keys": [
+        "Weights embody expensive training",
+        "A thief can run or modify the model without repeating training",
+        "Outside developer access controls and monitoring; safeguards can be modified"
+       ],
+       "x": "RAND (2024): 'once the attacker has access to the weights of a model, abusing the model without restrictions or monitoring is eminently feasible.' It contrasts reported training costs of $78 million (GPT-4) and nearly $200 million (Gemini Ultra) with under half a cent per thousand tokens to run.",
+       "choice": {
+        "p": "Why do security researchers treat a frontier model's weights as the key asset to protect?",
+        "o": [
+         "They capture costly training and let a thief run or modify the model independently.",
+         "They hold the developer's customer conversations and payment records",
+         "They contain the training data, which can be rebuilt from them if lost",
+         "Losing them forces the developer offline, so theft mainly causes outages"
+        ],
+        "a": 0,
+        "ow": [
+         "",
+         "Weights encode learned patterns, not customer records.",
+         "Weights encode patterns learned from the data; they aren't a copy of it, and the threat is what a thief can do.",
+         "The issue is what a thief can do with them, not the developer's own uptime."
+        ]
+       },
+       "basicLabel": "Why stolen weights matter"
+      },
+      {
+       "id": "zu0l0#basic3",
+       "t": "recall",
+       "p": "Why do analysts say that releasing a model's weights publicly can't be undone?",
+       "answer": "Once the weights are downloaded, copies spread (for example by torrent), and the developer can't recall them, monitor how they're used, or stop people from changing them.",
+       "keys": [
+        "copies spread and can't be recalled",
+        "the developer can't monitor or control how they're used"
+       ],
+       "x": "Once weights have been distributed, the original developer cannot reliably recall every copy. Recipients can run or modify their copies independently.",
+       "choice": {
+        "p": "Why is publicly releasing a model's weights described as irreversible?",
+        "o": [
+         "Copies spread beyond the developer's control, so it can't recall them or police their use",
+         "Released weights can't be updated, so the model's knowledge stays frozen at release",
+         "Published weights are cryptographically locked, so no one can modify them after release",
+         "Federal law treats a published model as public domain, ending the developer's rights in it"
+        ],
+        "a": 0,
+        "ow": [
+         "",
+         "Knowledge cutoffs apply to every model; the problem is that released copies spread and can't be recalled.",
+         "The reverse: anyone with the weights can modify them cheaply, including to strip safeguards.",
+         "No such law exists; the problem is practical, not legal."
+        ]
+       },
+       "basicLabel": "Open-weight releases cannot be recalled"
+      },
+      {
+       "id": "zu0l0#basic4",
+       "t": "mc",
+       "p": "AI policy often uses a model’s training compute as a threshold. What does training compute measure?",
+       "o": [
+        "The total number of arithmetic operations used to train the model",
+        "How many operations per second the developer's computers can run",
+        "The number of parameters, or weights, in the finished model",
+        "The number of words of text the model was trained on"
+       ],
+       "a": 0,
+       "ow": [
+        "",
+        "That's a rate (FLOP per second). The threshold is a total, like miles driven rather than miles per hour.",
+        "Parameter count is a different measure; Biden's 2023 order used it in a separate definition.",
+        "Training data is measured in tokens; compute depends on both data and model size."
+       ],
+       "keys": [
+        "total floating-point (arithmetic) operations",
+        "used in training",
+        "a total amount, not a speed"
+       ],
+       "x": "Training compute is the total number of arithmetic operations used in training, usually stated in FLOP (floating-point operations). Biden's 2023 order counted 'integer or floating-point operations' and had both kinds of trigger: 10^26 operations for a model and 10^20 operations per second for a computing cluster. Newer laws, including SB 53, also count fine-tuning and later training.",
+       "basicLabel": "Training compute"
+      },
+      {
+       "id": "zu0l0#basic5",
+       "t": "match",
+       "p": "Match each law or proposal to the compute line it uses.",
+       "pairs": [
+        [
+         "EU AI Act",
+         "Presumes a model has 'systemic risk' above 10^25 FLOP"
+        ],
+        [
+         "California SB 53",
+         "Covers models above 10^26 operations, with extra duties for developers over $500M in revenue"
+        ],
+        [
+         "Biden's 2023 order (revoked)",
+         "Reports above 10^26 operations, or 10^23 for biology-focused models"
+        ]
+       ],
+       "x": "Compute lines are legal coverage thresholds, rather than precise measures of danger. California and New York use a 10^26 training-operations threshold, with New York’s law starting in 2027; the EU systemic-risk presumption uses 10^25.",
+       "basicLabel": "Common compute thresholds"
+      },
+      {
+       "id": "zu0l0#basic6",
+       "t": "recall",
+       "p": "As of October 2026, is there a US federal requirement to report large AI training runs to the government? What existed before?",
+       "answer": "No. Biden's Executive Order 14110 (2023) used the Defense Production Act to require such reports, and Commerce's Bureau of Industry and Security proposed quarterly reporting rules in September 2024, but the order was revoked in January 2025.",
+       "keys": [
+        "No current federal requirement",
+        "EO 14110 required reports (2023)",
+        "Revoked January 2025"
+       ],
+       "x": "State laws such as SB 53 use 10^26 operations only to define who is covered. A June 2026 executive order set up only a voluntary framework for pre-release government testing. By contrast, the EU AI Act (Article 52) requires providers to notify the European Commission within two weeks once a model crosses its 10^25 systemic-risk threshold.",
+       "choice": {
+        "p": "As of October 2026, which best describes US federal reporting of large AI training runs?",
+        "o": [
+         "None now: Biden's 2023 order required reports but was revoked in January 2025",
+         "Developers must notify Commerce within two weeks of crossing 10^26 operations",
+         "The FRONTIER Act now requires quarterly training-run reports to the Commerce Department",
+         "A June 2026 executive order requires reports for every training run above 10^25 operations"
+        ],
+        "a": 0,
+        "ow": [
+         "",
+         "Two-week notice after crossing a threshold is the EU AI Act's rule, at 10^25.",
+         "The FRONTIER Act is a bill in House committee, not law.",
+         "The June 2026 order created a voluntary pre-release testing framework, not training-run reporting."
+        ]
+       },
+       "basicLabel": "EO 14110 and its revocation"
+      },
+      {
+       "id": "zu0l0#basic7",
+       "t": "recall",
+       "p": "What is a frontier AI safety framework?",
+       "keys": [
+        "published risk evaluation process",
+        "safeguards and development or deployment decisions"
+       ],
+       "x": "Frameworks often connect capability or risk thresholds to safeguards. The strength of the commitments varies. Anthropic’s February 2026 RSP v3.0 changed its approach, so an unconditional pause pledge should not be assumed for every framework.",
+       "answer": "A developer’s published process for evaluating serious risks and describing safeguards and development or deployment decisions. Commitments differ by lab and framework version.",
+       "choice": {
+        "o": [
+         "A published process connecting risk evaluation with safeguards and development decisions.",
+         "A binding government license giving a developer permission for each new training run.",
+         "A public leaderboard ranking models solely by their scores on capability benchmarks.",
+         "An insurance contract guaranteeing compensation for all harms caused by a model."
+        ],
+        "a": 0,
+        "ow": [
+         "",
+         "A lab framework is distinct from government licensing.",
+         "Risk management includes decisions and safeguards, beyond benchmark rankings.",
+         "Frameworks describe a process and commitments, rather than guaranteeing compensation."
+        ]
+       },
+       "basicLabel": "Lab safety frameworks"
+      },
+      {
+       "id": "zu0l0#basic8",
+       "t": "mc",
+       "p": "What is a system card?",
+       "o": [
+        "The developer's own report on a model's capabilities, safety tests and safeguards",
+        "An independent audit of a model, written by a government safety institute",
+        "A legal filing every developer must make with the Commerce Department before release",
+        "A short user guide that explains a model's features and pricing to customers"
+       ],
+       "a": 0,
+       "ow": [
+        "",
+        "A system card is developer documentation; an independent audit is a different kind of assessment.",
+        "No federal filing like this exists.",
+        "System cards describe capabilities, risk evaluations and safeguards, rather than focusing on features and pricing."
+       ],
+       "keys": [
+        "Developer-published documentation",
+        "Capabilities, safety evaluations and safeguards"
+       ],
+       "x": "System cards are documentation published by developers about model capabilities, safety evaluations and safeguards. Their content and level of detail vary.",
+       "basicLabel": "System cards"
+      },
+      {
+       "id": "zu0l0#basic9",
+       "t": "mc",
+       "p": "AI risk discussions separate 'misuse' from 'loss of control'. What is the main difference?",
+       "o": [
+        "Misuse: a person uses AI to cause harm on purpose. Loss of control: AI systems act outside anyone's control",
+        "Misuse: mistakes and bugs in AI systems cause harm. Loss of control: criminals take over AI systems to attack",
+        "Misuse: harm from models whose weights are published. Loss of control: harm from models kept inside labs",
+        "Misuse: harm to individual users. Loss of control: harm only to the developer's own computer systems"
+       ],
+       "a": 0,
+       "ow": [
+        "",
+        "This mixes them up: misuse is deliberate harm by people, bugs count as malfunctions, and criminals taking over a system is still misuse.",
+        "Either risk can involve open or closed models; the difference is whether a person or the AI is driving the harm.",
+        "Misuse can be catastrophic at scale, and loss of control is defined by AI escaping anyone's control, whatever it harms."
+       ],
+       "keys": [
+        "Misuse: a person deliberately uses AI to cause harm",
+        "Loss of control: AI systems operate outside anyone's control"
+       ],
+       "x": "The International AI Safety Report, chaired by Yoshua Bengio, groups risks into malicious use (such as cyberattacks and biological or chemical weapons), malfunctions (including loss of control) and systemic risks. The split matters for policy: misuse tools aim at bad actors and dangerous capabilities, while loss-of-control tools aim at the AI systems themselves.",
+       "basicLabel": "Misuse versus loss of control"
+      },
+      {
+       "t": "recall",
+       "p": "As of October 2026, how does US government pre-deployment testing of frontier AI models work?",
+       "answer": "Testing is voluntary. NIST’s testing center, now CAISSI, has voluntary agreements with five labs. EO14409 of June 2026 directs agencies to design a voluntary framework for government access to covered models for up to 30 days before developers release them to other trusted partners.",
+       "keys": [
+        "Voluntary government testing through NIST’s center, now CAISSI",
+        "Agreements with five labs",
+        "June 2026 order seeks up to 30 days of government access before trusted-partner release"
+       ],
+       "x": "The US center was called CAISI before its October 2026 rename to CAISSI. The June 2026 order directs a voluntary framework, rather than itself creating mandatory pre-release approval.",
+       "id": "zu0l0#basic10",
+       "choice": {
+        "o": [
+         "Voluntary testing through NIST’s CAISSI; the June 2026 order seeks up to 30 days of access before trusted-partner release.",
+         "Mandatory: under a May 2026 executive order, developers must give CAISSI 90 days of access to each model before release",
+         "Mandatory: the AI Risk Evaluation Act requires Energy Department testing of each model before deployment",
+         "None exists: CAISSI was abolished in 2025 and all frontier model testing moved over to the EU AI Office"
+        ],
+        "a": 0,
+        "ow": [
+         "",
+         "A draft order with 90 days of access was shelved in May 2026; the June order is voluntary and allows up to 30 days.",
+         "The Hawley-Blumenthal bill would do this, but it has not passed.",
+         "CAISSI exists and runs voluntary testing; the EU AI Office has no role in US release decisions."
+        ]
+       },
+       "basicLabel": "Voluntary US government testing"
+      },
+      {
+       "id": "zu0l0#basic11",
+       "t": "match",
+       "p": "For covered large developers, match these California SB 53 duties to what each concerns.",
+       "pairs": [
+        [
+         "Safety framework",
+         "Publish and follow the developer’s approach to catastrophic risk"
+        ],
+        [
+         "Transparency report",
+         "Publish specified information about a covered frontier model"
+        ],
+        [
+         "Incident reporting",
+         "Report qualifying critical safety incidents"
+        ],
+        [
+         "Whistleblower protection",
+         "Protect covered employee disclosures against retaliation"
+        ]
+       ],
+       "x": "This is an outline. Coverage, exceptions, deadlines and enforcement details belong in AI Policy Landscape.",
+       "basicLabel": "SB 53: the main duties"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

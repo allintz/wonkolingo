@@ -9,7 +9,7 @@
      "items": [
       {
        "t": "order",
-       "p": "Put the usual steps in order.",
+       "p": "Put the usual steps for a bill in order, from introduction to the floor.",
        "ends": [
         "First",
         "Last"
@@ -395,7 +395,7 @@
       },
       {
        "t": "order",
-       "p": "Put the cloture process in order.",
+       "p": "Put the Senate’s cloture process for ending a filibuster in order.",
        "ends": [
         "First",
         "Last"
@@ -529,7 +529,7 @@
       },
       {
        "t": "order",
-       "p": "Put the reconciliation process in order.",
+       "p": "Put the budget reconciliation process in order.",
        "ends": [
         "First",
         "Last"
@@ -751,7 +751,7 @@
       },
       {
        "t": "order",
-       "p": "Put a veto fight in order.",
+       "p": "Put a fight over a presidential veto in order.",
        "ends": [
         "First",
         "Last"
@@ -827,5 +827,6 @@
     }
    ]
   }
- ]
+ ],
+ "description": "How a bill moves through Congress: committees, floor rules, the filibuster, money, vetoes and the Congressional Review Act."
 }

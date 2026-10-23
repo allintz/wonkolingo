@@ -2,7 +2,7 @@
 # Wrap the vault's artifact source in a full HTML document for static hosting.
 set -e
 cd "$(dirname "$0")"
-SRC="$HOME/Documents/Obsidian Vault/05_Reference/WonkoLingo/wonkolingo.html"  # moved out of 00_Inbox 2026-10-09
+SRC="${WONKOLINGO_SOURCE:-$HOME/Documents/Obsidian Vault/05_Reference/WonkoLingo/wonkolingo.html}"  # moved out of 00_Inbox 2026-10-09
 {
   echo '<!doctype html>'
   echo '<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
@@ -21,7 +21,7 @@ sed -i '' "s/__WL_BUILD__/$BUILD_ID/" docs/index.html
 BUILT_AT="$(date +%s)000"
 sed -i '' "s/__WL_BUILT_AT__/$BUILT_AT/" docs/index.html
 # Course content as its own file, which the iPhone app checks at launch so course edits reach it without a new build.
-node scripts/build_content.mjs docs/index.html docs/content.json "$BUILT_AT"
+node scripts/build_content.mjs docs/index.html docs/content-v2.json "$BUILT_AT"
 
 # The course validator lives in the page source; copy it so the server checks uploads with the same rules.
 {
