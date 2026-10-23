@@ -784,7 +784,7 @@ tests.trial = async () => {
   const c = await ctx(), p = await page(c);
   await p.goto(BASE + '/');
   ok(await visible(p, '[data-try="policy"]') && await visible(p, '#gtHave'), 'welcome shows courses to try and a sign-in link');
-  await p.click('[data-try="lingo"]');
+  await clickGo(p, '.trylist [data-try]:first-child');
   ok(!await visible(p, '#gate') && await ev(p, `!!run && run.mode === 'session' && !ACCT`), 'picking a course starts a session with no account');
   ok(await ev(p, `run.total <= 5`), 'the trial session is 5 cards or fewer', await ev(p, 'run.total'));
   let n = 0; while (n++ < 20 && await answerOne(p)) {}
@@ -805,7 +805,7 @@ tests.trial = async () => {
   ok(r2 === 403, 'admin summary refuses no sign-in', r2);
   // Quitting a trial session early also leads to the save screen (or the welcome if nothing was answered).
   const c2 = await ctx(), q = await page(c2);
-  await q.goto(BASE + '/'); await q.click('[data-try="proc"]'); await ev(q, 'quitRun(true)');
+  await q.goto(BASE + '/'); await clickGo(q, '.trylist [data-try]:first-child'); await ev(q, 'quitRun(true)');
   ok(await visible(q, '#gate') && /Welcome/.test(await q.locator('#gateIn').innerText()), 'quitting before answering returns to the welcome');
   ok(p.errors.length === 0 && q.errors.length === 0, 'trial: no page errors', p.errors.concat(q.errors));
   await c.close(); await c2.close();
@@ -829,7 +829,7 @@ tests.google = async () => {
     renderButton(el) { const b = document.createElement('button'); b.className = 'fakeG'; b.textContent = 'Continue with Google'; b.onclick = () => window.__gcb({ credential: window.__gtok }); el.appendChild(b); } } } };` }));
   const sub = 'e2e' + rnd() + rnd();
   const c = await ctx(); await stub(c); const p = await page(c);
-  await p.goto(BASE + '/'); await p.click('[data-try="lingo"]');
+  await p.goto(BASE + '/'); await clickGo(p, '.trylist [data-try]:first-child');
   let n = 0; while (n++ < 20 && await answerOne(p)) {}
   const cards = await ev(p, 'Object.keys(state.srs).length');
   await p.click('#rHome');
@@ -891,7 +891,7 @@ tests.regressions = async () => {
     bumpRunDay(); bumpRunDay(); bumpRunDay(); run = null; bumpStreak = real; return calls; })()`);
   ok(d === 1, 'a run bumps the practice day once', d);
   // Order cards in a session show their label once.
-  { const c2 = await ctx(), q = await page(c2); await q.goto(BASE + '/'); await q.click('[data-try="proc"]');
+  { const c2 = await ctx(), q = await page(c2); await q.goto(BASE + '/'); await clickGo(q, '.trylist [data-try]:first-child');
     for (let i = 0; i < 6 && await ev(q, `run && run.cur.t !== 'order'`); i++) await answerOne(q);
     if (await ev(q, `run && run.cur.t === 'order'`)) ok(await ev(q, `document.querySelectorAll('#stage .cardtag').length`) === 1, 'an order card shows its label once');
     await c2.close(); }
@@ -904,7 +904,7 @@ tests.a11y = async () => {
   const c = await ctx(), p = await page(c);
   await p.goto(BASE + '/'); await p.waitForTimeout(300);
   ok(await ev(p, `document.querySelector('.app').inert && $('#gateIn').contains(document.activeElement)`), 'sign-up screen: page behind is inert and focus is inside');
-  await p.click('[data-try="lingo"]'); await p.waitForTimeout(300);
+  await clickGo(p, '.trylist [data-try]:first-child'); await p.waitForTimeout(300);
   ok(await ev(p, `document.querySelector('.app').inert && $('#lesson').contains(document.activeElement)`), 'lesson: focus moves into the lesson', await ev(p, 'document.activeElement.outerHTML.slice(0, 80)'));
   ok(await ev(p, `!!document.activeElement.closest('.prompt') || document.activeElement.matches('.prompt')`), 'lesson: the question has focus, so a screen reader reads it');
   await p.keyboard.press('Tab'); ok(await ev(p, `$('#lesson').contains(document.activeElement)`), 'Tab stays inside the lesson');

@@ -1,0 +1,1967 @@
+{
+  "format": "wonkolingo-course/1",
+  "id": "ai-compute-and-trends",
+  "title": "AI Compute and Trends",
+  "description": "Understand the scale and pace of AI: compute, hardware, infrastructure, falling inference prices, capability diffusion, and the limits of trend forecasts.",
+  "level": "intermediate",
+  "categories": [
+    "tech"
+  ],
+  "caveat": "Checked October 23, 2026. Adapted from Epoch AI research (CC BY); authors are credited in linked sources. Historical trends and dated forecasts describe specific datasets. Approximate numerical answers are sufficient. Drafted and independently reviewed by AI; no person has reviewed it.",
+  "units": [
+    {
+      "title": "Reading AI growth numbers",
+      "desc": "Separate amounts, rates, growth factors and forecasts before interpreting headlines.",
+      "lessons": [
+        {
+          "title": "Compute amounts and rates",
+          "items": [
+            {
+              "id": "tr-f-flop-unit",
+              "t": "mc",
+              "p": "What does a training-compute estimate in FLOP measure?",
+              "x": "A FLOP is one floating-point operation. A training-compute estimate sums operations over the run.",
+              "keys": [
+                "Total floating-point operations"
+              ],
+              "o": [
+                "The number of floating-point operations performed",
+                "The number of floating-point operations per second",
+                "The amount of electricity consumed during training",
+                "The number of parameters stored in the model"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Operations per second are measured in FLOP/s.",
+                "Electricity use is measured in units such as kWh.",
+                "Parameter count describes model size; compute counts operations."
+              ],
+              "dup": [
+                "zu0l0#basic4"
+              ]
+            },
+            {
+              "id": "tr-f-flops-unit",
+              "t": "mc",
+              "p": "What does a chip specification in FLOP/s measure?",
+              "x": "FLOP/s measures computing speed. To estimate total operations, multiply an achieved rate by the time it runs.",
+              "keys": [
+                "Operations per second"
+              ],
+              "o": [
+                "An energy requirement per floating-point operation",
+                "A rate of floating-point operations per second",
+                "A total count of operations over a training run",
+                "A dollar cost for one hour of computation"
+              ],
+              "a": 1,
+              "ow": [
+                "Energy per operation is an efficiency measure.",
+                "",
+                "A total operation count is measured in FLOP.",
+                "A rental price is measured in dollars per chip-hour."
+              ]
+            },
+            {
+              "id": "tr-f-rate-time",
+              "t": "mc",
+              "p": "Hypothetical: a system sustains 10^15 FLOP/s for 1,000 seconds. How much computation does it perform?",
+              "x": "Multiply the sustained rate by elapsed seconds: 10^15 × 10^3 = 10^18 FLOP. The time unit cancels.",
+              "keys": [
+                "10^18 FLOP"
+              ],
+              "o": [
+                "10^15 FLOP",
+                "10^18 FLOP/s",
+                "10^18 FLOP",
+                "10^12 FLOP"
+              ],
+              "a": 2,
+              "ow": [
+                "This ignores the 1,000 seconds of work.",
+                "Multiplying rate by time produces FLOP, with no per-second term.",
+                "",
+                "Dividing by time gives the wrong quantity here."
+              ]
+            },
+            {
+              "id": "tr-f-utilization",
+              "t": "mc",
+              "p": "Hypothetical: two identical clusters run for the same time, one at 25% of peak compute and one at 50%. How does their delivered training compute compare?",
+              "x": "Holding hardware and duration fixed, delivered compute scales with utilization. Peak specifications alone do not establish how many operations a training run used.",
+              "keys": [
+                "Twice as much at 50% utilization"
+              ],
+              "o": [
+                "The clusters deliver the same amount of compute",
+                "The 50% cluster delivers 25% more compute",
+                "The 50% cluster delivers four times as much compute",
+                "The 50% cluster delivers twice as much compute"
+              ],
+              "a": 3,
+              "ow": [
+                "Equal peak hardware can deliver different actual throughput.",
+                "Utilization rises by 25 percentage points, but the ratio is 50/25 = 2.",
+                "The ratio is 50/25 = 2.",
+                ""
+              ]
+            },
+            {
+              "id": "tr-f-peak-gap",
+              "t": "recall",
+              "p": "Why can a training run use much less compute than peak chip speed multiplied by elapsed time?",
+              "x": "Real workloads face memory bottlenecks, network latency and other overhead. Epoch accounts for the gap by including utilization in hardware-based estimates.",
+              "keys": [
+                "Memory or communication overhead lowers utilization"
+              ],
+              "answer": "Memory and communication delays can leave compute units waiting",
+              "choice": {
+                "o": [
+                  "Memory and communication delays can leave compute units waiting",
+                  "Peak speed already averages over the workload's idle periods",
+                  "Wall-clock training time counts arithmetic execution time alone",
+                  "The chip count already corrects for communication overhead"
+                ],
+                "a": 0,
+                "ow": [
+                  "",
+                  "Peak specifications describe theoretical throughput under specified conditions.",
+                  "Wall-clock time can include waiting for memory or communication.",
+                  "Utilization needs separate treatment even when chip count is known."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "Growth factors and projections",
+          "items": [
+            {
+              "id": "tr-f-factor-percent",
+              "t": "mc",
+              "p": "A quantity grows to five times its original value in one year. What is its percentage increase?",
+              "x": "A fivefold final value contains the original amount plus four more copies. Percentage increase is (5 - 1) × 100 = 400%.",
+              "keys": [
+                "400% increase"
+              ],
+              "o": [
+                "500%",
+                "400%",
+                "5%",
+                "50%"
+              ],
+              "a": 1,
+              "ow": [
+                "A 500% increase produces a sixfold final value.",
+                "",
+                "A 5% increase produces a factor of 1.05.",
+                "A 50% increase produces a factor of 1.5."
+              ]
+            },
+            {
+              "id": "tr-f-compound",
+              "t": "mc",
+              "p": "Hypothetical: training compute grows fivefold each year. What is the multiplier after two years?",
+              "x": "Growth compounds: 5 × 5 = 25. A constant annual factor adds increasing absolute amounts as the starting base grows.",
+              "keys": [
+                "25-fold"
+              ],
+              "o": [
+                "5-fold",
+                "125-fold",
+                "25-fold",
+                "10-fold"
+              ],
+              "a": 2,
+              "ow": [
+                "This counts only one year of growth.",
+                "That is three years of fivefold growth.",
+                "",
+                "Adding the annual factors does not compound them."
+              ]
+            },
+            {
+              "id": "tr-f-oom",
+              "t": "mc",
+              "p": "What does an increase of one order of magnitude mean?",
+              "x": "One order of magnitude, often abbreviated OOM, is a factor of ten. Two orders of magnitude are a factor of 100.",
+              "keys": [
+                "Factor of ten"
+              ],
+              "o": [
+                "A doubling of the quantity",
+                "A one-percentage-point increase in the quantity",
+                "An increase of one in the quantity",
+                "A tenfold increase in the quantity"
+              ],
+              "a": 3,
+              "ow": [
+                "A doubling is about 0.30 orders of magnitude.",
+                "Orders of magnitude measure multiplicative scale.",
+                "Adding one differs from multiplying by ten.",
+                ""
+              ]
+            },
+            {
+              "id": "tr-f-double-time",
+              "t": "mc",
+              "p": "Hypothetical: computing capacity doubles every six months. What annual growth factor does that imply?",
+              "x": "There are two six-month periods in a year, so the annual factor is 2 × 2 = 4. Doubling times describe compounding growth.",
+              "keys": [
+                "4x per year"
+              ],
+              "o": [
+                "Fourfold per year",
+                "Twofold per year",
+                "Sixfold per year",
+                "Twelvefold per year"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "This counts only one of the two doublings.",
+                "The number of months is not the growth factor.",
+                "Monthly intervals do not imply one doubling each month."
+              ]
+            },
+            {
+              "id": "tr-f-extrapolate",
+              "t": "recall",
+              "p": "Why should an observed fivefold annual growth trend be used cautiously in a five-year forecast?",
+              "x": "A fitted historical trend summarizes a period of evidence. Extending it assumes that constraints and incentives remain sufficiently similar.",
+              "keys": [
+                "Historical growth can change as bottlenecks or incentives change"
+              ],
+              "answer": "Future bottlenecks or changed incentives can alter the growth rate",
+              "choice": {
+                "o": [
+                  "Compounding arithmetic adjusts automatically for future resource limits",
+                  "Future bottlenecks or changed incentives can alter the growth rate",
+                  "A larger starting base makes the next five years easier to predict",
+                  "A confidence interval for the past rate includes every future disruption"
+                ],
+                "a": 1,
+                "ow": [
+                  "Compounding projects a rate; it does not model resource constraints.",
+                  "",
+                  "A larger base does not establish that the rate will continue.",
+                  "Uncertainty in a historical fit does not fully capture future structural changes."
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Scaling frontier training",
+      "desc": "Track the compute and money behind leading training runs, and distinguish them from development budgets.",
+      "lessons": [
+        {
+          "title": "What expands a training run",
+          "items": [
+            {
+              "id": "tr-f-frontier-rate",
+              "t": "mc",
+              "p": "In Epoch's dashboard checked October 2026, how fast has frontier language-model training compute grown since 2020?",
+              "x": "Epoch estimates roughly 5x annually, with a 90% confidence interval of about 4x to 6x. This concerns frontier language-model training runs.",
+              "keys": [
+                "About 5x annually since 2020 for frontier language models"
+              ],
+              "o": [
+                "About fivefold per decade",
+                "About 5% per year",
+                "About fivefold per year",
+                "About 50% per year"
+              ],
+              "a": 2,
+              "ow": [
+                "The dashboard estimates an annual fivefold factor.",
+                "5% annual growth is 1.05x.",
+                "",
+                "50% annual growth is 1.5x, considerably slower."
+              ],
+              "dup": [
+                "hu1l0#nhrju8d"
+              ]
+            },
+            {
+              "id": "tr-f-scope-frontier",
+              "t": "mc",
+              "p": "What does frontier training-compute growth tell you most directly?",
+              "x": "The frontier trend concerns high-compute models. It does not directly measure the average model, fleet-wide electricity or employment.",
+              "keys": [
+                "Compute used in leading training runs"
+              ],
+              "o": [
+                "How every deployed model's capability changes each year",
+                "How all AI chips' combined electricity use changes",
+                "How total industry training and inference compute changes",
+                "How compute used by leading individual training runs changes"
+              ],
+              "a": 3,
+              "ow": [
+                "Compute and capability have different units and relationships.",
+                "Fleet-wide energy needs information about the broader hardware stock and its use.",
+                "The frontier trend concerns individual high-compute training runs.",
+                ""
+              ]
+            },
+            {
+              "id": "tr-f-more-chips",
+              "t": "mc",
+              "p": "Hypothetical: a training run uses twice as many identical chips for the same duration at the same utilization. What happens to total compute?",
+              "x": "In the simplified accounting, compute equals chip count × peak rate × utilization × time. More chips raise compute proportionally when all other factors remain fixed.",
+              "keys": [
+                "Total compute doubles"
+              ],
+              "o": [
+                "It doubles",
+                "It stays constant",
+                "It quadruples",
+                "It halves"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "More chips perform more total work under these assumptions.",
+                "Only one factor doubles in this scenario.",
+                "The change increases available processing rather than reducing it."
+              ]
+            },
+            {
+              "id": "tr-f-hardware-duration",
+              "t": "mc",
+              "p": "Hypothetical: chip count triples and training duration doubles, with per-chip speed and utilization unchanged. How much does training compute grow?",
+              "x": "Independent multiplicative factors compound: 3 × 2 = 6. Actual cluster expansions can also change utilization, which this hypothetical holds fixed.",
+              "keys": [
+                "Sixfold"
+              ],
+              "o": [
+                "Ninefold",
+                "Sixfold",
+                "Fivefold",
+                "Threefold"
+              ],
+              "a": 1,
+              "ow": [
+                "The duration doubles rather than triples.",
+                "",
+                "Adding 3 and 2 misses their multiplicative effect.",
+                "This ignores the longer duration."
+              ]
+            },
+            {
+              "id": "tr-f-growth-levers",
+              "t": "recall",
+              "p": "Name two ways to increase a training run's total compute while holding per-chip peak speed and utilization fixed.",
+              "x": "More chips working in parallel and a longer run both add operations. Faster chips and higher utilization are additional levers when those assumptions are relaxed.",
+              "keys": [
+                "More chips",
+                "Longer training duration"
+              ],
+              "answer": "Use more chips and train for longer",
+              "choice": {
+                "o": [
+                  "Train on more tokens while reducing chip-hours proportionally",
+                  "Increase the number of separate runs while keeping this run fixed",
+                  "Use more chips and train for longer",
+                  "Use more parameters while keeping total hardware-hours fixed"
+                ],
+                "a": 2,
+                "ow": [
+                  "Reducing chip-hours reduces compute under the stated assumptions.",
+                  "Other runs do not add operations to the individual run in this question.",
+                  "",
+                  "Fixed chip-hours and fixed per-chip speed/utilization imply fixed compute."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "Compute, costs and budgets",
+          "items": [
+            {
+              "id": "tr-f-cost-growth",
+              "t": "mc",
+              "p": "In Epoch's dashboard checked October 2026, roughly how fast has the cost to train frontier language models grown since 2020?",
+              "x": "The dashboard estimates 3.5x annually, with a 90% confidence interval of 2.8x to 4.4x. This is a historical estimate, not a commitment by developers.",
+              "keys": [
+                "About 3.5x annually since 2020"
+              ],
+              "o": [
+                "About 3.5% per year",
+                "About 35-fold per year",
+                "About 3.5-fold per decade",
+                "About 3.5-fold per year"
+              ],
+              "a": 3,
+              "ow": [
+                "3.5% is a factor of 1.035, far smaller.",
+                "35x is ten times the estimated annual factor.",
+                "The estimate applies per year.",
+                ""
+              ]
+            },
+            {
+              "id": "tr-f-compute-cost",
+              "t": "mc",
+              "p": "How can training compute grow faster than the dollar cost of training?",
+              "x": "Improving price-performance allows a budget to buy more computation. Compute growth and spending growth can therefore differ.",
+              "keys": [
+                "Improving compute per dollar"
+              ],
+              "o": [
+                "More operations can be purchased per dollar over time",
+                "Compute growth is measured after subtracting hardware improvements",
+                "The dollar estimate rises only when the chip count rises",
+                "Longer runs increase FLOP without increasing hardware time"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Training compute counts operations before adjusting for hardware economics.",
+                "Dollar cost can change with duration, utilization and prices too.",
+                "Longer runs consume more chip-time, which carries a cost."
+              ]
+            },
+            {
+              "id": "tr-f-final-vs-rd",
+              "t": "mc",
+              "p": "A model's final-run compute bill includes chip rental and electricity. Which additional expense could make its total development budget larger?",
+              "x": "Final-run compute cost covers a limited part of model development. Experiments, staffing and other development costs require separate accounting.",
+              "keys": [
+                "Experiments or salaries outside final-run compute"
+              ],
+              "o": [
+                "The final run's operations multiplied by the same rental price again",
+                "Earlier experiments and researcher salaries",
+                "The final run's electricity already included in that compute bill",
+                "The final run's chip rental already included in that compute bill"
+              ],
+              "a": 1,
+              "ow": [
+                "Repricing the same operations twice would double-count them.",
+                "",
+                "An expense already included in the bill should not be added twice.",
+                "The stated rental bill already covers that final-run chip-time."
+              ]
+            },
+            {
+              "id": "tr-f-capex-run",
+              "t": "mc",
+              "p": "Why is buying an entire training cluster usually more expensive than the hardware cost allocated to a single training run?",
+              "x": "An estimate of a run's hardware cost can allocate part of the equipment's lifetime expense to the time used. The upfront purchase and the allocated run cost answer different questions.",
+              "keys": [
+                "A run uses only part of the hardware useful life"
+              ],
+              "o": [
+                "The purchase price should be charged in full to each run",
+                "The resale value should be added to the original purchase cost",
+                "The cluster can be used for multiple runs over its useful life",
+                "A run is allocated only electricity, with no share of equipment cost"
+              ],
+              "a": 2,
+              "ow": [
+                "Charging the full purchase to every run repeatedly counts the same equipment.",
+                "Resale value can reduce net ownership cost rather than increase it.",
+                "",
+                "Run-cost accounting can allocate part of the equipment cost as well as energy."
+              ]
+            },
+            {
+              "id": "tr-f-cost-labels",
+              "t": "recall",
+              "p": "Why is a headline saying \"this model cost 10 million dollars\" hard to interpret without more detail?",
+              "x": "Check what is included, the time period and whether the estimate uses rental prices or allocated ownership costs. Different scopes can produce valid but very different figures.",
+              "keys": [
+                "Need the accounting scope of the cost estimate"
+              ],
+              "answer": "It may refer to a final run, total development, or infrastructure spending",
+              "choice": {
+                "o": [
+                  "It should be treated as the model's full development cost",
+                  "It should be treated as the cluster's upfront purchase price",
+                  "It should be treated as the model's annual inference bill",
+                  "It may refer to a final run, total development, or infrastructure spending"
+                ],
+                "a": 3,
+                "ow": [
+                  "The headline alone does not establish that research and staffing are included.",
+                  "A run-cost estimate can allocate only part of a cluster's lifetime cost.",
+                  "Inference expenses need their own period and workload scope.",
+                  ""
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Hardware economics and bottlenecks",
+      "desc": "Understand what better chip specifications buy, and where the real workload can fall short.",
+      "lessons": [
+        {
+          "title": "Performance per dollar",
+          "items": [
+            {
+              "id": "tr-f-chip-price-rate",
+              "t": "mc",
+              "p": "For chips purchased from Q1 2023 to Q4 2025, what annual gain in performance per dollar did Epoch estimate in August 2026?",
+              "x": "Venkat Somala's Epoch analysis estimates 49% per year in constant 2025 dollars, with a 90% interval of 36% to 66%. It measures peak performance of chips sold.",
+              "keys": [
+                "About 49% annually in constant 2025 dollars"
+              ],
+              "o": [
+                "About 49% per year",
+                "About 5% per year",
+                "About 490% per year",
+                "About 49-fold per year"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "This is much smaller than the estimated gain.",
+                "490% growth is a factor of 5.9.",
+                "A 49% gain is a factor of 1.49."
+              ]
+            },
+            {
+              "id": "tr-f-chip-average",
+              "t": "mc",
+              "p": "In Epoch's 2026 chip price-performance analysis, what does the quarterly aggregate represent?",
+              "x": "The figure reflects the mix of chips bought each quarter. Chips accounting for more spending have more influence on the aggregate.",
+              "keys": [
+                "Combined peak performance sold divided by spending"
+              ],
+              "o": [
+                "The average model capability achieved per dollar of training",
+                "Total peak performance sold divided by total chip spending",
+                "The best available chip's performance per rental dollar",
+                "An equal-weighted average of each chip model's benchmark score"
+              ],
+              "a": 1,
+              "ow": [
+                "Chip throughput differs from model capability.",
+                "",
+                "The analysis uses purchase prices and the sales mix.",
+                "The aggregate is spending-weighted rather than one vote per chip model."
+              ]
+            },
+            {
+              "id": "tr-f-real-dollars",
+              "t": "mc",
+              "p": "Why express a hardware price-performance trend in constant 2025 dollars?",
+              "x": "Constant dollars adjust money values to a common purchasing-power baseline. This adjustment does not eliminate differences in transaction prices or workload performance.",
+              "keys": [
+                "Adjust for inflation"
+              ],
+              "o": [
+                "To convert peak specifications into measured workload throughput",
+                "To include all future electricity costs in the purchase price",
+                "To remove inflation's effect on the purchasing-power comparison",
+                "To ensure every customer paid the same chip price"
+              ],
+              "a": 2,
+              "ow": [
+                "Inflation adjustment changes the monetary denominator.",
+                "Future operating costs require separate accounting.",
+                "",
+                "Customers can still pay different prices."
+              ]
+            },
+            {
+              "id": "tr-f-expensive-efficient",
+              "t": "mc",
+              "p": "How can a newer chip cost more while offering better performance per dollar?",
+              "x": "Performance per dollar is a ratio. A higher-priced chip improves that ratio if performance increases even more in proportional terms.",
+              "keys": [
+                "Performance grows proportionally faster than price"
+              ],
+              "o": [
+                "Its price rises by a larger proportion than its performance",
+                "Its performance and price rise by the same proportion",
+                "Its price rises while performance stays the same",
+                "Its performance rises by a larger proportion than its price"
+              ],
+              "a": 3,
+              "ow": [
+                "That would worsen performance per dollar.",
+                "Equal proportional changes leave the ratio unchanged.",
+                "A higher price for equal performance worsens the ratio.",
+                ""
+              ]
+            },
+            {
+              "id": "tr-f-price-vs-workload",
+              "t": "recall",
+              "p": "A newer GPU has better peak arithmetic per dollar but unchanged memory bandwidth. Why might it provide little speedup on a memory-bound workload?",
+              "x": "A memory-bound workload waits for data rather than arithmetic units. Better peak arithmetic per dollar helps less when memory bandwidth remains the limiting resource.",
+              "keys": [
+                "Unchanged memory bandwidth leaves the workload bottleneck in place"
+              ],
+              "answer": "Data delivery can remain the bottleneck, leaving the extra arithmetic capacity underused",
+              "choice": {
+                "o": [
+                  "Data delivery can remain the bottleneck, leaving the extra arithmetic capacity underused",
+                  "The unchanged memory bandwidth means its arithmetic units cannot perform any operations",
+                  "A better arithmetic-per-dollar ratio guarantees an equal improvement in memory transfer speed",
+                  "A higher peak arithmetic rate measures the amount of data that fits in GPU memory"
+                ],
+                "a": 0,
+                "ow": [
+                  "",
+                  "Unchanged bandwidth can limit speedup without preventing useful work.",
+                  "Arithmetic throughput and memory transfer speed are separate specifications.",
+                  "Memory capacity is distinct from arithmetic rate."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "Memory, power and delivered work",
+          "items": [
+            {
+              "id": "tr-f-bandwidth-meaning",
+              "t": "mc",
+              "p": "What does GPU memory bandwidth describe?",
+              "x": "Bandwidth is a data-transfer rate. Memory capacity is the amount that fits, while compute throughput is the rate of arithmetic work.",
+              "keys": [
+                "Data-transfer rate between memory and computation"
+              ],
+              "o": [
+                "How many arithmetic operations the GPU can perform each second",
+                "How quickly data can move between GPU memory and processing units",
+                "How much data can be stored in GPU memory at once",
+                "How quickly chips exchange data over their network links"
+              ],
+              "a": 1,
+              "ow": [
+                "Arithmetic operations per second measure compute throughput.",
+                "",
+                "The amount that fits is memory capacity.",
+                "Inter-chip network bandwidth is distinct from GPU memory bandwidth."
+              ]
+            },
+            {
+              "id": "tr-f-bandwidth-bound",
+              "t": "mc",
+              "p": "A workload spends most of its time waiting for data from GPU memory. Which upgrade most directly targets that bottleneck?",
+              "x": "A memory-bound workload needs data delivered faster. More arithmetic capacity helps less when arithmetic units already wait for memory.",
+              "keys": [
+                "Increase memory bandwidth"
+              ],
+              "o": [
+                "More memory capacity with unchanged transfer speed",
+                "Higher inter-chip bandwidth when no chip exchange is required",
+                "Higher memory bandwidth",
+                "More arithmetic units with unchanged memory bandwidth"
+              ],
+              "a": 2,
+              "ow": [
+                "Extra capacity holds more data but does not necessarily move it faster.",
+                "That upgrade targets communication between chips rather than the stated bottleneck.",
+                "",
+                "Additional arithmetic units do not directly increase memory data supply."
+              ]
+            },
+            {
+              "id": "tr-f-precision-compare",
+              "t": "mc",
+              "p": "Why check number format when comparing two chips' published FLOP/s?",
+              "x": "A chip may perform more operations per second at lower precision. Comparisons should state the format and whether the workload can use it.",
+              "keys": [
+                "Throughput depends on number format"
+              ],
+              "o": [
+                "Every format listed for a chip has the same peak throughput",
+                "The lowest-precision specification is usable by every workload",
+                "One FLOP/s figure directly measures the model's output accuracy",
+                "Peak operation rates can differ between formats such as FP8 and FP16"
+              ],
+              "a": 3,
+              "ow": [
+                "Hardware can execute formats at different rates.",
+                "A workload may require higher precision or lack support for that format.",
+                "Chip throughput and model output quality are different quantities.",
+                ""
+              ]
+            },
+            {
+              "id": "tr-f-power-efficiency",
+              "t": "mc",
+              "p": "What does a higher FLOP/s-per-watt figure mean under the same specification conditions?",
+              "x": "FLOP/s divided by watts measures operations per unit of energy. Actual system efficiency still depends on utilization and overhead.",
+              "keys": [
+                "More operations per unit of energy"
+              ],
+              "o": [
+                "More arithmetic throughput for each watt of power",
+                "Less upfront spending for each operation per second",
+                "More arithmetic throughput at the same total electricity bill",
+                "More arithmetic throughput per gigabyte of GPU memory"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Purchase-price efficiency uses a dollar denominator.",
+                "The electricity bill also depends on operating time and electricity prices.",
+                "That is a throughput-to-memory-capacity ratio."
+              ]
+            },
+            {
+              "id": "tr-f-network-scale",
+              "t": "recall",
+              "p": "Why might doubling the chips in a training cluster deliver less than double the training throughput?",
+              "x": "Chips in distributed training must coordinate and exchange data. A larger cluster can spend a greater share of time on communication.",
+              "keys": [
+                "Communication overhead can lower utilization at scale"
+              ],
+              "answer": "Communication overhead can rise and lower utilization",
+              "choice": {
+                "o": [
+                  "Doubling the chips requires twice the duration for the same training run",
+                  "Communication overhead can rise and lower utilization",
+                  "Chip count already includes the slowdown from network communication",
+                  "Per-chip peak speed alone determines total cluster throughput"
+                ],
+                "a": 1,
+                "ow": [
+                  "More chips do not inherently require longer duration for the same work.",
+                  "",
+                  "Chip count measures installed hardware; utilization captures other losses.",
+                  "Throughput also depends on chip count and achieved utilization."
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Global chips and physical infrastructure",
+      "desc": "Read global capacity estimates and the power, cost and construction constraints behind them.",
+      "lessons": [
+        {
+          "title": "What the global stock measures",
+          "items": [
+            {
+              "id": "tr-f-stock-double",
+              "t": "mc",
+              "p": "According to Epoch's global AI chip estimate checked October 2026, roughly how often has computing capacity doubled since 2022?",
+              "x": "Josh You and colleagues at Epoch estimate roughly a seven-month doubling time. The underlying chip-sales data are a proxy for available capacity, with deployment lags and retirement caveats.",
+              "keys": [
+                "About every seven months since 2022"
+              ],
+              "o": [
+                "About every seven weeks",
+                "About every seventy months",
+                "About every seven months",
+                "About every seven years"
+              ],
+              "a": 2,
+              "ow": [
+                "Seven weeks would imply much faster growth.",
+                "Seventy months would imply much slower growth.",
+                "",
+                "The estimated doubling time is measured in months."
+              ]
+            },
+            {
+              "id": "tr-f-h100-equivalent",
+              "t": "mc",
+              "p": "What does a fleet size reported in H100-equivalents primarily convey?",
+              "x": "H100e is a hardware-capacity comparison using stated chip specifications. A fleet of other chip types can also be expressed in H100-equivalents.",
+              "keys": [
+                "Capacity relative to an H100 reference"
+              ],
+              "o": [
+                "A physical count of NVIDIA H100 chips owned",
+                "A count of H100-sized servers regardless of chip type",
+                "Delivered throughput measured on the same real training workload",
+                "Computing capacity normalized to an NVIDIA H100 reference"
+              ],
+              "a": 3,
+              "ow": [
+                "Equivalent capacity can come from several different chip types.",
+                "The reference is processing performance rather than a server count.",
+                "Specification-based equivalents do not directly measure delivered workload throughput.",
+                ""
+              ]
+            },
+            {
+              "id": "tr-f-sales-deployment",
+              "t": "mc",
+              "p": "Why can cumulative AI chip sales overstate computing capacity actually operating today?",
+              "x": "Sales data help estimate the hardware stock, but installation takes time and older hardware can leave service. Operational capacity needs those adjustments.",
+              "keys": [
+                "Deployment lags or retirement"
+              ],
+              "o": [
+                "Some sold chips await deployment or have been retired",
+                "Chip purchase prices must fall before computing capacity can increase",
+                "A chip sold to a cloud provider becomes capacity only when it is rented",
+                "A faster chip is counted as less capacity because fewer chips are needed"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "More or faster chips can add capacity even if their prices rise.",
+                "A cloud provider can operate chips internally as well as rent them out.",
+                "Performance normalization gives a faster chip more equivalent capacity."
+              ]
+            },
+            {
+              "id": "tr-f-stock-run",
+              "t": "mc",
+              "p": "Why can global AI chip capacity grow while one developer's largest training run stays the same size?",
+              "x": "The global stock is spread across owners and workloads. A single training run uses a particular allocation for a particular duration.",
+              "keys": [
+                "Capacity can be allocated elsewhere or to other workloads"
+              ],
+              "o": [
+                "A larger global stock implies longer duration for every training run",
+                "Added capacity may go to other developers or to inference",
+                "A training run scales automatically with the global chip-sales total",
+                "Global capacity growth already corrects each lab's run for utilization"
+              ],
+              "a": 1,
+              "ow": [
+                "Duration and chip allocation are separate choices.",
+                "",
+                "A developer chooses and obtains a particular allocation.",
+                "A stock estimate does not determine a specific run's achieved utilization."
+              ]
+            },
+            {
+              "id": "tr-f-utilized-capacity",
+              "t": "recall",
+              "p": "Why is installed computing capacity insufficient to estimate how much computation a fleet performs in a year?",
+              "x": "Capacity is a potential rate of work. Annual computation also depends on uptime, workload allocation and the fraction of peak throughput achieved.",
+              "keys": [
+                "Operating time",
+                "Achieved utilization"
+              ],
+              "answer": "You also need its operating time and achieved utilization",
+              "choice": {
+                "o": [
+                  "You need the chip count but can ignore per-chip performance",
+                  "You need the peak specification but can ignore workload overhead",
+                  "You also need its operating time and achieved utilization",
+                  "You need the purchase price but can ignore operating time"
+                ],
+                "a": 2,
+                "ow": [
+                  "Different chip types deliver different performance.",
+                  "Peak specifications need adjustment for achieved utilization.",
+                  "",
+                  "Equipment price does not tell you how long it operates."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "title": "Power, construction and capital",
+          "items": [
+            {
+              "id": "tr-f-gw-cost",
+              "t": "mc",
+              "p": "In Epoch's May 2026 model, what upfront cost accompanies a typical US AI data center with 1 GW of IT power?",
+              "x": "Amelia Michael and Ben Cottier's Epoch model gives about 38 billion dollars of capital expenditure, including GB200 NVL72 servers, networking and the facility. It models a typical US hyperscaler site; actual costs vary by hardware, design and location.",
+              "keys": [
+                "About 38 billion dollars upfront for 1 GW IT power"
+              ],
+              "o": [
+                "Roughly 3.8 billion dollars",
+                "Roughly 15 billion dollars",
+                "Roughly 100 billion dollars",
+                "Roughly 38 billion dollars"
+              ],
+              "a": 3,
+              "ow": [
+                "This is about one-tenth of the modeled upfront cost.",
+                "This is below the modeled total, which includes servers, networking and the facility.",
+                "This is substantially above the modeled typical site's upfront cost.",
+                ""
+              ]
+            },
+            {
+              "id": "tr-f-build-time",
+              "t": "mc",
+              "p": "In Epoch's dashboard checked October 2026, about how long is the median construction-to-gigawatt timeline for its sample of seven large projects?",
+              "x": "Epoch's dashboard estimates just over two years, based on seven planned or in-progress projects expected to exceed 1 GW of total facility power. Plans can change, so it is not a guarantee for every site.",
+              "keys": [
+                "Approximately two years"
+              ],
+              "o": [
+                "About two years",
+                "About six months",
+                "About five years",
+                "About ten years"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Six months is substantially shorter than the sample estimate.",
+                "Five years is substantially longer than the sample estimate.",
+                "Ten years is substantially longer than the sample estimate."
+              ]
+            },
+            {
+              "id": "tr-f-power-energy",
+              "t": "mc",
+              "p": "Hypothetical: a facility draws a constant 1 GW for 24 hours. How much energy does it use?",
+              "x": "Energy equals power multiplied by time: 1 GW × 24 hours = 24 GWh. GW alone measures a rate, while GWh measures accumulated energy.",
+              "keys": [
+                "24 GWh"
+              ],
+              "o": [
+                "1 GW per hour",
+                "24 GWh",
+                "1 GWh",
+                "24 GW"
+              ],
+              "a": 1,
+              "ow": [
+                "The relevant quantity is power multiplied by time.",
+                "",
+                "1 GWh would cover one hour at this power.",
+                "GW is a power unit and does not measure accumulated energy."
+              ]
+            },
+            {
+              "id": "tr-f-it-facility",
+              "t": "mc",
+              "p": "Why can total facility power exceed the IT power of an AI data center?",
+              "x": "IT power covers computing equipment. Cooling and other infrastructure add to the total site load, so the two boundaries matter when comparing gigawatt claims.",
+              "keys": [
+                "Cooling and other supporting equipment consume power"
+              ],
+              "o": [
+                "Facility power measures the chips alone without supporting equipment",
+                "IT power includes the entire electricity grid supplying the site",
+                "Cooling and supporting infrastructure also consume power",
+                "IT power measures electricity already accumulated during training"
+              ],
+              "a": 2,
+              "ow": [
+                "Total facility power includes supporting equipment too.",
+                "The grid supplies many loads outside this site's computing equipment.",
+                "",
+                "Accumulated electricity use is energy, measured in units such as GWh."
+              ]
+            },
+            {
+              "id": "tr-f-capacity-use",
+              "t": "recall",
+              "p": "A data center has 1 GW of power capacity. Why can its average actual electricity draw be lower?",
+              "x": "Capacity describes what the site can support. Its actual draw varies with the equipment operating and how heavily it is used.",
+              "keys": [
+                "Idle time, maintenance or partial utilization"
+              ],
+              "answer": "Idle periods, maintenance and partial utilization reduce average draw",
+              "choice": {
+                "o": [
+                  "The site's capacity is its guaranteed minimum electricity demand",
+                  "Capacity already averages over periods when equipment is switched off",
+                  "The upfront construction cost fixes its hourly electricity consumption",
+                  "Idle periods, maintenance and partial utilization reduce average draw"
+                ],
+                "a": 3,
+                "ow": [
+                  "Capacity describes a supported load rather than a guaranteed minimum.",
+                  "A capacity measure need not account for idle periods.",
+                  "Actual demand depends on operating equipment and workload.",
+                  ""
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "The falling price of AI",
+      "desc": "Track the cost of a fixed result, compare reasoning budgets, and distinguish cheap capability from cheap tokens.",
+      "lessons": [
+        {
+          "title": "What is getting cheaper?",
+          "items": [
+            {
+              "id": "tr-t-cost-rate",
+              "t": "mc",
+              "p": "Since 2023, how fast did the cost of a fixed benchmark performance level fall in Epoch's September 2026 study?",
+              "x": "Emberson and Roodman estimated a 47% quarterly decline, about 13-fold annually, averaging five primary benchmarks. This is a historical estimate.",
+              "keys": [
+                "About 13-fold per year; roughly an order of magnitude"
+              ],
+              "o": [
+                "About 50-fold per year",
+                "About 100-fold per year",
+                "About 13-fold per year",
+                "About 2-fold per year"
+              ],
+              "a": 2,
+              "ow": [
+                "This is substantially faster than the headline average.",
+                "This is substantially faster than the headline average.",
+                "",
+                "The study estimated a much faster average decline."
+              ]
+            },
+            {
+              "id": "tr-t-fixed-target",
+              "t": "mc",
+              "p": "What should stay fixed when measuring how cheaply models can deliver the same capability?",
+              "x": "An illustrative comparison asks what it costs to reach 80% on the same test at two dates. Changing the target confounds price and quality.",
+              "keys": [
+                "Task and required performance"
+              ],
+              "o": [
+                "Task and required performance",
+                "The model and its release date",
+                "The token count and model size",
+                "The supplier and its list price"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "A newer model can deliver the same result more cheaply.",
+                "Different token budgets can achieve the same result.",
+                "Holding a supplier fixed can miss cheaper alternatives."
+              ]
+            },
+            {
+              "id": "tr-t-token-task",
+              "t": "recall",
+              "p": "Ignoring input costs and holding task success rate fixed, why can a model with a lower output-token price cost more per task?",
+              "x": "Reasoning models make this distinction especially relevant. Compare spending for a required result.",
+              "keys": [
+                "The model may need more tokens per task"
+              ],
+              "answer": "The model may need more tokens per task",
+              "choice": {
+                "o": [
+                  "The model must have more parameters",
+                  "The task must have become more difficult",
+                  "The provider must charge more for inputs",
+                  "The model may need more tokens per task"
+                ],
+                "a": 3,
+                "ow": [
+                  "Parameter count alone does not determine token use or task cost.",
+                  "The same task can require different token counts across models.",
+                  "Output-token consumption alone can reverse the comparison.",
+                  ""
+                ]
+              }
+            },
+            {
+              "id": "tr-t-task-arithmetic",
+              "t": "mc",
+              "p": "Hypothetical: two models achieve the same accuracy. A uses 10,000 tokens at 1 dollar per million; B uses 2,000 at 2 dollars per million. Which costs less, and what does each cost? Ignore input costs.",
+              "x": "This invented example illustrates task cost: token count multiplied by price per token. B wins despite its higher token price.",
+              "keys": [
+                "B is cheaper",
+                "A costs 0.01 dollars and B costs 0.004 dollars"
+              ],
+              "o": [
+                "Both cost 0.02 dollars per completed task",
+                "A costs 0.01 dollars; B costs 0.04 dollars",
+                "B costs 0.004 dollars; A costs 0.01 dollars",
+                "A costs 0.001 dollars; B costs 0.004 dollars"
+              ],
+              "a": 2,
+              "ow": [
+                "Multiply each token count by its own price per token.",
+                "2,000 / 1,000,000 times 2 is 0.004.",
+                "",
+                "10,000 / 1,000,000 is 0.01, not 0.001."
+              ]
+            },
+            {
+              "id": "tr-t-quarter-compound",
+              "t": "mc",
+              "p": "Hypothetical: a cost falls by about half each quarter for one year. Roughly how much cheaper does it become?",
+              "x": "Four successive halvings multiply to 1/16. This arithmetic helps interpret the scale of rapid quarterly price declines.",
+              "keys": [
+                "About 16 times cheaper"
+              ],
+              "o": [
+                "About 4 times cheaper",
+                "About 200 times cheaper",
+                "About 16 times cheaper",
+                "About 2 times cheaper"
+              ],
+              "a": 2,
+              "ow": [
+                "Four halvings compound rather than add.",
+                "Four halvings leave one-sixteenth of the original cost.",
+                "",
+                "That accounts for only one quarterly halving."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Reading cost frontiers",
+          "items": [
+            {
+              "id": "tr-t-cost-frontier",
+              "t": "mc",
+              "p": "For a given test score and date, what is the AI cost frontier?",
+              "x": "The measured frontier uses evaluated models and settings. It can miss untested cheaper configurations or options that differ in latency and other constraints.",
+              "keys": [
+                "The cheapest evaluated configuration reaching the score"
+              ],
+              "o": [
+                "The lowest token price among models of any accuracy",
+                "The cheapest evaluated configuration reaching the score",
+                "The average price among every model released that year",
+                "The highest score among models with the most parameters"
+              ],
+              "a": 1,
+              "ow": [
+                "A cheap token is insufficient if the model misses the target.",
+                "",
+                "An average includes less efficient alternatives.",
+                "That describes a capability ranking rather than a cost minimum."
+              ]
+            },
+            {
+              "id": "tr-t-reasoning-budget",
+              "t": "recall",
+              "p": "Why compare several reasoning budgets for the same model when estimating cost efficiency?",
+              "x": "A maximum-effort run may obscure a cheaper configuration that already meets the target. The useful comparison holds required accuracy fixed.",
+              "keys": [
+                "Different budgets can change both spending and accuracy"
+              ],
+              "answer": "Different budgets can change both spending and accuracy",
+              "choice": {
+                "o": [
+                  "A higher budget makes its per-token API price lower",
+                  "A maximum-budget score summarizes its efficiency at every target",
+                  "Different budgets can change both spending and accuracy",
+                  "A higher budget estimates the compute spent originally training it"
+                ],
+                "a": 2,
+                "ow": [
+                  "Changing reasoning effort can change token consumption without lowering the price per token.",
+                  "A maximum-effort score can miss cheaper settings that meet a lower target.",
+                  "",
+                  "Answer-time compute and original training compute are separate quantities."
+                ]
+              }
+            },
+            {
+              "id": "tr-t-domain-uneven",
+              "t": "mc",
+              "p": "How should a buyer use a historical average decline in AI costs across several benchmarks?",
+              "x": "This is a practical inference from heterogeneous benchmark trends. A cross-benchmark average is a starting point for task-specific evaluation.",
+              "keys": [
+                "Check the trend on tasks resembling the intended use"
+              ],
+              "o": [
+                "Assume each model lowers its own price at that rate",
+                "Treat the average as a guarantee for the next year",
+                "Check the trend on tasks resembling the intended use",
+                "Apply the average to every domain without adjustment"
+              ],
+              "a": 2,
+              "ow": [
+                "A frontier trend can come from switching models.",
+                "Historical rates do not guarantee future rates.",
+                "",
+                "Cost trends vary across domains and performance levels."
+              ]
+            },
+            {
+              "id": "tr-t-coding-scope",
+              "t": "mc",
+              "p": "Does a 13-fold annual cost decline averaged over math, science, and game benchmarks establish the same rate for software engineering?",
+              "x": "The five primary benchmarks exclude software engineering. SWE-bench Verified appears separately in the study.",
+              "keys": [
+                "No",
+                "The primary average does not establish a coding-specific rate"
+              ],
+              "o": [
+                "Yes; general LLM price trends apply to coding",
+                "No; coding needs separate evidence for that rate",
+                "Yes; similar token prices imply similar task-cost trends",
+                "No; coding cost trends follow parameter counts alone"
+              ],
+              "a": 1,
+              "ow": [
+                "The measured average covers specific domains rather than a universal task mix.",
+                "",
+                "The tokens needed for a given outcome can differ by task.",
+                "Parameter count alone does not establish task cost over time."
+              ]
+            },
+            {
+              "id": "tr-t-cheap-frontier",
+              "t": "mc",
+              "p": "Why can a fixed level of AI performance get cheaper while users spend more on newer AI systems?",
+              "x": "Hypothetically, a team can save on yesterday's task while buying a harder service today. Expenditure also depends on volume and quality demanded.",
+              "keys": [
+                "Users may buy higher performance or use AI more often"
+              ],
+              "o": [
+                "The fixed-performance trend already includes rising usage volumes",
+                "Users may buy higher performance or use AI more often",
+                "The price of an older model rises when a newer one is released",
+                "Lower inference prices directly increase each training run's cost"
+              ],
+              "a": 1,
+              "ow": [
+                "A fixed-performance cost comparison does not measure total spending or usage.",
+                "",
+                "An older model's price need not rise for users to spend more on harder tasks.",
+                "Training expenditure is a separate choice and is not mechanically raised by lower inference prices."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Software and capability measurement",
+      "desc": "Separate algorithmic efficiency from hardware and learn what benchmark scores can support.",
+      "lessons": [
+        {
+          "title": "Progress with less compute",
+          "items": [
+            {
+              "id": "tr-t-software-rate",
+              "t": "mc",
+              "p": "How fast did Epoch's December 2025 analysis estimate software reduced the training compute needed for the same measured capability?",
+              "x": "Ho and colleagues inferred about a six-fold annual improvement from frontier models. This is an estimate conditional on their capability and compute model.",
+              "keys": [
+                "About one-sixth as much compute each year"
+              ],
+              "o": [
+                "About one-sixth as much compute each year",
+                "About six percent less compute each year",
+                "About one-half as much compute each year",
+                "About one-hundredth as much compute each year"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "A six-fold efficiency gain is much larger than a six-percent reduction.",
+                "The estimated efficiency improvement was faster than a two-fold annual gain.",
+                "The estimate was about six-fold, not one-hundred-fold."
+              ]
+            },
+            {
+              "id": "tr-t-efficiency-budget",
+              "t": "recall",
+              "p": "Why can better training algorithms coexist with rising compute use for frontier model training?",
+              "x": "Hypothetically, a six-fold efficiency gain lets a fixed budget reach a harder target. Developers can also increase that budget.",
+              "keys": [
+                "Developers can spend the savings on higher capability"
+              ],
+              "answer": "Developers can spend the savings on higher capability",
+              "choice": {
+                "o": [
+                  "The estimate measures falling chip prices",
+                  "The estimate includes increasingly difficult targets",
+                  "The estimate caps feasible training compute",
+                  "Developers can spend the savings on higher capability"
+                ],
+                "a": 3,
+                "ow": [
+                  "The cited software estimate concerns computation needed for a fixed measured capability.",
+                  "Holding capability fixed is distinct from the targets developers choose in practice.",
+                  "An efficiency estimate describes an input-output relation rather than a spending constraint.",
+                  ""
+                ]
+              }
+            },
+            {
+              "id": "tr-t-software-hardware",
+              "t": "mc",
+              "p": "Which change is evidence of training software efficiency, holding the model's capability target fixed?",
+              "x": "Software efficiency concerns the computation required for a result. Hardware and power prices can change the money cost separately.",
+              "keys": [
+                "Reaching the target with fewer arithmetic operations"
+              ],
+              "o": [
+                "Running the same operations on twice as many chips",
+                "Moving the same training run to a cheaper power grid",
+                "Reaching the target with fewer arithmetic operations",
+                "Buying the same operations at a lower chip price"
+              ],
+              "a": 2,
+              "ow": [
+                "More parallel hardware may shorten elapsed time without reducing operations.",
+                "Cheaper electricity can lower cost without changing algorithmic compute needs.",
+                "",
+                "Lower chip prices improve hardware economics."
+              ]
+            },
+            {
+              "id": "tr-t-training-inference",
+              "t": "mc",
+              "p": "What distinguishes inference scaling from pretraining scaling?",
+              "x": "Extra answer-time reasoning or search can improve results. Its gains and costs must be measured for the task and budget.",
+              "keys": [
+                "Inference scaling spends more compute while producing answers"
+              ],
+              "o": [
+                "Inference scaling spends more compute while producing answers",
+                "Inference scaling adds more examples to the pretraining set",
+                "Inference scaling enlarges the original training cluster",
+                "Inference scaling repeats the original pretraining run"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Adding pretraining examples changes the training process.",
+                "Cluster size alone says nothing about answer-time computation.",
+                "Repeating pretraining is still training."
+              ]
+            },
+            {
+              "id": "tr-t-double-counting",
+              "t": "mc",
+              "p": "Hypothetical: software cuts operations needed for a task in half, and hardware halves the cost per operation. What happens to compute cost for that task?",
+              "x": "In this invented example, 1/2 times 1/2 equals 1/4. Multiply independent changes in separate factors, and check that estimates do not already include each other.",
+              "keys": [
+                "It falls to one-quarter of its original level"
+              ],
+              "o": [
+                "It doubles relative to its original level",
+                "It falls to one-quarter of its original level",
+                "It falls to one-half of its original level",
+                "It falls to zero at the end of the year"
+              ],
+              "a": 1,
+              "ow": [
+                "Both stipulated changes reduce cost.",
+                "",
+                "That counts only one of the two independent improvements.",
+                "Multiplying two positive halves gives one-quarter."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "What the scores mean",
+          "items": [
+            {
+              "id": "tr-t-saturation",
+              "t": "mc",
+              "p": "Why can a benchmark near 100% stop revealing meaningful differences between improving models?",
+              "x": "A saturated test has a ceiling effect. Harder evaluations can reveal differences it misses.",
+              "keys": [
+                "The score has little remaining room to increase"
+              ],
+              "o": [
+                "The test's difficulty has stopped increasing",
+                "One score point means a fixed capability gain",
+                "The score has little remaining room to increase",
+                "A high test score establishes broad task equivalence"
+              ],
+              "a": 2,
+              "ow": [
+                "A test's ceiling describes the evaluation rather than the full range of possible tasks.",
+                "Bounded benchmark scores are not a linear capability scale, especially near saturation.",
+                "",
+                "A narrow test does not establish broad equivalence."
+              ],
+              "dup": [
+                "hu2l0#n40qrve"
+              ]
+            },
+            {
+              "id": "tr-t-eci-purpose",
+              "t": "mc",
+              "p": "What is the main measurement advantage of combining benchmarks of different difficulties into ECI?",
+              "x": "The Epoch Capabilities Index stitches together overlapping benchmark evidence. It remains a simplified statistical measure.",
+              "keys": [
+                "Comparing capability as individual tests saturate"
+              ],
+              "o": [
+                "Comparing capability as individual tests saturate",
+                "Expressing all scores as percent correct",
+                "Giving each benchmark equal statistical weight",
+                "Measuring compute cost at a common performance target"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "ECI is a fitted latent capability scale, not a shared percentage accuracy.",
+                "The framework models benchmark difficulty and discrimination.",
+                "A capability index and a cost-performance frontier answer different questions."
+              ]
+            },
+            {
+              "id": "tr-t-eci-ratio",
+              "t": "recall",
+              "p": "Hypothetical: one model has an ECI score of 160 and another 80. Does that establish that the first is twice as capable?",
+              "x": "ECI is calibrated to reference models. A score difference can be informative without a score ratio representing a capability multiplier.",
+              "keys": [
+                "No; ECI has an arbitrary zero and is not a ratio scale"
+              ],
+              "answer": "No; ECI has an arbitrary zero and is not a ratio scale",
+              "choice": {
+                "o": [
+                  "Yes; ECI ratios equal benchmark-accuracy ratios",
+                  "Yes; zero ECI is calibrated as zero capability",
+                  "No; ECI point differences are not comparable across the scale",
+                  "No; ECI has an arbitrary zero and is not a ratio scale"
+                ],
+                "a": 3,
+                "ow": [
+                  "ECI and percentage accuracy are related nonlinearly through benchmark-specific curves.",
+                  "The ECI zero is arbitrary, like its reference-model calibration.",
+                  "ECI point differences can be informative even though ratios are not.",
+                  ""
+                ]
+              }
+            },
+            {
+              "id": "tr-t-eci-specialist",
+              "t": "mc",
+              "p": "Why might a model with a lower general ECI score still be preferable for a particular coding workflow?",
+              "x": "Test the workflow directly. Cost, reliability, and tools may affect the choice beyond a general capability ranking.",
+              "keys": [
+                "Its strengths may align better with that specific workflow"
+              ],
+              "o": [
+                "General ECI weights tasks by commercial value",
+                "Its strengths may align better with that specific workflow",
+                "ECI uses pretraining size instead of evaluations",
+                "Lower ECI identifies lower reasoning-token use"
+              ],
+              "a": 1,
+              "ow": [
+                "The index combines selected benchmarks rather than the full workplace task distribution.",
+                "",
+                "ECI is fitted to benchmark performance.",
+                "An ECI score alone does not establish token use or cost."
+              ]
+            },
+            {
+              "id": "tr-t-workplace-validation",
+              "t": "mc",
+              "p": "A model improves on a coding benchmark. What additional evidence best supports a claim that it improves your team's productivity?",
+              "x": "This evaluation recommendation follows from the gap between benchmark performance and useful work. Include human review and rework in the workflow measurement.",
+              "keys": [
+                "Workflow tests of quality, total time, and rework"
+              ],
+              "o": [
+                "Workflow tests of quality, total time, and rework",
+                "A larger count of parameters in the model documentation",
+                "A lower API price without measuring task completion",
+                "A higher score on a second unrelated trivia benchmark"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Parameter count does not measure team productivity.",
+                "A lower price can coexist with slower or worse work.",
+                "Another benchmark can add context but does not directly test the workflow."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "How capabilities spread",
+      "desc": "Understand the open-weight frontier, domain gaps, and the practical limits of running models locally.",
+      "lessons": [
+        {
+          "title": "Open models and the frontier",
+          "items": [
+            {
+              "id": "tr-t-open-meaning",
+              "t": "mc",
+              "p": "What makes a model open-weight in Epoch's model-accessibility classification?",
+              "x": "Epoch uses open-weight for downloadable parameters. Code, data, and license permissions are separate dimensions of access.",
+              "keys": [
+                "Its trained parameter values are available to download"
+              ],
+              "o": [
+                "Its API price is lower than competing providers' prices",
+                "Its full training dataset is available to download",
+                "Its trained parameter values are available to download",
+                "Anyone can chat with it through a public website"
+              ],
+              "a": 2,
+              "ow": [
+                "Price and weight access are separate properties.",
+                "Training-data access is classified separately.",
+                "",
+                "A chat service can keep model weights closed."
+              ]
+            },
+            {
+              "id": "tr-t-license-check",
+              "t": "recall",
+              "p": "Why check the license before commercially deploying a downloadable AI model?",
+              "x": "Epoch distinguishes unrestricted, restricted-use, and non-commercial open weights. Check the specific terms attached to the release.",
+              "keys": [
+                "Downloadable weights can still have use restrictions"
+              ],
+              "answer": "Downloadable weights can still have use restrictions",
+              "choice": {
+                "o": [
+                  "Weight downloads permit unrestricted commerce",
+                  "Licenses cover APIs rather than local weights",
+                  "Downloadable weights can still have use restrictions",
+                  "Local deployment exempts users from publisher licenses"
+                ],
+                "a": 2,
+                "ow": [
+                  "Availability of weights and permission for particular uses are separate.",
+                  "Licenses can apply to use of downloaded model weights.",
+                  "",
+                  "Running locally does not itself remove license conditions."
+                ]
+              }
+            },
+            {
+              "id": "tr-t-general-gap",
+              "t": "mc",
+              "p": "In Epoch's May 2026 analysis, roughly how far did the best open-weight models lag leading closed models on general ECI since January 2026?",
+              "x": "Edwards and Emberson estimated a four-month average gap for this period. It is a dated comparison on general ECI.",
+              "keys": [
+                "About four months"
+              ],
+              "o": [
+                "About two months on average",
+                "About four months on average",
+                "About nine months on average",
+                "About eighteen months on average"
+              ],
+              "a": 1,
+              "ow": [
+                "That is shorter than the estimated four-month average.",
+                "",
+                "That is longer than the estimated four-month average.",
+                "That is substantially longer than the estimated four-month average."
+              ]
+            },
+            {
+              "id": "tr-t-lag-meaning",
+              "t": "mc",
+              "p": "Hypothetical: open models trail the closed frontier by six months on one test. What does that lag describe?",
+              "x": "A time lag compares when performance levels were reached. It depends on the metric, model set, and period.",
+              "keys": [
+                "How long ago closed models reached comparable test performance"
+              ],
+              "o": [
+                "How long ago closed models reached comparable test performance",
+                "Time from model announcement to weight release",
+                "Extra pretraining time for an equally sized open model",
+                "Forecast time until today's best open model matches today's best closed one"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "The lag compares capability frontiers across different releases, not a release schedule for one model.",
+                "It measures when scores were achieved rather than how long training took.",
+                "A measured historical lag is not a forecast of when the current performance gap will close."
+              ]
+            },
+            {
+              "id": "tr-t-domain-gap",
+              "t": "mc",
+              "p": "Why should a general open-versus-closed model lag not be applied unchanged to every domain?",
+              "x": "Epoch's October 16, 2026 topic update reports a six-to-seven-month Cyber ECI gap; its May general ECI analysis reported four months. These snapshots differ in date as well as domain.",
+              "keys": [
+                "Model strengths and rates of diffusion differ by domain"
+              ],
+              "o": [
+                "A general index implies equal time lags in each domain",
+                "Open models are compared with a fixed closed reference",
+                "Time lags depend on release dates without performance evidence",
+                "Model strengths and rates of diffusion differ by domain"
+              ],
+              "a": 3,
+              "ow": [
+                "An aggregate index does not establish one common gap for each domain.",
+                "Frontier comparisons track the best available models over time.",
+                "Estimating a lag requires both performance and dates.",
+                ""
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Running models yourself",
+          "items": [
+            {
+              "id": "tr-t-local-lag",
+              "t": "mc",
+              "p": "In Epoch's August 2025 analysis, how far behind the frontier were leading models that fit on a single high-end consumer GPU?",
+              "x": "Somala and Emberson compared selected knowledge, reasoning, and preference metrics. Their estimate depends on hardware and quantization assumptions.",
+              "keys": [
+                "About six to twelve months"
+              ],
+              "o": [
+                "About six to twelve months on those metrics",
+                "About one to three months on those metrics",
+                "About eighteen to twenty-four months on those metrics",
+                "About three to four years on those metrics"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "That is shorter than the six-to-twelve-month range reported.",
+                "That is longer than the six-to-twelve-month range reported.",
+                "That is substantially longer than the range reported."
+              ]
+            },
+            {
+              "id": "tr-t-local-vram",
+              "t": "recall",
+              "p": "Why is model weight size alone insufficient to decide whether an AI model fits in GPU memory?",
+              "x": "The context-related KV cache and runtime overhead need space alongside weights. A longer context can increase memory demand.",
+              "keys": [
+                "Context and runtime overhead also consume memory"
+              ],
+              "answer": "Context and runtime overhead also consume memory",
+              "choice": {
+                "o": [
+                  "The full training dataset must stay in memory",
+                  "Checkpoint size includes the inference cache",
+                  "Context and runtime overhead also consume memory",
+                  "Parameter count fixes memory use without regard to precision"
+                ],
+                "a": 2,
+                "ow": [
+                  "Inference can run from trained weights without retaining the training corpus.",
+                  "Context-related memory is additional to the checkpoint weights.",
+                  "",
+                  "Bits per weight also affect how much memory the weights require."
+                ]
+              }
+            },
+            {
+              "id": "tr-t-quantization",
+              "t": "mc",
+              "p": "What does weight quantization principally trade when making a model easier to fit on local hardware?",
+              "x": "Lower precision reduces weight storage; aggressive quantization can harm output quality. Evaluate the chosen quantization on the intended tasks.",
+              "keys": [
+                "Lower numerical precision for a smaller memory footprint"
+              ],
+              "o": [
+                "Removing whole model layers to reduce the parameter count",
+                "Lower numerical precision for a smaller memory footprint",
+                "Keeping weight precision fixed while shortening the prompt",
+                "Moving the same full-precision weights into CPU memory"
+              ],
+              "a": 1,
+              "ow": [
+                "Layer removal changes architecture or parameter count; weight quantization changes representation.",
+                "",
+                "Shorter prompts can reduce context memory but do not quantize weights.",
+                "Offloading moves storage rather than lowering weight precision."
+              ]
+            },
+            {
+              "id": "tr-t-local-open-gap",
+              "t": "mc",
+              "p": "Why can the frontier of all open-weight models differ from the frontier runnable on one consumer GPU?",
+              "x": "Open-weight access describes availability. Local feasibility also depends on model size, precision, context, and hardware.",
+              "keys": [
+                "Some downloadable models require more memory than that GPU has"
+              ],
+              "o": [
+                "The general open frontier uses the same single-GPU limit",
+                "Some downloadable models require more memory than that GPU has",
+                "Downloadability establishes a model fits on a consumer GPU",
+                "An API-hosted model runs in the client device's memory"
+              ],
+              "a": 1,
+              "ow": [
+                "The frontier of all open models includes releases beyond the single-GPU size constraint.",
+                "",
+                "Downloading a checkpoint does not establish that it fits in GPU memory.",
+                "A hosted service runs the model on server hardware rather than the client."
+              ]
+            },
+            {
+              "id": "tr-t-local-caveat",
+              "t": "mc",
+              "p": "Why might a local model's historical benchmark lag understate its lag on practical tasks?",
+              "x": "Epoch flags possible benchmark optimization among smaller models. A practical deployment still needs evaluation on its own workload.",
+              "keys": [
+                "The small model may be optimized especially for those tests"
+              ],
+              "o": [
+                "The small model may be optimized especially for those tests",
+                "A benchmark score already averages the model's performance over the full range of real tasks",
+                "The measured release-date gap includes the time a user spends configuring local inference",
+                "The hardware memory filter directly measures response reliability on workplace tasks"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Selected benchmarks provide limited coverage rather than an exhaustive task average.",
+                "The release-date performance comparison does not include each user's setup time.",
+                "A model fitting in memory does not establish its task reliability."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Limits and uncertain futures",
+      "desc": "Distinguish a constrained input from a ceiling on progress, and keep scenarios separate from forecasts.",
+      "lessons": [
+        {
+          "title": "The human text bottleneck",
+          "items": [
+            {
+              "id": "tr-t-text-stock",
+              "t": "mc",
+              "p": "What order of magnitude did Epoch's 2024 study give for the effective stock of human-generated public text for training?",
+              "x": "Villalobos and colleagues estimated around 300 trillion tokens after quality and repetition adjustments. It is a modeled effective stock, not a raw count of every online word.",
+              "keys": [
+                "Hundreds of trillions of tokens"
+              ],
+              "o": [
+                "Hundreds of millions of tokens",
+                "Hundreds of quadrillions of tokens",
+                "Hundreds of trillions of tokens",
+                "Hundreds of billions of tokens"
+              ],
+              "a": 2,
+              "ow": [
+                "This is about six orders of magnitude smaller.",
+                "This is about three orders of magnitude larger.",
+                "",
+                "This is about three orders of magnitude smaller."
+              ]
+            },
+            {
+              "id": "tr-t-data-window",
+              "t": "mc",
+              "p": "What did Epoch's 2024 forecast say could happen between 2026 and 2032 if LLM development trends continued?",
+              "x": "The forecast describes a potential bottleneck in public human text scaling. It is conditional on the development trajectory.",
+              "keys": [
+                "Datasets could approach the public human text stock"
+              ],
+              "o": [
+                "The annual flow of new public text could fall to zero",
+                "Datasets could approach the public human text stock",
+                "Global computer storage could fill with AI training datasets",
+                "Public text could cease to be useful for training smaller models"
+              ],
+              "a": 1,
+              "ow": [
+                "The forecast compares growing dataset sizes with a finite stock, not a halt in new writing.",
+                "",
+                "The limiting quantity is useful public human text, not total storage hardware.",
+                "A scaling bottleneck does not remove the usefulness of existing data for smaller runs."
+              ]
+            },
+            {
+              "id": "tr-t-effective-stock",
+              "t": "mc",
+              "p": "Why adjust a public text stock estimate for both quality and repetition?",
+              "x": "Effective stock accounts for filtering and the value of multiple passes. A raw web-size estimate answers a different question.",
+              "keys": [
+                "Useful learning signal differs from the raw count of tokens"
+              ],
+              "o": [
+                "A repeated training pass contributes the same information as an equal amount of new text",
+                "Filtering low-quality text and repeating useful text cancel exactly in every dataset",
+                "Useful learning signal differs from the raw count of tokens",
+                "The number of bytes stored is already a quality-adjusted measure of learning value"
+              ],
+              "a": 2,
+              "ow": [
+                "Further passes can help but have diminishing returns compared with fresh data.",
+                "The net adjustment must be estimated; these effects need not cancel.",
+                "",
+                "Storage size does not by itself measure training usefulness."
+              ]
+            },
+            {
+              "id": "tr-t-data-after-limit",
+              "t": "recall",
+              "p": "Name one way AI progress might continue if public human text can no longer provide larger training datasets.",
+              "x": "Other possibilities include learning from richer modalities and improving data efficiency. These are possible responses, not guarantees that the bottleneck is solved.",
+              "keys": [
+                "One valid route: synthetic data, transfer from other modalities, or data efficiency"
+              ],
+              "answer": "Examples: synthetic training data with quality checks; transfer from data-rich domains; improved data efficiency. Any one is sufficient.",
+              "choice": {
+                "o": [
+                  "Increase the tokenizer's token count without adding underlying information",
+                  "Treat additional copies of the same examples as equally valuable new data",
+                  "Use a larger model as a substitute for evaluating the training data's usefulness",
+                  "Use synthetic training data with appropriate quality checks"
+                ],
+                "a": 3,
+                "ow": [
+                  "Changing tokenization does not by itself add information or solve data scarcity.",
+                  "Repetition can help but is not indefinitely equivalent to fresh examples.",
+                  "More parameters alone do not establish a new source of useful training signal.",
+                  ""
+                ]
+              },
+              "open": true,
+              "dup": [
+                "mu1l0#nc44dxa"
+              ]
+            },
+            {
+              "id": "tr-t-consumed-data",
+              "t": "mc",
+              "p": "Does training one model on a text dataset prevent another developer from training on the same text?",
+              "x": "Data depletion in this context means limited new training signal for further scaling. It does not mean the text disappears after a run.",
+              "keys": [
+                "No; the text remains reusable subject to access and permissions"
+              ],
+              "o": [
+                "Yes; the estimated data stock is a total allowance shared across all developers' runs",
+                "Yes; an earlier model's training makes the same examples unavailable for later runs",
+                "No; repeated exposure provides as much new signal as fresh examples",
+                "No; the text remains reusable subject to access and permissions"
+              ],
+              "a": 3,
+              "ow": [
+                "The stock is available information, not an allowance allocated among all training runs.",
+                "Training on a dataset does not by itself make it unavailable to another run.",
+                "Reuse is possible, but repeated exposure can have diminishing returns.",
+                ""
+              ]
+            }
+          ]
+        },
+        {
+          "title": "How far can trends take us?",
+          "items": [
+            {
+              "id": "tr-t-run-duration",
+              "t": "mc",
+              "p": "In Epoch's July 2025 model, roughly where was the threshold beyond which frontier training runs may become economically inefficient?",
+              "x": "Emberson and Edelman's model suggested runs beyond about nine months may lose to runs started later with better technology. This is an economic estimate.",
+              "keys": [
+                "About nine months"
+              ],
+              "o": [
+                "About nine months",
+                "About three months",
+                "About eighteen months",
+                "About three years"
+              ],
+              "a": 0,
+              "ow": [
+                "",
+                "Three months is below the model's approximate nine-month threshold.",
+                "Eighteen months is above the model's approximate nine-month threshold.",
+                "Three years is well above the model's approximate nine-month threshold."
+              ]
+            },
+            {
+              "id": "tr-t-run-mechanism",
+              "t": "recall",
+              "p": "Why can a very long AI training run lose economically to a run started later?",
+              "x": "Rapid technological progress creates an opportunity cost to committing to an older training setup for too long.",
+              "keys": [
+                "Later runs can use better hardware and methods"
+              ],
+              "answer": "Later runs can use better hardware and methods",
+              "choice": {
+                "o": [
+                  "Longer training reduces model accuracy",
+                  "Later runs can use better hardware and methods",
+                  "Depreciation imposes a fixed stopping date",
+                  "Longer elapsed time raises operations needed for a fixed capability"
+                ],
+                "a": 1,
+                "ow": [
+                  "The argument compares runs benefiting from technological progress; it does not assume accuracy falls with time.",
+                  "",
+                  "Depreciation alone does not establish this stopping rule.",
+                  "Elapsed time alone does not change the algorithmic operations required for a fixed target."
+                ]
+              }
+            },
+            {
+              "id": "tr-t-duration-v-compute",
+              "t": "mc",
+              "p": "If economically sensible training durations stop growing, how could total training compute still increase?",
+              "x": "Larger or faster clusters can raise operations per second. Epoch also discusses distributing training across multiple clusters as a possible response.",
+              "keys": [
+                "Use more effective computing capacity during each run"
+              ],
+              "o": [
+                "Improve software while keeping operations unchanged",
+                "Use more effective computing capacity during each run",
+                "More tokens with the same operation rate and duration",
+                "Buy cheaper chips with the same speed and quantity"
+              ],
+              "a": 1,
+              "ow": [
+                "That improves capability per operation but does not increase the operation count itself.",
+                "",
+                "Token count alone does not override the stipulated fixed operation rate and duration.",
+                "Cheaper chips lower expenditure without increasing compute when speed and count stay fixed."
+              ]
+            },
+            {
+              "id": "tr-t-conditional-projection",
+              "t": "mc",
+              "p": "Hypothetical: frontier training compute grows five-fold annually for three years. What follows under that assumption?",
+              "x": "This scenario is arithmetic, not a forecast. Its implications depend on resource constraints and how additional compute translates into useful capability.",
+              "keys": [
+                "125-fold compute increase",
+                "Conditional on five-fold annual growth for three years"
+              ],
+              "o": [
+                "A fifteen-fold increase in compute, if the growth rate continues",
+                "A 125-fold increase in benchmark accuracy, if the compute trend continues",
+                "A 125-fold increase in compute, conditional on the growth continuing",
+                "A five-fold increase in compute, averaged across the three years"
+              ],
+              "a": 2,
+              "ow": [
+                "Three fivefold factors multiply rather than add.",
+                "A compute multiplier is not a benchmark-accuracy multiplier.",
+                "",
+                "Five-fold is the stipulated one-year factor, not the cumulative three-year factor."
+              ]
+            },
+            {
+              "id": "tr-t-agi-inference",
+              "t": "mc",
+              "p": "Why does a historical trend in AI compute or benchmark scores fail to determine a precise AGI arrival date by itself?",
+              "x": "A timeline needs an explicit target, a mapping from evidence to that target, and assumptions about future conditions. Historical trends inform those assumptions.",
+              "keys": [
+                "Uncertain links from compute and scores to useful capability"
+              ],
+              "o": [
+                "Compute growth maps proportionally to workplace output",
+                "An ECI cutoff defines AGI without a task specification",
+                "A historical confidence interval captures all future breakthroughs",
+                "Uncertain links from compute and scores to useful capability"
+              ],
+              "a": 3,
+              "ow": [
+                "The mapping from computation to output is empirical and need not be proportional.",
+                "A claim about full automation requires a defined capability target and supporting evaluation.",
+                "A historical fit does not exhaust uncertainty about future mechanisms and bottlenecks.",
+                ""
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

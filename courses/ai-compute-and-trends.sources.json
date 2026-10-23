@@ -1,0 +1,589 @@
+[
+  {
+    "id": "tr-f-flop-unit",
+    "q": "What does a training-compute estimate in FLOP measure?",
+    "src": [
+      "https://epoch.ai/data/ai-models-documentation/estimation"
+    ]
+  },
+  {
+    "id": "tr-f-flops-unit",
+    "q": "What does a chip specification in FLOP/s measure?",
+    "src": [
+      "https://epoch.ai/data/ai-models-documentation/estimation"
+    ]
+  },
+  {
+    "id": "tr-f-rate-time",
+    "q": "Hypothetical: a system sustains 10^15 FLOP/s for 1,000 seconds. How much computation does it perform?",
+    "src": [
+      "https://epoch.ai/data/ai-models-documentation/estimation"
+    ]
+  },
+  {
+    "id": "tr-f-utilization",
+    "q": "Hypothetical: two identical clusters run for the same time, one at 25% of peak compute and one at 50%. How does their de",
+    "src": [
+      "https://epoch.ai/data/ai-models-documentation/estimation"
+    ]
+  },
+  {
+    "id": "tr-f-peak-gap",
+    "q": "Why can a training run use much less compute than peak chip speed multiplied by elapsed time?",
+    "src": [
+      "https://epoch.ai/data/ai-models-documentation/estimation"
+    ]
+  },
+  {
+    "id": "tr-f-factor-percent",
+    "q": "A quantity grows to five times its original value in one year. What is its percentage increase?",
+    "src": [
+      "https://epoch.ai/trends"
+    ]
+  },
+  {
+    "id": "tr-f-compound",
+    "q": "Hypothetical: training compute grows fivefold each year. What is the multiplier after two years?",
+    "src": [
+      "https://epoch.ai/trends"
+    ]
+  },
+  {
+    "id": "tr-f-oom",
+    "q": "What does an increase of one order of magnitude mean?",
+    "src": [
+      "https://epoch.ai/publications/trends-in-the-dollar-training-cost-of-machine-learning-systems"
+    ]
+  },
+  {
+    "id": "tr-f-double-time",
+    "q": "Hypothetical: computing capacity doubles every six months. What annual growth factor does that imply?",
+    "src": [
+      "https://epoch.ai/trends"
+    ]
+  },
+  {
+    "id": "tr-f-extrapolate",
+    "q": "Why should an observed fivefold annual growth trend be used cautiously in a five-year forecast?",
+    "src": [
+      "https://epoch.ai/publications/training-compute-of-frontier-ai-models-grows-by-4-5x-per-year",
+      "https://epoch.ai/publications/trends-in-the-dollar-training-cost-of-machine-learning-systems"
+    ]
+  },
+  {
+    "id": "tr-f-frontier-rate",
+    "q": "In Epoch's dashboard checked October 2026, how fast has frontier language-model training compute grown since 2020?",
+    "src": [
+      "https://epoch.ai/trends",
+      "https://epoch.ai/publications/training-compute-of-frontier-ai-models-grows-by-4-5x-per-year"
+    ]
+  },
+  {
+    "id": "tr-f-scope-frontier",
+    "q": "What does frontier training-compute growth tell you most directly?",
+    "src": [
+      "https://epoch.ai/trends",
+      "https://epoch.ai/publications/training-compute-of-frontier-ai-models-grows-by-4-5x-per-year"
+    ]
+  },
+  {
+    "id": "tr-f-more-chips",
+    "q": "Hypothetical: a training run uses twice as many identical chips for the same duration at the same utilization. What happ",
+    "src": [
+      "https://epoch.ai/data/ai-models-documentation/estimation"
+    ]
+  },
+  {
+    "id": "tr-f-hardware-duration",
+    "q": "Hypothetical: chip count triples and training duration doubles, with per-chip speed and utilization unchanged. How much ",
+    "src": [
+      "https://epoch.ai/data/ai-models-documentation/estimation"
+    ]
+  },
+  {
+    "id": "tr-f-growth-levers",
+    "q": "Name two ways to increase a training run's total compute while holding per-chip peak speed and utilization fixed.",
+    "src": [
+      "https://epoch.ai/data/ai-models-documentation/estimation",
+      "https://epoch.ai/trends"
+    ]
+  },
+  {
+    "id": "tr-f-cost-growth",
+    "q": "In Epoch's dashboard checked October 2026, roughly how fast has the cost to train frontier language models grown since 2",
+    "src": [
+      "https://epoch.ai/trends"
+    ]
+  },
+  {
+    "id": "tr-f-compute-cost",
+    "q": "How can training compute grow faster than the dollar cost of training?",
+    "src": [
+      "https://epoch.ai/trends",
+      "https://epoch.ai/publications/trends-in-the-dollar-training-cost-of-machine-learning-systems"
+    ]
+  },
+  {
+    "id": "tr-f-final-vs-rd",
+    "q": "A model's final-run compute bill includes chip rental and electricity. Which additional expense could make its total dev",
+    "src": [
+      "https://epoch.ai/publications/trends-in-the-dollar-training-cost-of-machine-learning-systems"
+    ]
+  },
+  {
+    "id": "tr-f-capex-run",
+    "q": "Why is buying an entire training cluster usually more expensive than the hardware cost allocated to a single training ru",
+    "src": [
+      "https://epoch.ai/publications/trends-in-the-dollar-training-cost-of-machine-learning-systems"
+    ]
+  },
+  {
+    "id": "tr-f-cost-labels",
+    "q": "Why is a headline saying \"this model cost 10 million dollars\" hard to interpret without more detail?",
+    "src": [
+      "https://epoch.ai/publications/trends-in-the-dollar-training-cost-of-machine-learning-systems"
+    ]
+  },
+  {
+    "id": "tr-f-chip-price-rate",
+    "q": "For chips purchased from Q1 2023 to Q4 2025, what annual gain in performance per dollar did Epoch estimate in August 202",
+    "src": [
+      "https://epoch.ai/data-insights/chip-performance-per-dollar"
+    ]
+  },
+  {
+    "id": "tr-f-chip-average",
+    "q": "In Epoch's 2026 chip price-performance analysis, what does the quarterly aggregate represent?",
+    "src": [
+      "https://epoch.ai/data-insights/chip-performance-per-dollar"
+    ]
+  },
+  {
+    "id": "tr-f-real-dollars",
+    "q": "Why express a hardware price-performance trend in constant 2025 dollars?",
+    "src": [
+      "https://epoch.ai/data-insights/chip-performance-per-dollar"
+    ]
+  },
+  {
+    "id": "tr-f-expensive-efficient",
+    "q": "How can a newer chip cost more while offering better performance per dollar?",
+    "src": [
+      "https://epoch.ai/data-insights/chip-performance-per-dollar"
+    ]
+  },
+  {
+    "id": "tr-f-price-vs-workload",
+    "q": "A newer GPU has better peak arithmetic per dollar but unchanged memory bandwidth. Why might it provide little speedup on",
+    "src": [
+      "https://docs.nvidia.com/deeplearning/performance/dl-performance-gpu-background/index.html",
+      "https://epoch.ai/data-insights/chip-performance-per-dollar"
+    ]
+  },
+  {
+    "id": "tr-f-bandwidth-meaning",
+    "q": "What does GPU memory bandwidth describe?",
+    "src": [
+      "https://docs.nvidia.com/deeplearning/performance/dl-performance-gpu-background/index.html",
+      "https://epoch.ai/data-insights/chip-performance-per-dollar",
+      "https://epoch.ai/data/ai-models-documentation/estimation"
+    ]
+  },
+  {
+    "id": "tr-f-bandwidth-bound",
+    "q": "A workload spends most of its time waiting for data from GPU memory. Which upgrade most directly targets that bottleneck",
+    "src": [
+      "https://docs.nvidia.com/deeplearning/performance/dl-performance-gpu-background/index.html",
+      "https://epoch.ai/data/ai-models-documentation/estimation",
+      "https://epoch.ai/data-insights/chip-performance-per-dollar"
+    ]
+  },
+  {
+    "id": "tr-f-precision-compare",
+    "q": "Why check number format when comparing two chips' published FLOP/s?",
+    "src": [
+      "https://docs.nvidia.com/deeplearning/performance/dl-performance-gpu-background/index.html",
+      "https://epoch.ai/data/ai-models-documentation/estimation",
+      "https://epoch.ai/data-insights/chip-performance-per-dollar"
+    ]
+  },
+  {
+    "id": "tr-f-power-efficiency",
+    "q": "What does a higher FLOP/s-per-watt figure mean under the same specification conditions?",
+    "src": [
+      "https://epoch.ai/trends",
+      "https://epoch.ai/data-insights/chip-performance-per-dollar"
+    ]
+  },
+  {
+    "id": "tr-f-network-scale",
+    "q": "Why might doubling the chips in a training cluster deliver less than double the training throughput?",
+    "src": [
+      "https://epoch.ai/data/ai-models-documentation/estimation",
+      "https://epoch.ai/data-insights/chip-performance-per-dollar"
+    ]
+  },
+  {
+    "id": "tr-f-stock-double",
+    "q": "According to Epoch's global AI chip estimate checked October 2026, roughly how often has computing capacity doubled sinc",
+    "src": [
+      "https://epoch.ai/trends",
+      "https://epoch.ai/data-insights/ai-chip-production"
+    ]
+  },
+  {
+    "id": "tr-f-h100-equivalent",
+    "q": "What does a fleet size reported in H100-equivalents primarily convey?",
+    "src": [
+      "https://epoch.ai/data/ai-chip-users-documentation/methodology"
+    ]
+  },
+  {
+    "id": "tr-f-sales-deployment",
+    "q": "Why can cumulative AI chip sales overstate computing capacity actually operating today?",
+    "src": [
+      "https://epoch.ai/data-insights/ai-chip-production",
+      "https://epoch.ai/data-insights/chip-performance-per-dollar"
+    ]
+  },
+  {
+    "id": "tr-f-stock-run",
+    "q": "Why can global AI chip capacity grow while one developer's largest training run stays the same size?",
+    "src": [
+      "https://epoch.ai/data-insights/ai-chip-production",
+      "https://epoch.ai/data/ai-models-documentation/estimation"
+    ]
+  },
+  {
+    "id": "tr-f-utilized-capacity",
+    "q": "Why is installed computing capacity insufficient to estimate how much computation a fleet performs in a year?",
+    "src": [
+      "https://epoch.ai/data/ai-models-documentation/estimation",
+      "https://epoch.ai/data-insights/ai-chip-production"
+    ]
+  },
+  {
+    "id": "tr-f-gw-cost",
+    "q": "In Epoch's May 2026 model, what upfront cost accompanies a typical US AI data center with 1 GW of IT power?",
+    "src": [
+      "https://epoch.ai/data-insights/ai-datacenter-cost-breakdown"
+    ]
+  },
+  {
+    "id": "tr-f-build-time",
+    "q": "In Epoch's dashboard checked October 2026, about how long is the median construction-to-gigawatt timeline for its sample",
+    "src": [
+      "https://epoch.ai/trends"
+    ]
+  },
+  {
+    "id": "tr-f-power-energy",
+    "q": "Hypothetical: a facility draws a constant 1 GW for 24 hours. How much energy does it use?",
+    "src": [
+      "https://epoch.ai/data/ai-data-centers"
+    ]
+  },
+  {
+    "id": "tr-f-it-facility",
+    "q": "Why can total facility power exceed the IT power of an AI data center?",
+    "src": [
+      "https://epoch.ai/data/ai-data-centers"
+    ]
+  },
+  {
+    "id": "tr-f-capacity-use",
+    "q": "A data center has 1 GW of power capacity. Why can its average actual electricity draw be lower?",
+    "src": [
+      "https://epoch.ai/data/ai-data-centers"
+    ]
+  },
+  {
+    "id": "tr-t-cost-rate",
+    "q": "Since 2023, how fast did the cost of a fixed benchmark performance level fall in Epoch's September 2026 study?",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought"
+    ]
+  },
+  {
+    "id": "tr-t-fixed-target",
+    "q": "What should stay fixed when measuring how cheaply models can deliver the same capability?",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought"
+    ]
+  },
+  {
+    "id": "tr-t-token-task",
+    "q": "Ignoring input costs and holding task success rate fixed, why can a model with a lower output-token price cost more per ",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought"
+    ]
+  },
+  {
+    "id": "tr-t-task-arithmetic",
+    "q": "Hypothetical: two models achieve the same accuracy. A uses 10,000 tokens at 1 dollar per million; B uses 2,000 at 2 doll",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought"
+    ]
+  },
+  {
+    "id": "tr-t-quarter-compound",
+    "q": "Hypothetical: a cost falls by about half each quarter for one year. Roughly how much cheaper does it become?",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought"
+    ]
+  },
+  {
+    "id": "tr-t-cost-frontier",
+    "q": "For a given test score and date, what is the AI cost frontier?",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought"
+    ]
+  },
+  {
+    "id": "tr-t-reasoning-budget",
+    "q": "Why compare several reasoning budgets for the same model when estimating cost efficiency?",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought"
+    ]
+  },
+  {
+    "id": "tr-t-domain-uneven",
+    "q": "How should a buyer use a historical average decline in AI costs across several benchmarks?",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought"
+    ]
+  },
+  {
+    "id": "tr-t-coding-scope",
+    "q": "Does a 13-fold annual cost decline averaged over math, science, and game benchmarks establish the same rate for software",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought"
+    ]
+  },
+  {
+    "id": "tr-t-cheap-frontier",
+    "q": "Why can a fixed level of AI performance get cheaper while users spend more on newer AI systems?",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought"
+    ]
+  },
+  {
+    "id": "tr-t-software-rate",
+    "q": "How fast did Epoch's December 2025 analysis estimate software reduced the training compute needed for the same measured ",
+    "src": [
+      "https://epoch.ai/publications/a-rosetta-stone-for-ai-benchmarks"
+    ]
+  },
+  {
+    "id": "tr-t-efficiency-budget",
+    "q": "Why can better training algorithms coexist with rising compute use for frontier model training?",
+    "src": [
+      "https://epoch.ai/publications/a-rosetta-stone-for-ai-benchmarks"
+    ]
+  },
+  {
+    "id": "tr-t-software-hardware",
+    "q": "Which change is evidence of training software efficiency, holding the model's capability target fixed?",
+    "src": [
+      "https://epoch.ai/publications/a-rosetta-stone-for-ai-benchmarks"
+    ]
+  },
+  {
+    "id": "tr-t-training-inference",
+    "q": "What distinguishes inference scaling from pretraining scaling?",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought",
+      "https://epoch.ai/publications/trading-off-compute-in-training-and-inference"
+    ]
+  },
+  {
+    "id": "tr-t-double-counting",
+    "q": "Hypothetical: software cuts operations needed for a task in half, and hardware halves the cost per operation. What happe",
+    "src": [
+      "https://epoch.ai/publications/a-rosetta-stone-for-ai-benchmarks"
+    ]
+  },
+  {
+    "id": "tr-t-saturation",
+    "q": "Why can a benchmark near 100% stop revealing meaningful differences between improving models?",
+    "src": [
+      "https://epoch.ai/publications/a-rosetta-stone-for-ai-benchmarks"
+    ]
+  },
+  {
+    "id": "tr-t-eci-purpose",
+    "q": "What is the main measurement advantage of combining benchmarks of different difficulties into ECI?",
+    "src": [
+      "https://epoch.ai/eci",
+      "https://epoch.ai/publications/a-rosetta-stone-for-ai-benchmarks"
+    ]
+  },
+  {
+    "id": "tr-t-eci-ratio",
+    "q": "Hypothetical: one model has an ECI score of 160 and another 80. Does that establish that the first is twice as capable?",
+    "src": [
+      "https://epoch.ai/data/eci-documentation/methodology",
+      "https://epoch.ai/eci"
+    ]
+  },
+  {
+    "id": "tr-t-eci-specialist",
+    "q": "Why might a model with a lower general ECI score still be preferable for a particular coding workflow?",
+    "src": [
+      "https://epoch.ai/eci"
+    ]
+  },
+  {
+    "id": "tr-t-workplace-validation",
+    "q": "A model improves on a coding benchmark. What additional evidence best supports a claim that it improves your team's prod",
+    "src": [
+      "https://epoch.ai/publications/the-plunging-price-of-thought",
+      "https://epoch.ai/eci"
+    ]
+  },
+  {
+    "id": "tr-t-open-meaning",
+    "q": "What makes a model open-weight in Epoch's model-accessibility classification?",
+    "src": [
+      "https://epoch.ai/publications/open-models-report"
+    ]
+  },
+  {
+    "id": "tr-t-license-check",
+    "q": "Why check the license before commercially deploying a downloadable AI model?",
+    "src": [
+      "https://epoch.ai/publications/open-models-report"
+    ]
+  },
+  {
+    "id": "tr-t-general-gap",
+    "q": "In Epoch's May 2026 analysis, roughly how far did the best open-weight models lag leading closed models on general ECI s",
+    "src": [
+      "https://epoch.ai/data-insights/open-closed-eci-gap"
+    ]
+  },
+  {
+    "id": "tr-t-lag-meaning",
+    "q": "Hypothetical: open models trail the closed frontier by six months on one test. What does that lag describe?",
+    "src": [
+      "https://epoch.ai/data-insights/open-closed-eci-gap",
+      "https://epoch.ai/publications/open-models-report"
+    ]
+  },
+  {
+    "id": "tr-t-domain-gap",
+    "q": "Why should a general open-versus-closed model lag not be applied unchanged to every domain?",
+    "src": [
+      "https://epoch.ai/topics/open-models",
+      "https://epoch.ai/data-insights/open-closed-eci-gap"
+    ]
+  },
+  {
+    "id": "tr-t-local-lag",
+    "q": "In Epoch's August 2025 analysis, how far behind the frontier were leading models that fit on a single high-end consumer ",
+    "src": [
+      "https://epoch.ai/data-insights/consumer-gpu-model-gap"
+    ]
+  },
+  {
+    "id": "tr-t-local-vram",
+    "q": "Why is model weight size alone insufficient to decide whether an AI model fits in GPU memory?",
+    "src": [
+      "https://epoch.ai/data-insights/consumer-gpu-model-gap"
+    ]
+  },
+  {
+    "id": "tr-t-quantization",
+    "q": "What does weight quantization principally trade when making a model easier to fit on local hardware?",
+    "src": [
+      "https://epoch.ai/data-insights/consumer-gpu-model-gap"
+    ]
+  },
+  {
+    "id": "tr-t-local-open-gap",
+    "q": "Why can the frontier of all open-weight models differ from the frontier runnable on one consumer GPU?",
+    "src": [
+      "https://epoch.ai/data-insights/consumer-gpu-model-gap",
+      "https://epoch.ai/publications/open-models-report"
+    ]
+  },
+  {
+    "id": "tr-t-local-caveat",
+    "q": "Why might a local model's historical benchmark lag understate its lag on practical tasks?",
+    "src": [
+      "https://epoch.ai/data-insights/consumer-gpu-model-gap"
+    ]
+  },
+  {
+    "id": "tr-t-text-stock",
+    "q": "What order of magnitude did Epoch's 2024 study give for the effective stock of human-generated public text for training?",
+    "src": [
+      "https://epoch.ai/publications/will-we-run-out-of-data-limits-of-llm-scaling-based-on-human-generated-data"
+    ]
+  },
+  {
+    "id": "tr-t-data-window",
+    "q": "What did Epoch's 2024 forecast say could happen between 2026 and 2032 if LLM development trends continued?",
+    "src": [
+      "https://epoch.ai/publications/will-we-run-out-of-data-limits-of-llm-scaling-based-on-human-generated-data"
+    ]
+  },
+  {
+    "id": "tr-t-effective-stock",
+    "q": "Why adjust a public text stock estimate for both quality and repetition?",
+    "src": [
+      "https://arxiv.org/html/2211.04325v2"
+    ]
+  },
+  {
+    "id": "tr-t-data-after-limit",
+    "q": "Name one way AI progress might continue if public human text can no longer provide larger training datasets.",
+    "src": [
+      "https://arxiv.org/html/2211.04325v2"
+    ]
+  },
+  {
+    "id": "tr-t-consumed-data",
+    "q": "Does training one model on a text dataset prevent another developer from training on the same text?",
+    "src": [
+      "https://arxiv.org/html/2211.04325v2"
+    ]
+  },
+  {
+    "id": "tr-t-run-duration",
+    "q": "In Epoch's July 2025 model, roughly where was the threshold beyond which frontier training runs may become economically ",
+    "src": [
+      "https://epoch.ai/data-insights/longest-training-run"
+    ]
+  },
+  {
+    "id": "tr-t-run-mechanism",
+    "q": "Why can a very long AI training run lose economically to a run started later?",
+    "src": [
+      "https://epoch.ai/data-insights/longest-training-run"
+    ]
+  },
+  {
+    "id": "tr-t-duration-v-compute",
+    "q": "If economically sensible training durations stop growing, how could total training compute still increase?",
+    "src": [
+      "https://epoch.ai/data-insights/longest-training-run"
+    ]
+  },
+  {
+    "id": "tr-t-conditional-projection",
+    "q": "Hypothetical: frontier training compute grows five-fold annually for three years. What follows under that assumption?",
+    "src": [
+      "https://epoch.ai/data-insights/longest-training-run",
+      "https://epoch.ai/publications/a-rosetta-stone-for-ai-benchmarks"
+    ]
+  },
+  {
+    "id": "tr-t-agi-inference",
+    "q": "Why does a historical trend in AI compute or benchmark scores fail to determine a precise AGI arrival date by itself?",
+    "src": [
+      "https://epoch.ai/eci",
+      "https://arxiv.org/html/2211.04325v2"
+    ]
+  }
+]
