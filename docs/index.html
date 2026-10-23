@@ -701,11 +701,16 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .course-preview{margin:18px 0;padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}.preview-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px}.preview-heading h2{font-family:'Alegreya Sans SC',sans-serif;font-size:22px;margin:0}.course-preview p{line-height:1.5}.course-preview summary{cursor:pointer;padding:10px 0;font-weight:700;min-height:44px}.preview-units ul{list-style:none;padding:0}.preview-units li{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid var(--line)}.preview-units small{white-space:nowrap;color:var(--muted)}.catalog-sample{margin:12px 0 18px}.preview-options{display:grid;gap:8px}.preview-options button{text-align:left;white-space:normal;min-height:44px}.preview-options .sample-correct{border-color:var(--brass);box-shadow:inset 3px 0 var(--brass)}.fld select{width:100%;font:inherit;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg)}
 
 @media(max-width:360px){.catalog-levels{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.brand { gap: 8px; flex-shrink: 0; }
+.brand-owl { display: inline-block; position: relative; width: 32px; height: 32px; overflow: hidden; border-radius: 50%; flex-shrink: 0; }
+.brand-owl img { position: absolute; width: 64px; height: 64px; max-width: none; left: -16px; top: -5px; }
+@media(max-width:400px) { .top-in { flex-wrap: wrap; gap: 8px; } .top-in .stats { margin-left: auto; } }
 </style>
 
 <header class="top">
   <div class="top-in">
-    <button class="brand" id="brand" aria-label="WonkoLingo, go to Today">WonkoLingo</button>
+    <button class="brand" id="brand" aria-label="WonkoLingo, go to Today"><span class="brand-owl" aria-hidden="true"><img src="icons/icon-192.png" alt="" width="64" height="64"></span><span>WonkoLingo</span></button>
     <div class="stats">
       <div class="chip streak" title="Day streak"><span id="streak">0</span> day<span id="streakS">s</span></div>
       <div class="chip xp" title="Total XP"><span id="xp">0</span> XP</div>
@@ -839,8 +844,8 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
   };
   // The same errors go to the server as bug reports (the message, where it happened, the app version and browser; no
   // account or progress data), at most three per page load, so problems friends hit show up without anyone reporting them.
-  window.WL_BUILD = '2026-10-23-6cd5109';
-  window.WL_BUILT_AT = +'1792761875000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
+  window.WL_BUILD = '2026-10-23-9712acd';
+  window.WL_BUILT_AT = +'1792762114000' || 0; // build time in ms, stamped by build.sh (0 in the vault and artifact copies)
   const sent = new Set();
   const report = (message, stack) => {
     try {
@@ -33383,9 +33388,9 @@ const COURSES = Object.assign(Object.create(null), {
     keyTerms: ["democratic backsliding", "executive aggrandizement", "competitive authoritarianism", "judicial review", "impeachment", "impoundment", "injunction", "executive order"], created: '2026-10-23', updated: '2026-10-23',
     description: "How democracies erode, how to assess the evidence, and which US legal rules shape executive power and elections.",
     caveat: ["Prepared October 23, 2026 from public sources. Legal rules are simplified; dated rulings and scenarios are distinguished from predictions. Research and question quality were reviewed by separate AI agents. No person has reviewed this course. Check current law before relying on it."], meta: '11 units | Intermediate' },
-  lingo: { category: "hill", categories: ["hill"], description: "What Hill staffers mean: reading the polite no, buying signals, and the next question to ask.", name: 'Staff Talk', units: UNITS, pre: '', level: 'beginner', created: '2026-10-02', updated: '2026-10-21',
-    caveat: ['These are generic rules of thumb drawn from published staffer guides and Hill reporting. Nobody has checked them against what offices actually did afterward, and meanings vary by chamber, party, office and individual staffer.', 'Treat each answer as a starting guess. Check anything you plan to rely on with a former staffer.'],
-    meta: 'Draft · 2026-10-02 12:38 · Not reviewed by a Hill staffer' },
+  lingo: { category: "hill", categories: ["hill"], description: "A playful, tongue-in-cheek take on Hill jargon. This joke course has not been checked for accuracy; don’t rely on it as guidance.", name: 'Staff Talk', units: UNITS, pre: '', level: 'beginner', created: '2026-10-02', updated: '2026-10-21',
+    caveat: ['This is a joke course: a playful take on Hill jargon. It has not been checked for accuracy.', 'Meanings vary by chamber, party, office and individual staffer. Don’t rely on these answers as guidance; ask someone with relevant Hill experience.'],
+    meta: 'Joke course · Not checked for accuracy' },
   proc: { category: "hill", categories: ["hill"], description: "How a bill moves through Congress: committees, floor rules, the filibuster, money, vetoes and the Congressional Review Act.", name: 'Procedure', units: PROC_UNITS, pre: 'p', level: 'beginner', created: '2026-10-16', updated: '2026-10-21',
     caveat: ['These simplify standard House and Senate procedure as described in CRS reports and the chambers’ rules. Precedents and each Congress’s rules package change details over time, and there are exceptions to almost everything here.', 'News examples are paraphrased from 2023 to 2025 coverage, not real headlines.'],
     meta: 'Draft · 2026-10-16 · Not reviewed by a procedure expert' },
