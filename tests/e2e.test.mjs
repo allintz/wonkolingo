@@ -866,7 +866,7 @@ tests.google = async () => {
 tests.regressions = async () => {
   const c = await ctx(), p = await page(c);
   // A trial closed on its result screen asks to save on the next launch instead of opening the app with no account.
-  await p.goto(BASE + '/'); await p.click('[data-try="proc"]');
+  await p.goto(BASE + '/'); await clickGo(p, '.trylist [data-try]:first-child');
   let n = 0; while (n++ < 20 && await answerOne(p)) {}
   ok(await visible(p, '#result'), 'trial finished');
   await p.reload();
@@ -891,7 +891,7 @@ tests.regressions = async () => {
     bumpRunDay(); bumpRunDay(); bumpRunDay(); run = null; bumpStreak = real; return calls; })()`);
   ok(d === 1, 'a run bumps the practice day once', d);
   // Order cards in a session show their label once.
-  { const c2 = await ctx(), q = await page(c2); await q.goto(BASE + '/'); await clickGo(q, '.trylist [data-try]:first-child');
+  { const c2 = await ctx(), q = await page(c2); await q.goto(BASE + '/'); await ev(q, "startTrial('proc')");
     for (let i = 0; i < 6 && await ev(q, `run && run.cur.t !== 'order'`); i++) await answerOne(q);
     if (await ev(q, `run && run.cur.t === 'order'`)) ok(await ev(q, `document.querySelectorAll('#stage .cardtag').length`) === 1, 'an order card shows its label once');
     await c2.close(); }
