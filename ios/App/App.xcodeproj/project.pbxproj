@@ -13,18 +13,25 @@
 		26E51AC20D9FE4119F144870 /* public in Resources */ = {isa = PBXBuildFile; fileRef = 7E5BBB12596EE01767A6151A /* public */; };
 		2700A5422E45C887BEAE5B76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CC6C49B810BBC284BCED483 /* Main.storyboard */; };
 		2B5B5F3064DBFC529AE4129A /* WidgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1CB48AEEFB05708DB9BF26 /* WidgetStore.swift */; };
+		3E51647D9AA142A35256BF33 /* scene-briefing.png in Resources */ = {isa = PBXBuildFile; fileRef = 4197E9978E8874010E611710 /* scene-briefing.png */; };
 		3FB3C8C0634A765EE81D042E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76989E05CECAD7B8B3C424A7 /* Assets.xcassets */; };
 		43A22F8C4D28973E13B09537 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66D6209EF7400B94E61F120F /* Assets.xcassets */; };
 		44D430AE49CAE2977BBAE4C9 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CDBC4887C9075AEE649BBC /* SwiftUI.framework */; };
 		4FB34C264C0E482A4F3BA9EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23F8D68E28D07D16EB72E4AA /* LaunchScreen.storyboard */; };
 		5E04533C01261A377D816DB8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 8776CD2CC1249496A6F18C86 /* config.xml */; };
 		67740B5377F807ABF1532F55 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2016878D44EAA9692D059F /* SceneDelegate.swift */; };
+		79F75E55DF7331F8F37535C0 /* scene-freeze.png in Resources */ = {isa = PBXBuildFile; fileRef = 981EC589E23E759B7F9161B8 /* scene-freeze.png */; };
 		81138B00431411BE1EF97D97 /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 68ED4E8FE0185474B6E8E85B /* capacitor.config.json */; };
 		977F854033110451D85816CA /* WidgetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1CB48AEEFB05708DB9BF26 /* WidgetStore.swift */; };
 		A9F23A5FC48B9DCDBEB30197 /* WonkoWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5199D2BC16C8815E11634F28 /* WonkoWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B467234C96A53A1EFFF6CEA9 /* scene-milestone.png in Resources */ = {isa = PBXBuildFile; fileRef = B53BB3DB830151F5DDDBF283 /* scene-milestone.png */; };
+		D9563F66BDFE8E2C67F63EF9 /* scene-bonus.png in Resources */ = {isa = PBXBuildFile; fileRef = EBDB9421EF1A24C4E40C9E93 /* scene-bonus.png */; };
 		DF4ACE2366B7E6ED87D0E6F6 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D8EBBE2CF5ED24C0AFBC831 /* WidgetKit.framework */; };
 		E8E03F4FB1BE61A377693A7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9420949282AB92AA28A975D3 /* AppDelegate.swift */; };
+		EBAE2FAAB1821DB1A8B45F89 /* scene-reviews.png in Resources */ = {isa = PBXBuildFile; fileRef = 96C34FBA4EA834717DEA8DA8 /* scene-reviews.png */; };
 		EE5028C8611DDB77C8D08233 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7E94E5F9BD4A8A171DAB9F /* MainViewController.swift */; };
+		EE7D2075B3B796FBDDCC04A0 /* scene-goal.png in Resources */ = {isa = PBXBuildFile; fileRef = BA00E260CFC51A8B3770400B /* scene-goal.png */; };
+		FA4274926DFBDD51C59E5ACA /* scene-late.png in Resources */ = {isa = PBXBuildFile; fileRef = F9343A0699D63F66A514EC76 /* scene-late.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +64,7 @@
 		1613B4CACB108E77F6BBEFAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1A53C26E13E9C2EC7D99CC11 /* WonkoNativePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WonkoNativePlugin.swift; sourceTree = "<group>"; };
 		1B1CB48AEEFB05708DB9BF26 /* WidgetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetStore.swift; sourceTree = "<group>"; };
+		4197E9978E8874010E611710 /* scene-briefing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scene-briefing.png"; sourceTree = "<group>"; };
 		49D88A349FD70A9153DD2C03 /* App.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5199D2BC16C8815E11634F28 /* WonkoWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = WonkoWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		66D6209EF7400B94E61F120F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -68,10 +76,16 @@
 		7E5BBB12596EE01767A6151A /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; name = public; path = App/public; sourceTree = SOURCE_ROOT; };
 		8776CD2CC1249496A6F18C86 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
 		9420949282AB92AA28A975D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		96C34FBA4EA834717DEA8DA8 /* scene-reviews.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scene-reviews.png"; sourceTree = "<group>"; };
+		981EC589E23E759B7F9161B8 /* scene-freeze.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scene-freeze.png"; sourceTree = "<group>"; };
 		9B7E94E5F9BD4A8A171DAB9F /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		B53BB3DB830151F5DDDBF283 /* scene-milestone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scene-milestone.png"; sourceTree = "<group>"; };
 		B8C7A3ACFAFF3414D272722B /* WonkoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WonkoWidget.swift; sourceTree = "<group>"; };
+		BA00E260CFC51A8B3770400B /* scene-goal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scene-goal.png"; sourceTree = "<group>"; };
 		C4CDBC4887C9075AEE649BBC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		EBDB9421EF1A24C4E40C9E93 /* scene-bonus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scene-bonus.png"; sourceTree = "<group>"; };
 		ED2016878D44EAA9692D059F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		F9343A0699D63F66A514EC76 /* scene-late.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scene-late.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +140,20 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		87B8C85F6A74A14A00E1F7A6 /* Artwork */ = {
+			isa = PBXGroup;
+			children = (
+				EBDB9421EF1A24C4E40C9E93 /* scene-bonus.png */,
+				4197E9978E8874010E611710 /* scene-briefing.png */,
+				981EC589E23E759B7F9161B8 /* scene-freeze.png */,
+				BA00E260CFC51A8B3770400B /* scene-goal.png */,
+				F9343A0699D63F66A514EC76 /* scene-late.png */,
+				B53BB3DB830151F5DDDBF283 /* scene-milestone.png */,
+				96C34FBA4EA834717DEA8DA8 /* scene-reviews.png */,
+			);
+			path = Artwork;
+			sourceTree = "<group>";
+		};
 		92ACA850132D7931F18F9889 /* ios */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,6 +184,7 @@
 			children = (
 				66D6209EF7400B94E61F120F /* Assets.xcassets */,
 				B8C7A3ACFAFF3414D272722B /* WonkoWidget.swift */,
+				87B8C85F6A74A14A00E1F7A6 /* Artwork */,
 			);
 			path = WonkoWidget;
 			sourceTree = "<group>";
@@ -283,6 +312,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				43A22F8C4D28973E13B09537 /* Assets.xcassets in Resources */,
+				D9563F66BDFE8E2C67F63EF9 /* scene-bonus.png in Resources */,
+				3E51647D9AA142A35256BF33 /* scene-briefing.png in Resources */,
+				79F75E55DF7331F8F37535C0 /* scene-freeze.png in Resources */,
+				EE7D2075B3B796FBDDCC04A0 /* scene-goal.png in Resources */,
+				FA4274926DFBDD51C59E5ACA /* scene-late.png in Resources */,
+				B467234C96A53A1EFFF6CEA9 /* scene-milestone.png in Resources */,
+				EBAE2FAAB1821DB1A8B45F89 /* scene-reviews.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,7 +425,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 29B8GL5NYV;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -495,7 +531,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 29B8GL5NYV;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

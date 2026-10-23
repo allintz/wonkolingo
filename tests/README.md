@@ -44,3 +44,7 @@ The page and new iPhone bundles fetch `/content-v2.json`. Keep the existing `/co
 ## Course catalog (2026-10-23)
 
 `node tests/catalog.test.mjs` checks categories, category/level filters, title search, the suggested path, previews, sample questions without progress changes, editable upload suggestions, and category metadata in downloaded content. It exercises 320px and 390px phone layouts, desktop, and dark mode. `ONLY=catalog` runs the corresponding checks in the main browser suite. Course category round trips are covered by `api.test.mjs`. The catalog suite is also part of the deployment gate.
+
+## Native widget stills (2026-10-23)
+
+`ONLY=widget node tests/e2e.test.mjs http://localhost:8807` checks the app-to-widget snapshot, uncapped XP, future days, reviews and freeze consumption on a local server. The full browser suite includes these checks. Native selection and old-payload compatibility can be checked with `cat ios/App/Shared/WidgetStore.swift tests/widget-store.test.swift > /tmp/wonko-widget-main.swift && swift /tmp/wonko-widget-main.swift`. The seven approved original-style PNGs are bundled under `ios/App/WonkoWidget/Artwork/`; the widget decodes 512px thumbnails at runtime to keep memory bounded.

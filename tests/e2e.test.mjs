@@ -1,3 +1,4 @@
+import { widgetChecks } from './widget-checks.mjs';
 // Browser tests in headless Chrome against a LOCAL `wrangler dev` (they create accounts and groups, so never production).
 // Run: node tests/e2e.test.mjs http://localhost:8799   (needs Google Chrome; set CHROME=/path/to/chrome otherwise)
 // Covers: cold start on every route, sign-up and sign-in, a full session, every card rendered and answered in every
@@ -1014,6 +1015,13 @@ tests.tidy = async () => {
 tests.catalog = async () => {
   const c=await ctx({storage:{'wl-account':JSON.stringify({token:'x.y',player:{id:'catalog',name:'Catalog'}})}});const p=await page(c);await p.goto(BASE+'/');
   for(const [v,name]of await catalogChecks(p))ok(v,'catalog: '+name);ok(!p.errors.length,'catalog: no browser errors',p.errors);await c.close();
+};
+
+tests.widget = async () => {
+  const c = await ctx({storage:{'wl-account':JSON.stringify({token:'x.y',player:{id:'widget',name:'Widget'}})}});
+  const p=await page(c); await p.goto(BASE+'/');
+  for(const [v,n] of await widgetChecks(p)) ok(v,'widget: '+n);
+  ok(!p.errors.length,'widget: no browser errors',p.errors); await c.close();
 };
 
 for (const [name, fn] of Object.entries(tests)) {

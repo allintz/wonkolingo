@@ -36959,13 +36959,21 @@ function dayPlan(n) {
   });
 }
 // The widget reads one entry per day, so it stays right for two weeks even if the app isn't opened.
+function widgetDays() {
+  const days = {}, today = dstr(new Date()), goal = dailyGoal();
+  dayPlan(15).forEach(p => {
+    const si = computeStreak(state.activeDays, state.settings, p.d);
+    days[p.d] = { s: p.streak, off: p.off, paused: p.paused, done: p.done, fz: p.freezes,
+      xp: p.d === today ? xpToday() : 0, goal, reviews: dueCards(p.d).length,
+      risk: p.atRisk, freezeUsed: si.frozen.includes(addDays(p.d, -1)) };
+  });
+  return days;
+}
 function pushWidget() {
-  const days = {};
-  dayPlan(15).forEach(p => days[p.d] = { s: p.streak, off: p.off, paused: p.paused, done: p.done, fz: p.freezes });
-  const sig = JSON.stringify(days);
+  const days = widgetDays(), sig = JSON.stringify(days);
   if (sig === widgetSig) return;
   widgetSig = sig;
-  Native.wonko.setWidgetData({ json: JSON.stringify({ v: 1, at: Date.now(), days }) }).catch(() => { widgetSig = ''; });
+  Native.wonko.setWidgetData({ json: JSON.stringify({ v: 2, at: Date.now(), days }) }).catch(() => { widgetSig = ''; });
 }
 
 const REM_DEFAULTS = { on: false, asked: false, daily: '09:00', risk: '20:00', dailyOn: true, riskOn: true };
